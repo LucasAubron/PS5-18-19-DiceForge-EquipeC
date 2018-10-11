@@ -7,16 +7,16 @@
     <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-   <maven.compiler.source>1.8</maven.compiler.source> 
-   <maven.compiler.target>1.8</maven.compiler.target> 
+   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- CHANGE ME IF NEEDED, other : ISO-8859-1 -->
+   <maven.compiler.source>1.8</maven.compiler.source>
+   <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <plugins>
-       
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -29,8 +29,8 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>main</mainClass> <!-- CHANGE ME -->
-<!--         <arguments>
+          <mainClass>PlateauMain</mainClass> <!-- CHANGE ME -->
+<!--          <arguments>
             <argument>argument1</argument>
           </arguments>
           <systemProperties>
@@ -39,11 +39,10 @@
               <value>myvalue</value>
             </systemProperty>
           </systemProperties>
-          -_-_-_-__-_
 -->
         </configuration>
       </plugin>
-      
+
     </plugins>
   </build>
 
