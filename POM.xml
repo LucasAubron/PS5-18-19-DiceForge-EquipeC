@@ -39,7 +39,7 @@
               <value>myvalue</value>
             </systemProperty>
           </systemProperties>
-          -_-_-__-_-_-_-__
+          -_-_-_-__-_
 -->
         </configuration>
       </plugin>
