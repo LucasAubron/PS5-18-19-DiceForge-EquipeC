@@ -30,7 +30,7 @@
         </executions>
         <configuration>
           <mainClass>main</mainClass> <!-- CHANGE ME -->
-<!--          <arguments>
+<!--         <arguments>
             <argument>argument1</argument>
           </arguments>
           <systemProperties>
@@ -39,6 +39,7 @@
               <value>myvalue</value>
             </systemProperty>
           </systemProperties>
+          -_-_-__-_-_-_-__
 -->
         </configuration>
       </plugin>
