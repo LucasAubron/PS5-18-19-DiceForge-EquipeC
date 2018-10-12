@@ -14,4 +14,12 @@ public class Carte {
         this.cout = cout;
         this.nbrPointGloire = nbrPointGloire;
     }
+
+    public Ressource[] getCout() {
+        return cout;
+    }
+
+    public int getNbrPointGloire() {
+        return nbrPointGloire;
+    }
 }
