@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Bassin {
     private int cout;
-    private List<Face> face;
+    private List<List<Face>> face;
 
-    public Bassin(int cout, List<Face> face) {
+    public Bassin(int cout, List<List<Face>> face) {
         this.cout = cout;
         this.face = face;
     }
@@ -15,7 +15,7 @@ public class Bassin {
         return cout;
     }
 
-    public List<Face> getFace() {
+    public List<List<Face>> getFace() {
         return face;
     }
 }
