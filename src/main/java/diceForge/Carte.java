@@ -1,0 +1,17 @@
+package diceForge;
+
+public class Carte {
+    /**
+     * La classe carte peut être utilisé pour les cartes ne donnant que des points de gloire
+     * Sinon il faut créer / utiliser une classe dérivée de celle ci
+     */
+    private Ressource[] cout;
+    private int nbrPointGloire;
+
+    public Carte(Ressource[] cout, int nbrPointGloire){
+        if (cout.length <= 0)
+            throw new RuntimeException("Une carte doit couter quelque chose. Cout donné : "+cout);
+        this.cout = cout;
+        this.nbrPointGloire = nbrPointGloire;
+    }
+}
