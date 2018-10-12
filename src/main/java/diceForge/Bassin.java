@@ -1,25 +1,22 @@
 package diceForge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Bassin {
     private int cout;
-    private List<Face> face;
+    private Face[] face;
 
-    public Bassin(int cout, List<Face> face) {
+    public Bassin(int cout, Face[] face) {
         this.cout = cout;
         this.face = face;
-    }
-
-    public void ajouterFace(Face face){
-        this.face.add(face);
     }
 
     public int getCout() {
         return cout;
     }
 
-    public List<Face> getFace() {
-        return face;
+    public Face getFace(int nbrFace) {
+        return face[nbrFace];
     }
 }
