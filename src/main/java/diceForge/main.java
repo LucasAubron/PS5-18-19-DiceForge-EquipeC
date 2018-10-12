@@ -5,6 +5,11 @@ import java.util.List;
 
 public class main {
     public static void main(String[] args) {
-        Plateau plateau = new Plateau();
+        try {
+            Plateau plateau = new Plateau();
+        }
+        catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
     }
 }

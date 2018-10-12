@@ -7,4 +7,8 @@ public class Face {
     public Face(Ressource[][] ressource) {
         this.ressource = ressource;
     }
+
+    public Ressource[][] getRessource() {
+        return ressource;
+    }
 }
