@@ -4,18 +4,22 @@ import java.util.List;
 
 public class Bassin {
     private int cout;
-    private List<List<Face>> face;
+    private List<Face> face;
 
-    public Bassin(int cout, List<List<Face>> face) {
+    public Bassin(int cout, List<Face> face) {
         this.cout = cout;
         this.face = face;
+    }
+
+    public void ajouterFace(Face face){
+        this.face.add(face);
     }
 
     public int getCout() {
         return cout;
     }
 
-    public List<List<Face>> getFace() {
+    public List<Face> getFace() {
         return face;
     }
 }
