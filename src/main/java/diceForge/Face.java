@@ -1,6 +1,15 @@
 package diceForge;
 
 public class Face {
+    /**
+     * Cette classe représente une face d'un dé, qu'elle soit dans un bassin ou sur un dé
+     * On utilise un tableau à 2 dimensions pour stocker les ressources. Pourquoi :
+     * Si la case n'offre aucun choix (pas de ? sur la face), alors la liste principale est de taille 1,
+     * les ressources contenues sont donc dans ressource[0]
+     * Si il y a plusieurs choix, alors chaque choix est représenté par une liste.
+     * Le premier choix est dans ressource[0], le deuxième dans ressource[1]...
+     * N'hésitez pas à refaire ce pavé si vous avez compris et pouvez l'expliquer plus clairement.
+     */
     private Ressource[][] ressource;
     public Face(Ressource[][] ressource) {
         this.ressource = ressource;

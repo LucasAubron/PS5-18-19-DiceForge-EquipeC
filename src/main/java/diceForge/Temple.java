@@ -1,6 +1,11 @@
 package diceForge;
 
 public class Temple {
+    /**
+     * Classe regroupant tout ce qui est dans le temple, c'est à dire :
+     * le sanctuaire comportant les bassins accessibles par la forge
+     * et les jardins comportant les bassins accessibles par les cartes.
+     */
     private Bassin[] sanctuaire = new Bassin[2];//Pour la version minimale, il n'y a que 2 bassins
     public Temple(){
         Face or = new Face(new Ressource[][]{{new Or(), new Or()}});//On initialise la face or
