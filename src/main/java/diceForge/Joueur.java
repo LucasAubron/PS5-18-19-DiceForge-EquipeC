@@ -1,5 +1,7 @@
 package diceForge;
 
+import java.util.ArrayList;
+
 /**
  * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
  * Bien entendu ça peut changer. Pourquoi faire ça :
@@ -20,8 +22,9 @@ public class Joueur {
     private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
-    private Face premierDeFaceCourante;
-    private Face deuxiemeDeFaceCourante;
+    private Face premierDeFaceCourante;//!\\Ca n'a rien à faire en attribut, il faudrait trouver un autre système
+    private Face deuxiemeDeFaceCourante;//La même
+    private ArrayList<Carte> cartes;
 
     public Joueur(int nbrOr, int nbrSoleil, int nbrLune, int indentifiant){
         if (nbrOr < 2 || nbrOr > 7)
@@ -102,5 +105,31 @@ public class Joueur {
         return res;
     }
 
-    //public void acheterExploit(Carte carte, )
+    /**
+     * La méthode ne gére que la partie dépense et ingestion de la carte,
+     * elle ne regarde pas si il reste de cette carte.
+     * @param carte
+     * @return true si la carte à pu être acheté, false sinon
+     */
+    public boolean acheterExploit(Carte carte){
+        boolean estAcquise = true;
+        for (Ressource ressource:carte.getCout()){
+            if (ressource instanceof Soleil && ressource.getQuantite() <= soleil){
+                soleil -= ressource.getQuantite();
+                estAcquise = true;
+            }
+            else if (ressource instanceof Lune && ressource.getQuantite() <= lune){
+                lune -= ressource.getQuantite();
+            }
+            else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
+                estAcquise = false;
+                break;//Si vous pensez trouver un meilleur moyen, eh bien soyez sur que ça marche et implémenté le
+            }
+        }
+        if (estAcquise) {
+            pointDeGloire += carte.getNbrPointGloire();
+            cartes.add(carte);
+        }
+        return estAcquise;
+    }
 }

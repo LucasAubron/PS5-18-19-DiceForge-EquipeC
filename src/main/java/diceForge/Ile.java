@@ -1,8 +1,5 @@
 package diceForge;
 
-import javax.management.relation.RoleUnresolved;
-
-
 /**
  * Une ile représente un lot de 2 cartes (ou 3 pour celle du fond).
  * C'est la où les joueurs viennent lorsqu'il choisisse une carte qui fait partie de l'ile
@@ -46,23 +43,24 @@ public class Ile {
     /**
      * Méthode permettant à un joueur de prendre une carte
      * Elle gére l'arrivé de joueur, il ne faut donc pas utiliser ajouterJoueur
+     * Elle gére aussi la prise de carte par le joueur
+     * @return false si le joueur n'a pas pu acheter la carte ou qu'elle n'est pas dans l'ile, true sinon
      */
-    public Carte prendreCarte(Joueur joueur, Carte carte){
+    public boolean prendreCarte(Joueur joueur, Carte carte){
         if (this.joueur.getIdentifiant() != joueur.getIdentifiant())
             ajouterJoueur(joueur);
         for (Carte[] paquet:cartes){//On cherche dans chaque paquet
             if (paquet[0].equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
                 for (int i = paquet.length; i != -1; --i){//On commence par la fin du paquet (évite une variable inutile)
                     if (paquet[i] != null){//Si il y a bien une carte la ou l'on regarde
-                        Carte x = paquet[i];//On la sauvegarde
+                        if (!joueur.acheterExploit(paquet[i]))//Le joueur l'achete
+                            return false;
                         paquet[i] = null;//On l'enlève du paquet
-                        return x;//On la renvoit
                     }
                 }
             }
         }
-        return null;//!\\ Cette fonction peut renvoyer null, il faut bien tester si on a pas null avant de continuer
-        //J'hésite quand même à throw une exception si on ne trouve pas la carte, a voir comment on design un personnage
+        return false;//J'hésite quand même à throw une exception si on ne trouve pas la carte, a voir comment on design le jeu
     }
 
     /**

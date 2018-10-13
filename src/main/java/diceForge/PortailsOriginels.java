@@ -13,11 +13,11 @@ public class PortailsOriginels {
         this.joueurs = joueurs;
     }
 
+    /**
+     * Cette méthode permet de retirer un joueur d'un des portails originels
+     * Elle est a utiliser à chaque fois qu'un joueur va sur une ile prendre une carte
+     */
     public Joueur retirerJoueur(int numJoueur){
-        /**
-         * Cette méthode permet de retirer un joueur d'un des portails originels
-         * Elle est a utiliser à chaque fois qu'un joueur va sur une ile prendre une carte
-         */
         if (numJoueur < 0 || numJoueur >= joueurs.length)
             throw new RuntimeException("Le numéro du joueur est invalide. Min : 0, max : "+(joueurs.length-1)+", actuel : "+numJoueur);
         if (joueurs[numJoueur] == null)
@@ -41,7 +41,7 @@ public class PortailsOriginels {
         return joueurs;
     }
 
-    public void setJoueurs(Joueur[] joueurs) {
+    public void setJoueurs(Joueur[] joueurs) {//UHUHUHU ! Il y a une raison pour cette folie ?????????
         this.joueurs = joueurs;
     }
 }
