@@ -81,7 +81,8 @@ public class Joueur {
 
     public void printRessourcesEtDes(){
         System.out.println("Or: " + this.or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString());
-        System.out.println("Soleil: " + this.soleil + "\t\t\t\t2ème Dé: not implemented in Minimal Product" ); //+ deuxiemeDeFaceCourante.toString()
+        System.out.println("Soleil: " + this.soleil + "\t\t\t\t2ème Dé: not implemented in Minimal Version" );
+        //+ deuxiemeDeFaceCourante.toString()
         System.out.println("PointDeGloire: " + this.pointDeGloire);
     }
 
