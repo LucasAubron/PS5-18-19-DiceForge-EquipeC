@@ -6,6 +6,7 @@ public class PortailsOriginels {
      * ou ils viennent lorsqu'il sont chassés
      */
     private Joueur[] joueurs;
+
     public PortailsOriginels(Joueur[] joueurs){
         if (joueurs.length < 2 || joueurs.length > 4)
             throw new RuntimeException("Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
@@ -34,5 +35,13 @@ public class PortailsOriginels {
         if (joueurs[joueur.getIdentifiant()] != null)
             throw new RuntimeException("FATAL ERROR ! Il y a déjà une joueur situé dans son emplacement");
         joueurs[joueur.getIdentifiant()] = joueur;
+    }
+
+    public Joueur[] getJoueurs() {
+        return joueurs;
+    }
+
+    public void setJoueurs(Joueur[] joueurs) {
+        this.joueurs = joueurs;
     }
 }

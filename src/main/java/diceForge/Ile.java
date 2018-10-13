@@ -2,6 +2,7 @@ package diceForge;
 
 import javax.management.relation.RoleUnresolved;
 
+
 public class Ile {
     /**
      * Une ile représente un lot de 2 cartes (ou 3 pour celle du fond).
@@ -31,4 +32,24 @@ public class Ile {
         for (int i = 0; i != nbrCarteParPaquet; ++i)
             cartes[1][i] = new Carte(carte2.getCout(), carte2.getNbrPointGloire());
     }
+    /*
+    retourne le joueur expulser mais vous pouvez l'enlever si c'est useless
+     */
+    public Joueur retirerJoueur(Joueur joueur){
+        Joueur joueurExpulse = this.joueur;
+        this.joueur=null;
+
+        return joueurExpulse;
+    }
+    /*
+    ajoute un joueur et s'il y en a deja un, le supprime mais du coup le joueur disparait dans le néant distordu
+     */
+    public void ajouterJoueur(Joueur joueur){
+        if(this.joueur!=null)
+            retirerJoueur(this.joueur);
+
+        this.joueur=joueur;
+    }
+
+
 }
