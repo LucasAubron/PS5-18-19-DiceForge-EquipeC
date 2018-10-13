@@ -1,23 +1,23 @@
 package diceForge;
 
+/**
+ * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
+ * Bien entendu ça peut changer. Pourquoi faire ça :
+ * Parce la plupart des choses que l'on achete ne coute que d'une ressource, donc je pense
+ * qu'avoir un unique tableau de ressource compliquerait les choses.
+ * La classe ne doit contenir AUCUN élément d'un bot, la classe bot (il y en aura plusieurs) sera une classe à part.
+ * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
+ * Chaque joueur possède un identifiant, allant de 0 à 3 (s'il y a 4 joueurs, sinon moins)
+ * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
+ */
 public class Joueur {
-    /**
-     * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
-     * Bien entendu ça peut changer. Pourquoi faire ça :
-     * Parce la plupart des choses que l'on achete ne coute que d'une ressource, donc je pense
-     * qu'avoir un unique tableau de ressource compliquerait les choses.
-     * La classe ne doit contenir AUCUN élément d'un bot, la classe bot (il y en aura plusieurs) sera une classe à part.
-     * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
-     * Chaque joueur possède un identifiant, allant de 0 à 3 (s'il y a 4 joueurs, sinon moins)
-     * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
-     */
     private int or;
     private int maxOr = 12;
     private int soleil;
     private int maxSoleil = 6;
     private int lune;
     private int maxLune = 6;
-    private int pointDeGloire;
+    private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
     private Face premierDeFaceCourante;
@@ -57,11 +57,11 @@ public class Joueur {
 
     public int getIdentifiant() {return identifiant;}
 
+    /**
+     * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
+     * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
+     */
     public void lancerLesDes(){
-        /**
-         * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
-         * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
-         */
         for (De de:des){
             Face face = de.lancerLeDe();
             if (de == des[0])
@@ -79,9 +79,24 @@ public class Joueur {
         }
     }
 
+    /**
+     * Méthode à appeler lorsque le joueur est chassé
+     * Elle servira surtout lorsque le sanglier sera introduit
+     */
+    public void estChasse(){
+        lancerLesDes();
+    }
+
+    /**
+     * Méthode à appeler lorsque le joueur en chasse un autre
+     * Elle servira uniquement lorsque le sanglier sera introduit
+     */
+    public void chasse() {
+    }
+
     public String printRessourcesEtDes(){
         String res = "Or: " + or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString() + "\n";
-        res = res + "Soleil: " + soleil + "\t\t\t2ème Dé: not implemented in MVP\n" ; //+ deuxiemeDeFaceCourante.toString()
+        res = res + "Soleil: " + soleil + "\t\t\t2ème Dé: Non implémenté en version minimale\n" ; //+ deuxiemeDeFaceCourante.toString()
         res = res + "PointDeGloire: " + pointDeGloire + "\n";
         res = res + "--------------------------------------";
         return res;

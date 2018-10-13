@@ -1,10 +1,10 @@
 package diceForge;
 
+/**
+ * Les portails originels sont la ou les joueurs commence et la
+ * ou ils viennent lorsqu'il sont chassés
+ */
 public class PortailsOriginels {
-    /**
-     * Les portails originels sont la ou les joueurs commence et la
-     * ou ils viennent lorsqu'il sont chassés
-     */
     private Joueur[] joueurs;
 
     public PortailsOriginels(Joueur[] joueurs){
@@ -27,11 +27,11 @@ public class PortailsOriginels {
         return x;
     }
 
+    /**
+     * Méthode à utiliser lorsqu'un joueur se fait chasser et revient aux portails originels
+     * Si cette méthode renvoie l'erreur, il y a un gros problème quelque part
+     */
     public void ajouterJoueur(Joueur joueur){
-        /**
-         * Méthode à utiliser lorsqu'un joueur se fait chasser et revient aux portails originels
-         * Si cette méthode renvoie l'erreur, il y a un gros problème quelque part
-         */
         if (joueurs[joueur.getIdentifiant()] != null)
             throw new RuntimeException("FATAL ERROR ! Il y a déjà une joueur situé dans son emplacement");
         joueurs[joueur.getIdentifiant()] = joueur;

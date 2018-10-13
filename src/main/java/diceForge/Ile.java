@@ -3,12 +3,12 @@ package diceForge;
 import javax.management.relation.RoleUnresolved;
 
 
+/**
+ * Une ile représente un lot de 2 cartes (ou 3 pour celle du fond).
+ * C'est la où les joueurs viennent lorsqu'il choisisse une carte qui fait partie de l'ile
+ * On utilise un tableau à deux dimensions pour représenter plus intuitivement les paquets de carte.
+ */
 public class Ile {
-    /**
-     * Une ile représente un lot de 2 cartes (ou 3 pour celle du fond).
-     * C'est la où les joueurs viennent lorsqu'il choisisse une carte qui fait partie de l'ile
-     * On utilise un tableau à deux dimensions pour représenter plus intuitivement les paquets de carte.
-     */
     private Carte[][] cartes;
     private Joueur joueur = null;
 
@@ -20,20 +20,21 @@ public class Ile {
                 throw new RuntimeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+cartes[i].length);
         this.cartes = cartes;
     }
+    /**
+     * Constructeur à utiliser dans le cas principal ou il y a 2 paquets de nbrCarteParPaquet chaqu'un
+     */
     public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
-        /**
-         * Constructeur à utiliser dans le cas principal ou il y a 2 paquets de nbrCarteParPaquet chaqu'un
-         */
         if (nbrCarteParPaquet < 2 || nbrCarteParPaquet > 4)
             throw new RuntimeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new Carte[2][nbrCarteParPaquet];
-        for (int i = 0; i != nbrCarteParPaquet; ++i)
+        for (int i = 0; i != nbrCarteParPaquet; ++i) {
             cartes[0][i] = new Carte(carte1.getCout(), carte1.getNbrPointGloire());
-        for (int i = 0; i != nbrCarteParPaquet; ++i)
             cartes[1][i] = new Carte(carte2.getCout(), carte2.getNbrPointGloire());
+        }
     }
-    /*
-    retourne le joueur expulser mais vous pouvez l'enlever si c'est useless
+
+    /**
+     * Sert dans le cas ou le joueur part sur une autre ile
      */
     public Joueur retirerJoueur(){
         Joueur joueurExpulse = this.joueur;
@@ -41,15 +42,41 @@ public class Ile {
 
         return joueurExpulse;
     }
-    /*
-    ajoute un joueur et s'il y en a deja un, le supprime mais du coup le joueur disparait dans le néant distordu
-     */
-    public void ajouterJoueur(Joueur joueur){
-        if(this.joueur!=null)
-            retirerJoueur();
 
-        this.joueur=joueur;
+    /**
+     * Méthode permettant à un joueur de prendre une carte
+     * Elle gére l'arrivé de joueur, il ne faut donc pas utiliser ajouterJoueur
+     */
+    public Carte prendreCarte(Joueur joueur, Carte carte){
+        if (this.joueur.getIdentifiant() != joueur.getIdentifiant())
+            ajouterJoueur(joueur);
+        for (Carte[] paquet:cartes){//On cherche dans chaque paquet
+            if (paquet[0].equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
+                for (int i = paquet.length; i != -1; --i){//On commence par la fin du paquet (évite une variable inutile)
+                    if (paquet[i] != null){//Si il y a bien une carte la ou l'on regarde
+                        Carte x = paquet[i];//On la sauvegarde
+                        paquet[i] = null;//On l'enlève du paquet
+                        return x;//On la renvoit
+                    }
+                }
+            }
+        }
+        return null;//!\\ Cette fonction peut renvoyer null, il faut bien tester si on a pas null avant de continuer
+        //J'hésite quand même à throw une exception si on ne trouve pas la carte, a voir comment on design un personnage
     }
 
-
+    /**
+     * Lorsqu'un joueur arrive sur l'ile
+     * Cette fonction ne peux pas être utilisé en dehors de la classe,
+     * elle ne l'est que dans prendreCarte() pour l'instant
+     * On ne la teste pas, on teste prendreCarte() à la place.
+     */
+    private void ajouterJoueur(Joueur joueur){
+        if(this.joueur!=null){//S'il y a déjà un joueur présent, il y a une chasse
+            this.joueur.estChasse();
+            joueur.chasse();
+            retirerJoueur();
+        }
+        this.joueur=joueur;
+    }
 }
