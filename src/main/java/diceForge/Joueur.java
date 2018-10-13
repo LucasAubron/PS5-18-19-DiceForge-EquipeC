@@ -70,19 +70,19 @@ public class Joueur {
                 this.deuxiemeDeFaceCourante = face;
             for (Ressource ressource:face.getRessource()[0]){
                 if (ressource instanceof Or)
-                    ajouterOr(1);
+                    ajouterOr(ressource.getQuantite());
                 else if (ressource instanceof Soleil)
-                    ajouterSoleil(1);
+                    ajouterSoleil(ressource.getQuantite());
                 else if (ressource instanceof PointDeGloire)
-                    ++pointDeGloire;
+                    pointDeGloire += ressource.getQuantite();
             }
         }
     }
 
     public void printRessourcesEtDes(){
-        System.out.println("Or: " + this.or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString());
-        System.out.println("Soleil: " + this.soleil + "\t\t\t\t2ème Dé: not implemented in Minimal Product" ); //+ deuxiemeDeFaceCourante.toString()
-        System.out.println("PointDeGloire: " + this.pointDeGloire);
+        System.out.println("Or: " + or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString());
+        System.out.println("Soleil: " + soleil + "\t\t\t\t2ème Dé: not implemented in Minimal Product" ); //+ deuxiemeDeFaceCourante.toString()
+        System.out.println("PointDeGloire: " + pointDeGloire);
     }
 
     //public void acheterExploit(Carte carte, )

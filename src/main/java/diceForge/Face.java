@@ -22,9 +22,9 @@ public class Face {
     @Override
     public String toString() {
         String res = "";
-        if (this.ressource.length == 1){
+        if (ressource.length == 1){
             for (Ressource uneRess :ressource[0]) {
-                res = res + " " + uneRess.getQte();
+                res = res + " " + uneRess.getQuantite();
             }
         }
         return res;
