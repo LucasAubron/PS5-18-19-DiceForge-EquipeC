@@ -35,7 +35,7 @@ public class Ile {
     /*
     retourne le joueur expulser mais vous pouvez l'enlever si c'est useless
      */
-    public Joueur retirerJoueur(Joueur joueur){
+    public Joueur retirerJoueur(){
         Joueur joueurExpulse = this.joueur;
         this.joueur=null;
 
@@ -46,7 +46,7 @@ public class Ile {
      */
     public void ajouterJoueur(Joueur joueur){
         if(this.joueur!=null)
-            retirerJoueur(this.joueur);
+            retirerJoueur();
 
         this.joueur=joueur;
     }
