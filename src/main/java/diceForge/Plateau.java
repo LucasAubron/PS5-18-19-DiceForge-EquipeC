@@ -3,7 +3,7 @@ package diceForge;
 public class Plateau {
     /**
      * Cette classe acceuille tous les éléments qui sont sur le plateau de jeu
-     * A voir si on met les joueurs ici ou dans le main
+     * A voir si on met les joueurs ici ou dans le Main
      * En fait on va mettre les joueurs dans PortailsOriginels
      */
     private Temple temple = new Temple();//La classe temple s'occupe de toute la partie forge de dé
