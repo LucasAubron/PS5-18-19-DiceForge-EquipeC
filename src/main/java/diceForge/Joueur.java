@@ -10,11 +10,11 @@ public class Joueur {
      * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
      */
     private int or;
-    private int maxOr;
+    private int maxOr = 12;
     private int soleil;
-    private int maxSoleil;
+    private int maxSoleil = 6;
     private int lune;
-    private int maxLune;
+    private int maxLune = 6;
     private int pointDeGloire;
     private De[] des;
 
@@ -64,4 +64,6 @@ public class Joueur {
             }
         }
     }
+
+    //public void acheterExploit(Carte carte, )
 }
