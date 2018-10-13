@@ -10,9 +10,13 @@ public class Joueur {
      * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
      */
     private int or;
+    private int maxOr;
     private int soleil;
+    private int maxSoleil;
     private int lune;
+    private int maxLune;
     private int pointDeGloire;
+    private De[] des;
 
     public Joueur(int nbrOr, int nbrSoleil, int nbrLune){
         if (nbrOr < 2 || nbrOr > 7)
@@ -24,21 +28,40 @@ public class Joueur {
         if (nbrLune < 0 || nbrLune > 2)
             throw new RuntimeException("Le nombre de lune est invalide. Min : 0, max : 2, actuel : "+nbrLune);
         lune = nbrLune;
+        des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or()}}),
+                new Face(new Ressource[][]{{new Soleil()}}),
+                new Face(new Ressource[][]{{new PointDeGloire()}})})};//ON VA TOUS MOURRRRRIIIIRRR
     }
 
-    public int getOr() {
-        return or;
-    }
+    public int getOr() {return or;}
 
-    public int getSoleil() {
-        return soleil;
-    }
+    public void ajouterOr (int quantite){or = (or + quantite > maxOr) ? maxOr : or + quantite;}
 
-    public int getLune() {
-        return lune;
-    }
+    public int getSoleil() {return soleil;}
 
-    public int getPointDeGloire() {
-        return pointDeGloire;
+    public void ajouterSoleil(int quantite) {soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;}
+
+    public int getLune() {return lune;}
+
+    public void ajouterLune(int quantite) {lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;}
+
+    public int getPointDeGloire() {return pointDeGloire;}
+
+    public void lancerLesDes(){
+        /**
+         * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
+         * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
+         */
+        for (De de:des){
+            Face face = de.lancerLeDe();
+            for (Ressource ressource:face.getRessource()[0]){
+                if (ressource instanceof Or)
+                    ajouterOr(1);
+                else if (ressource instanceof Soleil)
+                    ajouterSoleil(1);
+                else if (ressource instanceof PointDeGloire)
+                    ++pointDeGloire;
+            }
+        }
     }
 }
