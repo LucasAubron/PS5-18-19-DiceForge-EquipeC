@@ -16,7 +16,7 @@ public class Plateau {
 
     public void playPlayer0(){
         j0.lancerLesDes();
-        j0.printRessourcesEtDes();
+        System.out.println(j0.printRessourcesEtDes());
     }
 
     public Plateau(){
