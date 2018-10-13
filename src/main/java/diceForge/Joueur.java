@@ -8,6 +8,8 @@ public class Joueur {
      * qu'avoir un unique tableau de ressource compliquerait les choses.
      * La classe ne doit contenir AUCUN élément d'un bot, la classe bot (il y en aura plusieurs) sera une classe à part.
      * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
+     * Chaque joueur possède un identifiant, allant de 0 à 3 (s'il y a 4 joueurs, sinon moins)
+     * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
      */
     private int or;
     private int maxOr = 12;
@@ -16,9 +18,10 @@ public class Joueur {
     private int lune;
     private int maxLune = 6;
     private int pointDeGloire;
+    private int identifiant;
     private De[] des;
 
-    public Joueur(int nbrOr, int nbrSoleil, int nbrLune){
+    public Joueur(int nbrOr, int nbrSoleil, int nbrLune, int indentifiant){
         if (nbrOr < 2 || nbrOr > 7)
             throw new RuntimeException("Le nombre d'or est invalide. Min : 2, max : 7, actuel : "+nbrOr);
         or = nbrOr;
@@ -28,6 +31,9 @@ public class Joueur {
         if (nbrLune < 0 || nbrLune > 2)
             throw new RuntimeException("Le nombre de lune est invalide. Min : 0, max : 2, actuel : "+nbrLune);
         lune = nbrLune;
+        if (identifiant < 0 || identifiant > 3)
+            throw new RuntimeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
+        this.identifiant = indentifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or()}}),
                 new Face(new Ressource[][]{{new Soleil()}}),
                 new Face(new Ressource[][]{{new PointDeGloire()}})})};//ON VA TOUS MOURRRRRIIIIRRR
@@ -46,6 +52,8 @@ public class Joueur {
     public void ajouterLune(int quantite) {lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;}
 
     public int getPointDeGloire() {return pointDeGloire;}
+
+    public int getIdentifiant() {return identifiant;}
 
     public void lancerLesDes(){
         /**

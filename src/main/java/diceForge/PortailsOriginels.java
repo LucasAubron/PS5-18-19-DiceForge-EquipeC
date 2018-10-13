@@ -25,4 +25,14 @@ public class PortailsOriginels {
         joueurs[numJoueur] = null;
         return x;
     }
+
+    public void ajouterJoueur(Joueur joueur){
+        /**
+         * Méthode à utiliser lorsqu'un joueur se fait chasser et revient aux portails originels
+         * Si cette méthode renvoie l'erreur, il y a un gros problème quelque part
+         */
+        if (joueurs[joueur.getIdentifiant()] != null)
+            throw new RuntimeException("FATAL ERROR ! Il y a déjà une joueur situé dans son emplacement");
+        joueurs[joueur.getIdentifiant()] = joueur;
+    }
 }
