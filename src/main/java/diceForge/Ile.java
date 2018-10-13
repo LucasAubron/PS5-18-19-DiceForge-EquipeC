@@ -9,6 +9,7 @@ public class Ile {
      * On utilise un tableau à deux dimensions pour représenter plus intuitivement les paquets de carte.
      */
     private Carte[][] cartes;
+    private Joueur joueur = null;
 
     public Ile(Carte[][] cartes){
         if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale

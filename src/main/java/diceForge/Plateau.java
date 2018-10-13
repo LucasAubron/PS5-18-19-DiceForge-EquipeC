@@ -6,7 +6,7 @@ public class Plateau {
      * A voir si on met les joueurs ici ou dans le main
      */
     private Temple temple = new Temple();//La classe temple s'occupe de toute la partie forge de dé
-    private PortailsOriginels portail = new PortailsOriginels();//La ou les joueurs sont de base
+    private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{new Joueur(3, 1, 1), new Joueur(3, 1, 1)});//La ou les joueurs sont de base
     private Ile[] iles;//La ou il y a les cartes
 
     public Plateau(){
