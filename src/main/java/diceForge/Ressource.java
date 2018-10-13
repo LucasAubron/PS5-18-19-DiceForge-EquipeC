@@ -7,4 +7,11 @@ public class Ressource {
      * on créé une classe Ressource que l'on dérive en chaque ressource de base,
      * mais aussi (plus tard) en face de dé complexe
      */
+    private int quantite;
+    public int getQuantite(){return quantite;}
+    Ressource(int quantite){
+        if (quantite < 0)
+            throw new RuntimeException("La quantité donnée est invalide. Min 0, actuelle : "+quantite);
+        this.quantite = quantite;
+    }
 }

@@ -18,4 +18,21 @@ public class Face {
     public Ressource[][] getRessource() {
         return ressource;
     }
+
+    @Override
+    public String toString() {
+        String res = "";
+        if (ressource.length == 1){
+            for (Ressource uneRess :ressource[0]) {
+                res = res + " " + uneRess.getQuantite();
+                if (uneRess instanceof Or)
+                    res = res + " Or";
+                else if (uneRess instanceof Soleil)
+                    res = res + " Soleil";
+                else if (uneRess instanceof PointDeGloire)
+                    res = res + " PdGloire";
+            }
+        }
+        return res;
+    }
 }
