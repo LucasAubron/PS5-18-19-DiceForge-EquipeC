@@ -7,6 +7,7 @@ public class De {
      * La classe représentant un dé (oui De c'est pas très intuitif, si quelqu'un a mieux il le refactor)
      */
     private Face[] faces;
+    private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé
 
     public Face[] getFaces() {
         return faces;
@@ -28,5 +29,6 @@ public class De {
         if (numFace < 0 || numFace > faces.length-1)
             throw new RuntimeException("Le numéro de la face est invalide. Min : 1, max : "+(faces.length-1)+", actuel : "+numFace);
         faces[numFace] = faceAForger;
+        ++nbrFaceForge;
     }
 }
