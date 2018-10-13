@@ -7,4 +7,7 @@ public class Ressource {
      * on créé une classe Ressource que l'on dérive en chaque ressource de base,
      * mais aussi (plus tard) en face de dé complexe
      */
+    private int qte;
+    public int getQte(){return this.qte;}
+    Ressource(int qte){this.qte = qte;}
 }

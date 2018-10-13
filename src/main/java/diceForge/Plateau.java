@@ -14,8 +14,8 @@ public class Plateau {
         iles = new Ile[]{
                 new Ile(
                         new Carte[][]{{
-                                new Carte(new Ressource[]{new Soleil(), new Soleil()}, 2),
-                                new Carte(new Ressource[]{new Soleil(), new Soleil()}, 2)}
+                                new Carte(new Ressource[]{new Soleil(2)}, 2),
+                                new Carte(new Ressource[]{new Soleil(2)}, 2)}
                         })};
         //XDDDDDDDDDD moi j'adore java parce que c'est vraiment simple d'initialiser des listes il n'y a aucun truc redondant c'est vraiment sympas. Cependant il est vrai qu'avec des ArrayList ça aurait été encore plus long. En plus le java n'a que des avantages par rapport au C++, par exemple on passer en fonction des initialiseur de liste (ah ben non) ou encore on peut mettre des arguments falcutatifs avec une valeur par défault(???). Bon sinon c'est pour dire que tout va bien la famille les amis wesh ça va
     }

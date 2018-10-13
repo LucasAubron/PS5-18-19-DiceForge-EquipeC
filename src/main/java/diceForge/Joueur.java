@@ -20,6 +20,8 @@ public class Joueur {
     private int pointDeGloire;
     private int identifiant;
     private De[] des;
+    private Face premierDeFaceCourante;
+    private Face deuxiemeDeFaceCourante;
 
     public Joueur(int nbrOr, int nbrSoleil, int nbrLune, int indentifiant){
         if (nbrOr < 2 || nbrOr > 7)
@@ -34,9 +36,9 @@ public class Joueur {
         if (identifiant < 0 || identifiant > 3)
             throw new RuntimeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
-        des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or()}}),
-                new Face(new Ressource[][]{{new Soleil()}}),
-                new Face(new Ressource[][]{{new PointDeGloire()}})})};//ON VA TOUS MOURRRRRIIIIRRR
+        des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Soleil(1)}}),
+                new Face(new Ressource[][]{{new PointDeGloire(1)}})})};//ON VA TOUS MOURRRRRIIIIRRR
     }
 
     public int getOr() {return or;}
@@ -62,6 +64,10 @@ public class Joueur {
          */
         for (De de:des){
             Face face = de.lancerLeDe();
+            if (de == des[0])
+                this.premierDeFaceCourante = face;
+            else
+                this.deuxiemeDeFaceCourante = face;
             for (Ressource ressource:face.getRessource()[0]){
                 if (ressource instanceof Or)
                     ajouterOr(1);
@@ -71,6 +77,12 @@ public class Joueur {
                     ++pointDeGloire;
             }
         }
+    }
+
+    public void printRessourcesEtDes(){
+        System.out.println("Or: " + this.or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString());
+        System.out.println("Soleil: " + this.soleil + "\t\t\t\t2ème Dé: not implemented in Minimal Product" ); //+ deuxiemeDeFaceCourante.toString()
+        System.out.println("PointDeGloire: " + this.pointDeGloire);
     }
 
     //public void acheterExploit(Carte carte, )

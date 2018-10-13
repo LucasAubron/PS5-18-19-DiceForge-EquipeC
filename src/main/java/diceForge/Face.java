@@ -18,4 +18,15 @@ public class Face {
     public Ressource[][] getRessource() {
         return ressource;
     }
+
+    @Override
+    public String toString() {
+        String res = "";
+        if (this.ressource.length == 1){
+            for (Ressource uneRess :ressource[0]) {
+                res = res + " " + uneRess.getQte();
+            }
+        }
+        return res;
+    }
 }
