@@ -5,9 +5,9 @@ public class Main {
         try {
             Plateau plateau = new Plateau();
             Coordinateur coordinateur = new Coordinateur(plateau, 4);
-            int i = 3;
+            /*int i = 3;
             while (i-- > 0)
-                plateau.playPlayer0();
+                plateau.playPlayer0();*/
         }
         catch (RuntimeException e){
             System.out.println(e.getMessage());

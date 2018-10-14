@@ -30,9 +30,14 @@ public class Coordinateur {
 
     public void tour(Joueur joueur, int numeroManche){
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
-            if (plateau.getPortail().getJoueurs().length == 2)//On passe par le portail pour de l'optimisation
+            if (plateau.getPortail().getJoueurs().length == 2) {//On passe par le portail pour de l'optimisation
                 x.lancerLesDes();
+                if (plateau.modeVerbeux)
+                    System.out.println(x.printRessourcesEtDes(numeroManche));
+            }
             x.lancerLesDes();
+            if (plateau.modeVerbeux)
+                System.out.println(x.printRessourcesEtDes(numeroManche));
         }
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//Est-ce que c'est une bonne manière ? A réfléchir....
     }

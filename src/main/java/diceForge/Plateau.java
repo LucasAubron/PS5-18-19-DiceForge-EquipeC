@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class Plateau {
 
+    boolean modeVerbeux = true;
     Joueur j0 = new RandomBot(0);
     Joueur j1 = new RandomBot(1);
     private Temple temple = new Temple();//La classe temple s'occupe de toute la partie forge de dé
@@ -17,7 +18,7 @@ public class Plateau {
 
     public void playPlayer0(){
         j0.lancerLesDes();
-        System.out.println(j0.printRessourcesEtDes());
+        //System.out.println(j0.printRessourcesEtDes());
     }
 
     public Plateau(){
