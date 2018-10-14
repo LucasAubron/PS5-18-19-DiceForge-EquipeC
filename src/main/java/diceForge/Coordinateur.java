@@ -1,13 +1,12 @@
 package diceForge;
 
 public class Coordinateur {
-    private Temple temple;
-    private Ile[] iles;
-    private PortailsOriginels portailsOriginels;
+    Plateau plateau;
+    private int nbrManche;
+    private int mancheActuelle = 1;
 
-    public Coordinateur(Temple temple, Ile[] iles, PortailsOriginels portailsOriginels){
-        this.temple = temple;
-        this.iles = iles;
-        this.portailsOriginels = portailsOriginels;
+    public Coordinateur(Plateau plateau, int nbrManche){
+        this.plateau = plateau;
+        this.nbrManche = nbrManche;
     }
 }

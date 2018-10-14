@@ -26,16 +26,4 @@ public class Plateau {
                                 new Carte(new Ressource[]{new Soleil(2)}, 2)}
                         })};
     }
-
-    public Ile[] getIles() {
-        return iles;
-    }
-
-    public PortailsOriginels getPortail() {
-        return portail;
-    }
-
-    public Temple getTemple() {
-        return temple;
-    }
 }
