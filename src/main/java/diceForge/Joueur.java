@@ -11,8 +11,9 @@ import java.util.ArrayList;
  * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
  * Chaque joueur possède un identifiant, allant de 0 à 3 (s'il y a 4 joueurs, sinon moins)
  * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
+ * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
-public class Joueur {
+public abstract class Joueur {
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -22,9 +23,11 @@ public class Joueur {
     private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
-    private Face premierDeFaceCourante;//!\\Ca n'a rien à faire en attribut, il faudrait trouver un autre système
-    private Face deuxiemeDeFaceCourante;//La même
+    private Face premierDeFaceCourante;
+    private Face deuxiemeDeFaceCourante;
     private ArrayList<Carte> cartes;
+
+    public enum Action {FORGER, EXPLOIT, PASSER}
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
@@ -124,4 +127,11 @@ public class Joueur {
         }
         return estAcquise;
     }
+
+    /**
+     * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
+     * @param numManche
+     * @return L'action que le bot à choisi de prendre
+     */
+    public abstract Action choisirAction(int numManche);
 }
