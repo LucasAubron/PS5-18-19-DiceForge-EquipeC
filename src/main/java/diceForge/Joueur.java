@@ -15,9 +15,9 @@ import java.util.ArrayList;
 public class Joueur {
     private int or;
     private int maxOr = 12;
-    private int soleil;
+    private int soleil = 0;
     private int maxSoleil = 6;
-    private int lune;
+    private int lune = 0;
     private int maxLune = 6;
     private int pointDeGloire = 0;
     private int identifiant;
@@ -26,19 +26,11 @@ public class Joueur {
     private Face deuxiemeDeFaceCourante;//La même
     private ArrayList<Carte> cartes;
 
-    public Joueur(int nbrOr, int nbrSoleil, int nbrLune, int indentifiant){
-        if (nbrOr < 2 || nbrOr > 7)
-            throw new RuntimeException("Le nombre d'or est invalide. Min : 2, max : 7, actuel : "+nbrOr);
-        or = nbrOr;
-        if (nbrSoleil < 0 || nbrSoleil > 2)
-            throw new RuntimeException("Le nombre de soleil est invalide. Min : 0, max : 2, actuel : "+nbrSoleil);
-        soleil = nbrSoleil;
-        if (nbrLune < 0 || nbrLune > 2)
-            throw new RuntimeException("Le nombre de lune est invalide. Min : 0, max : 2, actuel : "+nbrLune);
-        lune = nbrLune;
+    public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
             throw new RuntimeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
+        or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Soleil(1)}}),
                 new Face(new Ressource[][]{{new PointDeGloire(1)}})})};//ON VA TOUS MOURRRRRIIIIRRR

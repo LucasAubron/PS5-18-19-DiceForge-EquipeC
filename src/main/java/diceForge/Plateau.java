@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class Plateau {
 
-    Joueur j0 = new Joueur(3, 1, 1, 0);
-    Joueur j1 = new Joueur(3, 1, 1, 1);
+    Joueur j0 = new Joueur(0);
+    Joueur j1 = new Joueur(1);
     private Temple temple = new Temple();//La classe temple s'occupe de toute la partie forge de dé
     private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{j0,j1});//La ou les joueurs sont de base
     private Ile[] iles;//La ou il y a les cartes
@@ -46,4 +46,6 @@ public class Plateau {
             joueur[i] = tempJoueur.get(i);
         return joueur;
     }
+
+    public PortailsOriginels getPortail(){return portail;}
 }
