@@ -82,4 +82,6 @@ public class Ile {
         this.joueur=joueur;
         return x;
     }
+
+    public Joueur getJoueur() {return joueur;}
 }

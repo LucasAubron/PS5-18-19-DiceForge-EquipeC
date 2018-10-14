@@ -1,5 +1,7 @@
 package diceForge;
 
+import java.util.ArrayList;
+
 /**
  * Cette classe acceuille tous les éléments qui sont sur le plateau de jeu
  * A voir si on met les joueurs ici ou dans le Main
@@ -25,5 +27,23 @@ public class Plateau {
                                 new Carte(new Ressource[]{new Soleil(2)}, 2),
                                 new Carte(new Ressource[]{new Soleil(2)}, 2)}
                         })};
+    }
+
+    /**
+     * Si quelqu'un peut le faire plus clairement, qu'il le fasse
+     * @return la liste des joueurs présents sur le plateau
+     */
+    public Joueur[] getJoueur() {
+        Joueur[] joueur = new Joueur[portail.getJoueurs().length];
+        ArrayList<Joueur> tempJoueur = new ArrayList<>();
+        for (Joueur x:portail.getJoueurs())
+            if (x != null)
+                tempJoueur.add(x);
+        for (Ile x:iles)
+            if (x.getJoueur() != null)
+                tempJoueur.add(x.getJoueur());
+        for (int i = 0; i != tempJoueur.size(); ++i)
+            joueur[i] = tempJoueur.get(i);
+        return joueur;
     }
 }
