@@ -4,11 +4,11 @@ public class Bassin {
     private int cout;
     private Face[] face;
 
+    /**
+     * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
+     * et qu'il est plus simple de transmettre une liste
+     */
     public Bassin(int cout, Face[] face) {
-        /**
-         * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
-         * et qu'il est plus simple de transmettre une liste
-         */
         if (cout < 1 || cout > 12)
             throw new RuntimeException("Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
@@ -17,10 +17,10 @@ public class Bassin {
         this.face = face;
     }
 
+    /**
+     * Constructeur qui sert lorsque le bassin ne comporte que la même face
+     */
     public Bassin(int cout, Face faceUnique, int nbrFace){
-        /**
-         * Constructeur qui sert lorsque le bassin ne comporte que la même face
-         */
         if (cout < 1 || cout > 12)
             throw new RuntimeException("Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
@@ -39,11 +39,11 @@ public class Bassin {
         return face;
     }//Utiliser uniquement pour savoir qu'elle face il y a dans le bassin
 
+    /**
+     * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
+     * Il ne faut pas utiliser la méthode getFace() pour cela !
+     */
     public Face retirerFace(int numFace){
-        /**
-         * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
-         * Il ne faut pas utiliser la méthode getFace() pour cela !
-         */
         if (face[numFace] == null)
             throw new RuntimeException("La face demandée à déjà été retirée");
         Face x = face[numFace];
