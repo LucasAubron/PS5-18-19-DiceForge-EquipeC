@@ -40,8 +40,4 @@ public class PortailsOriginels {
     public Joueur[] getJoueurs() {
         return joueurs;
     }
-
-    public void setJoueurs(Joueur[] joueurs) {//UHUHUHU ! Il y a une raison pour cette folie ?????????
-        this.joueurs = joueurs;
-    }
 }
