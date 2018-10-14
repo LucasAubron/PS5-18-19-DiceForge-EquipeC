@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             Plateau plateau = new Plateau();
+            Coordinateur coordinateur = new Coordinateur(plateau.getTemple(), plateau.getIles(), plateau.getPortail());
             int i = 3;
             while (i-- > 0)
                 plateau.playPlayer0();
