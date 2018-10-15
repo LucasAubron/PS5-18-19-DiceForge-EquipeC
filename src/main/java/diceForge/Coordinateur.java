@@ -48,7 +48,7 @@ public class Coordinateur {
             case FORGER:
                 ArrayList<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
                 for (Bassin bassin:plateau.getTemple().getSanctuaire()){
-                    if (bassin.getCout() <= joueur.getOr())
+                    if (bassin.nbrFaceRestante() != 0 && bassin.getCout() <= joueur.getOr())
                         bassinAffordable.add(bassin);//Puis on la remplie
                 }
                 joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
