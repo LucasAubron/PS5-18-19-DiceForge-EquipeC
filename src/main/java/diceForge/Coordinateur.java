@@ -10,13 +10,11 @@ import java.util.List;
  */
 public class Coordinateur {
     Plateau plateau;
-    private int nbrManche;
 
     public Coordinateur(Plateau plateau, int nbrManche){
         this.plateau = plateau;
         if (nbrManche < 4 || nbrManche > 10)
             throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 4, max : 10, actuel : "+nbrManche);
-        this.nbrManche = nbrManche;
         for (int i = 1; i <= nbrManche; ++i){
             jouerManche(i);
         }
@@ -109,14 +107,14 @@ public class Coordinateur {
                         else if (prix instanceof Lune)
                             prixLune += prix.getQuantite();
                         else//Cela ne devrait jamais arriver
-                            throw new DiceForgeException("Coordinateur","Une carte doit couter soit des lunes soit des soleils !!!!");
+                            throw new DiceForgeException("Coordinateur","Une carte doit couter soit des lunes soit des soleils !");
                     }
                     if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
                         cartesAffordables.add(carte);
                 }
             }
         }
-        if (cartesAffordables.isEmpty())
+        if (cartesAffordables.isEmpty())//Si le joueur ne peut acheter aucune carte, on s'arrète la
             return;
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
             if (j != null && joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur

@@ -60,13 +60,10 @@ public class Ile {
         Joueur x = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
             if (paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
-                for (int i = paquet.size() - 1; i != -1; --i){//On commence par la fin du paquet (évite une variable inutile)
-                    joueur.acheterExploit(paquet.get(i));//Le joueur l'achete
+                    joueur.acheterExploit(paquet.remove(paquet.size()-1));//Le joueur l'achete
                     if (this.joueur == null || this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
                         x = ajouterJoueur(joueur);
-                    paquet.remove(i);//On l'enlève du paquet
                     return x;
-                }
             }
         }
         throw new DiceForgeException("Ile","La carte n'est pas dans le paquet.");
