@@ -49,4 +49,8 @@ public class Plateau {
     }
 
     public PortailsOriginels getPortail(){return portail;}
+
+    public Temple getTemple() {
+        return temple;
+    }
 }

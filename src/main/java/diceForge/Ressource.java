@@ -6,7 +6,7 @@ package diceForge;
  * on créé une classe Ressource que l'on dérive en chaque ressource de base,
  * mais aussi (plus tard) en face de dé complexe
  */
-public class Ressource {
+public abstract class Ressource {
     private int quantite;
     public int getQuantite(){return quantite;}
     Ressource(int quantite){

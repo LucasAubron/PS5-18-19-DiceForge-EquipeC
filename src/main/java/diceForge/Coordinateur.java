@@ -1,5 +1,9 @@
 package diceForge;
 
+import java.awt.image.BandCombineOp;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
  * Il s'occupe du déroulement des manches, mais aussi de déplacer les joueurs.
@@ -39,6 +43,18 @@ public class Coordinateur {
             if (plateau.modeVerbeux)
                 System.out.println(x.printRessourcesEtDes(numeroManche));
         }
-        Joueur.Action actionBot = joueur.choisirAction(numeroManche);//Est-ce que c'est une bonne manière ? A réfléchir....
+        Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
+        switch (actionBot){
+            case FORGER:
+                ArrayList<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
+                for (Bassin bassin:plateau.getTemple().getSanctuaire()){
+                    if (bassin.getCout() <= joueur.getOr())
+                        bassinAffordable.add(bassin);//Puis on la remplie
+                }
+                joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
+                break;
+            case EXPLOIT:
+
+        }
     }
 }

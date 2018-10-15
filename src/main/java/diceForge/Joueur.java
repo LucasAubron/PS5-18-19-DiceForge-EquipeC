@@ -14,18 +14,18 @@ import java.util.ArrayList;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
-    private int or;
-    private int maxOr = 12;
-    private int soleil = 0;
-    private int maxSoleil = 6;
-    private int lune = 0;
-    private int maxLune = 6;
-    private int pointDeGloire = 0;
-    private int identifiant;
-    private De[] des;
-    private Face premierDeFaceCourante;
-    private Face deuxiemeDeFaceCourante;
-    private ArrayList<Carte> cartes;
+    protected int or;
+    protected int maxOr = 12;
+    protected int soleil = 0;
+    protected int maxSoleil = 6;
+    protected int lune = 0;
+    protected int maxLune = 6;
+    protected int pointDeGloire = 0;
+    protected int identifiant;
+    protected De[] des;
+    protected Face premierDeFaceCourante;
+    protected Face deuxiemeDeFaceCourante;
+    protected ArrayList<Carte> cartes;
 
     public enum Action {FORGER, EXPLOIT, PASSER}
 
@@ -130,9 +130,28 @@ public abstract class Joueur {
     }
 
     /**
+     * Permet de forger une face sur un dé du joueur
+     */
+    public void forgerDe(int numDe, Face faceAForger, int numFace){
+        if (numDe < 0 || numDe > 1)
+            throw new RuntimeException("Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
+        des[numDe].forger(faceAForger, numFace);
+    }
+
+    /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
      * @param numManche
      * @return L'action que le bot à choisi de prendre
      */
     public abstract Action choisirAction(int numManche);
+
+    /**
+     * Permet de forger une face sur le dé à partir de la liste des bassins affordables.
+     * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
+     * @param bassins la liste des bassins affordables
+     */
+    public abstract void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche);
+
+    //public abstract void choisirCarte(ArrayList<Carte)
+
 }
