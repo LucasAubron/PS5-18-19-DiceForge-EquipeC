@@ -20,7 +20,7 @@ public class RandomBot extends Joueur{
             case 2:
                 return Action.PASSER;
         }
-        throw new RuntimeException("Il y a petit problème dans ma plantation, pourquoi ça pousse pas ?");
+        throw new DiceForgeException("Il y a petit problème dans ma plantation, pourquoi ça pousse pas ?");
     }
 
     @Override
@@ -42,7 +42,9 @@ public class RandomBot extends Joueur{
     }
 
     @Override
-    public Joueur choisirCarte(ArrayList<Carte> cartes, int numManche){
-        return null;
+    public Carte choisirCarte(ArrayList<Carte> cartes, int numManche){
+        Random random = new Random();
+        int numCarte = random.nextInt(cartes.size());
+        return cartes.get(numCarte);
     }
 }

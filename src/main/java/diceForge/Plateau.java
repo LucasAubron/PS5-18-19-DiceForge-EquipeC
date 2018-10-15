@@ -38,11 +38,15 @@ public class Plateau {
         Joueur[] joueur = new Joueur[portail.getJoueurs().length];
         ArrayList<Joueur> tempJoueur = new ArrayList<>();
         for (Joueur x:portail.getJoueurs())
-            if (x != null)
+            if (x != null) {
                 tempJoueur.add(x);
+            }
         for (Ile x:iles)
-            if (x.getJoueur() != null)
+            if (x.getJoueur() != null) {
                 tempJoueur.add(x.getJoueur());
+            }
+        if (tempJoueur.size() != joueur.length)
+            throw new DiceForgeException("On perd des joueurs ! Nombre de joueurs trouvé : "+tempJoueur.size());
         for (int i = 0; i != tempJoueur.size(); ++i)
             joueur[i] = tempJoueur.get(i);
         return joueur;

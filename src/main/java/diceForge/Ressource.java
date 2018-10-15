@@ -11,7 +11,7 @@ public abstract class Ressource {
     public int getQuantite(){return quantite;}
     Ressource(int quantite){
         if (quantite < 0)
-            throw new RuntimeException("La quantité donnée est invalide. Min 0, actuelle : "+quantite);
+            throw new DiceForgeException("La quantité donnée est invalide. Min 0, actuelle : "+quantite);
         this.quantite = quantite;
     }
 }

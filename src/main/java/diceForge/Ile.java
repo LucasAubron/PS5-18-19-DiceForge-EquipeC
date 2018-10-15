@@ -11,10 +11,10 @@ public class Ile {
 
     public Ile(Carte[][] cartes){
         if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale
-            throw new RuntimeException("Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
+            throw new DiceForgeException("Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
         for (int i = 0; i != cartes.length; ++i)
             if (cartes[i].length < 2 || cartes[i].length > 4)
-                throw new RuntimeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+cartes[i].length);
+                throw new DiceForgeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+cartes[i].length);
         this.cartes = cartes;
     }
     /**
@@ -22,7 +22,7 @@ public class Ile {
      */
     public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
         if (nbrCarteParPaquet < 2 || nbrCarteParPaquet > 4)
-            throw new RuntimeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
+            throw new DiceForgeException("Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new Carte[2][nbrCarteParPaquet];
         for (int i = 0; i != nbrCarteParPaquet; ++i) {
             cartes[0][i] = new Carte(carte1.getCout(), carte1.getNbrPointGloire());
@@ -52,9 +52,8 @@ public class Ile {
             if (paquet[0].equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
                 for (int i = paquet.length - 1; i != -1; --i){//On commence par la fin du paquet (évite une variable inutile)
                     if (paquet[i] != null){//Si il y a bien une carte la ou l'on regarde
-                        if (!joueur.acheterExploit(paquet[i]))//Le joueur l'achete
-                            throw new RuntimeException("Le joueur n'a pas les moyens d'acheter cette carte.");
-                        if (this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
+                        joueur.acheterExploit(paquet[i]);//Le joueur l'achete
+                        if (this.joueur == null || this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
                             x = ajouterJoueur(joueur);
                         paquet[i] = null;//On l'enlève du paquet
                         return x;
@@ -62,7 +61,7 @@ public class Ile {
                 }
             }
         }
-        throw new RuntimeException("La carte n'est pas dans le paquet.");
+        throw new DiceForgeException("La carte n'est pas dans le paquet.");
     }
 
     /**

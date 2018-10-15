@@ -1,7 +1,5 @@
 package diceForge;
 
-import java.awt.image.BandCombineOp;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +14,7 @@ public class Coordinateur {
     public Coordinateur(Plateau plateau, int nbrManche){
         this.plateau = plateau;
         if (nbrManche < 4 || nbrManche > 10)
-            throw new RuntimeException("Le nombre de manche est invalide. Min : 4, max : 10, actuel : "+nbrManche);
+            throw new DiceForgeException("Le nombre de manche est invalide. Min : 4, max : 10, actuel : "+nbrManche);
         this.nbrManche = nbrManche;
         for (int i = 1; i <= nbrManche; ++i){
             jouerManche(i);
@@ -62,30 +60,43 @@ public class Coordinateur {
                     joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
                 break;
             case EXPLOIT:
-                for (Joueur j:plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
-                    if (j != null && joueur.getIdentifiant() == j.getIdentifiant())//On teste les identifiants, c'est le plus sur
-                        plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
                 ArrayList<Carte> cartesAffordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
                 for (Ile ile:plateau.getIles()) {//On parcours les iles
                     for (Carte[] paquet : ile.getCartes()) {//Et les paquets
                         for (Carte carte : paquet) {//Et les cartes
-                            int prixSoleil = 0, prixLune = 0;
-                            for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
-                                if (prix instanceof Soleil)
-                                    prixSoleil += prix.getQuantite();
-                                else if (prix instanceof Lune)
-                                    prixLune += prix.getQuantite();
-                                else//Cela ne devrait jamais arriver
-                                    throw new RuntimeException("Une carte doit couter soit des lunes soit des soleils !!!!");
+                            if (carte != null) {
+                                int prixSoleil = 0, prixLune = 0;
+                                for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
+                                    if (prix instanceof Soleil)
+                                        prixSoleil += prix.getQuantite();
+                                    else if (prix instanceof Lune)
+                                        prixLune += prix.getQuantite();
+                                    else//Cela ne devrait jamais arriver
+                                        throw new DiceForgeException("Une carte doit couter soit des lunes soit des soleils !!!!");
+                                }
+                                if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
+                                    cartesAffordables.add(carte);
                             }
-                            if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
-                                cartesAffordables.add(carte);
                         }
                     }
                 }
-                Joueur joueurChasse = joueur.choisirCarte(cartesAffordables, numeroManche);
+                if (cartesAffordables.isEmpty())
+                    break;
+                for (Joueur j:plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
+                    if (j != null && joueur.getIdentifiant() == j.getIdentifiant())//On teste les identifiants, c'est le plus sur
+                        plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
+                Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
+                Joueur joueurChasse = null;
+                for (Ile ile:plateau.getIles()){
+                    for (Carte[] paquet:ile.getCartes()){
+                        if (paquet[0].equals(carteChoisie)){
+                            joueurChasse = ile.prendreCarte(joueur, carteChoisie);
+                        }
+                    }
+                }
                 if (joueurChasse != null)
                     plateau.getPortail().ajouterJoueur(joueurChasse);
+                break;
         }
     }
 }

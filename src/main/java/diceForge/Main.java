@@ -9,7 +9,7 @@ public class Main {
             while (i-- > 0)
                 plateau.playPlayer0();*/
         }
-        catch (RuntimeException e){
+        catch (DiceForgeException e){
             System.out.println("Une erreur est apparue dans le déroulement du programme, message d'erreur : ");
             System.out.println(e.getMessage());
         }

@@ -12,10 +12,10 @@ public class Bassin {
      */
     public Bassin(int cout, Face[] faces) {
         if (cout < 1 || cout > 12)
-            throw new RuntimeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+            throw new DiceForgeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
         if (faces.length < 2 || faces.length > 4)
-            throw new RuntimeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.length);
+            throw new DiceForgeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.length);
         this.faces = faces;
     }
 
@@ -24,10 +24,10 @@ public class Bassin {
      */
     public Bassin(int cout, Face facesUnique, int nbrFace){
         if (cout < 1 || cout > 12)
-            throw new RuntimeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+            throw new DiceForgeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
         if (nbrFace < 2 || nbrFace > 4)
-            throw new RuntimeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);
+            throw new DiceForgeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);
         faces = new Face[nbrFace];
         for (int i = 0; i != nbrFace; ++i)
             faces[i] = new Face(facesUnique.getRessource());
@@ -69,7 +69,7 @@ public class Bassin {
      */
     public Face retirerFace(int numFace){
         if (faces[numFace] == null)
-            throw new RuntimeException("Bassin : La face demandée à déjà été retirée");
+            throw new DiceForgeException("Bassin : La face demandée à déjà été retirée");
         Face x = faces[numFace];
         faces[numFace] = null;
         return x;
