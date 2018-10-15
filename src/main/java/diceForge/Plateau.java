@@ -36,10 +36,14 @@ public class Plateau {
         for (Joueur x:portail.getJoueurs())
             tempJoueur.add(x);
         for (Ile x:iles)
-            if (x.getJoueur() != null) {
+            if (x.getJoueur() != null)
                 tempJoueur.add(x.getJoueur());
-            }
-        return tempJoueur;
+        List<Joueur> joueur = new ArrayList<>();
+        for (int i = 0; i != tempJoueur.size(); ++i){
+            if (tempJoueur.get(i).getIdentifiant() == i)
+                joueur.add(tempJoueur.get(i));
+        }
+        return joueur;
     }
 
     public PortailsOriginels getPortail(){return portail;}
