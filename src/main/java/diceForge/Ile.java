@@ -84,4 +84,10 @@ public class Ile {
     }
 
     public Joueur getJoueur() {return joueur;}
+
+    /**
+     * Ne PAS utiliser pour retirer une carte !!!!
+     * @return
+     */
+    public Carte[][] getCartes(){return cartes;}
 }

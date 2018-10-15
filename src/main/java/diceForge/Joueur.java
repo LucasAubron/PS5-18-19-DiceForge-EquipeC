@@ -152,6 +152,10 @@ public abstract class Joueur {
      */
     public abstract void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche);
 
-    //public abstract void choisirCarte(ArrayList<Carte)
+    /**
+     * Permet de choisir une carte parmis une liste de carte affordable
+     * @return Le joueur chassé de l'ile (oui il se fait trimbaler partout lui)
+     */
+    public abstract Joueur choisirCarte(ArrayList<Carte> cartes, int numManche);
 
 }

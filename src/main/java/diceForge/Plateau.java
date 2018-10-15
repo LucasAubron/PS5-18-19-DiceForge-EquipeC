@@ -50,6 +50,8 @@ public class Plateau {
 
     public PortailsOriginels getPortail(){return portail;}
 
+    public Ile[] getIles() {return iles;}
+
     public Temple getTemple() {
         return temple;
     }

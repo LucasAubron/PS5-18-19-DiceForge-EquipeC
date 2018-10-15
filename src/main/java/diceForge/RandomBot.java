@@ -39,4 +39,9 @@ public class RandomBot extends Joueur{
         if (!bassinsAffordables.isEmpty())//Si la liste que l'on obtient n'est pas vide
             choisirFaceAForger(bassinsAffordables, numManche);
     }
+
+    @Override
+    public Joueur choisirCarte(ArrayList<Carte> cartes, int numManche){
+        return null;
+    }
 }
