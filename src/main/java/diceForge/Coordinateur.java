@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class Coordinateur {
     Plateau plateau;
+    private String affichage = "";
 
     public Coordinateur(Plateau plateau, int nbrManche){
         this.plateau = plateau;
@@ -26,7 +27,7 @@ public class Coordinateur {
                 numJoueurGagnant = joueur.getIdentifiant();
             }
         }
-        System.out.println("Le joueur n°"+numJoueurGagnant+" gagne avec "+maxPointGloire+" points de gloire !");
+        affichage += "\n\n\n\n\t\t-------------------------------------------------\n\t\t" + "| Le joueur n°"+numJoueurGagnant+" gagne avec "+maxPointGloire+" points de gloire ! |\n" + "\t\t-------------------------------------------------\n";
     }
 
     /**
@@ -45,24 +46,33 @@ public class Coordinateur {
      * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
      */
     public void tour(Joueur joueur, int numeroManche){
-        System.out.println("-----------------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur: " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n-----------------------------------------------------------------------\n");
+        if (plateau.getModeVerbeux())
+            affichage += ("-----------------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n-----------------------------------------------------------------------\n");
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
-            if (plateau.getJoueur().size() == 2) {//On passe par le portail pour de l'optimisation
+            if (plateau.getJoueur().size() == 2) {
                 x.lancerLesDes();
-                if (plateau.modeVerbeux)
-                    System.out.println(x.printRessourcesEtDes(numeroManche));
+                if (plateau.getModeVerbeux())
+                    affichage += x.returnStringRessourcesEtDes(numeroManche);
             }
             x.lancerLesDes();
-            if (plateau.modeVerbeux)
-                System.out.println(x.printRessourcesEtDes(numeroManche));
+            if (plateau.getModeVerbeux())
+                affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
+                if (plateau.getModeVerbeux())
+                    affichage += "----------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
                 forger(joueur, numeroManche);
                 break;
             case EXPLOIT:
+                if (plateau.getModeVerbeux())
+                    affichage += "-----------------------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
                 exploit(joueur, numeroManche);
+                break;
+            case PASSER:
+                if (plateau.getModeVerbeux())
+                    affichage += "------------------------------------------------\n" + "-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 break;
         }
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
@@ -79,7 +89,7 @@ public class Coordinateur {
     }
 
     /**
-     * Méthode qui permet à un joueur de forger une face d'un bassin
+     * Méthode demande à un joueur de forger une face d'un bassin
      */
     public  void forger(Joueur joueur, int numeroManche) {
         List<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
@@ -92,7 +102,7 @@ public class Coordinateur {
     }
 
     /**
-     * Méthode qui permet à un joueur de choisir une carte
+     * Méthode qui demande à un joueur de choisir une carte
      * A raccourcir, refaire ou alors nier son existence
      */
     public void exploit(Joueur joueur, int numeroManche) {
@@ -133,4 +143,7 @@ public class Coordinateur {
         if (joueurChasse != null)
             plateau.getPortail().ajouterJoueur(joueurChasse);
     }
+    public String toString(){
+        return affichage;
+        }
 }

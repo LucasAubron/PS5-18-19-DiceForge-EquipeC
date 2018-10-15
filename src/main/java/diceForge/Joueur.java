@@ -88,12 +88,12 @@ public abstract class Joueur {
 
     /**
      * Méthode à appeler lorsque le joueur en chasse un autre
-     * Elle servira uniquement lorsque le sanglier sera introduit
+     * Elle servira uniquement lorsque l'ours sera introduit
      */
     public void chasse() {
     }
 
-    public String printRessourcesEtDes(int numeroManche){
+    public String returnStringRessourcesEtDes(int numeroManche){
         String res = "Joueur: " + identifiant + "\n";
         res += "Res 1er dé: " +  premierDeFaceCourante.toString() + "\t||\t" + "Res 2ème dé: /" + "\n";
         res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";

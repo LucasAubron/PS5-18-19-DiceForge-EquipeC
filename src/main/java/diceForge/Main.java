@@ -4,9 +4,7 @@ public class Main {
         try {
             Plateau plateau = new Plateau();
             Coordinateur coordinateur = new Coordinateur(plateau, 4);
-            /*int i = 3;
-            while (i-- > 0)
-                plateau.playPlayer0();*/
+            System.out.println(coordinateur);
         }
         catch (DiceForgeException e){
             System.out.println("Une erreur est apparue dans "+e.getLocalisation()+".java, message d'erreur : ");
