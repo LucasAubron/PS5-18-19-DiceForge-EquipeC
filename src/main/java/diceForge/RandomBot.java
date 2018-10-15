@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomBot extends Joueur{
@@ -20,15 +21,14 @@ public class RandomBot extends Joueur{
             case 2:
                 return Action.PASSER;
         }
-        throw new DiceForgeException("Il y a petit problème dans ma plantation, pourquoi ça pousse pas ?");
+        throw new DiceForgeException("RandomBot","Il y a petit problème dans ma plantation, pourquoi ça pousse pas ?");
     }
 
     @Override
-    public void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche){
+    public void choisirFaceAForger(List<Bassin> bassins, int numManche){
         Random random = new Random();//On génére tout les nombres random que l'on a besoin
         int numBassin = random.nextInt(bassins.size());
-        int numFace = random.nextInt(bassins.get(numBassin).nbrFaceRestante());
-        numFace = bassins.get(numBassin).numFacesRestante().get(numFace);
+        int numFace = random.nextInt(bassins.get(numBassin).getFace().size());
         int numDe = random.nextInt(des.length);
         int posFace = random.nextInt(des[0].getFaces().length);
         forgerDe(numDe, bassins.get(numBassin).retirerFace(numFace), posFace);//On forge le dé et on retire la face en meme temps
@@ -42,7 +42,7 @@ public class RandomBot extends Joueur{
     }
 
     @Override
-    public Carte choisirCarte(ArrayList<Carte> cartes, int numManche){
+    public Carte choisirCarte(List<Carte> cartes, int numManche){
         Random random = new Random();
         int numCarte = random.nextInt(cartes.size());
         return cartes.get(numCarte);

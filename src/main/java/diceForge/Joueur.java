@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
@@ -31,7 +32,7 @@ public abstract class Joueur {
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
-            throw new DiceForgeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
+            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
         or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
@@ -114,7 +115,7 @@ public abstract class Joueur {
                 lune -= ressource.getQuantite();
             }
             else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
-                throw new DiceForgeException("Le joueur ne peut pas acquérir la carte !");
+                throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
             }
         }
         pointDeGloire += carte.getNbrPointGloire();
@@ -126,7 +127,7 @@ public abstract class Joueur {
      */
     public void forgerDe(int numDe, Face faceAForger, int numFace){
         if (numDe < 0 || numDe > 1)
-            throw new DiceForgeException("Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
+            throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
     }
 
@@ -148,13 +149,13 @@ public abstract class Joueur {
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins affordables
      */
-    public abstract void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche);
+    public abstract void choisirFaceAForger(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable
      * @return La carte choisie
      */
-    public abstract Carte choisirCarte(ArrayList<Carte> cartes, int numManche);
+    public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
 
     /**
      * Permet de choisir d'effectuer une action supplémentaire
