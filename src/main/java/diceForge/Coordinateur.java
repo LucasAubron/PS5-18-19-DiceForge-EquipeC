@@ -39,6 +39,7 @@ public class Coordinateur {
      * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
      */
     public void tour(Joueur joueur, int numeroManche){
+        System.out.println("-----------------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur: " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n-----------------------------------------------------------------------\n");
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getPortail().getJoueurs().length == 2) {//On passe par le portail pour de l'optimisation
                 x.lancerLesDes();
