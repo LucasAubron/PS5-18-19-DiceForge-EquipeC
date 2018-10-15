@@ -118,7 +118,6 @@ public abstract class Joueur {
                 throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
             }
         }
-        pointDeGloire += carte.getNbrPointGloire();
         cartes.add(carte);
     }
 
@@ -131,6 +130,10 @@ public abstract class Joueur {
         des[numDe].forger(faceAForger, numFace);
     }
 
+    /**
+     * Sert à additionner les points donné par les cartes.
+     * Est appelé une fois à la fin de la partie
+     */
     public void additionnerPointsCartes() {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
