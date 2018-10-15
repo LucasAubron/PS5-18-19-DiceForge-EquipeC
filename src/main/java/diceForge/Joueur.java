@@ -11,34 +11,29 @@ import java.util.ArrayList;
  * Ainsi elle doit permettre d'avoir une grande communication avec l'extérieur
  * Chaque joueur possède un identifiant, allant de 0 à 3 (s'il y a 4 joueurs, sinon moins)
  * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
+ * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
-public class Joueur {
-    private int or;
-    private int maxOr = 12;
-    private int soleil;
-    private int maxSoleil = 6;
-    private int lune;
-    private int maxLune = 6;
-    private int pointDeGloire = 0;
-    private int identifiant;
-    private De[] des;
-    private Face premierDeFaceCourante;//!\\Ca n'a rien à faire en attribut, il faudrait trouver un autre système
-    private Face deuxiemeDeFaceCourante;//La même
-    private ArrayList<Carte> cartes;
+public abstract class Joueur {
+    protected int or;
+    protected int maxOr = 12;
+    protected int soleil = 0;
+    protected int maxSoleil = 6;
+    protected int lune = 0;
+    protected int maxLune = 6;
+    protected int pointDeGloire = 0;
+    protected int identifiant;
+    protected De[] des;
+    protected Face premierDeFaceCourante;
+    protected Face deuxiemeDeFaceCourante;
+    protected ArrayList<Carte> cartes = new ArrayList<>();
 
-    public Joueur(int nbrOr, int nbrSoleil, int nbrLune, int indentifiant){
-        if (nbrOr < 2 || nbrOr > 7)
-            throw new RuntimeException("Le nombre d'or est invalide. Min : 2, max : 7, actuel : "+nbrOr);
-        or = nbrOr;
-        if (nbrSoleil < 0 || nbrSoleil > 2)
-            throw new RuntimeException("Le nombre de soleil est invalide. Min : 0, max : 2, actuel : "+nbrSoleil);
-        soleil = nbrSoleil;
-        if (nbrLune < 0 || nbrLune > 2)
-            throw new RuntimeException("Le nombre de lune est invalide. Min : 0, max : 2, actuel : "+nbrLune);
-        lune = nbrLune;
+    public enum Action {FORGER, EXPLOIT, PASSER}
+
+    public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
-            throw new RuntimeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
+            throw new DiceForgeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
+        or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Soleil(1)}}),
                 new Face(new Ressource[][]{{new PointDeGloire(1)}})})};//ON VA TOUS MOURRRRRIIIIRRR
@@ -97,11 +92,10 @@ public class Joueur {
     public void chasse() {
     }
 
-    public String printRessourcesEtDes(){
-        String res = "Or: " + or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString() + "\n";
-        res = res + "Soleil: " + soleil + "\t\t\t2ème Dé: Non implémenté en version minimale\n" ; //+ deuxiemeDeFaceCourante.toString()
-        res = res + "PointDeGloire: " + pointDeGloire + "\n";
-        res = res + "--------------------------------------";
+    public String printRessourcesEtDes(int numeroManche){
+        String res = "Joueur: " + identifiant + "\n";
+        res += "Res 1er dé: " +  premierDeFaceCourante.toString() + "\t||\t" + "Res 2ème dé: /" + "\n";
+        res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
         return res;
     }
 
@@ -111,25 +105,60 @@ public class Joueur {
      * @param carte
      * @return true si la carte à pu être acheté, false sinon
      */
-    public boolean acheterExploit(Carte carte){
-        boolean estAcquise = true;
+    public void acheterExploit(Carte carte){
         for (Ressource ressource:carte.getCout()){
             if (ressource instanceof Soleil && ressource.getQuantite() <= soleil){
                 soleil -= ressource.getQuantite();
-                estAcquise = true;
             }
             else if (ressource instanceof Lune && ressource.getQuantite() <= lune){
                 lune -= ressource.getQuantite();
             }
             else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
-                estAcquise = false;
-                break;//Si vous pensez trouver un meilleur moyen, eh bien soyez sur que ça marche et implémenté le
+                throw new DiceForgeException("Le joueur ne peut pas acquérir la carte !");
             }
         }
-        if (estAcquise) {
-            pointDeGloire += carte.getNbrPointGloire();
-            cartes.add(carte);
-        }
-        return estAcquise;
+        pointDeGloire += carte.getNbrPointGloire();
+        cartes.add(carte);
     }
+
+    /**
+     * Permet de forger une face sur un dé du joueur
+     */
+    public void forgerDe(int numDe, Face faceAForger, int numFace){
+        if (numDe < 0 || numDe > 1)
+            throw new DiceForgeException("Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
+        des[numDe].forger(faceAForger, numFace);
+    }
+
+    public void additionnerPointsCartes() {
+        for (Carte carte:cartes){
+            pointDeGloire += carte.getNbrPointGloire();
+        }
+    }
+
+    /**
+     * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
+     * @param numManche
+     * @return L'action que le bot à choisi de prendre
+     */
+    public abstract Action choisirAction(int numManche);
+
+    /**
+     * Permet de forger une face sur le dé à partir de la liste des bassins affordables.
+     * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
+     * @param bassins la liste des bassins affordables
+     */
+    public abstract void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche);
+
+    /**
+     * Permet de choisir une carte parmis une liste de carte affordable
+     * @return La carte choisie
+     */
+    public abstract Carte choisirCarte(ArrayList<Carte> cartes, int numManche);
+
+    /**
+     * Permet de choisir d'effectuer une action supplémentaire
+     * @return true si le bot veut une action supplémentaire, false sinon
+     */
+    public abstract boolean choisirActionSupplementaire(int numManche);
 }

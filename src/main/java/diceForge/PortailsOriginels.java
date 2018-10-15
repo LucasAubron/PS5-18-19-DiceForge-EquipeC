@@ -9,7 +9,7 @@ public class PortailsOriginels {
 
     public PortailsOriginels(Joueur[] joueurs){
         if (joueurs.length < 2 || joueurs.length > 4)
-            throw new RuntimeException("Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
+            throw new DiceForgeException("Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
         this.joueurs = joueurs;
     }
 
@@ -19,9 +19,9 @@ public class PortailsOriginels {
      */
     public Joueur retirerJoueur(int numJoueur){
         if (numJoueur < 0 || numJoueur >= joueurs.length)
-            throw new RuntimeException("Le numéro du joueur est invalide. Min : 0, max : "+(joueurs.length-1)+", actuel : "+numJoueur);
+            throw new DiceForgeException("Le numéro du joueur est invalide. Min : 0, max : "+(joueurs.length-1)+", actuel : "+numJoueur);
         if (joueurs[numJoueur] == null)
-            throw new RuntimeException("Il n'y a pas de joueur à cette position. Position : "+numJoueur);
+            throw new DiceForgeException("Il n'y a pas de joueur à cette position. Position : "+numJoueur);
         Joueur x = joueurs[numJoueur];
         joueurs[numJoueur] = null;
         return x;
@@ -33,7 +33,9 @@ public class PortailsOriginels {
      */
     public void ajouterJoueur(Joueur joueur){
         if (joueurs[joueur.getIdentifiant()] != null)
-            throw new RuntimeException("FATAL ERROR ! Il y a déjà une joueur situé dans son emplacement");
+            throw new DiceForgeException("FATAL ERROR ! Il y a déjà une joueur situé dans son emplacement");
+        if (joueur == null)
+            throw new DiceForgeException("FATAL ERREUR : Le joueur donné n'existe pas");
         joueurs[joueur.getIdentifiant()] = joueur;
     }
 

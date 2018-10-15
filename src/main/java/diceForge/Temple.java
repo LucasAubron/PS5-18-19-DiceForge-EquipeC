@@ -13,4 +13,6 @@ public class Temple {
         sanctuaire[0] = new Bassin(2, or, 2);//Et on créé chaque bassins avec leur face
         sanctuaire[1] = new Bassin(2, soleil, 2);
     }
+
+    public Bassin[] getSanctuaire() {return sanctuaire;}
 }
