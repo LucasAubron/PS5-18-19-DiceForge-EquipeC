@@ -32,6 +32,12 @@ public class Coordinateur {
         }
     }
 
+    /**
+     * La méthode qui gére la gestion d'un tour.
+     * Il faut absolument faire des méthodes forger() et exploit() !
+     * @param joueur c'est le joueur actif
+     * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
+     */
     public void tour(Joueur joueur, int numeroManche){
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getPortail().getJoueurs().length == 2) {//On passe par le portail pour de l'optimisation
@@ -51,7 +57,8 @@ public class Coordinateur {
                     if (bassin.nbrFaceRestante() != 0 && bassin.getCout() <= joueur.getOr())
                         bassinAffordable.add(bassin);//Puis on la remplie
                 }
-                joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
+                if (!bassinAffordable.isEmpty())
+                    joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
                 break;
             case EXPLOIT:
                 for (Joueur j:plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels

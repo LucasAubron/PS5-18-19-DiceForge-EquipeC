@@ -12,10 +12,10 @@ public class Bassin {
      */
     public Bassin(int cout, Face[] faces) {
         if (cout < 1 || cout > 12)
-            throw new RuntimeException("Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+            throw new RuntimeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
         if (faces.length < 2 || faces.length > 4)
-            throw new RuntimeException("Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.length);
+            throw new RuntimeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.length);
         this.faces = faces;
     }
 
@@ -24,10 +24,10 @@ public class Bassin {
      */
     public Bassin(int cout, Face facesUnique, int nbrFace){
         if (cout < 1 || cout > 12)
-            throw new RuntimeException("Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+            throw new RuntimeException("Bassin : Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
         if (nbrFace < 2 || nbrFace > 4)
-            throw new RuntimeException("Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);
+            throw new RuntimeException("Bassin : Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);
         faces = new Face[nbrFace];
         for (int i = 0; i != nbrFace; ++i)
             faces[i] = new Face(facesUnique.getRessource());
@@ -45,6 +45,16 @@ public class Bassin {
         return i;
     }
 
+    public ArrayList<Integer> numFacesRestante(){
+        if (nbrFaceRestante() == 0)
+            return null;
+        ArrayList<Integer> nums = new ArrayList<Integer>();
+        for (int i = 0; i != faces.length; ++i)
+            if (faces[i] != null)
+                nums.add(i);
+        return nums;
+    }
+
     /**
      * A utiliser pour savoir les faces présentent, PAS pour en prendre une
      * @return la liste des faces. Aucune, certaines ou toutes peuvent être null
@@ -59,7 +69,7 @@ public class Bassin {
      */
     public Face retirerFace(int numFace){
         if (faces[numFace] == null)
-            throw new RuntimeException("La face demandée à déjà été retirée");
+            throw new RuntimeException("Bassin : La face demandée à déjà été retirée");
         Face x = faces[numFace];
         faces[numFace] = null;
         return x;
