@@ -19,6 +19,15 @@ public class Coordinateur {
         for (int i = 1; i <= nbrManche; ++i){
             jouerManche(i);
         }
+        int numJoueurGagnant = 0, maxPointGloire = 0;
+        for (Joueur joueur:plateau.getJoueur()){
+            joueur.additionnerPointsCartes();
+            if (joueur.getPointDeGloire() > maxPointGloire){
+                maxPointGloire = joueur.getPointDeGloire();
+                numJoueurGagnant = joueur.getIdentifiant();
+            }
+        }
+        System.out.println("Le joueur n°"+numJoueurGagnant+" gagne avec "+maxPointGloire+" points de gloire !");
     }
 
     /**
@@ -51,52 +60,78 @@ public class Coordinateur {
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
-                ArrayList<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
-                for (Bassin bassin:plateau.getTemple().getSanctuaire()){
-                    if (bassin.nbrFaceRestante() != 0 && bassin.getCout() <= joueur.getOr())
-                        bassinAffordable.add(bassin);//Puis on la remplie
-                }
-                if (!bassinAffordable.isEmpty())
-                    joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
+                forger(joueur, numeroManche);
                 break;
             case EXPLOIT:
-                ArrayList<Carte> cartesAffordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
-                for (Ile ile:plateau.getIles()) {//On parcours les iles
-                    for (Carte[] paquet : ile.getCartes()) {//Et les paquets
-                        for (Carte carte : paquet) {//Et les cartes
-                            if (carte != null) {
-                                int prixSoleil = 0, prixLune = 0;
-                                for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
-                                    if (prix instanceof Soleil)
-                                        prixSoleil += prix.getQuantite();
-                                    else if (prix instanceof Lune)
-                                        prixLune += prix.getQuantite();
-                                    else//Cela ne devrait jamais arriver
-                                        throw new DiceForgeException("Une carte doit couter soit des lunes soit des soleils !!!!");
-                                }
-                                if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
-                                    cartesAffordables.add(carte);
-                            }
-                        }
-                    }
-                }
-                if (cartesAffordables.isEmpty())
-                    break;
-                for (Joueur j:plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
-                    if (j != null && joueur.getIdentifiant() == j.getIdentifiant())//On teste les identifiants, c'est le plus sur
-                        plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
-                Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
-                Joueur joueurChasse = null;
-                for (Ile ile:plateau.getIles()){
-                    for (Carte[] paquet:ile.getCartes()){
-                        if (paquet[0].equals(carteChoisie)){
-                            joueurChasse = ile.prendreCarte(joueur, carteChoisie);
-                        }
-                    }
-                }
-                if (joueurChasse != null)
-                    plateau.getPortail().ajouterJoueur(joueurChasse);
+                exploit(joueur, numeroManche);
                 break;
         }
+        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
+            Joueur.Action actionBot2 = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
+            switch (actionBot2) {
+                case FORGER:
+                    forger(joueur, numeroManche);
+                    break;
+                case EXPLOIT:
+                    exploit(joueur, numeroManche);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Méthode qui permet à un joueur de forger une face d'un bassin
+     */
+    public  void forger(Joueur joueur, int numeroManche) {
+        ArrayList<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
+        for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
+            if (bassin.nbrFaceRestante() != 0 && bassin.getCout() <= joueur.getOr())
+                bassinAffordable.add(bassin);//Puis on la remplie
+        }
+        if (!bassinAffordable.isEmpty())
+            joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
+    }
+
+    /**
+     * Méthode qui permet à un joueur de choisir une carte
+     * A raccourcir, refaire ou alors nier son existence
+     */
+    public void exploit(Joueur joueur, int numeroManche) {
+        ArrayList<Carte> cartesAffordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
+        for (Ile ile : plateau.getIles()) {//On parcours les iles
+            for (Carte[] paquet : ile.getCartes()) {//Et les paquets
+                for (Carte carte : paquet) {//Et les cartes
+                    if (carte != null) {
+                        int prixSoleil = 0, prixLune = 0;
+                        for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
+                            if (prix instanceof Soleil)
+                                prixSoleil += prix.getQuantite();
+                            else if (prix instanceof Lune)
+                                prixLune += prix.getQuantite();
+                            else//Cela ne devrait jamais arriver
+                                throw new DiceForgeException("Une carte doit couter soit des lunes soit des soleils !!!!");
+                        }
+                        if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
+                            cartesAffordables.add(carte);
+                    }
+                }
+            }
+        }
+        if (cartesAffordables.isEmpty())
+            return;
+        for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
+            if (j != null && joueur.getIdentifiant() == j.getIdentifiant())//On teste les identifiants, c'est le plus sur
+                plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
+        Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
+        Joueur joueurChasse = null;
+        for (Ile ile : plateau.getIles()) {
+            for (Carte[] paquet : ile.getCartes()) {
+                if (paquet[0].equals(carteChoisie)) {
+                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);
+                }
+            }
+        }
+        if (joueurChasse != null)
+            plateau.getPortail().ajouterJoueur(joueurChasse);
     }
 }

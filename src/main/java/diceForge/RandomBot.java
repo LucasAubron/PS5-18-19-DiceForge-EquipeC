@@ -47,4 +47,11 @@ public class RandomBot extends Joueur{
         int numCarte = random.nextInt(cartes.size());
         return cartes.get(numCarte);
     }
+
+    @Override
+    public boolean choisirActionSupplementaire(int numManche){
+        Random random = new Random();
+        int pileFace = random.nextInt(2);
+        return pileFace == 1;
+    }
 }

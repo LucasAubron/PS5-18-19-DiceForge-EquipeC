@@ -130,6 +130,12 @@ public abstract class Joueur {
         des[numDe].forger(faceAForger, numFace);
     }
 
+    public void additionnerPointsCartes() {
+        for (Carte carte:cartes){
+            pointDeGloire += carte.getNbrPointGloire();
+        }
+    }
+
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
      * @param numManche
@@ -150,4 +156,9 @@ public abstract class Joueur {
      */
     public abstract Carte choisirCarte(ArrayList<Carte> cartes, int numManche);
 
+    /**
+     * Permet de choisir d'effectuer une action supplémentaire
+     * @return true si le bot veut une action supplémentaire, false sinon
+     */
+    public abstract boolean choisirActionSupplementaire(int numManche);
 }

@@ -1,5 +1,5 @@
 package diceForge;
-
+//TODO CHANGER TOUTES LES LISTES EN ARRAYLIST SAUF DANS LES CONSTRUCTEURS
 public class Main {
     public static void main(String[] args) {
         try {
