@@ -38,10 +38,13 @@ public class Plateau {
         for (Ile x:iles)
             if (x.getJoueur() != null)
                 tempJoueur.add(x.getJoueur());
-        List<Joueur> joueur = new ArrayList<>();
-        for (int i = 0; i != tempJoueur.size(); ++i){
-            if (tempJoueur.get(i).getIdentifiant() == i)
-                joueur.add(tempJoueur.get(i));
+        List<Joueur> joueur = new ArrayList<>();//Pour la liste triée
+        for (int i = 0; i != tempJoueur.size(); ++i){//On parcours de 0 à ce qu'il faut
+            for (Joueur j:tempJoueur)
+                if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
+                    joueur.add(j);
+                    break;
+                }
         }
         return joueur;
     }
