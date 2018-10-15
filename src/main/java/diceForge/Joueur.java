@@ -93,11 +93,10 @@ public abstract class Joueur {
     }
 
     public String printRessourcesEtDes(int numeroManche){
-        String res = "Joueur " + identifiant + ":\nManche: " + numeroManche + "\n";
-        res = res + "Or: " + or + "\t\t\t\t1er Dé: " + premierDeFaceCourante.toString() + "\n";
-        res = res + "Soleil: " + soleil + "\t\t\t2ème Dé: Non implémenté en version minimale\n" ; //+ deuxiemeDeFaceCourante.toString()
-        res = res + "PointDeGloire: " + pointDeGloire + "\n";
-        res = res + "--------------------------------------";
+        String res = "Manche: " + numeroManche + "\t||\t" + "Joueur: " + identifiant + "\n";
+        res += "Res 1er dé: " +  premierDeFaceCourante.toString() + "\t||\t" + "Res 2ème dé: /" + "\n";
+        res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
+        res += "---------------------------------------------------------------";
         return res;
     }
 

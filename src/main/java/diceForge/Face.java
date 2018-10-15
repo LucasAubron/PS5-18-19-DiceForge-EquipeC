@@ -30,7 +30,7 @@ public class Face {
                 else if (uneRess instanceof Soleil)
                     res = res + " Soleil";
                 else if (uneRess instanceof PointDeGloire)
-                    res = res + " PdGloire";
+                    res = res + " PointDeGloire";
             }
         }
         return res;
