@@ -28,6 +28,7 @@ public class RandomBot extends Joueur{
         Random random = new Random();//On génére tout les nombres random que l'on a besoin
         int numBassin = random.nextInt(bassins.size());
         int numFace = random.nextInt(bassins.get(numBassin).nbrFaceRestante());
+        numFace = bassins.get(numBassin).numFacesRestante().get(numFace);
         int numDe = random.nextInt(des.length);
         int posFace = random.nextInt(des[0].getFaces().length);
         forgerDe(numDe, bassins.get(numBassin).retirerFace(numFace), posFace);//On forge le dé et on retire la face en meme temps
