@@ -47,7 +47,7 @@ public class Coordinateur {
      */
     public void tour(Joueur joueur, int numeroManche){
         if (plateau.getModeVerbeux())
-            affichage += ("-----------------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n-----------------------------------------------------------------------\n");
+            affichage += ("--------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n--------------------------------------------------------------\n");
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getJoueur().size() == 2) {
                 x.lancerLesDes();
@@ -72,7 +72,7 @@ public class Coordinateur {
                 break;
             case PASSER:
                 if (plateau.getModeVerbeux())
-                    affichage += "------------------------------------------------\n" + "-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
+                    affichage += "--------------------------------\n" + "-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 break;
         }
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
