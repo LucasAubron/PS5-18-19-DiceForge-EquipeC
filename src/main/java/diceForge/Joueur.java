@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
@@ -25,13 +26,13 @@ public abstract class Joueur {
     protected De[] des;
     protected Face premierDeFaceCourante;
     protected Face deuxiemeDeFaceCourante;
-    protected ArrayList<Carte> cartes;
+    protected ArrayList<Carte> cartes = new ArrayList<>();
 
     public enum Action {FORGER, EXPLOIT, PASSER}
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
-            throw new RuntimeException("L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
+            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
         or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
@@ -87,16 +88,15 @@ public abstract class Joueur {
 
     /**
      * Méthode à appeler lorsque le joueur en chasse un autre
-     * Elle servira uniquement lorsque le sanglier sera introduit
+     * Elle servira uniquement lorsque l'ours sera introduit
      */
     public void chasse() {
     }
 
-    public String printRessourcesEtDes(int numeroManche){
-        String res = "Manche: " + numeroManche + " || Joueur: " + identifiant + "\n" ;
-        res += "Res 1er dé: " + premierDeFaceCourante.toString() + "\t||\t" + "Res 2ème dé: /\n";
-        res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
-        res += "--------------------------------------------------------------------------------------------------";
+    public String returnStringRessourcesEtDes(int numeroManche){
+        String res = "\nJoueur: " + identifiant + "\t||\t";
+        res += "Résultat du 1er dé: " +  premierDeFaceCourante.toString() + "\t||\t" + "Résultat du 2ème dé: /" + "\n";
+        res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n\n";
         return res;
     }
 
@@ -106,26 +106,19 @@ public abstract class Joueur {
      * @param carte
      * @return true si la carte à pu être acheté, false sinon
      */
-    public boolean acheterExploit(Carte carte){
-        boolean estAcquise = true;
+    public void acheterExploit(Carte carte){
         for (Ressource ressource:carte.getCout()){
             if (ressource instanceof Soleil && ressource.getQuantite() <= soleil){
                 soleil -= ressource.getQuantite();
-                estAcquise = true;
             }
             else if (ressource instanceof Lune && ressource.getQuantite() <= lune){
                 lune -= ressource.getQuantite();
             }
             else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
-                estAcquise = false;
-                break;//Si vous pensez trouver un meilleur moyen, eh bien soyez sur que ça marche et implémenté le
+                throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
             }
         }
-        if (estAcquise) {
-            pointDeGloire += carte.getNbrPointGloire();
-            cartes.add(carte);
-        }
-        return estAcquise;
+        cartes.add(carte);
     }
 
     /**
@@ -133,8 +126,18 @@ public abstract class Joueur {
      */
     public void forgerDe(int numDe, Face faceAForger, int numFace){
         if (numDe < 0 || numDe > 1)
-            throw new RuntimeException("Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
+            throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
+    }
+
+    /**
+     * Sert à additionner les points donné par les cartes.
+     * Est appelé une fois à la fin de la partie
+     */
+    public void additionnerPointsCartes() {
+        for (Carte carte:cartes){
+            pointDeGloire += carte.getNbrPointGloire();
+        }
     }
 
     /**
@@ -149,12 +152,17 @@ public abstract class Joueur {
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins affordables
      */
-    public abstract void choisirFaceAForger(ArrayList<Bassin> bassins, int numManche);
+    public abstract void choisirFaceAForger(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable
-     * @return Le joueur chassé de l'ile (oui il se fait trimbaler partout lui)
+     * @return La carte choisie
      */
-    public abstract Joueur choisirCarte(ArrayList<Carte> cartes, int numManche);
+    public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
 
+    /**
+     * Permet de choisir d'effectuer une action supplémentaire
+     * @return true si le bot veut une action supplémentaire, false sinon
+     */
+    public abstract boolean choisirActionSupplementaire(int numManche);
 }

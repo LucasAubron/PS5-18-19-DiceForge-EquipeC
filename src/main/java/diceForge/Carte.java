@@ -10,7 +10,7 @@ public class Carte {
 
     public Carte(Ressource[] cout, int nbrPointGloire){
         if (cout.length <= 0)
-            throw new RuntimeException("Une carte doit couter quelque chose. Cout donné : "+cout);
+            throw new DiceForgeException("Carte","Une carte doit couter quelque chose. Cout donné : "+cout);
         this.cout = cout;
         this.nbrPointGloire = nbrPointGloire;
     }
@@ -29,6 +29,6 @@ public class Carte {
     public boolean equals(Carte carte){
         if (carte == null)
             return false;
-        return (cout == carte.getCout() && nbrPointGloire == carte.getNbrPointGloire());
+        return (nbrPointGloire == carte.getNbrPointGloire());
     }
 }
