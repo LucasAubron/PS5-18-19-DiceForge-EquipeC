@@ -62,37 +62,38 @@ public class Coordinateur {
         switch (actionBot){
             case FORGER:
                 if (plateau.getModeVerbeux())
-                    affichage += "----------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
+                    affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
                 do {
                     forger(joueur, numeroManche);
                 } while(joueur.choisirContinuerForger());
                 break;
             case EXPLOIT:
                 if (plateau.getModeVerbeux())
-                    affichage += "-----------------------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
+                    affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
                 exploit(joueur, numeroManche);
                 break;
             case PASSER:
                 if (plateau.getModeVerbeux())
-                    affichage += "--------------------------------\n" + "-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
+                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 break;
         }
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
             Joueur.Action actionBot2 = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
-            affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
+            if (plateau.getModeVerbeux())
+                affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
             switch (actionBot2) {
                 case FORGER:
                     if (plateau.getModeVerbeux())
-                        affichage += "----------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
+                        affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
                     forger(joueur, numeroManche);
                     break;
                 case EXPLOIT:
                     if (plateau.getModeVerbeux())
-                        affichage += "-----------------------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
+                        affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
                     exploit(joueur, numeroManche);
                     break;
                 case PASSER:
-                    affichage += "-----------------------------------------------------------------\n" + "-- Le joueur revient sur sa décision et n'utilise pas sa deuxième action, deux soleils lui ont été débité --";
+                    affichage += "\n\t\t" + "\t\t-- Le joueur revient sur sa décision et n'utilise pas sa deuxième action, deux soleils lui ont été débité --";
                     break;
             }
         }
