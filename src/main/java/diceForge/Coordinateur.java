@@ -63,7 +63,9 @@ public class Coordinateur {
             case FORGER:
                 if (plateau.getModeVerbeux())
                     affichage += "----------------------------------\n" + "-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
-                forger(joueur, numeroManche);
+                do {
+                    forger(joueur, numeroManche);
+                } while(joueur.choisirContinuerForger());
                 break;
             case EXPLOIT:
                 if (plateau.getModeVerbeux())

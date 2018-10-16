@@ -165,4 +165,6 @@ public abstract class Joueur {
      * @return true si le bot veut une action supplémentaire, false sinon
      */
     public abstract boolean choisirActionSupplementaire(int numManche);
+
+    public abstract boolean choisirContinuerForger();
 }
