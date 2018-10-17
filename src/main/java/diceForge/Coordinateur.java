@@ -99,7 +99,7 @@ public class Coordinateur {
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus forger
      */
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
-        List<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
+        List<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean forge = true;
             for (Bassin x:bassinsUtilises)
