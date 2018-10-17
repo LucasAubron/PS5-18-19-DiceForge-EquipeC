@@ -34,7 +34,7 @@ public class JoueurTest {
     @Test
     public void acheterExploit(){
         String t0 = "";
-        Carte c1 = new Carte(new Ressource[]{new Soleil(3)}, 3);
+        Carte c1 = new Carte(new Ressource[]{new Soleil(3)}, 3, "Test");
         try {
             j0.acheterExploit(c1);
         } catch (DiceForgeException e){

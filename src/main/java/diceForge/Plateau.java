@@ -19,12 +19,8 @@ public class Plateau {
 
 
     public Plateau(){
-        iles = new Ile[]{
-                new Ile(
-                        new Carte[][]{{
-                                new Carte(new Ressource[]{new Soleil(2)}, 2),
-                                new Carte(new Ressource[]{new Soleil(2)}, 2)}
-                        })};
+        iles = new Ile[]{new Ile(new Carte(new  Ressource[]{new Lune(1)}, 0, "Marteau"),
+                new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), portail.getJoueurs().size())};
     }
 
     /**

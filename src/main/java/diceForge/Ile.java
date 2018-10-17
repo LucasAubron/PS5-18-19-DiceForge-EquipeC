@@ -34,10 +34,10 @@ public class Ile {
         cartes = new ArrayList<>();
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire()));
+            cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire()));
+            cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
     }
 
     /**

@@ -7,12 +7,14 @@ package diceForge;
 public class Carte {
     private Ressource[] cout;
     private int nbrPointGloire;
+    private String nom;
 
-    public Carte(Ressource[] cout, int nbrPointGloire){
+    public Carte(Ressource[] cout, int nbrPointGloire, String nom){
         if (cout.length <= 0)
             throw new DiceForgeException("Carte","Une carte doit couter quelque chose. Cout donné : "+cout);
         this.cout = cout;
         this.nbrPointGloire = nbrPointGloire;
+        this.nom = nom;
     }
 
     public Ressource[] getCout() {
@@ -23,12 +25,11 @@ public class Carte {
         return nbrPointGloire;
     }
 
-    /**
-     * TODO A CHANGER APRES LA VERSION MINIMALE SINON IL VA Y AVOIR DE GROS PROBLEME
-     */
+    public String getNom() { return nom; }
+
     public boolean equals(Carte carte){
         if (carte == null)
             return false;
-        return (nbrPointGloire == carte.getNbrPointGloire());
+        return (nom.equals(carte.getNom()));
     }
 }
