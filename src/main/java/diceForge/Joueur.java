@@ -15,18 +15,18 @@ import java.util.List;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
-    protected int or;
-    protected int maxOr = 12;
-    protected int soleil = 0;
-    protected int maxSoleil = 6;
-    protected int lune = 0;
-    protected int maxLune = 6;
-    protected int pointDeGloire = 0;
-    protected int identifiant;
-    protected De[] des;
-    protected Face premierDeFaceCourante;
-    protected Face deuxiemeDeFaceCourante;
-    protected ArrayList<Carte> cartes = new ArrayList<>();
+    private int or;
+    private int maxOr = 12;
+    private int soleil = 0;
+    private int maxSoleil = 6;
+    private int lune = 0;
+    private int maxLune = 6;
+    private int pointDeGloire = 0;
+    private int identifiant;
+    private De[] des;
+    private Face premierDeFaceCourante;
+    private Face deuxiemeDeFaceCourante;
+    private ArrayList<Carte> cartes = new ArrayList<>();
 
     public enum Action {FORGER, EXPLOIT, PASSER}
 
@@ -42,7 +42,24 @@ public abstract class Joueur {
 
     public int getOr() {return or;}
 
-    public void ajouterOr (int quantite){or = (or + quantite > maxOr) ? maxOr : or + quantite;}
+    public void ajouterOr (int quantite){
+        int ajoutOr = quantite;
+        if (quantite > 0 && !possedeMarteau().isEmpty()){//C'est ici que l'on gere le marteau
+            ajoutOr = choisirRepartitionOrMarteau(quantite);
+            List<Marteau> marteaux = possedeMarteau();
+            int i = 0;
+            int restant;
+            while ((restant = marteaux.get(i).ajouterPoints(quantite-ajoutOr)) != 0){//On ajoute la quantité de point et on regarde si elle est != 0
+                if (marteaux.get(i).getNbrPointGloire() == 25)//Si le marteau est rempli
+                    ++i;//On passe au marteau suivant
+                if (i == marteaux.size()) {//S'il n'y a pas de marteau suivant
+                    ajoutOr += restant;//On ajoute l'or que le marteau n'a pas gobbé
+                    break;//On arrete
+                }
+            }
+        }
+        or = (or + ajoutOr > maxOr) ? maxOr : or + ajoutOr;
+    }
 
     public int getSoleil() {return soleil;}
 
@@ -55,6 +72,8 @@ public abstract class Joueur {
     public int getPointDeGloire() {return pointDeGloire;}
 
     public int getIdentifiant() {return identifiant;}
+
+    public De[] getDes() {return des;}
 
     /**
      * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
@@ -118,7 +137,35 @@ public abstract class Joueur {
                 throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
             }
         }
+        if (carte.getNom().equals("Coffre")){
+            maxOr += 4;
+            maxSoleil += 3;
+            maxLune += 3;
+        }
         cartes.add(carte);
+    }
+
+    /**
+     * Permet de savoir si le joueur posséde un certaine carte
+     * @param nom le nom de la carte demandé
+     * @return true si le joueur possède la carte, false sinon
+     */
+    public boolean possedeCarte(String nom){
+        for (Carte carte:cartes)
+            if (carte.equals(nom))
+                return true;
+        return false;
+    }
+
+    /**
+     * @return la liste des marteaux dans la liste des cartes. C'est une liste vide s'il n'y en a pas
+     */
+    public List<Marteau> possedeMarteau(){
+        List<Marteau> position = new ArrayList<>();
+        for (int i = 0; i != cartes.size(); ++i)
+            if (cartes.get(i) instanceof Marteau)
+                position.add((Marteau) cartes.get(i));
+        return position;
     }
 
     /**
@@ -166,5 +213,16 @@ public abstract class Joueur {
      */
     public abstract boolean choisirActionSupplementaire(int numManche);
 
+    /**
+     * Permet de choisir de continuer à forger
+     * @return true si le bot désire continuer à forger, false sinon
+     */
     public abstract boolean choisirContinuerForger();
+
+    /**
+     * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectué
+     * @param nbrOr l'or total disponnible
+     * @return le nombre d'or que le bot souhaite garder en or.
+     */
+    public abstract int choisirRepartitionOrMarteau(int nbrOr);
 }

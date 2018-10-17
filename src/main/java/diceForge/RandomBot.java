@@ -29,8 +29,8 @@ public class RandomBot extends Joueur{
     public Bassin choisirFaceAForger(List<Bassin> bassins, int numManche){
         int numBassin = random.nextInt(bassins.size());//On génére tout les nombres random que l'on a besoin
         int numFace = random.nextInt(bassins.get(numBassin).getFace().size());
-        int numDe = random.nextInt(des.length);
-        int posFace = random.nextInt(des[0].getFaces().length);
+        int numDe = random.nextInt(getDes().length);
+        int posFace = random.nextInt(getDes()[0].getFaces().length);
 
         forgerDe(numDe, bassins.get(numBassin).retirerFace(numFace), posFace);//On forge le dé et on retire la face en meme temps
         return bassins.get(numBassin);
@@ -38,20 +38,23 @@ public class RandomBot extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        int numCarte = random.nextInt(cartes.size());
-        return cartes.get(numCarte);
+        return cartes.get(random.nextInt(cartes.size()));
     }
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
         int pileFace = random.nextInt(2);
-        if (pileFace == 1) soleil -= 2;
+        if (pileFace == 1) ajouterSoleil(-2);
         return pileFace == 1;
     }
 
     @Override
     public boolean choisirContinuerForger(){
-        int pileFace = random.nextInt(2);
-        return pileFace == 1;
+        return random.nextInt(2) == 1;
+    }
+
+    @Override
+    public int choisirRepartitionOrMarteau(int nbrOr){
+        return random.nextInt(nbrOr);
     }
 }
