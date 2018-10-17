@@ -26,9 +26,11 @@ public abstract class Joueur {
     private De[] des;
     private Face premierDeFaceCourante;
     private Face deuxiemeDeFaceCourante;
-    private ArrayList<Carte> cartes = new ArrayList<>();
+    private List<Carte> cartes = new ArrayList<>();
+    private List<Renfort> renforts = new ArrayList<>();
 
     public enum Action {FORGER, EXPLOIT, PASSER}
+    public enum Renfort{ANCIEN}
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
@@ -84,6 +86,8 @@ public abstract class Joueur {
 
     public De[] getDes() {return des;}
 
+    public List<Renfort> getRenforts() {return renforts;}
+
     /**
      * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
      * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
@@ -122,9 +126,9 @@ public abstract class Joueur {
     }
 
     public String returnStringRessourcesEtDes(int numeroManche){
-        String res = "\nJoueur: " + identifiant + "\t||\t";
-        res += "Résultat du 1er dé: " +  premierDeFaceCourante.toString() + "\t||\t" + "Résultat du 2ème dé: /" + "\n";
-        res += "Or: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: /" + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n\n";
+        String res = "\nJ" + identifiant + "\t||\t";
+        res += "1er dé:" +  premierDeFaceCourante.toString() + "\t||\t" + "2ème dé:"+deuxiemeDeFaceCourante.toString();
+        res += "\t||\tOr: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: "+lune + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
         return res;
     }
 
@@ -151,6 +155,12 @@ public abstract class Joueur {
             maxSoleil += 3;
             maxLune += 3;
         }
+        else if (carte.getNom().equals("Herbes folles")){
+            ajouterSoleil(3);
+            ajouterOr(3);
+        }
+        else if (carte.getNom().equals("Ancien"))
+            renforts.add(Renfort.ANCIEN);
         cartes.add(carte);
     }
 
@@ -175,6 +185,18 @@ public abstract class Joueur {
             if (cartes.get(i) instanceof Marteau)
                 position.add((Marteau) cartes.get(i));
         return position;
+    }
+
+    public void appelerRenforts(List<Renfort> renfortsAAppeler){
+        for (Renfort renfort:renfortsAAppeler){
+            switch (renfort){
+                case ANCIEN:
+                    if (or >= 3){
+                        or -= 3;
+                        pointDeGloire += 4;
+                    }
+            }
+        }
     }
 
     /**
@@ -234,4 +256,10 @@ public abstract class Joueur {
      * @return le nombre d'or que le bot souhaite garder en or.
      */
     public abstract int choisirRepartitionOrMarteau(int nbrOr);
+
+    /**
+     * Permet de choisir quel renfort appeler
+     * @return la liste des renforts à appeler
+     */
+    public abstract List<Renfort> choisirRenforts();
 }

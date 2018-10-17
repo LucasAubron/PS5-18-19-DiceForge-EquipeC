@@ -31,6 +31,8 @@ public class Face {
                     res = res + " Soleil";
                 else if (uneRess instanceof PointDeGloire)
                     res = res + " PointDeGloire";
+                else if (uneRess instanceof Lune)
+                    res += " Lune";
             }
         }
         return res;

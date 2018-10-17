@@ -67,6 +67,7 @@ public class Coordinateur {
             if (plateau.getModeVerbeux())
                 affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
+        joueur.appelerRenforts(joueur.choisirRenforts());//En premier on appelle les renforts
         boolean agit = actionPrincipale(joueur, numeroManche);//le joueur agit, et on regarde s'il passe son tour ou pas
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {//S'il peut, et il veut, il re-agit
             if (plateau.getModeVerbeux())
@@ -159,7 +160,7 @@ public class Coordinateur {
         Joueur joueurChasse = null;//On gére le joueur chassé et on donne la carte au joueur
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes()) {
-                if (paquet.get(0).equals(carteChoisie)) {
+                if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);
                 }
             }

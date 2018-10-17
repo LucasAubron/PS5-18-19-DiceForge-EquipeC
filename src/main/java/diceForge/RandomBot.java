@@ -57,4 +57,13 @@ public class RandomBot extends Joueur{
     public int choisirRepartitionOrMarteau(int nbrOr){
         return random.nextInt(nbrOr);
     }
+
+    @Override
+    public List<Renfort> choisirRenforts(){
+        List<Renfort> renforts = new ArrayList<>();
+        for (Renfort renfort:getRenforts())
+            if (random.nextInt(2) == 1)//1 chance sur 2 d'ajouter chaque renfort
+                renforts.add(renfort);
+        return renforts;
+    }
 }
