@@ -36,8 +36,17 @@ public abstract class Joueur {
         this.identifiant = indentifiant;
         or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Soleil(1)}}),
-                new Face(new Ressource[][]{{new PointDeGloire(1)}})})};//ON VA TOUS MOURRRRRIIIIRRR
+                new Face(new Ressource[][]{{new Lune(1)}}),
+                new Face(new Ressource[][]{{new PointDeGloire(2)}}),
+                new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}})}),
+        new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Lune(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}}),
+                new Face(new Ressource[][]{{new Or(1)}})})};
     }
 
     public int getOr() {return or;}

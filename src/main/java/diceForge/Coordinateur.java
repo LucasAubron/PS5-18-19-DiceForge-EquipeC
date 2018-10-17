@@ -13,8 +13,8 @@ public class Coordinateur {
 
     public Coordinateur(Plateau plateau, int nbrManche){
         this.plateau = plateau;//On garde le plateau en référence
-        if (nbrManche < 4 || nbrManche > 10)
-            throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 4, max : 10, actuel : "+nbrManche);
+        if (nbrManche < 9 || nbrManche > 10)
+            throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 9, max : 10, actuel : "+nbrManche);
         for (int i = 1; i <= nbrManche; ++i){//C'est ici que tout le jeu ce déroule
             jouerManche(i);
         }
