@@ -33,14 +33,14 @@ public class Plateau {
      */
     public List<Joueur> getJoueur() {
         List<Joueur> tempJoueur = new ArrayList<>();
-        for (Joueur x:portail.getJoueurs())
+        for (Joueur x:portail.getJoueurs())//On ajoute tous les joueurs des portails originels
             tempJoueur.add(x);
-        for (Ile x:iles)
-            if (x.getJoueur() != null)
+        for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
+            if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
         List<Joueur> joueur = new ArrayList<>();//Pour la liste triée
-        for (int i = 0; i != tempJoueur.size(); ++i){//On parcours de 0 à ce qu'il faut
-            for (Joueur j:tempJoueur)
+        for (int i = 0; i != tempJoueur.size(); ++i){
+            for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
                 if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
                     joueur.add(j);
                     break;

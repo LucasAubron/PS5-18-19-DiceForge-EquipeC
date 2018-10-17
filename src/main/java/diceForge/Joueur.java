@@ -67,7 +67,7 @@ public abstract class Joueur {
                 this.premierDeFaceCourante = face;
             else
                 this.deuxiemeDeFaceCourante = face;
-            for (Ressource ressource:face.getRessource()[0]){
+            for (Ressource ressource:face.getRessource()[0]){//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or)
                     ajouterOr(ressource.getQuantite());
                 else if (ressource instanceof Soleil)

@@ -6,28 +6,37 @@ import java.util.List;
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
  * Il s'occupe du déroulement des manches, mais aussi de déplacer les joueurs.
- * A voir si c'est une bonne solution
  */
 public class Coordinateur {
     Plateau plateau;
     private String affichage = "";
 
     public Coordinateur(Plateau plateau, int nbrManche){
-        this.plateau = plateau;
+        this.plateau = plateau;//On garde le plateau en référence
         if (nbrManche < 4 || nbrManche > 10)
             throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 4, max : 10, actuel : "+nbrManche);
-        for (int i = 1; i <= nbrManche; ++i){
+        for (int i = 1; i <= nbrManche; ++i){//C'est ici que tout le jeu ce déroule
             jouerManche(i);
         }
+        int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+        affichage += "\n\n\n\n\t\t-------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t-------------------------------------------------\n";
+    }
+
+    /**
+     * Permet de connaitre le numéro du joueur gagnant ainsi que son nombre de point de gloire
+     * Cette fonction additionne le nombre de point de gloire des cartes des joueurs, il faut donc ne l'appeler qu'une fois
+     * @return un tableau d'entier de taille 2, son premier éléments est le numéro du joueur gagnant et son second est le nombre de point de victoire du gagnant
+     */
+    public int[] infoJoueurGagnant(){
         int numJoueurGagnant = 0, maxPointGloire = 0;
         for (Joueur joueur:plateau.getJoueur()){
             joueur.additionnerPointsCartes();
-            if (joueur.getPointDeGloire() > maxPointGloire){
+            if (joueur.getPointDeGloire() > maxPointGloire){//Simple recherche d'un maximum
                 maxPointGloire = joueur.getPointDeGloire();
                 numJoueurGagnant = joueur.getIdentifiant();
             }
         }
-        affichage += "\n\n\n\n\t\t-------------------------------------------------\n\t\t" + "| Le joueur n°"+numJoueurGagnant+" gagne avec "+maxPointGloire+" points de gloire ! |\n" + "\t\t-------------------------------------------------\n";
+        return new int[]{numJoueurGagnant, maxPointGloire};
     }
 
     /**
@@ -50,7 +59,7 @@ public class Coordinateur {
             affichage += ("--------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n--------------------------------------------------------------\n");
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getJoueur().size() == 2) {
-                x.lancerLesDes();
+                x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés 2 fois
                 if (plateau.getModeVerbeux())
                     affichage += x.returnStringRessourcesEtDes(numeroManche);
             }
@@ -58,8 +67,8 @@ public class Coordinateur {
             if (plateau.getModeVerbeux())
                 affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
-        boolean agit = actionPrincipale(joueur, numeroManche);
-        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {
+        boolean agit = actionPrincipale(joueur, numeroManche);//le joueur agit, et on regarde s'il passe son tour ou pas
+        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {//S'il peut, et il veut, il re-agit
             if (plateau.getModeVerbeux())
                 affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
             actionPrincipale(joueur, numeroManche);
@@ -77,8 +86,8 @@ public class Coordinateur {
                 if (plateau.getModeVerbeux())
                     affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
-                do {
-                    bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);
+                do {//Il faut que le joueur puisse s'arreter de forger
+                    bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
                 } while(joueur.choisirContinuerForger() && bassinsAEnlever != null);
                 break;
             case EXPLOIT:
@@ -89,7 +98,7 @@ public class Coordinateur {
             case PASSER:
                 if (plateau.getModeVerbeux())
                     affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
-                return false;
+                return false;//Si le joueur passe, on averti plus haut
         }
         return true;
     }
@@ -103,14 +112,14 @@ public class Coordinateur {
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean forge = true;
             for (Bassin x:bassinsUtilises)
-                if (x.equals(bassin))
+                if (x.equals(bassin))//On fait attention de ne pas réutiliser un bassin déjà utilisé
                     forge = false;
-            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && forge)
-                bassinAffordable.add(bassin);//Puis on la remplie
+            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && forge)//Si on peut ajouter ce bassin
+                bassinAffordable.add(bassin);//On l'ajoute
         }
         if (!bassinAffordable.isEmpty())
             bassinsUtilises.add(joueur.choisirFaceAForger(bassinAffordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
-        else
+        else//Si le joueur ne peut plus forger, on averti
             return null;
         return bassinsUtilises;
 
@@ -147,7 +156,7 @@ public class Coordinateur {
                 break;
             }
         Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
-        Joueur joueurChasse = null;
+        Joueur joueurChasse = null;//On gére le joueur chassé et on donne la carte au joueur
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes()) {
                 if (paquet.get(0).equals(carteChoisie)) {
@@ -155,9 +164,10 @@ public class Coordinateur {
                 }
             }
         }
-        if (joueurChasse != null)
+        if (joueurChasse != null)//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
     }
+
     public String toString(){
         return affichage;
         }
