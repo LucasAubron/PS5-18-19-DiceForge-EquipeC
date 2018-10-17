@@ -58,8 +58,8 @@ public class Coordinateur {
             if (plateau.getModeVerbeux())
                 affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
-        actionPrincipale(joueur, numeroManche);
-        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
+        boolean agit = actionPrincipale(joueur, numeroManche);
+        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {
             if (plateau.getModeVerbeux())
                 affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
             actionPrincipale(joueur, numeroManche);
@@ -68,8 +68,9 @@ public class Coordinateur {
 
     /**
      * Demande ce que le bot veut faire et agit en fonction
+     * @return true si le joueur effectue une action, false s'il passe son tour
      */
-    public void actionPrincipale(Joueur joueur, int numeroManche){
+    public boolean actionPrincipale(Joueur joueur, int numeroManche){
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
@@ -88,8 +89,9 @@ public class Coordinateur {
             case PASSER:
                 if (plateau.getModeVerbeux())
                     affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
-                break;
+                return false;
         }
+        return true;
     }
 
     /**
