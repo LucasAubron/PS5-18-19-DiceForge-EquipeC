@@ -58,14 +58,27 @@ public class Coordinateur {
             if (plateau.getModeVerbeux())
                 affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
+        actionPrincipale(joueur, numeroManche);
+        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
+            if (plateau.getModeVerbeux())
+                affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
+            actionPrincipale(joueur, numeroManche);
+        }
+    }
+
+    /**
+     * Demande ce que le bot veut faire et agit en fonction
+     */
+    public void actionPrincipale(Joueur joueur, int numeroManche){
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
                 if (plateau.getModeVerbeux())
                     affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
+                List<Bassin> bassinsAEnlever = new ArrayList<>();
                 do {
-                    forger(joueur, numeroManche);
-                } while(joueur.choisirContinuerForger());
+                    bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);
+                } while(joueur.choisirContinuerForger() && bassinsAEnlever != null);
                 break;
             case EXPLOIT:
                 if (plateau.getModeVerbeux())
@@ -77,39 +90,28 @@ public class Coordinateur {
                     affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 break;
         }
-        if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche)) {
-            Joueur.Action actionBot2 = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
-            if (plateau.getModeVerbeux())
-                affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
-            switch (actionBot2) {
-                case FORGER:
-                    if (plateau.getModeVerbeux())
-                        affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
-                    forger(joueur, numeroManche);
-                    break;
-                case EXPLOIT:
-                    if (plateau.getModeVerbeux())
-                        affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
-                    exploit(joueur, numeroManche);
-                    break;
-                case PASSER:
-                    affichage += "\n\t\t" + "\t\t-- Le joueur revient sur sa décision et n'utilise pas sa deuxième action, deux soleils lui ont été débité --";
-                    break;
-            }
-        }
     }
 
     /**
      * Méthode demande à un joueur de forger une face d'un bassin
+     * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus forger
      */
-    public  void forger(Joueur joueur, int numeroManche) {
+    public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins affordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
-            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr())
+            boolean forge = true;
+            for (Bassin x:bassinsUtilises)
+                if (x.equals(bassin))
+                    forge = false;
+            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && forge)
                 bassinAffordable.add(bassin);//Puis on la remplie
         }
         if (!bassinAffordable.isEmpty())
-            joueur.choisirFaceAForger(bassinAffordable, numeroManche);//Puis on forge, le joueur s'occupe de retirer la face
+            bassinsUtilises.add(joueur.choisirFaceAForger(bassinAffordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
+        else
+            return null;
+        return bassinsUtilises;
+
     }
 
     /**

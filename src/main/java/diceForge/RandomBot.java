@@ -26,14 +26,14 @@ public class RandomBot extends Joueur{
     }
 
     @Override
-    public void choisirFaceAForger(List<Bassin> bassins, int numManche){
+    public Bassin choisirFaceAForger(List<Bassin> bassins, int numManche){
         int numBassin = random.nextInt(bassins.size());//On génére tout les nombres random que l'on a besoin
         int numFace = random.nextInt(bassins.get(numBassin).getFace().size());
         int numDe = random.nextInt(des.length);
         int posFace = random.nextInt(des[0].getFaces().length);
 
         forgerDe(numDe, bassins.get(numBassin).retirerFace(numFace), posFace);//On forge le dé et on retire la face en meme temps
-        bassins.remove(numBassin);//On retire le bassin (on ne peut plus forger depuis ce bassin)
+        return bassins.get(numBassin);
     }
 
     @Override

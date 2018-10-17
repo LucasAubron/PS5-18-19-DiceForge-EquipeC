@@ -152,7 +152,7 @@ public abstract class Joueur {
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins affordables
      */
-    public abstract void choisirFaceAForger(List<Bassin> bassins, int numManche);
+    public abstract Bassin choisirFaceAForger(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable

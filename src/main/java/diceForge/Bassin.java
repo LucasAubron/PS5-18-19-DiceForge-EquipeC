@@ -53,4 +53,12 @@ public class Bassin {
     public Face retirerFace(int numFace){
         return faces.remove(numFace);
     }
+
+    public boolean equals(Bassin bassin){
+        if (faces.isEmpty() && bassin.getFace().isEmpty() && cout == bassin.getCout())
+            return true;
+        if (cout == bassin.getCout() && faces.size() == bassin.getFace().size() && faces.get(0).toString().equals(bassin.getFace().get(0).toString()))
+            return true;
+        return false;
+    }
 }
