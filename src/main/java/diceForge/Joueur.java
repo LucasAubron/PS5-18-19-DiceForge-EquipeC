@@ -95,11 +95,14 @@ public abstract class Joueur {
     public void lancerLesDes(){
         for (De de:des){
             Face face = de.lancerLeDe();
-            if (de == des[0])
+            if (de == des[0])//Pour l'affichage
                 this.premierDeFaceCourante = face;
             else
                 this.deuxiemeDeFaceCourante = face;
-            for (Ressource ressource:face.getRessource()[0]){//On regarde de quelle ressource il s'agit
+            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
+            if (face.getRessource().length != 1)
+                choix = choisirRessource(face);
+            for (Ressource ressource:face.getRessource()[choix]){//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or)
                     ajouterOr(ressource.getQuantite());
                 else if (ressource instanceof Soleil)
@@ -262,4 +265,11 @@ public abstract class Joueur {
      * @return la liste des renforts à appeler
      */
     public abstract List<Renfort> choisirRenforts();
+
+    /**
+     * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible
+     * @param faceAChoix la face en question
+     * @return ne numéro de la face choisi
+     */
+    public abstract int choisirRessource(Face faceAChoix);
 }
