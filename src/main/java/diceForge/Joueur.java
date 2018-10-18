@@ -44,7 +44,7 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}})}),
         new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Lune(1)}}),
+                new Face(new Ressource[][]{{new Soleil(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
