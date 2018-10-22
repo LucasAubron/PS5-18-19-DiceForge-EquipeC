@@ -63,7 +63,7 @@ public class TestBot extends Joueur {
         return choix;
     }
 
-    private int nbrPointMarteau;
+    private int nbrPointMarteau = 0;
     @Override
     public int choisirRepartitionOrMarteau(int nbrOr){return nbrOr-nbrPointMarteau;}
     public void setNbrPointMarteau(int nbrPointMarteau) {

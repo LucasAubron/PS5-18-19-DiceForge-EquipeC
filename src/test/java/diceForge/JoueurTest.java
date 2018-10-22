@@ -68,4 +68,16 @@ public class JoueurTest {
         j0.appelerRenforts(new ArrayList<Joueur.Renfort>(Arrays.asList(Joueur.Renfort.ANCIEN)));
         assertEquals(j0.getPointDeGloire(), pdgAct+4);
     }
+
+    @Test
+    public void repartitionOrMarteau(){
+        j0.ajouterLune(1);
+        j0.acheterExploit(new Marteau());
+        j0.setNbrPointMarteau(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 0);
+        j0.ajouterOr(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 10);
+        j0.ajouterOr(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 25);
+    }
 }
