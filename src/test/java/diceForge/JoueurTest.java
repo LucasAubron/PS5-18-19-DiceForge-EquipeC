@@ -2,14 +2,18 @@ package diceForge;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class JoueurTest {
 
-    private RandomBot j0 = new RandomBot(0);
-    private RandomBot j1 = new RandomBot(1);
-    private RandomBot j2 = new RandomBot(2);
-    private RandomBot j3 = new RandomBot(3);
+    private TestBot j0 = new TestBot(0);
+    private TestBot j1 = new TestBot(1);
+    private TestBot j2 = new TestBot(2);
+    private TestBot j3 = new TestBot(3);
 
     @Test
     public void getOr(){
@@ -34,7 +38,7 @@ public class JoueurTest {
     @Test
     public void acheterExploit(){
         String t0 = "";
-        Carte c1 = new Carte(new Ressource[]{new Soleil(3)}, 3);
+        Carte c1 = new Carte(new Ressource[]{new Soleil(3)}, 3, "Test");
         try {
             j0.acheterExploit(c1);
         } catch (DiceForgeException e){
@@ -45,5 +49,35 @@ public class JoueurTest {
         j0.acheterExploit(c1);
         j0.additionnerPointsCartes();
         assertEquals(j0.getPointDeGloire(), 3);
+    }
+
+    @Test
+    public void possedeMarteau(){
+        j0.ajouterLune(1);
+        j0.acheterExploit(new Marteau());
+        assertTrue(j0.possedeMarteau().get(0).equals(new Marteau()));
+    }
+
+    @Test
+    public void appelerRenforts(){
+        j0.ajouterSoleil(1);
+        Carte hf = new Carte(new Ressource[]{new Soleil(1)}, 2, "Ancien");
+        j0.acheterExploit(hf);
+        j0.ajouterOr(3);
+        int pdgAct = j0.getPointDeGloire();
+        j0.appelerRenforts(new ArrayList<Joueur.Renfort>(Arrays.asList(Joueur.Renfort.ANCIEN)));
+        assertEquals(j0.getPointDeGloire(), pdgAct+4);
+    }
+
+    @Test
+    public void repartitionOrMarteau(){
+        j0.ajouterLune(1);
+        j0.acheterExploit(new Marteau());
+        j0.setNbrPointMarteau(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 0);
+        j0.ajouterOr(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 10);
+        j0.ajouterOr(15);
+        assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 25);
     }
 }

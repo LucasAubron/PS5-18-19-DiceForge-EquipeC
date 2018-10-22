@@ -14,8 +14,8 @@ public class De {
     }
 
     public De(Face[] faces){
-        if (faces.length != 3)//Pour la version minimale, le dé à 3 faces
-            throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 3, actuel : "+faces.length);
+        if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
+            throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
         this.faces = faces;
     }
 

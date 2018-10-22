@@ -9,7 +9,6 @@ import java.util.List;
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
 public class Plateau {
-
     private boolean modeVerbeux = true;
     Joueur j0 = new RandomBot(0);
     Joueur j1 = new RandomBot(1);
@@ -19,12 +18,10 @@ public class Plateau {
 
 
     public Plateau(){
-        iles = new Ile[]{
-                new Ile(
-                        new Carte[][]{{
-                                new Carte(new Ressource[]{new Soleil(2)}, 2),
-                                new Carte(new Ressource[]{new Soleil(2)}, 2)}
-                        })};
+        iles = new Ile[]{new Ile(new Marteau(),
+                new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), portail.getJoueurs().size()),
+        new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),
+                new Carte(new Ressource[]{new Soleil(1)}, 2, "Herbes folles"), portail.getJoueurs().size())};
     }
 
     /**

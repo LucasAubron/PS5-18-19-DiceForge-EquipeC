@@ -34,10 +34,10 @@ public class Ile {
         cartes = new ArrayList<>();
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire()));
+            cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire()));
+            cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
     }
 
     /**
@@ -59,7 +59,7 @@ public class Ile {
     public Joueur prendreCarte(Joueur joueur, Carte carte){
         Joueur x = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
-            if (paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
+            if (!paquet.isEmpty() && paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
                 if (this.joueur == null || this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
                     x = ajouterJoueur(joueur);
                 joueur.acheterExploit(paquet.remove(paquet.size()-1));//Le joueur l'achete
