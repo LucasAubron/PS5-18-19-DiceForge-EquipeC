@@ -19,7 +19,7 @@ public class Coordinateur {
             jouerManche(i);
         }
         int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-        affichage += "\n\n\n\n\t\t-------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t-------------------------------------------------\n";
+        affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
     }
 
     /**
@@ -55,23 +55,23 @@ public class Coordinateur {
      * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
      */
     public void tour(Joueur joueur, int numeroManche){
-        if (plateau.getModeVerbeux())
+        if (plateau.estVerbeux())
             affichage += ("--------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n--------------------------------------------------------------\n");
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getJoueur().size() == 2) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés 2 fois
-                if (plateau.getModeVerbeux())
+                if (plateau.estVerbeux())
                     affichage += x.returnStringRessourcesEtDes(numeroManche);
             }
             x.lancerLesDes();
-            if (plateau.getModeVerbeux())
+            if (plateau.estVerbeux())
                 affichage += x.returnStringRessourcesEtDes(numeroManche);
         }
         joueur.appelerRenforts(joueur.choisirRenforts());//En premier on appelle les renforts
         boolean agit = actionPrincipale(joueur, numeroManche);//le joueur agit, et on regarde s'il passe son tour ou pas
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {//S'il peut, et il veut, il re-agit
-            if (plateau.getModeVerbeux())
-                affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n\n";
+            if (plateau.estVerbeux())
+                affichage += "\n---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n";
             actionPrincipale(joueur, numeroManche);
         }
     }
@@ -84,7 +84,7 @@ public class Coordinateur {
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
-                if (plateau.getModeVerbeux())
+                if (plateau.estVerbeux())
                     affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 do {//Il faut que le joueur puisse s'arreter de forger
@@ -92,12 +92,12 @@ public class Coordinateur {
                 } while(joueur.choisirContinuerForger() && bassinsAEnlever != null);
                 break;
             case EXPLOIT:
-                if (plateau.getModeVerbeux())
+                if (plateau.estVerbeux())
                     affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
                 exploit(joueur, numeroManche);
                 break;
             case PASSER:
-                if (plateau.getModeVerbeux())
+                if (plateau.estVerbeux())
                     affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 return false;//Si le joueur passe, on averti plus haut
         }

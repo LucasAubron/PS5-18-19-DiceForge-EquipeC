@@ -12,8 +12,8 @@ public class Plateau {
     private boolean modeVerbeux = true;
     Joueur j0 = new RandomBot(0);
     Joueur j1 = new RandomBot(1);
-    private Temple temple = new Temple();//La classe temple s'occupe de toute la partie forge de dé
     private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{j0,j1});//La ou les joueurs sont de base
+    private Temple temple = new Temple(portail.getJoueurs().size());//La classe temple s'occupe de toute la partie forge de dé
     private Ile[] iles;//La ou il y a les cartes
 
 
@@ -54,5 +54,5 @@ public class Plateau {
         return temple;
     }
 
-    public boolean getModeVerbeux() {return modeVerbeux; }
+    public boolean estVerbeux() {return modeVerbeux; }
 }
