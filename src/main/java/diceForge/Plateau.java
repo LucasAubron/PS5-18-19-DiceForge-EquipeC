@@ -54,5 +54,5 @@ public class Plateau {
         return temple;
     }
 
-    public boolean getModeVerbeux() {return modeVerbeux; }
+    public boolean estVerbeux() {return modeVerbeux; }
 }
