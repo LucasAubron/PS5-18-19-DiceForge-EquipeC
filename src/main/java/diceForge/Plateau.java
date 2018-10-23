@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Plateau {
     private boolean modeVerbeux = true;
-    Joueur j0 = new RandomBot(0);
+    Joueur j0 = new EasyBot(0);
     Joueur j1 = new RandomBot(1);
     private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{j0,j1});//La ou les joueurs sont de base
     private Temple temple = new Temple(portail.getJoueurs().size());//La classe temple s'occupe de toute la partie forge de dé

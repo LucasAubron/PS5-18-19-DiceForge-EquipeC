@@ -122,6 +122,8 @@ public class Coordinateur {
             bassinsUtilises.add(joueur.choisirFaceAForger(bassinAffordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
         else//Si le joueur ne peut plus forger, on averti
             return null;
+        if (bassinsUtilises.get(bassinsUtilises.size()-1) == null)
+            return null;
         return bassinsUtilises;
 
     }
