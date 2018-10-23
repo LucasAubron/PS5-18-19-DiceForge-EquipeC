@@ -154,22 +154,30 @@ public class Coordinateur {
         if (cartesAffordables.isEmpty())//Si le joueur ne peut acheter aucune carte, on s'arrète la
             return;
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
-            if (j != null && joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
+            if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
                 plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
                 break;
             }
         Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
         Joueur joueurChasse = null;//On gére le joueur chassé et on donne la carte au joueur
-        for (Ile ile : plateau.getIles()) {
-            for (List<Carte> paquet : ile.getCartes()) {
-                if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
-                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);
+        int i = 1;
+        for (Ile ile:plateau.getIles())
+            if (ile.getJoueur() != null && joueur.getIdentifiant() == ile.getJoueur().getIdentifiant()) {
+                ile.retirerJoueur();//En premier, on retire le joueur de son ile
+                break;
+            }
+                for (Ile ile : plateau.getIles()) {
+                    for (List<Carte> paquet : ile.getCartes()) {
+                        if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
+                            joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va
+                        }
+                    }
+                    ++i;
+                }
+                if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
+                    plateau.getPortail().ajouterJoueur(joueurChasse);
                 }
             }
-        }
-        if (joueurChasse != null)//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
-            plateau.getPortail().ajouterJoueur(joueurChasse);
-    }
 
     public String toString(){
         return affichage;
