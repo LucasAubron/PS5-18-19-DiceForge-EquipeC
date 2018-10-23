@@ -33,11 +33,19 @@ public class Ile {
             throw new DiceForgeException("Ile","Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new ArrayList<>();
         cartes.add(new ArrayList<>());
-        for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
+        for (int i = 0; i != nbrCarteParPaquet; ++i) {
+            if (carte1 instanceof Marteau)
+                cartes.get(0).add(new Marteau());
+            else
+                cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
+        }
         cartes.add(new ArrayList<>());
-        for (int i = 0; i != nbrCarteParPaquet; ++i)
-            cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
+        for (int i = 0; i != nbrCarteParPaquet; ++i) {
+            if (carte2 instanceof Marteau)
+                cartes.get(1).add(new Marteau());
+            else
+                cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
+        }
     }
 
     /**

@@ -15,10 +15,10 @@ public class Marteau extends Carte {
      */
     public int ajouterPoints(int nbrPoints){
         point += nbrPoints;
-        if (nbrPoints >= 15){
+        if (point >= 15){
             ++niveau;
             point -= 15;
-            if (niveau > 2)
+            if (niveau > 1)
                 return point;
         }
         return 0;

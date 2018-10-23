@@ -61,8 +61,9 @@ public abstract class Joueur {
             int i = 0;
             int restant;
             while ((restant = marteaux.get(i).ajouterPoints(quantite-ajoutOr)) != 0){//On ajoute la quantité de point et on regarde si elle est != 0
-                if (marteaux.get(i).getNbrPointGloire() == 25)//Si le marteau est rempli
+                if (marteaux.get(i).getNbrPointGloire() == 25) {//Si le marteau est rempli
                     ++i;//On passe au marteau suivant
+                }
                 if (i == marteaux.size()) {//S'il n'y a pas de marteau suivant
                     ajoutOr += restant;//On ajoute l'or que le marteau n'a pas gobbé
                     break;//On arrete
@@ -107,6 +108,8 @@ public abstract class Joueur {
                     ajouterOr(ressource.getQuantite());
                 else if (ressource instanceof Soleil)
                     ajouterSoleil(ressource.getQuantite());
+                else if (ressource instanceof Lune)
+                    ajouterLune(ressource.getQuantite());
                 else if (ressource instanceof PointDeGloire)
                     pointDeGloire += ressource.getQuantite();
             }
@@ -174,7 +177,7 @@ public abstract class Joueur {
      */
     public boolean possedeCarte(String nom){
         for (Carte carte:cartes)
-            if (carte.equals(nom))
+            if (carte.getNom().equals(nom))
                 return true;
         return false;
     }
@@ -185,8 +188,10 @@ public abstract class Joueur {
     public List<Marteau> possedeMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
-            if (cartes.get(i) instanceof Marteau)
-                position.add((Marteau) cartes.get(i));
+            if (cartes.get(i).getNom().equals("Marteau")) {
+                Marteau marteau = (Marteau) cartes.get(i);
+                position.add(marteau);
+            }
         return position;
     }
 
