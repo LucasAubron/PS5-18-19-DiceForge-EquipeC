@@ -234,9 +234,9 @@ public abstract class Joueur {
     public abstract Action choisirAction(int numManche);
 
     /**
-     * Permet de forger une face sur le dé à partir de la liste des bassins affordables.
+     * Permet de forger une face sur le dé à partir de la liste des bassins abordables.
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
-     * @param bassins la liste des bassins affordables
+     * @param bassins la liste des bassins abordables
      */
     public abstract Bassin choisirFaceAForger(List<Bassin> bassins, int numManche);
 

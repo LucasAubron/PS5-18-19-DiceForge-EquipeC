@@ -85,7 +85,7 @@ public class Coordinateur {
         switch (actionBot){
             case FORGER:
                 if (plateau.estVerbeux())
-                    affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n";
+                    affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n\n";
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 do {//Il faut que le joueur puisse s'arreter de forger
                     bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
@@ -93,12 +93,12 @@ public class Coordinateur {
                 break;
             case EXPLOIT:
                 if (plateau.estVerbeux())
-                    affichage += "\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n";
+                    affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n\n";
                 exploit(joueur, numeroManche);
                 break;
             case PASSER:
                 if (plateau.estVerbeux())
-                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
+                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
                 return false;//Si le joueur passe, on averti plus haut
         }
         return true;
