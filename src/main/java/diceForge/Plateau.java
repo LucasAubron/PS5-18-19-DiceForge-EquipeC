@@ -9,7 +9,7 @@ import java.util.List;
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
 public class Plateau {
-    private boolean modeVerbeux = true;
+    private boolean modeVerbeux;
     Joueur j0 = new EasyBot(0);
     Joueur j1 = new RandomBot(1);
     private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{j0,j1});//La ou les joueurs sont de base
@@ -17,7 +17,8 @@ public class Plateau {
     private Ile[] iles;//La ou il y a les cartes
 
 
-    public Plateau(){
+    public Plateau(boolean modeVerbeux){
+        this.modeVerbeux = modeVerbeux;
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), portail.getJoueurs().size()),
         new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),

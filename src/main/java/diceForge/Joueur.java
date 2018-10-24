@@ -253,12 +253,6 @@ public abstract class Joueur {
     public abstract boolean choisirActionSupplementaire(int numManche);
 
     /**
-     * Permet de choisir de continuer à forger
-     * @return true si le bot désire continuer à forger, false sinon
-     */
-    public abstract boolean choisirContinuerForger();
-
-    /**
      * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectué
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.

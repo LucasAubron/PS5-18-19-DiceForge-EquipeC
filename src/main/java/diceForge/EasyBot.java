@@ -66,9 +66,6 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public boolean choisirContinuerForger(){return true;}//On veut toujours forger
-
-    @Override
     public int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tous dans le marteau
 
     @Override

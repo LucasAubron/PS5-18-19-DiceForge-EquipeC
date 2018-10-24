@@ -58,11 +58,6 @@ public class TestBot extends Joueur {
         this.choix = choix;
     }
 
-    @Override
-    public boolean choisirContinuerForger(){
-        return choix;
-    }
-
     private int nbrPointMarteau = 0;
     @Override
     public int choisirRepartitionOrMarteau(int nbrOr){return nbrOr-nbrPointMarteau;}

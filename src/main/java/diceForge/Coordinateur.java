@@ -19,7 +19,8 @@ public class Coordinateur {
             jouerManche(i);
         }
         int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-        affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+        if (plateau.estVerbeux())
+            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
     }
 
     /**
@@ -89,7 +90,7 @@ public class Coordinateur {
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 do {//Il faut que le joueur puisse s'arreter de forger
                     bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
-                } while(joueur.choisirContinuerForger() && bassinsAEnlever != null);
+                } while(bassinsAEnlever != null);
                 break;
             case EXPLOIT:
                 if (plateau.estVerbeux())
@@ -109,23 +110,22 @@ public class Coordinateur {
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus forger
      */
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
-        List<Bassin> bassinAffordable = new ArrayList<>();//On créé la liste des bassins abordables
+        List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean forge = true;
             for (Bassin x:bassinsUtilises)
                 if (x.equals(bassin))//On fait attention de ne pas réutiliser un bassin déjà utilisé
                     forge = false;
             if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && forge)//Si on peut ajouter ce bassin
-                bassinAffordable.add(bassin);//On l'ajoute
+                bassinAbordable.add(bassin);//On l'ajoute
         }
-        if (!bassinAffordable.isEmpty())
-            bassinsUtilises.add(joueur.choisirFaceAForger(bassinAffordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
+        if (!bassinAbordable.isEmpty())
+            bassinsUtilises.add(joueur.choisirFaceAForger(bassinAbordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
         else//Si le joueur ne peut plus forger, on averti
             return null;
         if (bassinsUtilises.get(bassinsUtilises.size()-1) == null)
             return null;
         return bassinsUtilises;
-
     }
 
     /**
@@ -133,7 +133,7 @@ public class Coordinateur {
      * A raccourcir, refaire ou alors nier son existence
      */
     public void exploit(Joueur joueur, int numeroManche) {
-        List<Carte> cartesAffordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
+        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
                 for (Carte carte : paquet) {//Et les cartes
@@ -147,18 +147,18 @@ public class Coordinateur {
                             throw new DiceForgeException("Coordinateur","Une carte doit couter soit des lunes soit des soleils !");
                     }
                     if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
-                        cartesAffordables.add(carte);
+                        cartesAbordables.add(carte);
                 }
             }
         }
-        if (cartesAffordables.isEmpty())//Si le joueur ne peut acheter aucune carte, on s'arrète la
+        if (cartesAbordables.isEmpty())//Si le joueur ne peut acheter aucune carte, on s'arrète la
             return;
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
             if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
                 plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
                 break;
             }
-        Carte carteChoisie = joueur.choisirCarte(cartesAffordables, numeroManche);
+        Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche);
         Joueur joueurChasse = null;//On gére le joueur chassé et on donne la carte au joueur
         int i = 1;
         for (Ile ile:plateau.getIles())
