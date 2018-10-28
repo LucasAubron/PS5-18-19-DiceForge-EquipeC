@@ -57,8 +57,8 @@ public class Coordinateur {
      */
     public void tour(Joueur joueur, int numeroManche){
         if (plateau.estVerbeux())
-            affichage += ("--------------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "Phase de lancer de dés" + "\n--------------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
-            affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() +"\n\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
+            affichage += ("--------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() +"\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getJoueur().size() == 2) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés 2 fois
@@ -68,10 +68,12 @@ public class Coordinateur {
         joueur.appelerRenforts(joueur.choisirRenforts());//En premier on appelle les renforts
         boolean agit = actionPrincipale(joueur, numeroManche);//le joueur agit, et on regarde s'il passe son tour ou pas
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {//S'il peut, et il veut, il re-agit
-            if (plateau.estVerbeux())
-                affichage += "---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n";
-                affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() +"\n\n");
-            actionPrincipale(joueur, numeroManche);
+           joueur.ajouterSoleil(-2);
+           if (plateau.estVerbeux()) {
+               affichage += "---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n";
+               affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n");
+           }
+           actionPrincipale(joueur, numeroManche);
         }
     }
 

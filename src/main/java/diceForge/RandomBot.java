@@ -46,7 +46,6 @@ public class RandomBot extends Joueur{
     @Override
     public boolean choisirActionSupplementaire(int numManche){
         int pileFace = random.nextInt(2);
-        if (pileFace == 1) ajouterSoleil(-2);
         return pileFace == 1;
     }
 
