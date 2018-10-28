@@ -15,6 +15,7 @@ import java.util.List;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
+    private Plateau plateau;
     private int or;
     private int maxOr = 12;
     private int soleil = 0;

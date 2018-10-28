@@ -15,8 +15,8 @@ public class Coordinateur {
         this.plateau = plateau;//On garde le plateau en référence
         if (nbrManche < 9 || nbrManche > 10)
             throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 9, max : 10, actuel : "+nbrManche);
-        for (int i = 1; i <= nbrManche; ++i){//C'est ici que tout le jeu ce déroule
-            jouerManche(i);
+        for (int numManche = 0; numManche <= nbrManche; ++numManche){//C'est ici que tout le jeu ce déroule
+            jouerManche(numManche);
         }
         int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
         if (plateau.estVerbeux())
@@ -56,16 +56,8 @@ public class Coordinateur {
      * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
      */
     public void tour(Joueur joueur, int numeroManche){
-        if (plateau.estVerbeux())
-            affichage += ("--------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
-            affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() +"\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
-        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
-            if (plateau.getJoueur().size() == 2) {
-                x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés 2 fois
-            }
-            x.lancerLesDes();
-        }
-        joueur.appelerRenforts(joueur.choisirRenforts());//En premier on appelle les renforts
+        phaseLanceDe(joueur, numeroManche);
+        renforts(joueur, numeroManche);
         boolean agit = actionPrincipale(joueur, numeroManche);//le joueur agit, et on regarde s'il passe son tour ou pas
         if (joueur.getSoleil() >= 2 && joueur.choisirActionSupplementaire(numeroManche) && agit) {//S'il peut, et il veut, il re-agit
            joueur.ajouterSoleil(-2);
@@ -178,7 +170,23 @@ public class Coordinateur {
                     plateau.getPortail().ajouterJoueur(joueurChasse);
                 }
             }
+    private void renforts(Joueur joueur, int numeroManche){
+        List choixDuJoueur = joueur.choisirRenforts();
+        joueur.appelerRenforts(choixDuJoueur);
+        choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
+    }
 
+    private void phaseLanceDe(Joueur joueur, int numeroManche){
+        if (plateau.estVerbeux())
+            affichage += ("--------------------------------------------------------\n"+ "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("\n" + "Ressource disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() +"\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
+        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
+            if (plateau.getJoueur().size() == 2) {
+                x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
+            }
+            x.lancerLesDes();
+        }
+    }
     public String toString(){
         return affichage;
         }
