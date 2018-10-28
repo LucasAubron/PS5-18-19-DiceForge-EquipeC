@@ -61,4 +61,9 @@ public class Bassin {
             return true;
         return false;
     }
+
+    @Override
+    public String toString(){
+        return "" + faces;
+    }
 }
