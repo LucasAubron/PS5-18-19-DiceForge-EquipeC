@@ -171,27 +171,29 @@ public class Coordinateur {
                     plateau.getPortail().ajouterJoueur(joueurChasse);
                 }
             }
-    private int nombreAncienInactivable(Joueur joueur)    {
+    private int nombreAncienInactivable(Joueur joueur){
         int nombreAncienActivable = joueur.getNombreAncien();
         if (joueur.getOr()/3 < nombreAncienActivable)
-            nombreAncienActivable = joueur.getOr();
-        return joueur.getNombreAncien()- nombreAncienActivable;
+            nombreAncienActivable = joueur.getOr()/3;
+        int nombreAncienInactivable = joueur.getNombreAncien() - nombreAncienActivable;
+        return nombreAncienInactivable;
     }
 
-    private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable){
-        System.out.println(joueur.getOr());
-        System.out.println(renforts);
-        System.out.println("nombre ancien inactivable = " + nombreAncienInactivable);
-        for (int i=1; i<nombreAncienInactivable; i++)
-            renforts.remove("ANCIEN");
-        System.out.println(renforts);
-        System.out.println("-----------------------------------------------------------------------------------");
+    private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable) {
+        int compteAnciensEnleves = 0;
+        List indicesAEnlever = new ArrayList<>();
+        for (int i = 0; i < renforts.size(); i++)
+            if ((renforts.get(i) + "").equals("ANCIEN") && compteAnciensEnleves < nombreAncienInactivable) {
+                indicesAEnlever.add(i);
+                compteAnciensEnleves++;
+            }
+        for (int j=0; j<indicesAEnlever.size(); j++)
+            renforts.remove((int) indicesAEnlever.get(j));
         return renforts;
     }
 
     private void renforts(Joueur joueur, int numeroManche){
-        List renfortsUtilisables = new ArrayList<>();
-        renfortsUtilisables = joueur.getRenforts();
+        List renfortsUtilisables = joueur.getRenforts();
         int nombreAncienInactivable = nombreAncienInactivable(joueur);
         renfortsUtilisables = enleveAncienInactivable(joueur, renfortsUtilisables, nombreAncienInactivable);
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);

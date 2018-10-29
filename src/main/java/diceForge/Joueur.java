@@ -196,14 +196,12 @@ public abstract class Joueur {
         return position;
     }
 
-    public void appelerRenforts(List<Renfort> renfortsAAppeler){
-        for (Renfort renfort:renfortsAAppeler){
+    public void appelerRenforts(List<Renfort> renfortsUtilisables){
+        for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
-                    if (or >= 3){
-                        or -= 3;
-                        pointDeGloire += 4;
-                    }
+                    or -= 3;
+                    pointDeGloire += 4;
             }
         }
     }
@@ -228,7 +226,7 @@ public abstract class Joueur {
     }
     public int getNombreAncien(){
         int compte = 0;
-        for (int i=0; i<renforts.size()-1;i++)
+        for (int i=0; i<renforts.size();i++)
             if ((renforts.get(i)+"").equals("ANCIEN"))
                 compte++;
         return compte;
