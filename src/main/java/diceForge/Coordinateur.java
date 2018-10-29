@@ -180,20 +180,16 @@ public class Coordinateur {
     }
 
     private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable) {
-        int compteAnciensEnleves = 0;
-        List indicesAEnlever = new ArrayList<>();
-        for (int i = 0; i < renforts.size(); i++)
-            if ((renforts.get(i) + "").equals("ANCIEN") && compteAnciensEnleves < nombreAncienInactivable) {
-                indicesAEnlever.add(i);
-                compteAnciensEnleves++;
-            }
-        for (int j=0; j<indicesAEnlever.size(); j++)
-            renforts.remove((int) indicesAEnlever.get(j));
+        for (int compteAnciensEnleves = 0; compteAnciensEnleves < nombreAncienInactivable; compteAnciensEnleves++)
+            renforts.remove(0);
         return renforts;
     }
 
     private void renforts(Joueur joueur, int numeroManche){
-        List renfortsUtilisables = joueur.getRenforts();
+        List renfortsUtilisables = new ArrayList();
+        int len = joueur.getRenforts().size();
+        for (int i=0; i<len; i++)
+            renfortsUtilisables.add(joueur.getRenforts().get(i));
         int nombreAncienInactivable = nombreAncienInactivable(joueur);
         renfortsUtilisables = enleveAncienInactivable(joueur, renfortsUtilisables, nombreAncienInactivable);
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
