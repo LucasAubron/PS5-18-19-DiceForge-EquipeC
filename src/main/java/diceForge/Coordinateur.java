@@ -1,5 +1,6 @@
 package diceForge;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,8 +179,13 @@ public class Coordinateur {
     }
 
     private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable){
+        System.out.println(joueur.getOr());
+        System.out.println(renforts);
+        System.out.println("nombre ancien inactivable = " + nombreAncienInactivable);
         for (int i=1; i<nombreAncienInactivable; i++)
             renforts.remove("ANCIEN");
+        System.out.println(renforts);
+        System.out.println("-----------------------------------------------------------------------------------");
         return renforts;
     }
 
