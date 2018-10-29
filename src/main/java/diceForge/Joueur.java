@@ -226,6 +226,13 @@ public abstract class Joueur {
             pointDeGloire += carte.getNbrPointGloire();
         }
     }
+    public int getNombreAncien(){
+        int compte = 0;
+        for (int i=0; i<renforts.size()-1;i++)
+            if ((renforts.get(i)+"").equals("ANCIEN"))
+                compte++;
+        return compte;
+    }
 
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
@@ -264,7 +271,7 @@ public abstract class Joueur {
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    public abstract List<Renfort> choisirRenforts();
+    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible

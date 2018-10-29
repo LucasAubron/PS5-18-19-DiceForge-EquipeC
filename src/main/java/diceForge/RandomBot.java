@@ -55,11 +55,11 @@ public class RandomBot extends Joueur{
     }
 
     @Override
-    public List<Renfort> choisirRenforts(){
+    public List<Renfort> choisirRenforts(List renfortsUtilisables){
         List<Renfort> renforts = new ArrayList<>();
-        for (Renfort renfort:getRenforts())
+        for (Object renfort: renfortsUtilisables)
             if (random.nextInt(2) == 1)//1 chance sur 2 d'ajouter chaque renfort
-                renforts.add(renfort);
+                renforts.add((Renfort) renfort);
         return renforts;
     }
 

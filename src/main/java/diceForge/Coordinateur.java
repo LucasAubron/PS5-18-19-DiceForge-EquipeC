@@ -170,8 +170,25 @@ public class Coordinateur {
                     plateau.getPortail().ajouterJoueur(joueurChasse);
                 }
             }
+    private int nombreAncienInactivable(Joueur joueur)    {
+        int nombreAncienActivable = joueur.getNombreAncien();
+        if (joueur.getOr()/3 < nombreAncienActivable)
+            nombreAncienActivable = joueur.getOr();
+        return joueur.getNombreAncien()- nombreAncienActivable;
+    }
+
+    private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable){
+        for (int i=1; i<nombreAncienInactivable; i++)
+            renforts.remove("ANCIEN");
+        return renforts;
+    }
+
     private void renforts(Joueur joueur, int numeroManche){
-        List choixDuJoueur = joueur.choisirRenforts();
+        List renfortsUtilisables = new ArrayList<>();
+        renfortsUtilisables = joueur.getRenforts();
+        int nombreAncienInactivable = nombreAncienInactivable(joueur);
+        renfortsUtilisables = enleveAncienInactivable(joueur, renfortsUtilisables, nombreAncienInactivable);
+        List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         joueur.appelerRenforts(choixDuJoueur);
         choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
     }

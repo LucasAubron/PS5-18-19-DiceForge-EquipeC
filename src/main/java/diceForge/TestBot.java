@@ -67,9 +67,9 @@ public class TestBot extends Joueur {
 
     private int numRenfort;
     @Override
-    public List<Renfort> choisirRenforts(){
+    public List<Renfort> choisirRenforts(List renfortsUtilisables){
         List<Renfort> renforts = new ArrayList<>();
-        renforts.add(getRenforts().get(numRenfort));
+        renforts.add((Renfort) renfortsUtilisables.get(numRenfort));
         return renforts;
     }
     public void setNumRenfort(int numRenfort) {

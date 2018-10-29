@@ -1,5 +1,6 @@
 package diceForge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EasyBot extends Joueur{
@@ -69,8 +70,8 @@ public class EasyBot extends Joueur{
     public int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tous dans le marteau
 
     @Override
-    public List<Renfort> choisirRenforts(){
-        return getRenforts();//On appelle tous les renforts, si on ne peut pas, c'est géré plus tard
+    public List<Renfort> choisirRenforts(List renfortsUtilisables){
+        return renfortsUtilisables;//On appelle tous les renforts, si on ne peut pas, c'est géré plus tard
     }
 
     @Override
