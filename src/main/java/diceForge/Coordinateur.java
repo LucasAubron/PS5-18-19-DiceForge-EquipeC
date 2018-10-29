@@ -171,6 +171,12 @@ public class Coordinateur {
                     plateau.getPortail().ajouterJoueur(joueurChasse);
                 }
             }
+
+    /**
+     * Calcule le nombre de carte ANCIEN possédées par un joueur non activable faute d'or
+      * @param joueur
+     * @return
+     */
     private int nombreAncienInactivable(Joueur joueur){
         int nombreAncienActivable = joueur.getNombreAncien();
         if (joueur.getOr()/3 < nombreAncienActivable)
@@ -179,19 +185,41 @@ public class Coordinateur {
         return nombreAncienInactivable;
     }
 
-    private List enleveAncienInactivable(Joueur joueur, List renforts,int nombreAncienInactivable) {
+    /**
+     *enlève dans la liste fournie, autant de fois le renfort ANCIEN que l'entier fourni,
+     * ATTENTION ! La liste fournie doit être triée, les renforts ANCIEN doient être au début de la liste
+     * @param renforts
+     * @param nombreAncienInactivable
+     * @return
+     */
+    private List enleveAncienInactivable(List renforts,int nombreAncienInactivable) {
         for (int compteAnciensEnleves = 0; compteAnciensEnleves < nombreAncienInactivable; compteAnciensEnleves++)
             renforts.remove(0);
         return renforts;
     }
 
+    /**
+     * S'occupe d'envoyer la liste des renforts activable au bot, plus particulièrement retire
+     * les renforts anciens qu'il ne peut pas active faute d'or, le reste des choix liés aux autres renforts sera
+     * a ajouter par la suite. Les renforts sont activés dans la foulée après que le joueur ai fait son choix.
+     * @param joueur
+     * @param numeroManche
+     */
     private void renforts(Joueur joueur, int numeroManche){
+        //on créé une copie de liste des renforts du joueurs, on met les anciens au début de la liste
         List renfortsUtilisables = new ArrayList();
         int len = joueur.getRenforts().size();
-        for (int i=0; i<len; i++)
+        for (int i=0; i<len; i++) {
             renfortsUtilisables.add(joueur.getRenforts().get(i));
+            if ((joueur.getRenforts().get(i) + "").equals("ANCIEN")) {
+                for (int j = i; j > 0; j--) {
+                    renfortsUtilisables.set(j, renfortsUtilisables.get(j - 1));
+                    renfortsUtilisables.set(0, joueur.getRenforts().get(i));
+                };
+            };
+        }
         int nombreAncienInactivable = nombreAncienInactivable(joueur);
-        renfortsUtilisables = enleveAncienInactivable(joueur, renfortsUtilisables, nombreAncienInactivable);
+        renfortsUtilisables = enleveAncienInactivable(renfortsUtilisables, nombreAncienInactivable);
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         joueur.appelerRenforts(choixDuJoueur);
         choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
