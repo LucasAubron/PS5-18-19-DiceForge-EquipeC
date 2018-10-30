@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
- * Il s'occupe du déroulement des manches, mais aussi de déplacer les joueurs.
+ * Il s'occupe du déroulement des de la partie, mais aussi de déplacer les joueurs et gérer leur actions.
  */
 public class Coordinateur {
     Plateau plateau;
@@ -124,7 +124,7 @@ public class Coordinateur {
     }
 
     /**
-     * Demande ce que le bot veut faire et agit en fonction
+     * Demande ce que le bot veut faire et agit en fonction de sa réponse
      * @return true si le joueur effectue une action, false s'il passe son tour
      */
     public boolean action(Joueur joueur, int numeroManche){
@@ -156,13 +156,13 @@ public class Coordinateur {
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
-        List<Bassin> bassinAbordable = getBassinAbordable(joueur, bassinsUtilises);
+        List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face
             return null;
         else{
             ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
             if (choixDuJoueur.getBassin() != null) {
-                affichage += "Le joueur " + joueur.getIdentifiant() + " forge la face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
+                affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
                 joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
                 joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());
             }
@@ -173,7 +173,7 @@ public class Coordinateur {
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
     }
 
-    private List<Bassin> getBassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
+    private List<Bassin> BassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean estDejaUtilise = false;
@@ -186,11 +186,11 @@ public class Coordinateur {
         return bassinAbordable;
     }
     /**
-     * Méthode qui demande à un joueur de choisir une carte
-     * A raccourcir, refaire ou alors nier son existence
+     * Action exploit, on envoit la liste des cartes achetables par le joueur, celui ci choisit et l'achat est effectué dans la foulée.
+     * Gère également la chasse.
      */
     public void exploit(Joueur joueur, int numeroManche) {
-        List<Carte> cartesAbordables = getCartesAbordables(joueur);
+        List<Carte> cartesAbordables = CartesAbordables(joueur);
         if (cartesAbordables.isEmpty())//Si le joueur ne peut acheter aucune carte faute de ressources
             return;
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
@@ -219,7 +219,7 @@ public class Coordinateur {
 
     }
 
-    private List getCartesAbordables(Joueur joueur) {
+    private List CartesAbordables(Joueur joueur) {
         List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
