@@ -18,7 +18,7 @@ public class EasyBot extends Joueur{
     public ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
-            if (numManche < 3 && bassin.getFace().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
+            if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
                 for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
                     for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                         if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){

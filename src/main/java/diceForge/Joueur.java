@@ -88,6 +88,8 @@ public abstract class Joueur {
 
     public De[] getDes() {return des;}
 
+    public De getDe(int num) {return des[num];}
+
     public List<Renfort> getRenforts() {return renforts;}
 
     /**

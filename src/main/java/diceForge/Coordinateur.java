@@ -162,12 +162,16 @@ public class Coordinateur {
             for (Bassin x:bassinsUtilises)
                 if (x.equals(bassin))//On fait attention de ne pas réutiliser un bassin déjà utilisé
                     estDejaUtilise = true;
-            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && !estDejaUtilise)//Si on peut ajouter ce bassin
+            if (!bassin.getFaces().isEmpty() && bassin.getCout() <= joueur.getOr() && !estDejaUtilise)//Si on peut ajouter ce bassin
                 bassinAbordable.add(bassin);//On l'ajoute
         }
         if (!bassinAbordable.isEmpty()) {
             ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
-            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+            if (choixDuJoueur.getBassin() != null) {
+                affichage += "Le joueur " + joueur.getIdentifiant() + " forge la face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
+                joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+                joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());
+            }
             bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé
         }
         else//Si le joueur ne peut plus forger (plus assez d'or pour les bassins dans lesquels il n'a pas encore pioché
