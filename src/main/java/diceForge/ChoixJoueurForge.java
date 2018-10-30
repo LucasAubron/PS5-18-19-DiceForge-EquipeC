@@ -2,9 +2,9 @@ package diceForge;
 
 /**
  * Parce que le craft d'une face de dé demande une multitude d'informations aux joueurs, et de types
- * différents (1 bassin et 4 entiers) on créé une classe pour pouvoir renvoyer un seul objet lorsque le joueur choisi.
+ * différents (1 bassin et 3 entiers) on créé une classe pour pouvoir renvoyer un seul objet lorsque le joueur choisi.
  * bassin est le bassin dans lequel la face a forger a été prise, numDe est le numéro du dé sur lequel le joueur
- * va rempalcer une face, numBassin est le numéro du bassin enquestion, numFace est le numéro de la face choisie
+ * va rempalcer une face, numFace est le numéro de la face choisie dans le bassin concerné.
  * dans le bassin (utile car deux bassins accueuillent des faces différentes: ceux qui coutent 4 et 12),
  * posFace est la position de la face sur le dé que le joueur décide de remplacer.
  *
@@ -15,13 +15,11 @@ package diceForge;
 public class ChoixJoueurForge {
     private Bassin bassin;
     private int numDe;
-    private int numBassin;
     private int numFace;
     private int posFace;
-    ChoixJoueurForge(Bassin bassin, int numDe, int numBassin, int numFace, int posFace){
+    ChoixJoueurForge(Bassin bassin, int numFace, int numDe, int posFace){
         this.bassin = bassin;
         this.numDe = numDe;
-        this.numBassin = numBassin;
         this.numFace = numFace;
         this.posFace = posFace;
     }
@@ -32,10 +30,6 @@ public class ChoixJoueurForge {
 
     public Bassin getBassin() {
         return bassin;
-    }
-
-    public int getNumBassin() {
-        return numBassin;
     }
 
     public int getNumFace() {

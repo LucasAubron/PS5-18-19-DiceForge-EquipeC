@@ -28,9 +28,8 @@ public class TestBot extends Joueur {
      */
     private int[] num = new int[4];
     @Override
-    public Bassin choisirFaceAForger(List<Bassin> bassins, int numManche){
-        forgerDe(num[2], bassins.get(num[0]).retirerFace(num[1]), num[3]);
-        return bassins.get(num[0]);
+    public ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+        return new ChoixJoueurForge(bassins.get(num[0]), num[1], num[2], num[3]);
     }
     public void setNum(int[] num) {
         this.num = num;

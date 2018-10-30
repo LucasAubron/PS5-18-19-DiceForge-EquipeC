@@ -1,6 +1,5 @@
 package diceForge;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EasyBot extends Joueur{
@@ -16,15 +15,14 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public Bassin choisirFaceAForger(List<Bassin> bassins, int numManche){
+    public ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
             if (numManche < 3 && bassin.getFace().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
                 for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
                     for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                         if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
-                            forgerDe(i, bassin.retirerFace(0), j);//Si c'est un face 1 or, on forge
-                            return bassin;
+                            return new ChoixJoueurForge(bassin, 0, i, j);
                         }
                     }
                 }
@@ -38,7 +36,7 @@ public class EasyBot extends Joueur{
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
                     forgerDe(i, bassinAChoisir.retirerFace(0), j);//Si c'est un face 1 or, on forge
-                    return bassinAChoisir;
+                    return new ChoixJoueurForge(bassinAChoisir, 0, i, j);
                 }
             }
         }

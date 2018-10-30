@@ -158,18 +158,21 @@ public class Coordinateur {
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
-            boolean forge = true;
+            boolean estDejaUtilise = false;
             for (Bassin x:bassinsUtilises)
                 if (x.equals(bassin))//On fait attention de ne pas réutiliser un bassin déjà utilisé
-                    forge = false;
-            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && forge)//Si on peut ajouter ce bassin
+                    estDejaUtilise = true;
+            if (!bassin.getFace().isEmpty() && bassin.getCout() <= joueur.getOr() && !estDejaUtilise)//Si on peut ajouter ce bassin
                 bassinAbordable.add(bassin);//On l'ajoute
         }
-        if (!bassinAbordable.isEmpty())
-            bassinsUtilises.add(joueur.choisirFaceAForger(bassinAbordable, numeroManche));//Puis on forge, le joueur s'occupe de retirer la face
-        else//Si le joueur ne peut plus forger, on averti
+        if (!bassinAbordable.isEmpty()) {
+            ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
+            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+            bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé
+        }
+        else//Si le joueur ne peut plus forger (plus assez d'or pour les bassins dans lesquels il n'a pas encore pioché
             return null;
-        if (bassinsUtilises.get(bassinsUtilises.size()-1) == null)
+        if (bassinsUtilises.get(bassinsUtilises.size()-1) == null) //Si le joueur n'a pas crafté alors cela signifie qu'il veut s'arrêter
             return null;
         return bassinsUtilises;
     }
