@@ -1,0 +1,510 @@
+[33mcommit 28bbbc6a54adcce01d5168017cc00b9932881d93[m[33m ([m[1;36mHEAD -> [m[1;32mNewCoordinateur[m[33m, [m[1;31morigin/NewCoordinateur[m[33m)[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 30 15:06:20 2018 +0100
+
+    in progress: affichage des craft de dés dans le mode verbeux
+
+[33mcommit bbda098c04173ef9a140c24665e427333d8b9e29[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 30 12:47:57 2018 +0100
+
+    in progress: affichage des craft de dés dans le mode verbeux
+
+[33mcommit 5e0e30340dbe4a199376b6c65d52a403c2993552[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 30 11:14:25 2018 +0100
+
+    in progress: affichage des craft de dés dans le mode verbeux
+
+[33mcommit 5afb884c555763d96aa395ce01c9fbd908a4173f[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 22:42:39 2018 +0100
+
+    checkpoint
+
+[33mcommit e81892281ead270eaf874eb5f47521a2c606da8e[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 15:14:00 2018 +0100
+
+    reecriture jusqu'a renforts vraiment finie sans bug
+
+[33mcommit d2a6a1642bb476b8d35878d4ab0e73470e39dae6[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 13:14:27 2018 +0100
+
+    reecriture jusqu'a renfort, solution temporaire, ne marche que si il n'y a que les anciens en exploits
+
+[33mcommit 43e8facb2de6ed99c164c400bfb449952365ae75[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 12:50:43 2018 +0100
+
+    reecriture jusqu'a renforts: done
+
+[33mcommit e3151a68907771ead584ed9c0539279452353c23[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 11:07:32 2018 +0100
+
+    reecriture jusqu'a renforts, non fonctionel encore, ajout de sout pour comprendre le probleme
+
+[33mcommit 1814847128341d389a586745537a3196a1d1ca87[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 29 11:03:13 2018 +0100
+
+    reecriture jusqu'a renforts, non fonctionel encore
+
+[33mcommit 787c9e324d540d0988dadec90bc2e1dd6361a722[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Sun Oct 28 18:24:11 2018 +0100
+
+    renforts ajoutés a affichage, épuration de l'écriture pas terminée'
+
+[33mcommit 8e48d5e0e4f396eae881ddd70d436b193e4d2ea9[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Sun Oct 28 17:43:16 2018 +0100
+
+    modifications d'affichage mineures
+
+[33mcommit 90fc3bc7ea2a7ca243e1193a230881c78202156a[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Sun Oct 28 02:28:51 2018 +0200
+
+    #47 in progress: mode verbeux amélioré, moins de blabla et plus d'informations utiles
+
+[33mcommit d00398ab0ecc3462f925ab340e8bfc86b8ecc491[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Wed Oct 24 17:18:52 2018 +0200
+
+    petites modifications d'affichage
+
+[33mcommit 95a31b4933c9d62ddc1294f41dba97789b47765d[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Wed Oct 24 15:54:52 2018 +0200
+
+    petites modifications d'affichage
+
+[33mcommit b643eebb720a9a3626c7e9e6f70d54e9292bdbf6[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Wed Oct 24 15:42:17 2018 +0200
+
+    petites modifications d'affichage
+
+[33mcommit cba6f462f84c24e69ff13c4a5b89ca0a0f2f7204[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Wed Oct 24 15:41:39 2018 +0200
+
+    petites modifications d'affichage
+
+[33mcommit d667222def218f4832aefbdca83d7ad96d012611[m
+Merge: 3fd0015 6c48136
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Tue Oct 23 14:00:02 2018 +0200
+
+    Merge pull request #46 from LucasAubron/EasyBot
+    
+    Easy bot
+
+[33mcommit 6c48136b137e313ed28985bb45bd23a73929a1a4[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 23 13:54:29 2018 +0200
+
+    Bugfix
+
+[33mcommit 94523e037b4c7ff12dd63a17bb5b3cf95771f720[m[33m ([m[1;31morigin/EasyBot[m[33m)[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 23 11:26:48 2018 +0200
+
+    Joueur avec une intelligence minimale
+
+[33mcommit 3fd00150d5b87d895aaae364791872314040a0d5[m
+Merge: 69388dc 7384c33
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Tue Oct 23 10:17:34 2018 +0200
+
+    Merge pull request #45 from LucasAubron/Temple
+    
+    Temple
+
+[33mcommit 7384c331129063cef9f0f8de5f225fd415b1737d[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 23 10:13:03 2018 +0200
+
+    Commentaires
+
+[33mcommit 137eed50730513c6c7976b05706d776cd5b3c60f[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 23 09:59:22 2018 +0200
+
+    Remplissage du temple
+
+[33mcommit 69388dcff8e8a4446824b5bd4c0fc2000fc071c4[m
+Merge: 9158b8e 2858f51
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Mon Oct 22 18:21:18 2018 +0200
+
+    Merge pull request #44 from LucasAubron/Marteau
+    
+    Marteau
+
+[33mcommit 2858f51022988fe944ae2a50d5dbf77315970293[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 22 18:18:49 2018 +0200
+
+    Test du marteau
+
+[33mcommit 4596b0e5869f6eb24125f9d9dc449ef863b7cf2b[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 22 18:12:02 2018 +0200
+
+    Ajout de test pour certaines cartes
+
+[33mcommit f2355be64fc53f041db0bfe008e2672ccb069d2f[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sat Oct 20 11:13:29 2018 +0200
+
+    Création du bot de test
+
+[33mcommit 0a77ff950c1270b17ff62811df6b0bd1b119f18e[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Thu Oct 18 11:20:43 2018 +0200
+
+    Gestion des faces à choix
+
+[33mcommit 5c7029a3cf193cb1186944c1d2e97b21fceeebbf[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Thu Oct 18 09:09:08 2018 +0200
+
+    Mini bugfix
+
+[33mcommit be52a459149e64cc11d4965d004ec28f02b31231[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 23:19:01 2018 +0200
+
+    Ajout des herbes folles et de l'ancien non testé
+
+[33mcommit 0d2d754fef7086db7f45349b9f57bdc8c7fdf78f[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 22:17:44 2018 +0200
+
+    Dés conformes au régles
+
+[33mcommit 77b54f10df0b45facb9ac432b8e57f12c5cedb55[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 21:58:28 2018 +0200
+
+    Ajout marteau et coffre non testé
+
+[33mcommit 2a08d7a80103534ea2a009189af0483782e45c95[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 20:42:47 2018 +0200
+
+    Initialisation de l'ajout du marteau et du coffre
+
+[33mcommit 9158b8e2668dbaa91a2df2bf7d2ec85228560cc6[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 15:12:03 2018 +0200
+
+    Ajout de commentaire
+
+[33mcommit 746d7f8371cea70fb70344b6b15838cf1b06f2e6[m
+Merge: 873ff60 eac49b3
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 14:24:21 2018 +0200
+
+    Merge branch 'master' of https://github.com/LucasAubron/PS5-18-19-DiceForge-EquipeC
+
+[33mcommit 873ff601ad87d4dec1a3b26c3e8560a9f1d40fba[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 14:23:59 2018 +0200
+
+    Bugfix gestion des actions
+
+[33mcommit eac49b3fb7cfdaef3f25987f372997cf127c292e[m
+Author: RaphaelRomanet <raphael.romanet@gmail.com>
+Date:   Wed Oct 17 14:23:54 2018 +0200
+
+    Changement d'un commentaire
+
+[33mcommit 63a282c67fb976626ba351f3c4a3fb473810fc5c[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Wed Oct 17 11:30:55 2018 +0200
+
+    Bugfix quand on forge
+
+[33mcommit 57f6aa60f54c34ec6d68030ba39d2dda6336d66f[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 16 12:13:34 2018 +0200
+
+    améloriation de l'affichage
+
+[33mcommit 583fc887c5cf541ffeb940e1ea64461a2d01df0f[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 16 10:25:17 2018 +0200
+
+    Le bot peut s'arreter de forger
+
+[33mcommit f51859a87c4fad129a6827a0c016122daf3481d4[m
+Merge: ee48e4b d36fc6b
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 16 10:13:56 2018 +0200
+
+    améloriation de l'affichage
+
+[33mcommit d36fc6b3aeac7161097f23ee2846b5b20b624602[m
+Merge: 15cde0f 9bf4498
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Tue Oct 16 10:06:35 2018 +0200
+
+    Merge pull request #14 from LucasAubron/Menage
+    
+    Il faut l'enterer
+
+[33mcommit 9bf44981ef2ccdd7e6832e056ccc0db63b956c18[m[33m ([m[1;31morigin/Menage[m[33m)[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 16 09:59:30 2018 +0200
+
+    améloriation de l'affichage
+
+[33mcommit 15cde0f3fbae44e3bacd44843a50cd518d2e5c95[m
+Merge: 388a4bd fbd64bf
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 16 09:55:22 2018 +0200
+
+    Merge branch 'master' of https://github.com/LucasAubron/PS5-18-19-DiceForge-EquipeC
+
+[33mcommit 388a4bd10ea5a61875846d0c36a7950ccd7ad569[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 16 09:53:38 2018 +0200
+
+    Ajout du META-INF/MANIFEST.MF
+
+[33mcommit fbd64bf3a6313dd1092e5d9dcb312975f821eac5[m
+Merge: f1386d5 a0e3415
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Tue Oct 16 09:04:55 2018 +0200
+
+    Merge pull request #13 from LucasAubron/Menage
+    
+    Menage
+
+[33mcommit a0e34152cc13f95a5eb8a527ca9db226baf8d3c3[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 16 01:18:01 2018 +0200
+
+    amélioration des printé
+
+[33mcommit 83031567c5b209d12202e62936aa2fc1ad224c97[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 16 00:16:02 2018 +0200
+
+    bugfix
+
+[33mcommit 7b788d8b18fdc95eec6e5c5ed2326b8fecab8837[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Tue Oct 16 00:09:02 2018 +0200
+
+    bugfix
+
+[33mcommit c913e1dd938f6b70f3803cb4ba8495e57a21122a[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Tue Oct 16 00:04:28 2018 +0200
+
+    amélioration du mode verbeux
+
+[33mcommit 66964cfd1a7293100cd2142cbd65484acf45e415[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 23:37:12 2018 +0200
+
+    Tests
+
+[33mcommit aca088d020b89f6d32722bb05be3cfb7dbc9b946[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 22:46:51 2018 +0200
+
+    Bugfix mineur
+
+[33mcommit 941ef5ad370efcfca7065771aa558769dcd8179e[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 21:59:31 2018 +0200
+
+    On passe l'aspi
+
+[33mcommit ea679dadde9ab21f79439be345d8f018f2a95a8c[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 21:36:42 2018 +0200
+
+    Changement d'array à List
+
+[33mcommit f1386d53750a19c9b8e39bd3f0f69ec44206466e[m
+Merge: 1269240 0749dcf
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Mon Oct 15 19:57:30 2018 +0200
+
+    Merge pull request #11 from LucasAubron/Coordinateur
+    
+    Coordinateur
+
+[33mcommit 0749dcf1d2c8c868e620cd1898414cfbffd17aa9[m[33m ([m[1;31morigin/Coordinateur[m[33m)[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 19:54:09 2018 +0200
+
+    Version minimale pas propre mais finit !
+
+[33mcommit 65f918b53d737f98db9a20e2987331862e056bed[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 18:59:33 2018 +0200
+
+    Forgeage et exploit géré !
+
+[33mcommit d196b02eba0f4c850bf74dbb5a8be26a820e1736[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 15 15:43:59 2018 +0200
+
+    affichage mode verbeux plus compacte
+
+[33mcommit 9129bd635a146794037ae750067f4fe918ace14a[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 15 15:22:37 2018 +0200
+
+    affichage mode verbeux plus compacte
+
+[33mcommit ee48e4b91e0ee4f821bb6214636f693fcf036d85[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 15 15:12:51 2018 +0200
+
+    affichage mode verbeux plus compacte
+
+[33mcommit a849327b5f2cfc9077fc2d33969d4646bf5a79e1[m
+Merge: 29b58c9 de0a21c
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 15 15:10:27 2018 +0200
+
+    Merge branch 'Coordinateur' of https://github.com/LucasAubron/PS5-18-19-DiceForge-EquipeC
+
+[33mcommit 29b58c9084bdcaa3de349587e47a66a20ef314a6[m
+Author: Lucas Aubron <lucas.aubron@etu.unice.fr>
+Date:   Mon Oct 15 15:09:07 2018 +0200
+
+    affichage mode verbeux plus compacte
+
+[33mcommit de0a21c5855d2040e02077dbd051444f6a0087b8[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 14:54:00 2018 +0200
+
+    Il y a une erreur dans la case EXPLOIT qui n'est pas levé par le programme, GLHF
+
+[33mcommit cc8ed9057ecd0e00591deeb634595aa8243d627d[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 14:23:20 2018 +0200
+
+    Gestion de choisirCarte pas finis, il faut faire la méthode dans randomBot
+
+[33mcommit 74a11baab32df58f8e900ce23242d801bae26e6f[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 13:55:23 2018 +0200
+
+    Gestion du forgeage (bug fix)
+
+[33mcommit 4b4813d14f7e1dbe6b094697f49c6f8be25a5436[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Mon Oct 15 13:23:29 2018 +0200
+
+    Gestion du forgeage
+
+[33mcommit 03ed2c688effeb5feb9e76511a4a07794562a6ca[m
+Author: Jean-Marie Dormoy <jean-marie.dormoy@etu.unice.fr>
+Date:   Sun Oct 14 21:39:38 2018 +0200
+
+    modif mineures print dans Coordinateur méthode tour
+
+[33mcommit 3da23ec9aed921639fdc88c3d07e9e79c793e976[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 12:13:35 2018 +0200
+
+    Ca avance
+
+[33mcommit 08ca2774a3dfbf2c70d9e46352366fee0571d592[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 11:44:14 2018 +0200
+
+    On ne peut pas aller plus loin avant de créer les bots
+
+[33mcommit a71afb9a98768f593605b90bc889ec84ee7f0940[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 11:24:55 2018 +0200
+
+    création de la structure d'une manche
+
+[33mcommit e6de6a442acfcd3f95365763aa03eb02dabb1eaf[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 11:02:07 2018 +0200
+
+    Structure de base du coordinateur
+
+[33mcommit 37346ca9cd68fe055304fb3ee8dfedd4c6440d0c[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 10:52:56 2018 +0200
+
+    Structure de base du coordinateur
+
+[33mcommit 1269240c964ca73c36f4fc6a086d087bb7a549f8[m
+Merge: c4d6fd8 0b249ae
+Author: GabrielPlante <43040976+GabrielPlante@users.noreply.github.com>
+Date:   Sun Oct 14 10:28:04 2018 +0200
+
+    Merge pull request #9 from LucasAubron/ImplementationJoueurIle
+    
+    ImplementationJoueurIle #2
+
+[33mcommit 0b249ae17d99baf9ce7fb7cadc45263e1c7791e0[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sun Oct 14 10:21:18 2018 +0200
+
+    Changement de comportement de prendre carte
+
+[33mcommit e7e5a3b2f353c186fc1a79190fd0ce6424d18be1[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sat Oct 13 23:57:21 2018 +0200
+
+    Grand avancement
+
+[33mcommit 7a1c28b45a0f44cb3badb95e9d2e8c695aff2ef4[m
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sat Oct 13 23:16:48 2018 +0200
+
+    Avancement
+
+[33mcommit 6acc735edc5bcca322be87ae46ef4433293f6653[m
+Author: Raphael ROMANET <raphael.romanet@gmail.com>
+Date:   Sat Oct 13 20:51:00 2018 +0200
+
+    Modification de retirer et ajouter dans ile
+
+[33mcommit 569e1d5c936a83f70bc72297e0e92ca84bb4621d[m
+Merge: adcd68a 11f0097
+Author: Raphael ROMANET <raphael.romanet@gmail.com>
+Date:   Sat Oct 13 19:00:48 2018 +0200
+
+    Merge branch 'ImplementationJoueurIle' of https://github.com/LucasAubron/PS5-18-19-DiceForge-EquipeC into ImplementationJoueurIle
+
+[33mcommit adcd68af5ce479a7b9de2fd02f739521ca7ee8d2[m
+Author: Raphael ROMANET <raphael.romanet@gmail.com>
+Date:   Sat Oct 13 19:00:39 2018 +0200
+
+    Ajout de la fonction ajouter et retirer un joueur dans la classe ile
+
+[33mcommit 11f009700bfe081afead7a52d74f1190dc525014[m
+Author: Jean-Marie Dormoy <jean-marie.dormoy@etu.unice.fr>
+Date:   Sat Oct 13 18:56:31 2018 +0200
+
+    ajout tests a la main dans Main et méthodes toString
+    dans Joueur et Face.Pb si le dé tombe sur PdGloire.
+
+[33mcommit 8af43cff9d2dbbf3e5a0db83c2b0a1d6e1e0285c[m
+Merge: ce56b6b aba38eb
+Author: GabrielPlante <gabriel.plante@live.fr>
+Date:   Sat Oct 13 18:37:20 2018 +0200
+
+    Merge branch 'ImplementationJoueurIle' of https://github.com/LucasAubron/PS5-18-19-DiceForge-EquipeC into ImplementationJoueurIle
+    
+    # Conflicts:
+    #       src/main/java/diceForge/Joueur.java

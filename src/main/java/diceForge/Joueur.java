@@ -15,6 +15,7 @@ import java.util.List;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
+    private Plateau plateau;
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -86,6 +87,8 @@ public abstract class Joueur {
     public int getIdentifiant() {return identifiant;}
 
     public De[] getDes() {return des;}
+
+    public De getDe(int num) {return des[num];}
 
     public List<Renfort> getRenforts() {return renforts;}
 
@@ -195,14 +198,12 @@ public abstract class Joueur {
         return position;
     }
 
-    public void appelerRenforts(List<Renfort> renfortsAAppeler){
-        for (Renfort renfort:renfortsAAppeler){
+    public void appelerRenforts(List<Renfort> renfortsUtilisables){
+        for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
-                    if (or >= 3){
-                        or -= 3;
-                        pointDeGloire += 4;
-                    }
+                    or -= 3;
+                    pointDeGloire += 4;
             }
         }
     }
@@ -225,6 +226,13 @@ public abstract class Joueur {
             pointDeGloire += carte.getNbrPointGloire();
         }
     }
+    public int getNombreAncien(){
+        int compte = 0;
+        for (int i=0; i<renforts.size();i++)
+            if ((renforts.get(i)+"").equals("ANCIEN"))
+                compte++;
+        return compte;
+    }
 
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
@@ -238,7 +246,7 @@ public abstract class Joueur {
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins abordables
      */
-    public abstract Bassin choisirFaceAForger(List<Bassin> bassins, int numManche);
+    public abstract ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable
@@ -263,7 +271,7 @@ public abstract class Joueur {
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    public abstract List<Renfort> choisirRenforts();
+    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible
