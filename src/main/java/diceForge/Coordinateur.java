@@ -49,7 +49,7 @@ public class Coordinateur {
             secondeAction(joueur, numeroManche);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution
+// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise.
 
     /**
      * Méthode qui parle d'elle même, première étape d'un tour de diceforge.
@@ -102,6 +102,7 @@ public class Coordinateur {
 
     /**
      * Calcule le nombre de carte ANCIEN possédées par un joueur non activable faute d'or
+     * Exemple: le joueur a 3 anciens et 8 or, il a 1 ANCIEN inactivable.
      * @param joueur
      * @return
      */
@@ -128,7 +129,8 @@ public class Coordinateur {
 
     /**
      * Demande ce que le bot veut faire et agit en fonction de sa réponse
-     * @return true si le joueur effectue une action, false s'il passe son tour
+     * return true si le joueur effectue une action, false s'il passe son tour,
+     * utile pour lui demander s'il souhaite réaliser une seconde action.
      */
     public boolean action(Joueur joueur, int numeroManche){
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
@@ -144,7 +146,7 @@ public class Coordinateur {
             case EXPLOIT:
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
                     affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
-                    break;
+                    return false;
                 }
                 if (plateau.estVerbeux())
                     affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n\n";
@@ -159,7 +161,8 @@ public class Coordinateur {
     }
 
     /**
-     * Méthode demande à un joueur de forger une face d'un bassin
+     * Méthode qui demande à un joueur de choisir la face a crafter (dans un des bassins) et la face a éliminer (sur ses dés)
+     * et qui effectue l'action chosie par le joueur.
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
@@ -178,6 +181,13 @@ public class Coordinateur {
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
     }
 
+    /**
+     * Méthode qui calcule les bassins auxquels le joueur peut encore accéder en fonction de
+     * ceux qu'il a utilisé précédemment et de son or, renvoit les bassins sous forme de liste.
+     * @param joueur
+     * @param bassinsUtilises
+     * @return
+     */
     private List<Bassin> BassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
@@ -201,7 +211,7 @@ public class Coordinateur {
                 plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
                 break;
             }
-        Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche);
+        Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche); //On demande au joueur la carte qu'il veut acheter
         Joueur joueurChasse = null;//On gère le joueur chassé et on donne la carte au joueur
         for (Ile ile:plateau.getIles())
             if (ile.getJoueur() != null && joueur.getIdentifiant() == ile.getJoueur().getIdentifiant()) {
