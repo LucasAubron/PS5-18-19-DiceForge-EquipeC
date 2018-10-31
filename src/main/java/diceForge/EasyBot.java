@@ -39,7 +39,7 @@ public class EasyBot extends Joueur{
                 }
             }
         }
-        return null;//Si on ne trouve rien à forger
+        return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class EasyBot extends Joueur{
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        return renfortsUtilisables;//On appelle tous les renforts, si on ne peut pas, c'est géré plus tard
+        return renfortsUtilisables;//On appelle tous les renforts
     }
 
     @Override

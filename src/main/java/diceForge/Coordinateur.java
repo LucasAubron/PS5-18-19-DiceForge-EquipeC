@@ -139,9 +139,10 @@ public class Coordinateur {
                 if (plateau.estVerbeux())
                     affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n\n";
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
-                do {//Il faut que le joueur puisse s'arreter de forger
+                //Il faut que le joueur puisse s'arreter de forger
+                do
                     bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
-                } while(bassinsAEnlever != null);
+                while(bassinsAEnlever != null);
                 break;
             case EXPLOIT:
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
@@ -169,7 +170,7 @@ public class Coordinateur {
         List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
-            ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
+        ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
             affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
