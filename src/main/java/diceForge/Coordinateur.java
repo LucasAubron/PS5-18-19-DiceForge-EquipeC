@@ -7,6 +7,9 @@ import java.util.List;
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
  * Il s'occupe du déroulement des de la partie, mais aussi de déplacer les joueurs et gérer leur actions.
+ * Le coordinateur est en échange permanent avec les joueurs, a chaque étape nécessitant une prise de décision,
+ * il envoit toutes les possibilités aux joueurs,il s'assure lui même de les trier pour les joueurs, par exemple si
+ * le joueur veut forger mais n'a que 5 or, le coordinateur ne va lui proposer que les bassins dont le coût est <=5.
  */
 public class Coordinateur {
     Plateau plateau;
@@ -139,6 +142,10 @@ public class Coordinateur {
                 } while(bassinsAEnlever != null);
                 break;
             case EXPLOIT:
+                if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
+                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
+                    break;
+                }
                 if (plateau.estVerbeux())
                     affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n\n";
                 exploit(joueur, numeroManche);
@@ -157,17 +164,15 @@ public class Coordinateur {
      */
     public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
-        if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face
+        if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
-        else{
             ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
-            if (choixDuJoueur.getBassin() != null) {
-                affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
-                joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
-                joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());
-            }
-            bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé
+        if (choixDuJoueur.getBassin() != null) {
+            affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
+            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur (n'est-ce pas Gabriel ..)
         }
+        bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé, null si n'il y pas eu de craft (signifiant la volonté pour le joueur de s'arrêter)
         if (bassinsUtilises.get(bassinsUtilises.size()-1) == null) //Si le joueur n'a pas crafté alors cela signifie qu'il veut s'arrêter
             return null;
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
@@ -190,9 +195,7 @@ public class Coordinateur {
      * Gère également la chasse.
      */
     public void exploit(Joueur joueur, int numeroManche) {
-        List<Carte> cartesAbordables = CartesAbordables(joueur);
-        if (cartesAbordables.isEmpty())//Si le joueur ne peut acheter aucune carte faute de ressources
-            return;
+        List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
             if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
                 plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
@@ -219,7 +222,7 @@ public class Coordinateur {
 
     }
 
-    private List CartesAbordables(Joueur joueur) {
+    private List cartesAbordables(Joueur joueur) {
         List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
@@ -251,16 +254,6 @@ public class Coordinateur {
             action(joueur, numeroManche);
         }
     }
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Permet de connaitre le numéro du joueur gagnant ainsi que son nombre de point de gloire
