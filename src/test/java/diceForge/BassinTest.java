@@ -12,11 +12,11 @@ public class BassinTest {
     @Test
     public void retirerFace(){
         b0.retirerFace(0);
-        assertEquals(b0.getFace().size(), 3);
+        assertEquals(b0.getFaces().size(), 3);
         b0.retirerFace(0);
-        assertEquals(b0.getFace().size(), 2);
+        assertEquals(b0.getFaces().size(), 2);
         b0.retirerFace(0);
-        assertEquals(b0.getFace().size(), 1);
+        assertEquals(b0.getFaces().size(), 1);
     }
 
     @Test
