@@ -207,18 +207,9 @@ public class Coordinateur {
      */
     public void exploit(Joueur joueur, int numeroManche) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
-        for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
-            if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
-                plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
-                break;
-            }
         Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche); //On demande au joueur la carte qu'il veut acheter
-        Joueur joueurChasse = null;//On gère le joueur chassé et on donne la carte au joueur
-        for (Ile ile:plateau.getIles())
-            if (ile.getJoueur() != null && joueur.getIdentifiant() == ile.getJoueur().getIdentifiant()) {
-                ile.retirerJoueur();//En premier, on retire le joueur de son ile
-                break;
-            }
+        retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
+        Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes()) {
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
@@ -254,7 +245,18 @@ public class Coordinateur {
         }
         return cartesAbordables;
     }
-
+    private void retirerJoueurDeSonEmplacement(Joueur joueur){
+        for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
+            if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
+                plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
+                break;
+            }
+        for (Ile ile:plateau.getIles())
+            if (ile.getJoueur() != null && joueur.getIdentifiant() == ile.getJoueur().getIdentifiant()) {
+                ile.retirerJoueur();//En premier, on retire le joueur de son ile
+                break;
+            }
+    }
     private void secondeAction(Joueur joueur, int numeroManche) {
         if (joueur.choisirActionSupplementaire(numeroManche)) {//S'il peut, et il veut, il re-agit
             joueur.ajouterSoleil(-2);
