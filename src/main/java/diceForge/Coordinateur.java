@@ -80,51 +80,20 @@ public class Coordinateur {
     private void phaseRenforts(Joueur joueur, int numeroManche){
         //on créé une copie de liste des renforts du joueurs, on met les renforts ANCIEN au début de la liste
         List renfortsUtilisables = new ArrayList();
-        int len = joueur.getRenforts().size();
-        for (int i=0; i<len; i++) {
-            renfortsUtilisables.add(joueur.getRenforts().get(i));
-            if ((joueur.getRenforts().get(i) + "").equals("ANCIEN")) {
-                for (int j = i; j > 0; j--) {
-                    renfortsUtilisables.set(j, renfortsUtilisables.get(j - 1));
-                    renfortsUtilisables.set(0, joueur.getRenforts().get(i));
-                };
-            };
+        int nbrAncientAjoute = 0;
+        for (Joueur.Renfort renfort:joueur.getRenforts()){
+            if ((renfort+"").equals("ANCIEN") && (nbrAncientAjoute+1)*3 >= joueur.getOr()){//On ajoute les anciens si le joueur peut
+                renfortsUtilisables.add(renfort);
+                ++nbrAncientAjoute;
+            }
+            else if (!(renfort+"").equals("ANCIEN"))//Et on ajoute les autres
+                renfortsUtilisables.add(renfort);
         }
-        //On enlève de la liste les renforts ANCIEN que le joueur ne peut pas payer, il n'a donc pas la possibilité de tricher
-        int nombreAncienInactivable = nombreAncienInactivable(joueur);
-        renfortsUtilisables = enleveAncienInactivable(renfortsUtilisables, nombreAncienInactivable);
         //On demande au joueur son plan de jeu pour les renforts
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
         choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
-    }
-
-    /**
-     * Calcule le nombre de carte ANCIEN possédées par un joueur non activable faute d'or
-     * Exemple: le joueur a 3 anciens et 8 or, il a 1 ANCIEN inactivable.
-     * @param joueur
-     * @return
-     */
-    private int nombreAncienInactivable(Joueur joueur){
-        int nombreAncienActivable = joueur.getNombreAncien();
-        if (joueur.getOr()/3 < nombreAncienActivable)
-            nombreAncienActivable = joueur.getOr()/3;
-        int nombreAncienInactivable = joueur.getNombreAncien() - nombreAncienActivable;
-        return nombreAncienInactivable;
-    }
-
-    /**
-     * Enlève dans la liste fournie, autant de fois le renfort ANCIEN que l'entier fourni,
-     * ATTENTION ! La liste fournie doit être triée, les renforts ANCIEN doivent être au début de la liste
-     * @param renforts
-     * @param nombreAncienInactivable
-     * @return
-     */
-    private List enleveAncienInactivable(List renforts,int nombreAncienInactivable) {
-        for (int compteAnciensEnleves = 0; compteAnciensEnleves < nombreAncienInactivable; compteAnciensEnleves++)
-            renforts.remove(0);
-        return renforts;
     }
 
     /**
