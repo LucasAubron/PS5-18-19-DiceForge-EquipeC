@@ -32,4 +32,8 @@ public class Carte {
             return false;
         return (nom.equals(carte.getNom()));
     }
+    public String toString(){
+        return nom;
+    }
+
 }

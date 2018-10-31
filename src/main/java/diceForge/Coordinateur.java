@@ -49,7 +49,7 @@ public class Coordinateur {
             secondeAction(joueur, numeroManche);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise.
+// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise).
 
     /**
      * Méthode qui parle d'elle même, première étape d'un tour de diceforge.
@@ -72,7 +72,7 @@ public class Coordinateur {
 
     /**
      * S'occupe d'envoyer la liste des renforts activable au bot, plus particulièrement retire
-     * les renforts anciens qu'il ne peut pas active faute d'or, le reste des choix liés aux autres renforts sera
+     * les renforts ANCIEN qu'il ne peut pas activer faute d'or, le reste des choix liés aux autres renforts sera
      * a ajouter par la suite. Les renforts sont activés après que le joueur ait fait son choix.
      * @param joueur
      * @param numeroManche
@@ -82,7 +82,7 @@ public class Coordinateur {
         List renfortsUtilisables = new ArrayList();
         int nbrAncientAjoute = 0;
         for (Joueur.Renfort renfort:joueur.getRenforts()){
-            if ((renfort+"").equals("ANCIEN") && nbrAncientAjoute*3 >= joueur.getOr()){//On ajoute les anciens si le joueur peut
+            if ((renfort+"").equals("ANCIEN") && (nbrAncientAjoute+1)*3 <= joueur.getOr()){//On ajoute les anciens si le joueur peut
                 renfortsUtilisables.add(renfort);
                 ++nbrAncientAjoute;
             }
@@ -93,7 +93,8 @@ public class Coordinateur {
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
-        choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
+        if (plateau.estVerbeux())
+            choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
     }
     
     /**
@@ -115,7 +116,8 @@ public class Coordinateur {
                 break;
             case EXPLOIT:
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
-                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
+                    if (plateau.estVerbeux())
+                        affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
                     return false;
                 }
                 if (plateau.estVerbeux())
@@ -141,7 +143,8 @@ public class Coordinateur {
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
-            affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
+            if (plateau.estVerbeux())
+                affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
             joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur (n'est-ce pas Gabriel ..)
         }
@@ -186,11 +189,15 @@ public class Coordinateur {
                 }
             }
         }
+        if (plateau.estVerbeux())
+            affichage += "Le joueur " + joueur.getIdentifiant() + " achète une carte " + carteChoisie;
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
-            affichage += "Le joueur " + joueur.getIdentifiant() + " chasse le joueur " + joueurChasse.getIdentifiant() + "\n\n";
+            if (plateau.estVerbeux())
+                affichage += " et chasse le joueur " + joueurChasse.getIdentifiant();
         }
-
+        if (plateau.estVerbeux())
+            affichage += "\n\n";
     }
 
     private List cartesAbordables(Joueur joueur) {
