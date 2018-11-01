@@ -149,17 +149,24 @@ public abstract class Joueur {
      */
     public void acheterExploit(Carte carte){
         if (carte.getNom().equals("Coffre")){
+            ajouterLune(-1);
             maxOr += 4;
             maxSoleil += 3;
             maxLune += 3;
         }
         else if (carte.getNom().equals("Herbes folles")){
-            ajouterSoleil(3);
+            ajouterSoleil(-1);
+            ajouterLune(3);
             ajouterOr(3);
         }
-        else if (carte.getNom().equals("Ancien"))
+        else if (carte.getNom().equals("Ancien")) {
+            ajouterSoleil(-1);
             renforts.add(Renfort.ANCIEN);
+        }
+        else if (carte.getNom().equals("Marteau"))
+            ajouterLune(-1);
         cartes.add(carte);
+
     }
 
     /**
