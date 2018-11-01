@@ -183,11 +183,11 @@ public class Coordinateur {
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {
-            for (List<Carte> paquet : ile.getCartes()) {
+            for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
-                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va
+                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
+                    Ressource[] cout = carteChoisie.getCout();
                 }
-            }
         }
         if (plateau.estVerbeux())
             affichage += "Le joueur " + joueur.getIdentifiant() + " achète une carte " + carteChoisie;

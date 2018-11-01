@@ -226,13 +226,6 @@ public abstract class Joueur {
             pointDeGloire += carte.getNbrPointGloire();
         }
     }
-    public int getNombreAncien(){
-        int compte = 0;
-        for (int i=0; i<renforts.size();i++)
-            if ((renforts.get(i)+"").equals("ANCIEN"))
-                compte++;
-        return compte;
-    }
 
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
