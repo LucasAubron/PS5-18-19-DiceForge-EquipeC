@@ -148,17 +148,6 @@ public abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     public void acheterExploit(Carte carte){
-        for (Ressource ressource:carte.getCout()){
-            if (ressource instanceof Soleil && ressource.getQuantite() <= soleil){
-                soleil -= ressource.getQuantite();
-            }
-            else if (ressource instanceof Lune && ressource.getQuantite() <= lune){
-                lune -= ressource.getQuantite();
-            }
-            else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
-                throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
-            }
-        }
         if (carte.getNom().equals("Coffre")){
             maxOr += 4;
             maxSoleil += 3;
