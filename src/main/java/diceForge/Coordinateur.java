@@ -19,7 +19,7 @@ public class Coordinateur {
         this.plateau = plateau;//On garde le plateau en référence
         if (nbrManche < 9 || nbrManche > 10)
             throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 9, max : 10, actuel : "+nbrManche);
-        for (int numManche = 0; numManche <= nbrManche; ++numManche){//C'est ici que tout le jeu ce déroule
+        for (int numManche = 1; numManche <= nbrManche; ++numManche){//C'est ici que tout le jeu ce déroule
             jouerManche(numManche);
         }
         int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
