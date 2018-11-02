@@ -14,6 +14,7 @@ public class Marteau extends Carte {
      * @return Le nombre de point en trop si le marteau est complété, 0 sinon
      */
     public int ajouterPoints(int nbrPoints){
+        if (niveau > 1) return nbrPoints;
         point += nbrPoints;
         if (point >= 15){
             ++niveau;

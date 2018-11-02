@@ -15,16 +15,37 @@ public class Coordinateur {
     Plateau plateau;
     private String affichage = "";
 
-    public Coordinateur(Plateau plateau, int nbrManche){
-        this.plateau = plateau;//On garde le plateau en référence
-        if (nbrManche < 9 || nbrManche > 10)
-            throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 9, max : 10, actuel : "+nbrManche);
-        for (int numManche = 1; numManche <= nbrManche; ++numManche){//C'est ici que tout le jeu ce déroule
-            jouerManche(numManche);
+    public Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
+        int nbrManche = joueurs.length == 3 ? 10 : 9;
+        if (modeVerbeux) {
+            plateau = new Plateau(modeVerbeux, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu ce déroule
+                jouerManche(numManche);
+            }
+            int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+            if (plateau.estVerbeux())
+                affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant[0] + " gagne avec " + infoJoueurGagnant[1] + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
         }
-        int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-        if (plateau.estVerbeux())
-            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+        else{
+            int[] nbrVictoire = new int[joueurs.length];
+            int[] moyennePtsGloire = new int[joueurs.length];
+            for (int i = 0; i != joueurs.length; ++i){
+                nbrVictoire[i] = 0;
+                moyennePtsGloire[i] = 0;
+            }
+            for (int i = 0; i != 1000; ++i){//1000 parties, comme demandé dans le kata
+                plateau = new Plateau(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});
+                for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu ce déroule
+                    jouerManche(numManche);
+                }
+                nbrVictoire[infoJoueurGagnant()[0]]++;
+                for (int j = 0; j != joueurs.length; ++j)
+                    moyennePtsGloire[j] += plateau.getJoueur().get(j).getPointDeGloire();
+            }
+            for (int i = 0; i != joueurs.length; ++i){
+                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+moyennePtsGloire[i]/1000+" points de gloire\n";
+            }
+        }
     }
 
     /**

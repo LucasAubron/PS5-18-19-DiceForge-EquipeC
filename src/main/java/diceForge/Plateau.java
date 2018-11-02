@@ -10,14 +10,14 @@ import java.util.List;
  */
 public class Plateau {
     private boolean modeVerbeux;
-    Joueur j0 = new EasyBot(0);
-    Joueur j1 = new RandomBot(1);
-    private PortailsOriginels portail = new PortailsOriginels(new Joueur[]{j0,j1});//La ou les joueurs sont de base
-    private Temple temple = new Temple(portail.getJoueurs().size());//La classe temple s'occupe de toute la partie forge de dé
+    private PortailsOriginels portail;
+    private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
 
-    public Plateau(boolean modeVerbeux){
+    public Plateau(boolean modeVerbeux, Joueur[] joueurs){
+        portail = new PortailsOriginels(joueurs);//La ou les joueurs sont de base
+        temple = new Temple(portail.getJoueurs().size());//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), portail.getJoueurs().size()),
