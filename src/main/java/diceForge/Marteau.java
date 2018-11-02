@@ -23,6 +23,7 @@ public class Marteau extends Carte {
         }
         return 0;
     }
+    public int getNiveau(){return niveau;}
 
     public int getPoints(){return point;}
 

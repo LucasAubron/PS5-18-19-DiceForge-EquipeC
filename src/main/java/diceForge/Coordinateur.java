@@ -73,11 +73,11 @@ public class Coordinateur {
     }
 
     private void affichageMarteau(Marteau marteau){
-            if (marteau.getNbrPointGloire() == 0 && marteau.getPoints()<10)
+            if (marteau.getNiveau()==0 && marteau.getPoints()<10)
                 affichage += "\tMarteau Phase I: " + marteau.getPoints() + "/10" + "\n";
-            else if (marteau.getNbrPointGloire() == 0 && marteau.getPoints()>=10)
+            else if (marteau.getNiveau()==0 && marteau.getPoints()>=10)
                 affichage += "\tMarteau Phase II: " + (marteau.getPoints() - 10) + "/15" + "\n";
-            else if (marteau.getNbrPointGloire() == 10)
+            else if (marteau.getNiveau()==1)
                 affichage += "\tMarteau Phase II: " + marteau.getPoints() + "/15" + "\n";
     }
 
