@@ -65,15 +65,15 @@ public class Coordinateur {
             x.lancerLesDes();
         }
         if (plateau.estVerbeux()) {
-            affichage += ("--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("\n\n\n\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
             affichage += ("\n" + "Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau ->
                 {
                     if (marteau.getNbrPointGloire() == 0)
-                        affichage += "Marteau Phase I: " + marteau.getPoints() + "/10" + "\n";
+                        affichage += "\tMarteau Phase I: " + marteau.getPoints() + "/10" + "\n";
                     else if (marteau.getNbrPointGloire() == 10)
-                        affichage += "Marteau Phase II: " + marteau.getPoints() + "/15" + "\n";
+                        affichage += "\tMarteau Phase II: " + marteau.getPoints() + "/15" + "\n";
                 }
                 );
         }
