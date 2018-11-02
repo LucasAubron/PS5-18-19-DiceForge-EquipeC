@@ -70,8 +70,10 @@ public class Coordinateur {
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau ->
                 {
-                    if (marteau.getNbrPointGloire() == 0)
+                    if (marteau.getNbrPointGloire() == 0 && marteau.getPoints()<10)
                         affichage += "\tMarteau Phase I: " + marteau.getPoints() + "/10" + "\n";
+                    else if (marteau.getNbrPointGloire() == 0 && marteau.getPoints()>=10)
+                        affichage += "\tMarteau Phase II: " + (marteau.getPoints() - 10) + "/15" + "\n";
                     else if (marteau.getNbrPointGloire() == 10)
                         affichage += "\tMarteau Phase II: " + marteau.getPoints() + "/15" + "\n";
                 }
