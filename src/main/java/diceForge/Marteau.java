@@ -24,6 +24,8 @@ public class Marteau extends Carte {
         return 0;
     }
 
+    public int getPoints(){return point;}
+
     @Override
     public int getNbrPointGloire(){
         if (niveau == 1)
