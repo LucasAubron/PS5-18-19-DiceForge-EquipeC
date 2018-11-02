@@ -56,9 +56,9 @@ public abstract class Joueur {
 
     public void ajouterOr (int quantite){
         int ajoutOr = quantite;
-        if (quantite > 0 && !possedeMarteau().isEmpty()){//C'est ici que l'on gere le marteau
+        if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
             ajoutOr = choisirRepartitionOrMarteau(quantite);
-            List<Marteau> marteaux = possedeMarteau();
+            List<Marteau> marteaux = getMarteau();
             int i = 0;
             int restant;
             while ((restant = marteaux.get(i).ajouterPoints(quantite-ajoutOr)) != 0){//On ajoute la quantité de point et on regarde si elle est != 0
@@ -184,7 +184,7 @@ public abstract class Joueur {
     /**
      * @return la liste des marteaux dans la liste des cartes. C'est une liste vide s'il n'y en a pas
      */
-    public List<Marteau> possedeMarteau(){
+    public List<Marteau> getMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
             if (cartes.get(i).getNom().equals("Marteau")) {
