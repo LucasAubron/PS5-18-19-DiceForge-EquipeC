@@ -16,10 +16,11 @@ public class Coordinateur {
     private String affichage = "";
 
     public Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
-        int nbrManche = joueurs.length == 3 ? 10 : 9;
+        //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
+        int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             plateau = new Plateau(modeVerbeux, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
-            for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu ce déroule
+            for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
             int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
@@ -27,22 +28,23 @@ public class Coordinateur {
         }
         else{
             int[] nbrVictoire = new int[joueurs.length];
-            int[] moyennePtsGloire = new int[joueurs.length];
+            int[] PtsGloireCumulés = new int[joueurs.length];
+            int iteration = 1000;
             for (int i = 0; i != joueurs.length; ++i){
                 nbrVictoire[i] = 0;
-                moyennePtsGloire[i] = 0;
+                PtsGloireCumulés[i] = 0;
             }
-            for (int i = 0; i != 1000; ++i){//1000 parties, comme demandé dans le kata
+            for (int i = 0; i != iteration; ++i){//1000 parties, comme demandé dans le kata
                 plateau = new Plateau(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});
-                for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu ce déroule
+                for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }
                 nbrVictoire[infoJoueurGagnant()[0]]++;
                 for (int j = 0; j != joueurs.length; ++j)
-                    moyennePtsGloire[j] += plateau.getJoueur().get(j).getPointDeGloire();
+                    PtsGloireCumulés[j] += plateau.getJoueur().get(j).getPointDeGloire();
             }
             for (int i = 0; i != joueurs.length; ++i){
-                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+moyennePtsGloire[i]/1000+" points de gloire\n";
+                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumulés[i]/iteration+" points de gloire\n";
             }
         }
     }
@@ -64,7 +66,7 @@ public class Coordinateur {
     public void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
-        //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton (triton et/ou cerbère), a appeler avant chacune des deux actions
+        //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2)
             secondeAction(joueur, numeroManche);
     }
