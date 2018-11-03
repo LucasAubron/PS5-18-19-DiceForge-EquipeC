@@ -29,12 +29,12 @@ public class Coordinateur {
         else{
             int[] nbrVictoire = new int[joueurs.length];
             int[] PtsGloireCumulés = new int[joueurs.length];
-            int iteration = 1000;
+            int iteration = 1000; //itération = 1000 parties, comme demandé dans le kata
             for (int i = 0; i != joueurs.length; ++i){
                 nbrVictoire[i] = 0;
                 PtsGloireCumulés[i] = 0;
             }
-            for (int i = 0; i != iteration; ++i){//1000 parties, comme demandé dans le kata
+            for (int i = 0; i != iteration; ++i){
                 plateau = new Plateau(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
@@ -61,7 +61,7 @@ public class Coordinateur {
     /**
      * La méthode qui gére la gestion d'un tour, a appeler par manche autant de fois qu'il y a de joueur.
      * @param joueur c'est le joueur actif
-     * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
+     * @param numeroManche pour plus tard, permet au bot de compter un paramètre en plus pour leur prise de décision
      */
     public void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
@@ -234,7 +234,7 @@ public class Coordinateur {
     }
 
     private List cartesAbordables(Joueur joueur) {
-        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
+        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes abordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
                 for (Carte carte : paquet) {//Et les cartes
