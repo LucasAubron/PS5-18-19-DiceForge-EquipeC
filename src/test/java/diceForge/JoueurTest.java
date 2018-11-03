@@ -33,6 +33,8 @@ public class JoueurTest {
         assertEquals(j0.getOr(), 12);
         j0.ajouterOr(9999999);
         assertEquals(j0.getOr(), 12);
+        j0.ajouterOr(-2);
+        assertEquals(j0.getOr(), 10);
     }
 
     @Test
