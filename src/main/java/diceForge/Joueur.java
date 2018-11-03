@@ -56,9 +56,9 @@ public abstract class Joueur {
 
     public void ajouterOr (int quantite){
         int ajoutOr = quantite;
-        if (quantite > 0 && !possedeMarteau().isEmpty()){//C'est ici que l'on gere le marteau
+        if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
             ajoutOr = choisirRepartitionOrMarteau(quantite);
-            List<Marteau> marteaux = possedeMarteau();
+            List<Marteau> marteaux = getMarteau();
             int i = 0;
             int restant;
             while ((restant = marteaux.get(i).ajouterPoints(quantite-ajoutOr)) != 0){//On ajoute la quantité de point et on regarde si elle est != 0
@@ -148,29 +148,25 @@ public abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     public void acheterExploit(Carte carte){
-        for (Ressource ressource:carte.getCout()){
-            if (ressource instanceof Soleil && ressource.getQuantite() <= soleil){
-                soleil -= ressource.getQuantite();
-            }
-            else if (ressource instanceof Lune && ressource.getQuantite() <= lune){
-                lune -= ressource.getQuantite();
-            }
-            else {//Si vous pensez pouvoir faire sans cela, pensez à l'hydre
-                throw new DiceForgeException("Joueur","Le joueur ne peut pas acquérir la carte !");
-            }
-        }
         if (carte.getNom().equals("Coffre")){
+            ajouterLune(-1);
             maxOr += 4;
             maxSoleil += 3;
             maxLune += 3;
         }
         else if (carte.getNom().equals("Herbes folles")){
-            ajouterSoleil(3);
+            ajouterSoleil(-1);
+            ajouterLune(3);
             ajouterOr(3);
         }
-        else if (carte.getNom().equals("Ancien"))
+        else if (carte.getNom().equals("Ancien")) {
+            ajouterSoleil(-1);
             renforts.add(Renfort.ANCIEN);
+        }
+        else if (carte.getNom().equals("Marteau"))
+            ajouterLune(-1);
         cartes.add(carte);
+
     }
 
     /**
@@ -188,7 +184,7 @@ public abstract class Joueur {
     /**
      * @return la liste des marteaux dans la liste des cartes. C'est une liste vide s'il n'y en a pas
      */
-    public List<Marteau> possedeMarteau(){
+    public List<Marteau> getMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
             if (cartes.get(i).getNom().equals("Marteau")) {
@@ -225,13 +221,6 @@ public abstract class Joueur {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
         }
-    }
-    public int getNombreAncien(){
-        int compte = 0;
-        for (int i=0; i<renforts.size();i++)
-            if ((renforts.get(i)+"").equals("ANCIEN"))
-                compte++;
-        return compte;
     }
 
     /**

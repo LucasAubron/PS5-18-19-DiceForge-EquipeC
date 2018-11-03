@@ -64,7 +64,7 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tous dans le marteau
+    public int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tout dans le marteau
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
