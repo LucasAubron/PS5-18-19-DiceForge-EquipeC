@@ -23,8 +23,7 @@ public class Coordinateur {
                 jouerManche(numManche);
             }
             int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-            if (plateau.estVerbeux())
-                affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant[0] + " gagne avec " + infoJoueurGagnant[1] + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant[0] + " gagne avec " + infoJoueurGagnant[1] + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
         }
         else{
             int[] nbrVictoire = new int[joueurs.length];
