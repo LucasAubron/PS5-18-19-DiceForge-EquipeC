@@ -83,4 +83,11 @@ public class TestBot extends Joueur {
     public void setNumFace(int numFace) {
         this.numFace = numFace;
     }
+
+    private int numDe;
+    @Override
+    public int choisirDeBiche() { return numDe; }
+    public void setNumDe(int numDe) {
+        this.numDe = numDe;
+    }
 }

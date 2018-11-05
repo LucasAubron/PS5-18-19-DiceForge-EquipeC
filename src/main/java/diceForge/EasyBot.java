@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.List;
+import java.util.Random;
 
 public class EasyBot extends Joueur{
     public EasyBot(int identifiant) {super(identifiant);}
@@ -80,5 +81,11 @@ public class EasyBot extends Joueur{
             }
         }
         return 0;
+    }
+
+    @Override
+    public int choisirDeBiche(){
+        Random random = new Random();
+        return random.nextInt(2);
     }
 }

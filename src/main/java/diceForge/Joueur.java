@@ -31,7 +31,7 @@ public abstract class Joueur {
     private List<Renfort> renforts = new ArrayList<>();
 
     public enum Action {FORGER, EXPLOIT, PASSER}
-    public enum Renfort{ANCIEN}
+    public enum Renfort{ANCIEN, BICHE}
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
@@ -103,19 +103,7 @@ public abstract class Joueur {
                 this.premierDeFaceCourante = face;
             else
                 this.deuxiemeDeFaceCourante = face;
-            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
-            if (face.getRessource().length != 1)
-                choix = choisirRessource(face);
-            for (Ressource ressource:face.getRessource()[choix]){//On regarde de quelle ressource il s'agit
-                if (ressource instanceof Or)
-                    ajouterOr(ressource.getQuantite());
-                else if (ressource instanceof Soleil)
-                    ajouterSoleil(ressource.getQuantite());
-                else if (ressource instanceof Lune)
-                    ajouterLune(ressource.getQuantite());
-                else if (ressource instanceof PointDeGloire)
-                    pointDeGloire += ressource.getQuantite();
-            }
+            gagnerRessourceFace(face);
         }
     }
 
@@ -124,6 +112,8 @@ public abstract class Joueur {
      * Elle servira surtout lorsque le sanglier sera introduit
      */
     public void estChasse(){
+        if(possedeCarte("Ours"))
+            pointDeGloire += 3;
         lancerLesDes();
     }
 
@@ -132,6 +122,8 @@ public abstract class Joueur {
      * Elle servira uniquement lorsque l'ours sera introduit
      */
     public void chasse() {
+        if(possedeCarte("Ours"))
+            pointDeGloire += 3;
     }
 
     public String returnStringRessourcesEtDes(int numeroManche){
@@ -200,6 +192,10 @@ public abstract class Joueur {
                 case ANCIEN:
                     or -= 3;
                     pointDeGloire += 4;
+                    break;
+                case BICHE:
+                    Face face = des[choisirDeBiche()].lancerLeDe();
+                    gagnerRessourceFace(face);
             }
         }
     }
@@ -221,6 +217,22 @@ public abstract class Joueur {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
         }
+    }
+
+    public void gagnerRessourceFace(Face face){
+            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
+            if (face.getRessource().length != 1)
+                choix = choisirRessource(face);
+            for (Ressource ressource:face.getRessource()[choix]){//On regarde de quelle ressource il s'agit
+                if (ressource instanceof Or)
+                    ajouterOr(ressource.getQuantite());
+                else if (ressource instanceof Soleil)
+                    ajouterSoleil(ressource.getQuantite());
+                else if (ressource instanceof Lune)
+                    ajouterLune(ressource.getQuantite());
+                else if (ressource instanceof PointDeGloire)
+                    pointDeGloire += ressource.getQuantite();
+            }
     }
 
     /**
@@ -268,4 +280,10 @@ public abstract class Joueur {
      * @return ne numéro de la face choisi
      */
     public abstract int choisirRessource(Face faceAChoix);
+
+    /**
+     * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé
+     * @return 0 ou 1
+     */
+    public abstract int choisirDeBiche();
 }
