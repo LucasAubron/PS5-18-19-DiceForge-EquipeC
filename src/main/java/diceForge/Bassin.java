@@ -42,10 +42,13 @@ public class Bassin {
      * A utiliser pour savoir les faces présentent, PAS pour en prendre une
      * @return la liste des faces. Aucune, certaines ou toutes peuvent être null
      */
-    public List<Face> getFace() {
+    public List<Face> getFaces() {
         return faces;
     }
 
+    public Face getFace(int num) {
+        return faces.get(num);
+    }
     /**
      * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
      * Il ne faut pas utiliser la méthode getFace() pour cela !
@@ -55,9 +58,9 @@ public class Bassin {
     }
 
     public boolean equals(Bassin bassin){
-        if (faces.isEmpty() && bassin.getFace().isEmpty() && cout == bassin.getCout())
+        if (faces.isEmpty() && bassin.getFaces().isEmpty() && cout == bassin.getCout())
             return true;
-        if (cout == bassin.getCout() && faces.size() == bassin.getFace().size() && faces.get(0).toString().equals(bassin.getFace().get(0).toString()))
+        if (cout == bassin.getCout() && faces.size() == bassin.getFaces().size() && faces.get(0).toString().equals(bassin.getFaces().get(0).toString()))
             return true;
         return false;
     }

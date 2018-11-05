@@ -13,6 +13,8 @@ public class De {
         return faces;
     }
 
+    public Face getFace(int num) { return faces[num]; }
+
     public De(Face[] faces){
         if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
             throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
