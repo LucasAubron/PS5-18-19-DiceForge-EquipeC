@@ -15,16 +15,38 @@ public class Coordinateur {
     Plateau plateau;
     private String affichage = "";
 
-    public Coordinateur(Plateau plateau, int nbrManche){
-        this.plateau = plateau;//On garde le plateau en référence
-        if (nbrManche < 9 || nbrManche > 10)
-            throw new DiceForgeException("Coordinateur","Le nombre de manche est invalide. Min : 9, max : 10, actuel : "+nbrManche);
-        for (int numManche = 0; numManche <= nbrManche; ++numManche){//C'est ici que tout le jeu ce déroule
-            jouerManche(numManche);
+    public Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
+        //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
+        int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
+        if (modeVerbeux) {
+            plateau = new Plateau(modeVerbeux, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
+                jouerManche(numManche);
+            }
+            int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant[0] + " gagne avec " + infoJoueurGagnant[1] + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
         }
-        int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-        if (plateau.estVerbeux())
-            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°"+infoJoueurGagnant[0]+" gagne avec "+infoJoueurGagnant[1]+" points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+        else{
+            int[] nbrVictoire = new int[joueurs.length];
+            int[] PtsGloireCumulés = new int[joueurs.length];
+            int iteration = 1000; //itération = 1000 parties, comme demandé dans le kata
+            for (int i = 0; i != joueurs.length; ++i){
+                nbrVictoire[i] = 0;
+                PtsGloireCumulés[i] = 0;
+            }
+            for (int i = 0; i != iteration; ++i){
+                plateau = new Plateau(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});
+                for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
+                    jouerManche(numManche);
+                }
+                nbrVictoire[infoJoueurGagnant()[0]]++;
+                for (int j = 0; j != joueurs.length; ++j)
+                    PtsGloireCumulés[j] += plateau.getJoueur().get(j).getPointDeGloire();
+            }
+            for (int i = 0; i != joueurs.length; ++i){
+                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumulés[i]/iteration+" points de gloire\n";
+            }
+        }
     }
 
     /**
@@ -39,17 +61,17 @@ public class Coordinateur {
     /**
      * La méthode qui gére la gestion d'un tour, a appeler par manche autant de fois qu'il y a de joueur.
      * @param joueur c'est le joueur actif
-     * @param numeroManche pour plus tard, lorsque les bots feront des actions différentes selon les tours
+     * @param numeroManche pour plus tard, permet au bot de compter un paramètre en plus pour leur prise de décision
      */
     public void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
-        //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton (triton et/ou cerbère), a appeler avant chacune des deux actions
+        //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2)
             secondeAction(joueur, numeroManche);
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise.
+// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise).
 
     /**
      * Méthode qui parle d'elle même, première étape d'un tour de diceforge.
@@ -65,14 +87,25 @@ public class Coordinateur {
             x.lancerLesDes();
         }
         if (plateau.estVerbeux()) {
-            affichage += ("--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("\n\n\n\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
             affichage += ("\n" + "Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
+            if (!joueur.getMarteau().isEmpty())
+                joueur.getMarteau().forEach(marteau -> affichageMarteau(marteau));
         }
+    }
+
+    private void affichageMarteau(Marteau marteau){
+            if (marteau.getNiveau()==0 && marteau.getPoints()<10)
+                affichage += "\tMarteau Phase I: " + marteau.getPoints() + "/10" + "\n";
+            else if (marteau.getNiveau()==0 && marteau.getPoints()>=10)
+                affichage += "\tMarteau Phase II: " + (marteau.getPoints() - 10) + "/15" + "\n";
+            else if (marteau.getNiveau()==1)
+                affichage += "\tMarteau Phase II: " + marteau.getPoints() + "/15" + "\n";
     }
 
     /**
      * S'occupe d'envoyer la liste des renforts activable au bot, plus particulièrement retire
-     * les renforts anciens qu'il ne peut pas active faute d'or, le reste des choix liés aux autres renforts sera
+     * les renforts ANCIEN qu'il ne peut pas activer faute d'or, le reste des choix liés aux autres renforts sera
      * a ajouter par la suite. Les renforts sont activés après que le joueur ait fait son choix.
      * @param joueur
      * @param numeroManche
@@ -80,53 +113,23 @@ public class Coordinateur {
     private void phaseRenforts(Joueur joueur, int numeroManche){
         //on créé une copie de liste des renforts du joueurs, on met les renforts ANCIEN au début de la liste
         List renfortsUtilisables = new ArrayList();
-        int len = joueur.getRenforts().size();
-        for (int i=0; i<len; i++) {
-            renfortsUtilisables.add(joueur.getRenforts().get(i));
-            if ((joueur.getRenforts().get(i) + "").equals("ANCIEN")) {
-                for (int j = i; j > 0; j--) {
-                    renfortsUtilisables.set(j, renfortsUtilisables.get(j - 1));
-                    renfortsUtilisables.set(0, joueur.getRenforts().get(i));
-                };
-            };
+        int nbrAncientAjoute = 0;
+        for (Joueur.Renfort renfort:joueur.getRenforts()){
+            if ((renfort+"").equals("ANCIEN") && (nbrAncientAjoute+1)*3 <= joueur.getOr()){//On ajoute les anciens si le joueur peut
+                renfortsUtilisables.add(renfort);
+                ++nbrAncientAjoute;
+            }
+            else if (!(renfort+"").equals("ANCIEN"))//Et on ajoute les autres
+                renfortsUtilisables.add(renfort);
         }
-        //On enlève de la liste les renforts ANCIEN que le joueur ne peut pas payer, il n'a donc pas la possibilité de tricher
-        int nombreAncienInactivable = nombreAncienInactivable(joueur);
-        renfortsUtilisables = enleveAncienInactivable(renfortsUtilisables, nombreAncienInactivable);
         //On demande au joueur son plan de jeu pour les renforts
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
-        choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
+        if (plateau.estVerbeux())
+            choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
     }
-
-    /**
-     * Calcule le nombre de carte ANCIEN possédées par un joueur non activable faute d'or
-     * Exemple: le joueur a 3 anciens et 8 or, il a 1 ANCIEN inactivable.
-     * @param joueur
-     * @return
-     */
-    private int nombreAncienInactivable(Joueur joueur){
-        int nombreAncienActivable = joueur.getNombreAncien();
-        if (joueur.getOr()/3 < nombreAncienActivable)
-            nombreAncienActivable = joueur.getOr()/3;
-        int nombreAncienInactivable = joueur.getNombreAncien() - nombreAncienActivable;
-        return nombreAncienInactivable;
-    }
-
-    /**
-     * Enlève dans la liste fournie, autant de fois le renfort ANCIEN que l'entier fourni,
-     * ATTENTION ! La liste fournie doit être triée, les renforts ANCIEN doivent être au début de la liste
-     * @param renforts
-     * @param nombreAncienInactivable
-     * @return
-     */
-    private List enleveAncienInactivable(List renforts,int nombreAncienInactivable) {
-        for (int compteAnciensEnleves = 0; compteAnciensEnleves < nombreAncienInactivable; compteAnciensEnleves++)
-            renforts.remove(0);
-        return renforts;
-    }
-
+    
     /**
      * Demande ce que le bot veut faire et agit en fonction de sa réponse
      * return true si le joueur effectue une action, false s'il passe son tour,
@@ -146,7 +149,8 @@ public class Coordinateur {
                 break;
             case EXPLOIT:
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
-                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
+                    if (plateau.estVerbeux())
+                        affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
                     return false;
                 }
                 if (plateau.estVerbeux())
@@ -172,7 +176,8 @@ public class Coordinateur {
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
-            affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
+            if (plateau.estVerbeux())
+                affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
             joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur (n'est-ce pas Gabriel ..)
         }
@@ -211,21 +216,25 @@ public class Coordinateur {
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {
-            for (List<Carte> paquet : ile.getCartes()) {
+            for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
-                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va
+                    joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
+                    //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
-            }
         }
+        if (plateau.estVerbeux())
+            affichage += "Le joueur " + joueur.getIdentifiant() + " achète une carte " + carteChoisie;
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
-            affichage += "Le joueur " + joueur.getIdentifiant() + " chasse le joueur " + joueurChasse.getIdentifiant() + "\n\n";
+            if (plateau.estVerbeux())
+                affichage += " et chasse le joueur " + joueurChasse.getIdentifiant();
         }
-
+        if (plateau.estVerbeux())
+            affichage += "\n\n";
     }
 
     private List cartesAbordables(Joueur joueur) {
-        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes affordables par le joueur
+        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes abordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
                 for (Carte carte : paquet) {//Et les cartes

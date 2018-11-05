@@ -2,7 +2,7 @@ package diceForge;
 public class Main {
     public static void main(String[] args) {
         try {
-            Coordinateur coordinateur = new Coordinateur(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});//Le coordinateur, qui comprend toute la partie temporelle du jeu, le jeu se joue en 9 manches si c'est une partie a 3 joueurs, sinon 10
+            Coordinateur coordinateur = new Coordinateur(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});//Le coordinateur, qui comprend toute la partie temporelle du jeu
             System.out.println(coordinateur);
         }
         catch (DiceForgeException e){
