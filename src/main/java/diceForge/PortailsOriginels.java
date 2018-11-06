@@ -10,16 +10,16 @@ import java.util.List;
 public class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    public PortailsOriginels(Joueur[] joueurs){
+    public PortailsOriginels(Joueur[] joueurs, Plateau plateau){
         if (joueurs.length < 2 || joueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
         this.joueurs = new ArrayList<>();
         int identifiant = 0;
         for (Joueur joueur:joueurs) {//On copie les joueurs, pour éviter de garder le même joueur sur des plateaux différents
             if (joueur instanceof RandomBot)//Système imparfait, mais je ne vois pas mieux à faire
-                this.joueurs.add(new RandomBot(identifiant));
+                this.joueurs.add(new RandomBot(identifiant, plateau));
             else if (joueur instanceof EasyBot)
-                this.joueurs.add(new EasyBot(identifiant));
+                this.joueurs.add(new EasyBot(identifiant, plateau));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
             ++identifiant;
         }

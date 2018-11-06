@@ -10,10 +10,10 @@ import static org.junit.Assert.*;
 
 public class JoueurTest {
 
-    private TestBot j0 = new TestBot(0);
-    private TestBot j1 = new TestBot(1);
-    private TestBot j2 = new TestBot(2);
-    private TestBot j3 = new TestBot(3);
+    private TestBot j0 = new TestBot(0, null);
+    private TestBot j1 = new TestBot(1, null);
+    private TestBot j2 = new TestBot(2, null);
+    private TestBot j3 = new TestBot(3, null);
 
     @Test
     public void getOr(){

@@ -9,7 +9,7 @@ import java.util.List;
  * puis appeler la méthode à tester
  */
 public class TestBot extends Joueur {
-    public TestBot(int identifiant) {super (identifiant);}
+    public TestBot(int identifiant, Plateau plateau) {super (identifiant, plateau);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir
@@ -89,5 +89,14 @@ public class TestBot extends Joueur {
     public int choisirDeBiche() { return numDe; }
     public void setNumDe(int numDe) {
         this.numDe = numDe;
+    }
+
+    private int id;
+    @Override
+    public int choisirIdJoueurPorteurSanglier(){
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 }

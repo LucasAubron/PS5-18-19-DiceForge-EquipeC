@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 public class EasyBot extends Joueur{
-    public EasyBot(int identifiant) {super(identifiant);}
+    public EasyBot(int identifiant, Plateau plateau) {super(identifiant, plateau);}
 
     @Override
     public Action choisirAction(int numManche){
@@ -87,5 +87,14 @@ public class EasyBot extends Joueur{
     public int choisirDeBiche(){
         Random random = new Random();
         return random.nextInt(2);
+    }
+
+    @Override
+    public int choisirIdJoueurPorteurSanglier() {
+        Random random = new Random();
+        int x = random.nextInt(getPlateau().getJoueur().size() - 1);
+        if (x >= getIdentifiant())
+            ++x;
+        return x;
     }
 }

@@ -1,8 +1,8 @@
 package diceForge;
 public class Main {
     public static void main(String[] args) {
-        try {
-            Coordinateur coordinateur = new Coordinateur(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});//Le coordinateur, qui comprend toute la partie temporelle du jeu
+        try {//Le coordinateur, qui comprend toute la partie temporelle du jeu
+            Coordinateur coordinateur = new Coordinateur(false, new Joueur[]{new EasyBot(0, null), new RandomBot(1, null)});
             System.out.println(coordinateur);
         }
         catch (DiceForgeException e){

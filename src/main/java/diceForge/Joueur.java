@@ -33,10 +33,11 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE}
 
-    public Joueur(int indentifiant){
+    public Joueur(int indentifiant, Plateau plateau){
         if (identifiant < 0 || identifiant > 3)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
+        this.plateau = plateau;
         or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Lune(1)}}),
@@ -50,6 +51,10 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}})})};
+    }
+
+    protected Plateau getPlateau() {
+        return plateau;
     }
 
     public int getOr() {return or;}
@@ -109,7 +114,6 @@ public abstract class Joueur {
 
     /**
      * Méthode à appeler lorsque le joueur est chassé
-     * Elle servira surtout lorsque le sanglier sera introduit
      */
     public void estChasse(){
         if(possedeCarte("Ours"))
@@ -158,7 +162,6 @@ public abstract class Joueur {
         else if (carte.getNom().equals("Marteau"))
             ajouterLune(-1);
         cartes.add(carte);
-
     }
 
     /**
@@ -286,4 +289,6 @@ public abstract class Joueur {
      * @return 0 ou 1
      */
     public abstract int choisirDeBiche();
+
+    public abstract int choisirIdJoueurPorteurSanglier();
 }
