@@ -22,7 +22,7 @@ public class RandomBot extends Joueur{
             case 2:
                 return Action.PASSER;
         }
-        throw new DiceForgeException("RandomBot","Il y a petit problème dans ma plantation, pourquoi ça pousse pas ?");
+        throw new DiceForgeException("RandomBot","?");
     }
 
     @Override
