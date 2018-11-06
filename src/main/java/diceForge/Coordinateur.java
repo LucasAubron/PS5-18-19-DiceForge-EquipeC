@@ -1,6 +1,5 @@
 package diceForge;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class Coordinateur {
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
-            plateau = new Plateau(modeVerbeux, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
@@ -29,22 +28,22 @@ public class Coordinateur {
         else{
             int[] nbrVictoire = new int[joueurs.length];
             int[] PtsGloireCumulés = new int[joueurs.length];
-            int iteration = 1000; //itération = 1000 parties, comme demandé dans le kata
+            int nbrPartiesJoue = 1000; //nbrPartiesJoue = 1000 parties, comme demandé dans le kata
             for (int i = 0; i != joueurs.length; ++i){
-                nbrVictoire[i] = 0;
+                nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
                 PtsGloireCumulés[i] = 0;
             }
-            for (int i = 0; i != iteration; ++i){
-                plateau = new Plateau(false, new Joueur[]{new EasyBot(0), new RandomBot(1)});
+            for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
+                plateau = new Plateau(false, joueurs);
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }
-                nbrVictoire[infoJoueurGagnant()[0]]++;
+                nbrVictoire[infoJoueurGagnant()[0]]++;//Puis on stocke les infos des parties
                 for (int j = 0; j != joueurs.length; ++j)
                     PtsGloireCumulés[j] += plateau.getJoueur().get(j).getPointDeGloire();
             }
-            for (int i = 0; i != joueurs.length; ++i){
-                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumulés[i]/iteration+" points de gloire\n";
+            for (int i = 0; i != joueurs.length; ++i){//Puis on les affiches
+                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumulés[i]/nbrPartiesJoue+" points de gloire\n";
             }
         }
     }
