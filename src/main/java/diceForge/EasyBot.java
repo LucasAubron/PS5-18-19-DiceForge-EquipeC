@@ -41,6 +41,7 @@ public class EasyBot extends Joueur{
                 }
             }
         }
+        return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
     @Override
