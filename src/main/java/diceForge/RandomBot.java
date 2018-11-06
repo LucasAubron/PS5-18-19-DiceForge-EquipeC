@@ -49,7 +49,7 @@ public class RandomBot extends Joueur{
 
     @Override
     public int choisirRepartitionOrMarteau(int nbrOr){
-        return random.nextInt(nbrOr);
+        return random.nextInt(nbrOr+1);
     }
 
     @Override
