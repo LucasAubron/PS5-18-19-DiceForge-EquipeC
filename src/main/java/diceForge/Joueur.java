@@ -15,7 +15,6 @@ import java.util.List;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
-    private Plateau plateau;
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -33,11 +32,10 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE}
 
-    public Joueur(int indentifiant, Plateau plateau){
+    public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
-        this.plateau = plateau;
         or = 3-identifiant;
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Lune(1)}}),
@@ -51,10 +49,6 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}})})};
-    }
-
-    protected Plateau getPlateau() {
-        return plateau;
     }
 
     public int getOr() {return or;}

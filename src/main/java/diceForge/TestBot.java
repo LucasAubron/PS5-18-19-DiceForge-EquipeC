@@ -9,7 +9,7 @@ import java.util.List;
  * puis appeler la méthode à tester
  */
 public class TestBot extends Joueur {
-    public TestBot(int identifiant, Plateau plateau) {super (identifiant, plateau);}
+    public TestBot(int identifiant) {super (identifiant);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir

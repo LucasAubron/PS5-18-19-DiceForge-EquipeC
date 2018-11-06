@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class RandomBot extends Joueur{
     private Random random = new Random();
-    public RandomBot(int identifiant, Plateau plateau){
-        super(identifiant, plateau);
+    public RandomBot(int identifiant){
+        super(identifiant);
     }
 
     @Override
@@ -73,9 +73,6 @@ public class RandomBot extends Joueur{
 
     @Override
     public int choisirIdJoueurPorteurSanglier(){
-        int x = random.nextInt(getPlateau().getJoueur().size()-1);
-        if(x >= getIdentifiant())
-            ++x;
-        return x;
+        return (getIdentifiant() == 1 ? 0 : 1);
     }
 }
