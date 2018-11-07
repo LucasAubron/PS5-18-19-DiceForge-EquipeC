@@ -90,7 +90,18 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public int choisirIdJoueurPorteurSanglier() {
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
         return (getIdentifiant() == 1 ? 0 : 1);
+    }
+
+    @Override
+    public void forgerFace(Face face){
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    forgerDe(i, face, j);
+                }
+            }
+        }
     }
 }

@@ -284,5 +284,17 @@ public abstract class Joueur {
      */
     public abstract int choisirDeBiche();
 
-    public abstract int choisirIdJoueurPorteurSanglier();
+    /**
+     * Le joueur choisis à qui il veut faire forger le sanglier
+     * @param joueurs la liste des joueurs présent dans le jeu
+     * @return l'id du joueur que le joueur à choisi
+     */
+    public abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
+
+    /**
+     * Demande au joueur de forger une face
+     * Utile lorsque les exploits demande de faire forger une face
+     * @param face
+     */
+    public abstract void forgerFace(Face face);
 }

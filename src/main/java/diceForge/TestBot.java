@@ -93,10 +93,14 @@ public class TestBot extends Joueur {
 
     private int id;
     @Override
-    public int choisirIdJoueurPorteurSanglier(){
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
         return id;
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void forgerFace(Face face){
+        forgerDe(numDe, face, numFace);
     }
 }

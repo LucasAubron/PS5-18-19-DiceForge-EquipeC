@@ -72,7 +72,12 @@ public class RandomBot extends Joueur{
     }
 
     @Override
-    public int choisirIdJoueurPorteurSanglier(){
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
         return (getIdentifiant() == 1 ? 0 : 1);
+    }
+
+    @Override
+    public void forgerFace(Face face){
+        forgerDe(random.nextInt(2), face, random.nextInt(6));
     }
 }

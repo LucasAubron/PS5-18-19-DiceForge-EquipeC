@@ -38,22 +38,6 @@ public class JoueurTest {
     }
 
     @Test
-    public void acheterExploit(){
-        String t0 = "";
-        Carte c1 = new Carte(new Ressource[]{new Soleil(3)}, 3, "Test");
-        try {
-            j0.acheterExploit(c1);
-        } catch (DiceForgeException e){
-            t0 = e.getLocalisation();
-        }
-        assertEquals(t0, "Joueur");
-        j0.ajouterSoleil(3);
-        j0.acheterExploit(c1);
-        j0.additionnerPointsCartes();
-        assertEquals(j0.getPointDeGloire(), 3);
-    }
-
-    @Test
     public void possedeMarteau(){
         j0.ajouterLune(1);
         j0.acheterExploit(new Marteau());
@@ -76,10 +60,10 @@ public class JoueurTest {
         j0.ajouterLune(1);
         j0.acheterExploit(new Marteau());
         j0.setNbrPointMarteau(15);
-        //assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 0);
+        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 0);
         j0.ajouterOr(15);
-        //assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 10);
+        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 10);
         j0.ajouterOr(15);
-        //assertEquals(j0.possedeMarteau().get(0).getNbrPointGloire(), 25);
+        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 25);
     }
 }
