@@ -227,7 +227,7 @@ public class Coordinateur {
             for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     if (carteChoisie.equals("Sanglier")){
-                        int idJoueurPorteurSanglier = joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur());
+                        plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
                     }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte

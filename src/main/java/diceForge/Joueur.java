@@ -216,6 +216,10 @@ public abstract class Joueur {
         }
     }
 
+    /**
+     * Méthode ajoutant les gains lié à une face
+     * @param face
+     */
     public void gagnerRessourceFace(Face face){
             int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
             if (face.getRessource().length != 1)
@@ -229,6 +233,10 @@ public abstract class Joueur {
                     ajouterLune(ressource.getQuantite());
                 else if (ressource instanceof PointDeGloire)
                     pointDeGloire += ressource.getQuantite();
+            }
+            if (face instanceof FaceSanglier){//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
+                FaceSanglier faceSanglier = (FaceSanglier) face;
+                faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
             }
     }
 
@@ -274,7 +282,7 @@ public abstract class Joueur {
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible
      * @param faceAChoix la face en question
-     * @return ne numéro de la face choisi
+     * @return le numéro de la face choisi
      */
     public abstract int choisirRessource(Face faceAChoix);
 
