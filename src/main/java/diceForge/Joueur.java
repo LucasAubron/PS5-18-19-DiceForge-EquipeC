@@ -71,15 +71,27 @@ public abstract class Joueur {
             }
         }
         or = (or + ajoutOr > maxOr) ? maxOr : or + ajoutOr;
+        if (or < 0) or = 0;
     }
 
     public int getSoleil() {return soleil;}
 
-    public void ajouterSoleil(int quantite) {soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;}
+    public void ajouterSoleil(int quantite) {
+        soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
+        if (soleil < 0) soleil = 0;
+    }
 
     public int getLune() {return lune;}
 
-    public void ajouterLune(int quantite) {lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;}
+    public void ajouterLune(int quantite) {
+        lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;
+        if (lune < 0) lune = 0;
+    }
+
+    public void ajouterPointDeGloire(int quantite) {
+        pointDeGloire += quantite;
+        if (pointDeGloire < 0) pointDeGloire = 0;
+    }
 
     public int getPointDeGloire() {return pointDeGloire;}
 
@@ -171,6 +183,28 @@ public abstract class Joueur {
         }
         else if (carte.getNom().equals("Hibou"))
             renforts.add(Renfort.HIBOU);
+        else if (carte.getNom().equals("Minautore")){
+            Minautore minautore = (Minautore) carte;
+            for (Joueur joueur:minautore.getJoueurs()){//Pour tous les joueurs
+                if (joueur.getIdentifiant() != identifiant){//Si ce n'est pas le joueur actuel
+                    for (De de:joueur.getDes()){//Pour tous les dés
+                        Face face = de.lancerLeDe();//On le lance
+                        int x = 0;
+                        if (face.getRessource().length != 1) x = joueur.choisirRessourceAPerdre(face);//On gere le cas du choix
+                        for (Ressource ressource:face.getRessource()[x]){//on parcours les ressources de la face
+                            if (ressource instanceof Or)//On retire les ressources
+                                joueur.ajouterOr(-ressource.getQuantite());
+                            else if (ressource instanceof Soleil)
+                                joueur.ajouterSoleil(-ressource.getQuantite());
+                            else if (ressource instanceof Lune)
+                                joueur.ajouterLune(-ressource.getQuantite());
+                            else if (ressource instanceof PointDeGloire)
+                                joueur.ajouterPointDeGloire(-ressource.getQuantite());
+                        }
+                    }
+                }
+            }
+        }
         cartes.add(carte);
     }
 
@@ -316,6 +350,11 @@ public abstract class Joueur {
      * @return le numéro de la face choisi
      */
     public abstract int choisirRessource(Face faceAChoix);
+
+    /**
+     * La meme que la méthode au dessus, mais pour perdre la ressource
+     */
+    public abstract int choisirRessourceAPerdre(Face faceAChoix);
 
     /**
      * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé

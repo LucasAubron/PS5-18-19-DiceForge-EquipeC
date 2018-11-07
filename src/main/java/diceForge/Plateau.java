@@ -21,16 +21,23 @@ public class Plateau {
         temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         Random random = new Random();
+
         Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, "Ours");
         Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, "Biche");
         Carte sanglier = new Carte(new Ressource[]{new Lune(3)}, 4, "Sanglier");
         Carte satyres = new Satyres(portail.getJoueurs());
+
+        Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
+        Carte bateauCeleste = new Carte(new Ressource[]{new Soleil(2)}, 4, "Bateau celeste");
+        Carte minautore = new Minautore(portail.getJoueurs());
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),
         new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),
                 new Carte(new Ressource[]{new Soleil(1)}, 2, "Herbes folles"), joueurs.length),
         new Ile(random.nextInt(2) == 1 ? ours : biche,
-                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length)};
+                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
+        new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
+                minautore, joueurs.length)};
     }
 
     /**

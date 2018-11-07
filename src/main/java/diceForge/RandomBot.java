@@ -67,6 +67,11 @@ public class RandomBot extends Joueur{
     }
 
     @Override
+    public int choisirRessourceAPerdre(Face faceAChoix){
+        return random.nextInt(faceAChoix.getRessource().length);
+    }
+
+    @Override
     public int choisirDeBiche(){
         return random.nextInt(2);
     }

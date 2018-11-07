@@ -86,6 +86,11 @@ public class EasyBot extends Joueur{
     }
 
     @Override
+    public int choisirRessourceAPerdre(Face faceAChoix){
+        return 0;
+    }
+
+    @Override
     public int choisirDeBiche(){
         Random random = new Random();
         return random.nextInt(2);

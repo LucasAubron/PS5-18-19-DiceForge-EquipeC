@@ -84,6 +84,9 @@ public class TestBot extends Joueur {
         this.numFace = numFace;
     }
 
+    @Override
+    public int choisirRessourceAPerdre(Face faceAChoix) {return numFace;}
+
     private int numDe;
     @Override
     public int choisirDeBiche() { return numDe; }
