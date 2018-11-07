@@ -138,23 +138,26 @@ public abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     public void acheterExploit(Carte carte){
+        for (Ressource ressource:carte.getCout()){
+            if (ressource instanceof Soleil)
+                ajouterSoleil(-ressource.getQuantite());
+            if (ressource instanceof Lune)
+                ajouterLune(-ressource.getQuantite());
+        }
         if (carte.getNom().equals("Coffre")){
-            ajouterLune(-1);
             maxOr += 4;
             maxSoleil += 3;
             maxLune += 3;
         }
         else if (carte.getNom().equals("Herbes folles")){
-            ajouterSoleil(-1);
             ajouterLune(3);
             ajouterOr(3);
         }
-        else if (carte.getNom().equals("Ancien")) {
-            ajouterSoleil(-1);
+        else if (carte.getNom().equals("Ancien"))
             renforts.add(Renfort.ANCIEN);
-        }
-        else if (carte.getNom().equals("Marteau"))
-            ajouterLune(-1);
+        else if (carte.getNom().equals("Biche"))
+            renforts.add(Renfort.BICHE);
+
         cartes.add(carte);
     }
 

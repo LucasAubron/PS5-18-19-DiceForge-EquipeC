@@ -127,8 +127,10 @@ public class Coordinateur {
                 renfortsUtilisables.add(renfort);
                 ++nbrAncientAjoute;
             }
-            else if (!(renfort+"").equals("ANCIEN"))//Et on ajoute les autres
+            else if (!(renfort+"").equals("ANCIEN")) {//Et on ajoute les autres
                 renfortsUtilisables.add(renfort);
+                System.out.println("BREBRBE");
+            }
         }
         //On demande au joueur son plan de jeu pour les renforts
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
@@ -226,9 +228,8 @@ public class Coordinateur {
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
-                    if (carteChoisie.equals("Sanglier")){
+                    if (carteChoisie.equals("Sanglier"))
                         plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
-                    }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
