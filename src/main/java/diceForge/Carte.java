@@ -21,6 +21,15 @@ public class Carte {
         this.nom = nom;
     }
 
+    /**
+     * Pour cloner
+     * Il faut l'override dans chaque classe fille
+     * @return un clone de la carte en question
+     */
+    public Carte clone(){
+        return new Carte(cout, nbrPointGloire, nom);
+    }
+
     Ressource[] getCout() {
         return cout;
     }

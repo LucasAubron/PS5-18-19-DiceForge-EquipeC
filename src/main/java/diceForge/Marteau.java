@@ -8,6 +8,11 @@ public class Marteau extends Carte {
         super (new Ressource[]{new Lune(1)}, 0, "Marteau");
     }
 
+    @Override
+    public Carte clone(){
+        return new Marteau();
+    }
+
     /**
      * Permet d'ajouter des points à son marteau
      * @param nbrPoints le nombre de points à ajouter

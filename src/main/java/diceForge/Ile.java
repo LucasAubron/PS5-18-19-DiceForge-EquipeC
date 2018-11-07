@@ -34,21 +34,11 @@ public class Ile {
         cartes = new ArrayList<>();
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i) {
-            if (carte1.getNom().equals("Marteau"))
-                cartes.get(0).add(new Marteau());
-            else if (carte1.getNom().equals("Satyres"))
-                cartes.get(0).add(new Satyres(((Satyres) carte1).getJoueurs()));
-            else
-                cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
+            cartes.get(0).add(carte1.clone());
         }
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i) {
-            if (carte2.getNom().equals("Marteau"))
-                cartes.get(1).add(new Marteau());
-            else if (carte2.getNom().equals("Satyres"))
-                cartes.get(1).add(new Satyres(((Satyres) carte2).getJoueurs()));
-            else
-                cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
+            cartes.get(1).add(carte2.clone());
         }
     }
 
