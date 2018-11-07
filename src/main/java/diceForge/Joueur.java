@@ -30,7 +30,7 @@ public abstract class Joueur {
     private List<Renfort> renforts = new ArrayList<>();
 
     public enum Action {FORGER, EXPLOIT, PASSER}
-    public enum Renfort{ANCIEN, BICHE}
+    public enum Renfort{ANCIEN, BICHE, HIBOU}
 
     public Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
@@ -169,6 +169,8 @@ public abstract class Joueur {
             faces.remove(x);//Puis on l'enlève de la liste
             gagnerRessourceFace(faces.get(choisirFace(faces)));//Et on demande pour la deuxième face et on lui fait gagné
         }
+        else if (carte.getNom().equals("Hibou"))
+            renforts.add(Renfort.HIBOU);
         cartes.add(carte);
     }
 
@@ -207,6 +209,8 @@ public abstract class Joueur {
                 case BICHE:
                     Face face = des[choisirDeBiche()].lancerLeDe();
                     gagnerRessourceFace(face);
+                case HIBOU:
+                    gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
             }
         }
     }
