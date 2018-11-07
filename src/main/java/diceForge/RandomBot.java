@@ -80,4 +80,9 @@ public class RandomBot extends Joueur{
     public void forgerFace(Face face){
         forgerDe(random.nextInt(2), face, random.nextInt(6));
     }
+
+    @Override
+    public int choisirFace(List<Face> faces){
+        return random.nextInt(faces.size());
+    }
 }

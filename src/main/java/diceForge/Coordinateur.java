@@ -129,7 +129,6 @@ public class Coordinateur {
             }
             else if (!(renfort+"").equals("ANCIEN")) {//Et on ajoute les autres
                 renfortsUtilisables.add(renfort);
-                System.out.println("BREBRBE");
             }
         }
         //On demande au joueur son plan de jeu pour les renforts

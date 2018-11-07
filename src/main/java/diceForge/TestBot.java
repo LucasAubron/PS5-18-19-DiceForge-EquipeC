@@ -100,7 +100,12 @@ public class TestBot extends Joueur {
         this.id = id;
     }
 
+    @Override
     public void forgerFace(Face face){
         forgerDe(numDe, face, numFace);
+    }
+
+    public int choisirFace(List<Face> faces) {
+        return numFace;
     }
 }

@@ -104,4 +104,10 @@ public class EasyBot extends Joueur{
             }
         }
     }
+
+    @Override
+    public int choisirFace(List<Face> faces){
+        Random random = new Random();
+        return random.nextInt(faces.size());
+    }
 }

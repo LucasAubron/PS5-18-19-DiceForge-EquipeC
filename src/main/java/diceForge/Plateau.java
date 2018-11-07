@@ -24,12 +24,13 @@ public class Plateau {
         Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, "Ours");
         Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, "Biche");
         Carte sanglier = new Carte(new Ressource[]{new Lune(3)}, 4, "Sanglier");
+        Carte satyres = new Satyres(portail.getJoueurs());
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),
         new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),
                 new Carte(new Ressource[]{new Soleil(1)}, 2, "Herbes folles"), joueurs.length),
-        new Ile((random.nextInt(2) == 1 ? ours : biche),
-                sanglier, joueurs.length)};
+        new Ile(random.nextInt(2) == 1 ? ours : biche,
+                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length)};
     }
 
     /**
