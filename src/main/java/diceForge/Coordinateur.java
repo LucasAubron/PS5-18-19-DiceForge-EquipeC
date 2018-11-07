@@ -22,8 +22,15 @@ public class Coordinateur {
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
-            int[] infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
-            affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant[0] + " gagne avec " + infoJoueurGagnant[1] + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+            List<Integer> infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+            if (infoJoueurGagnant.size() == 2)//Un gagnant
+                affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant.get(1) + " gagne avec " + infoJoueurGagnant.get(0) + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
+            else {//Egalité
+                affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Egalité entre les joueurs n°";
+                for (int i = 1; i != infoJoueurGagnant.size(); ++i)
+                    affichage += infoJoueurGagnant.get(i)+", ";
+                affichage += "avec " + infoJoueurGagnant.get(0) + " points de gloire ! |\n " + "\t\t--------------------------------------------------\n ";
+            }
         }
         else{
             int[] nbrVictoire = new int[joueurs.length];
@@ -38,7 +45,9 @@ public class Coordinateur {
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }
-                nbrVictoire[infoJoueurGagnant()[0]]++;//Puis on stocke les infos des parties
+                List<Integer> infoJoueurGagnant = infoJoueurGagnant();
+                for (int j = 1; j != infoJoueurGagnant.size(); ++j)
+                    nbrVictoire[infoJoueurGagnant.get(j)]++;//Puis on stocke les infos des parties
                 for (int j = 0; j != joueurs.length; ++j)
                     PtsGloireCumulés[j] += plateau.getJoueur().get(j).getPointDeGloire();
             }
@@ -118,8 +127,9 @@ public class Coordinateur {
                 renfortsUtilisables.add(renfort);
                 ++nbrAncientAjoute;
             }
-            else if (!(renfort+"").equals("ANCIEN"))//Et on ajoute les autres
+            else if (!(renfort+"").equals("ANCIEN")) {//Et on ajoute les autres
                 renfortsUtilisables.add(renfort);
+            }
         }
         //On demande au joueur son plan de jeu pour les renforts
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
@@ -217,6 +227,8 @@ public class Coordinateur {
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
+                    if (carteChoisie.equals("Sanglier"))
+                        plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
@@ -279,18 +291,25 @@ public class Coordinateur {
     /**
      * Permet de connaitre le numéro du joueur gagnant ainsi que son nombre de point de gloire
      * Cette fonction additionne le nombre de point de gloire des cartes des joueurs, il faut donc ne l'appeler qu'une fois
-     * @return un tableau d'entier de taille 2, son premier éléments est le numéro du joueur gagnant et son second est le nombre de point de victoire du gagnant
+     * @return une List, le premier élement est le nombre de point de gloire maximum, l'/les autre(s) est/sont le(s) numéro(s) du/des joueur(s) gagnant(s)
      */
-    public int[] infoJoueurGagnant(){
-        int numJoueurGagnant = 0, maxPointGloire = 0;
+    public List<Integer> infoJoueurGagnant(){
+        List<Integer> infoJoueurGagnant = new ArrayList<>();
+        infoJoueurGagnant.add(0);
+        infoJoueurGagnant.add(-1);
         for (Joueur joueur:plateau.getJoueur()){
             joueur.additionnerPointsCartes();
-            if (joueur.getPointDeGloire() > maxPointGloire){//Simple recherche d'un maximum
-                maxPointGloire = joueur.getPointDeGloire();
-                numJoueurGagnant = joueur.getIdentifiant();
+            if (joueur.getPointDeGloire() > infoJoueurGagnant.get(0)){//Simple recherche d'un maximum
+                infoJoueurGagnant.set(0, joueur.getPointDeGloire());//On midifie le nbr de points de gloire maximum
+                infoJoueurGagnant.subList(1, infoJoueurGagnant.size()).clear();//On clear la liste sauf le premier élément
+                infoJoueurGagnant.add(joueur.getIdentifiant());//On ajoute son identifiant
             }
+            else if (joueur.getPointDeGloire() == infoJoueurGagnant.get(0))
+                infoJoueurGagnant.add(joueur.getIdentifiant());//On ajoute son identifiant
         }
-        return new int[]{numJoueurGagnant, maxPointGloire};
+        if (infoJoueurGagnant.get(1) == -1)
+            throw new DiceForgeException("Coordinateur", "Aucun joueur a plus de 0 pt de gloire, problème !");
+        return infoJoueurGagnant;
     }
     public String toString(){
         return affichage;

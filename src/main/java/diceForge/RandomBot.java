@@ -65,4 +65,24 @@ public class RandomBot extends Joueur{
     public int choisirRessource(Face faceAChoix){
         return random.nextInt(faceAChoix.getRessource().length);
     }
+
+    @Override
+    public int choisirDeBiche(){
+        return random.nextInt(2);
+    }
+
+    @Override
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
+        return (getIdentifiant() == 1 ? 0 : 1);
+    }
+
+    @Override
+    public void forgerFace(Face face){
+        forgerDe(random.nextInt(2), face, random.nextInt(6));
+    }
+
+    @Override
+    public int choisirFace(List<Face> faces){
+        return random.nextInt(faces.size());
+    }
 }

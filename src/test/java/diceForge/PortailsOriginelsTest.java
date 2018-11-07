@@ -12,9 +12,9 @@ public class PortailsOriginelsTest {
     @Test
     public void retirerJoueur() {
         assertEquals(p0.getJoueurs().size(), 2);
-        assertEquals(p0.retirerJoueur(0), j0);
+        assertEquals(p0.retirerJoueur(0).getIdentifiant(), j0.getIdentifiant());
         assertEquals(p0.getJoueurs().size(), 1);
-        assertEquals(p0.retirerJoueur(1), j1);
+        assertEquals(p0.retirerJoueur(1).getIdentifiant(), j1.getIdentifiant());
         assertEquals(p0.getJoueurs().size(), 0);
         p0.ajouterJoueur(j1);
         assertEquals(p0.getJoueurs().size(), 1);

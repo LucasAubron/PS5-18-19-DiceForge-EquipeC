@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.List;
+import java.util.Random;
 
 public class EasyBot extends Joueur{
     public EasyBot(int identifiant) {super(identifiant);}
@@ -82,5 +83,37 @@ public class EasyBot extends Joueur{
             }
         }
         return 0;
+    }
+
+    @Override
+    public int choisirDeBiche(){
+        Random random = new Random();
+        return random.nextInt(2);
+    }
+
+    @Override
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
+        return (getIdentifiant() == 1 ? 0 : 1);
+    }
+
+    @Override
+    public void forgerFace(Face face){
+        boolean aForge = false;
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    forgerDe(i, face, j);
+                    aForge = true;
+                }
+            }
+        }
+        if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
+            forgerDe(0, face, 0);
+    }
+
+    @Override
+    public int choisirFace(List<Face> faces){
+        Random random = new Random();
+        return random.nextInt(faces.size());
     }
 }

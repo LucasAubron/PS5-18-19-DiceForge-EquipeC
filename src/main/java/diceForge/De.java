@@ -33,4 +33,8 @@ public class De {
         faces[numFace] = faceAForger;
         ++nbrFaceForge;
     }
+
+    public int getNbrFaceForge() {
+        return nbrFaceForge;
+    }
 }

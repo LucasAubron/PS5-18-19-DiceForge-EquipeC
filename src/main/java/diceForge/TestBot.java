@@ -83,4 +83,29 @@ public class TestBot extends Joueur {
     public void setNumFace(int numFace) {
         this.numFace = numFace;
     }
+
+    private int numDe;
+    @Override
+    public int choisirDeBiche() { return numDe; }
+    public void setNumDe(int numDe) {
+        this.numDe = numDe;
+    }
+
+    private int id;
+    @Override
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public void forgerFace(Face face){
+        forgerDe(numDe, face, numFace);
+    }
+
+    public int choisirFace(List<Face> faces) {
+        return numFace;
+    }
 }
