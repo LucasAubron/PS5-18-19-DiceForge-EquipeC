@@ -11,7 +11,7 @@ public class Bassin {
      * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
      * et qu'il est plus simple de transmettre une liste
      */
-    public Bassin(int cout, List<Face> faces) {
+    Bassin(int cout, List<Face> faces) {
         if (cout < 1 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
@@ -23,7 +23,7 @@ public class Bassin {
     /**
      * Constructeur qui sert lorsque le bassin ne comporte que la même faces
      */
-    public Bassin(int cout, Face facesUnique, int nbrFace){
+    Bassin(int cout, Face facesUnique, int nbrFace){
         if (cout < 1 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
         this.cout = cout;
@@ -34,7 +34,7 @@ public class Bassin {
             faces.add(new Face(facesUnique.getRessource()));
     }
 
-    public int getCout() {
+    int getCout() {
         return cout;
     }
 
@@ -46,18 +46,18 @@ public class Bassin {
         return faces;
     }
 
-    public Face getFace(int num) {
+    Face getFace(int num) {
         return faces.get(num);
     }
     /**
      * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
      * Il ne faut pas utiliser la méthode getFace() pour cela !
      */
-    public Face retirerFace(int numFace){
+    Face retirerFace(int numFace){
         return faces.remove(numFace);
     }
 
-    public boolean equals(Bassin bassin){
+    boolean equals(Bassin bassin){
         if (faces.isEmpty() && bassin.getFaces().isEmpty() && cout == bassin.getCout())
             return true;
         if (cout == bassin.getCout() && faces.size() == bassin.getFaces().size() && faces.get(0).toString().equals(bassin.getFaces().get(0).toString()))

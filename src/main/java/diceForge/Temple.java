@@ -49,5 +49,5 @@ public class Temple {
         sanctuaire[9] = new Bassin(12, faceBassin9);
     }
 
-    public Bassin[] getSanctuaire() {return sanctuaire;}
+    Bassin[] getSanctuaire() {return sanctuaire;}
 }

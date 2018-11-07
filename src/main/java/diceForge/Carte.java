@@ -21,7 +21,7 @@ public class Carte {
         this.nom = nom;
     }
 
-    public Ressource[] getCout() {
+    Ressource[] getCout() {
         return cout;
     }
 
@@ -29,9 +29,9 @@ public class Carte {
         return nbrPointGloire;
     }
 
-    public String getNom() { return nom; }
+    String getNom() { return nom; }
 
-    public boolean equals(Carte carte){
+    boolean equals(Carte carte){
         if (carte == null)
             return false;
         return (nom.equals(carte.getNom()));

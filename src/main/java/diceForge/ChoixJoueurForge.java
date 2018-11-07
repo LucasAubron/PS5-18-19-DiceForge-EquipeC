@@ -24,15 +24,15 @@ public class ChoixJoueurForge {
         this.posFace = posFace;
     }
 
-    public int getNumDe() { return numDe; }
+    int getNumDe() { return numDe; }
 
     public Bassin getBassin() { return bassin; }
 
-    public int getNumFace() {
+    int getNumFace() {
         return numFace;
     }
 
-    public int getPosFace() {
+    int getPosFace() {
         return posFace;
     }
 }

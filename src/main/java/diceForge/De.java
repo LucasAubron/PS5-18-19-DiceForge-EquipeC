@@ -13,21 +13,21 @@ public class De {
         return faces;
     }
 
-    public Face getFace(int num) { return faces[num]; }
+    Face getFace(int num) { return faces[num]; }
 
-    public De(Face[] faces){
+    De(Face[] faces){
         if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
             throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
         this.faces = faces;
     }
 
-    public Face lancerLeDe(){
+    Face lancerLeDe(){
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
         int face = aleatoire.nextInt(faces.length);//Nombre entre 0 et faces.length-1
         return faces[face];
     }
 
-    public void forger(Face faceAForger, int numFace){
+    void forger(Face faceAForger, int numFace){
         if (numFace < 0 || numFace > faces.length-1)
             throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 1, max : "+(faces.length-1)+", actuel : "+numFace);
         faces[numFace] = faceAForger;

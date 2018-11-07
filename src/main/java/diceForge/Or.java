@@ -1,7 +1,7 @@
 package diceForge;
 
-public class Or extends Ressource {
-    public Or(int quantite) {
+class Or extends Ressource {
+    Or(int quantite) {
         super(quantite);
     }
 }

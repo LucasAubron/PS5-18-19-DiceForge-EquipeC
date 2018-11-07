@@ -9,7 +9,7 @@ import java.util.List;
  * puis appeler la méthode à tester
  */
 public class TestBot extends Joueur {
-    public TestBot(int identifiant) {super (identifiant);}
+    TestBot(int identifiant) {super (identifiant);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir
@@ -60,7 +60,7 @@ public class TestBot extends Joueur {
     private int nbrPointMarteau = 0;
     @Override
     public int choisirRepartitionOrMarteau(int nbrOr){return nbrOr-nbrPointMarteau;}
-    public void setNbrPointMarteau(int nbrPointMarteau) {
+    void setNbrPointMarteau(int nbrPointMarteau) {
         this.nbrPointMarteau = nbrPointMarteau;
     }
 

@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class RandomBot extends Joueur{
     private Random random = new Random();
-    public RandomBot(int identifiant){
+    RandomBot(int identifiant){
         super(identifiant);
     }
 

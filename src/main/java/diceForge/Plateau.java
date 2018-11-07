@@ -16,7 +16,7 @@ public class Plateau {
     private Ile[] iles;//La ou il y a les cartes
 
 
-    public Plateau(boolean modeVerbeux, Joueur[] joueurs){
+    Plateau(boolean modeVerbeux, Joueur[] joueurs){
         portail = new PortailsOriginels(joueurs);//La ou les joueurs sont de base
         temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
@@ -39,8 +39,8 @@ public class Plateau {
      */
     public List<Joueur> getJoueur() {
         List<Joueur> tempJoueur = new ArrayList<>();
-        for (Joueur x:portail.getJoueurs())//On ajoute tous les joueurs des portails originels
-            tempJoueur.add(x);
+        //On ajoute tous les joueurs des portails originels
+        tempJoueur.addAll(portail.getJoueurs());
         for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
@@ -55,13 +55,13 @@ public class Plateau {
         return joueur;
     }
 
-    public PortailsOriginels getPortail(){return portail;}
+    PortailsOriginels getPortail(){return portail;}
 
-    public Ile[] getIles() {return iles;}
+    Ile[] getIles() {return iles;}
 
-    public Temple getTemple() {
+    Temple getTemple() {
         return temple;
     }
 
-    public boolean estVerbeux() {return modeVerbeux; }
+    boolean estVerbeux() {return modeVerbeux; }
 }

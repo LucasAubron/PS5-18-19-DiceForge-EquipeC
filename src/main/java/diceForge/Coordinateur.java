@@ -11,7 +11,7 @@ import java.util.List;
  * le joueur veut forger mais n'a que 5 or, le coordinateur ne va lui proposer que les bassins dont le coût est <=5.
  */
 public class Coordinateur {
-    Plateau plateau;
+    private Plateau plateau;
     private String affichage = "";
 
     public Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
@@ -34,11 +34,11 @@ public class Coordinateur {
         }
         else{
             int[] nbrVictoire = new int[joueurs.length];
-            int[] PtsGloireCumulés = new int[joueurs.length];
+            int[] PtsGloireCumules = new int[joueurs.length];
             int nbrPartiesJoue = 1000; //nbrPartiesJoue = 1000 parties, comme demandé dans le kata
             for (int i = 0; i != joueurs.length; ++i){
                 nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
-                PtsGloireCumulés[i] = 0;
+                PtsGloireCumules[i] = 0;
             }
             for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
                 plateau = new Plateau(false, joueurs);
@@ -49,10 +49,10 @@ public class Coordinateur {
                 for (int j = 1; j != infoJoueurGagnant.size(); ++j)
                     nbrVictoire[infoJoueurGagnant.get(j)]++;//Puis on stocke les infos des parties
                 for (int j = 0; j != joueurs.length; ++j)
-                    PtsGloireCumulés[j] += plateau.getJoueur().get(j).getPointDeGloire();
+                    PtsGloireCumules[j] += plateau.getJoueur().get(j).getPointDeGloire();
             }
             for (int i = 0; i != joueurs.length; ++i){//Puis on les affiches
-                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumulés[i]/nbrPartiesJoue+" points de gloire\n";
+                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumules[i]/nbrPartiesJoue+" points de gloire\n";
             }
         }
     }
@@ -60,7 +60,7 @@ public class Coordinateur {
     /**
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
      */
-    public void jouerManche(int numeroManche){
+    private void jouerManche(int numeroManche){
         for (Joueur joueur:plateau.getJoueur()){
             tour(joueur, numeroManche);
         }
@@ -71,7 +71,7 @@ public class Coordinateur {
      * @param joueur c'est le joueur actif
      * @param numeroManche pour plus tard, permet au bot de compter un paramètre en plus pour leur prise de décision
      */
-    public void tour(Joueur joueur, int numeroManche){
+    private void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
         //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
@@ -144,7 +144,7 @@ public class Coordinateur {
      * return true si le joueur effectue une action, false s'il passe son tour,
      * utile pour lui demander s'il souhaite réaliser une seconde action.
      */
-    public boolean action(Joueur joueur, int numeroManche){
+    private boolean action(Joueur joueur, int numeroManche){
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
@@ -179,7 +179,7 @@ public class Coordinateur {
      * et qui effectue l'action chosie par le joueur.
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
-    public List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
+    private List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
@@ -219,7 +219,7 @@ public class Coordinateur {
      * Action exploit, on envoit la liste des cartes achetables par le joueur, celui ci choisit et l'achat est effectué dans la foulée.
      * Gère également la chasse.
      */
-    public void exploit(Joueur joueur, int numeroManche) {
+    private void exploit(Joueur joueur, int numeroManche) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
         Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche); //On demande au joueur la carte qu'il veut acheter
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
