@@ -238,24 +238,37 @@ public abstract class Joueur {
      * Méthode ajoutant les gains lié à une face
      * @param face
      */
-    public void gagnerRessourceFace(Face face){
-            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
-            if (face.getRessource().length != 1)
-                choix = choisirRessource(face);
-            for (Ressource ressource:face.getRessource()[choix]){//On regarde de quelle ressource il s'agit
-                if (ressource instanceof Or)
-                    ajouterOr(ressource.getQuantite());
-                else if (ressource instanceof Soleil)
-                    ajouterSoleil(ressource.getQuantite());
-                else if (ressource instanceof Lune)
-                    ajouterLune(ressource.getQuantite());
-                else if (ressource instanceof PointDeGloire)
-                    pointDeGloire += ressource.getQuantite();
+    public void gagnerRessourceFace(Face face) {
+        int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
+        if (face.getRessource().length != 1)
+            choix = choisirRessource(face);
+        for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
+            if (ressource instanceof Or)
+                ajouterOr(ressource.getQuantite());
+            else if (ressource instanceof Soleil)
+                ajouterSoleil(ressource.getQuantite());
+            else if (ressource instanceof Lune)
+                ajouterLune(ressource.getQuantite());
+            else if (ressource instanceof PointDeGloire)
+                pointDeGloire += ressource.getQuantite();
+        }
+        if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
+            FaceSanglier faceSanglier = (FaceSanglier) face;
+            faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
+        } else if (face instanceof FaceBateauCeleste) {//Si c'est une face de bateau celeste
+            FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) face;//on fait comme dans le coordinateur
+            List<Bassin> bassinsAbordables = new ArrayList<>();
+            for (Bassin bassin : faceBateauCeleste.getTemple().getSanctuaire())
+                if (bassin.getCout() - 2 >= or)
+                    bassinsAbordables.add(bassin);
+            if (!bassinsAbordables.isEmpty()) {
+                ChoixJoueurForge choixJoueurForge = choisirFaceAForger(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
+                if (choixJoueurForge.getBassin() != null) {
+                    forgerDe(choixJoueurForge.getNumDe(), choixJoueurForge.getBassin().retirerFace(choixJoueurForge.getNumFace()), choixJoueurForge.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+                    ajouterOr(-choixJoueurForge.getBassin().getCout());//On oublie pas de faire payer le joueur
+                }
             }
-            if (face instanceof FaceSanglier){//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
-                FaceSanglier faceSanglier = (FaceSanglier) face;
-                faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
-            }
+        }
     }
 
     /**
