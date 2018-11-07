@@ -96,13 +96,17 @@ public class EasyBot extends Joueur{
 
     @Override
     public void forgerFace(Face face){
+        boolean aForge = false;
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
                     forgerDe(i, face, j);
+                    aForge = true;
                 }
             }
         }
+        if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
+            forgerDe(0, face, 0);
     }
 
     @Override
