@@ -98,7 +98,7 @@ class Coordinateur {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
             }
             x.lancerLesDes();
-            affichage += joueur;
+            affichage += x;
         }
         if (plateau.estVerbeux()) {
             affichage += ("\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
@@ -141,8 +141,8 @@ class Coordinateur {
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
-        if (plateau.estVerbeux())
-            affichage += joueur;
+        for (Joueur x:plateau.getJoueur())
+            affichage += x;
     }
     
     /**
