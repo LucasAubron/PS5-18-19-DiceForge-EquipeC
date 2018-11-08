@@ -1,15 +1,12 @@
 package diceForge;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * La classe carte peut être utilisé pour les cartes ne donnant que des points de gloire
  * Sinon il faut créer / utiliser une classe dérivée de celle ci
  * Nom des cartes:
  * Coffre ; Herbes folles ; Ancien ; Marteau ; Ours ; Sanglier ; Biche ; Satyres
  * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerberes ; Passeur ; Casque d invisibilite
- * Gorgone ; Triton ; Abysse
+ * Gorgone ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope
  */
 public class Carte {
     private Ressource[] cout;
