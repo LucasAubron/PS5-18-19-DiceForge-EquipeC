@@ -1,13 +1,13 @@
 package diceForge;
 
-public class FaceBateauCeleste extends Face {
+class FaceBateauCeleste extends Face {
     private Temple temple;
-    public FaceBateauCeleste(Temple temple){
+    FaceBateauCeleste(Temple temple){
         super(new Ressource[][]{{}});
         this.temple = temple;
     }
 
-    public Temple getTemple() {
+    Temple getTemple() {
         return temple;
     }
 }

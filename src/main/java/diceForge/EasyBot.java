@@ -3,11 +3,11 @@ package diceForge;
 import java.util.List;
 import java.util.Random;
 
-public class EasyBot extends Joueur{
-    public EasyBot(int identifiant) {super(identifiant);}
+class EasyBot extends Joueur{
+    EasyBot(int identifiant) {super(identifiant);}
 
     @Override
-    public Action choisirAction(int numManche){
+    Action choisirAction(int numManche){
         if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
@@ -16,7 +16,7 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+    ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
         Bassin bassinAChoisir = null;
@@ -46,7 +46,7 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche){
+    Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
             if (carte.getNom().equals("Marteau") && !possedeCarte("Marteau"))//Au moins 1 marteau
@@ -62,20 +62,20 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public boolean choisirActionSupplementaire(int numManche){
+    boolean choisirActionSupplementaire(int numManche){
         return ((getOr() > 10 && numManche < 6) || getSoleil() > 3 || getLune() > 1);//Si on a assez de ressource pour refaire un tour
     }
 
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tout dans le marteau
+    int choisirRepartitionOrMarteau(int nbrOr){return 0;}//On met tout dans le marteau
 
     @Override
-    public List<Renfort> choisirRenforts(List renfortsUtilisables){
+    List<Renfort> choisirRenforts(List renfortsUtilisables){
         return renfortsUtilisables;//On appelle tous les renforts
     }
 
     @Override
-    public int choisirRessource(Face faceAChoix){
+    int choisirRessource(Face faceAChoix){
         for (int i = 0; i != faceAChoix.getRessource().length; ++i){
             for (Ressource ressource:faceAChoix.getRessource()[i]){
                 if (ressource instanceof Lune || ressource instanceof Soleil)
@@ -86,23 +86,23 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public int choisirRessourceAPerdre(Face faceAChoix){
+    int choisirRessourceAPerdre(Face faceAChoix){
         return 0;
     }
 
     @Override
-    public int choisirDeBiche(){
+    int choisirDeBiche(){
         Random random = new Random();
         return random.nextInt(2);
     }
 
     @Override
-    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
+    int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
         return (getIdentifiant() == 1 ? 0 : 1);
     }
 
     @Override
-    public void forgerFace(Face face){
+    void forgerFace(Face face){
         boolean aForge = false;
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
@@ -117,7 +117,7 @@ public class EasyBot extends Joueur{
     }
 
     @Override
-    public int choisirFace(List<Face> faces){
+    int choisirFace(List<Face> faces){
         Random random = new Random();
         return random.nextInt(faces.size());
     }

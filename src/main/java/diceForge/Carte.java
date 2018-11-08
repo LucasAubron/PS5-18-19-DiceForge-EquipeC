@@ -8,12 +8,12 @@ package diceForge;
  * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerberes ; Passeur ; Casque d invisibilite
  * Gorgone ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope
  */
-public class Carte {
+class Carte {
     private Ressource[] cout;
     private int nbrPointGloire;
     private String nom;
 
-    public Carte(Ressource[] cout, int nbrPointGloire, String nom){
+    Carte(Ressource[] cout, int nbrPointGloire, String nom){
         if (cout.length <= 0)
             throw new DiceForgeException("Carte","Une carte doit couter quelque chose. Cout donné : "+cout);
         this.cout = cout;
@@ -30,7 +30,7 @@ public class Carte {
         return new Carte(cout, nbrPointGloire, nom);
     }
 
-    public void effetDirect(Joueur acheteur){
+    void effetDirect(Joueur acheteur){
         if (nom.equals("Coffre")){
             acheteur.augmenterMaxOr(4);
             acheteur.augmenterMaxSoleil(3);
@@ -52,7 +52,7 @@ public class Carte {
         return cout;
     }
 
-    public int getNbrPointGloire() {
+    int getNbrPointGloire() {
         return nbrPointGloire;
     }
 

@@ -3,7 +3,7 @@ package diceForge;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Satyres extends Carte {
+class Satyres extends Carte {
     private List<Joueur> joueurs = new ArrayList<>();
     Satyres(List<Joueur> joueurs){
         super(new Ressource[]{new Lune(3)}, 6, "Satyres");
@@ -18,7 +18,7 @@ public class Satyres extends Carte {
     }
 
     @Override
-    public void effetDirect(Joueur acheteur){
+    void effetDirect(Joueur acheteur){
             List<Face> faces = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
             for (Joueur joueur:joueurs)
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant())
@@ -30,7 +30,7 @@ public class Satyres extends Carte {
             acheteur.gagnerRessourceFace(faces.get(acheteur.choisirFace(faces)));//Et on demande pour la deuxième face et on lui fait gagné
     }
 
-    public List<Joueur> getJoueurs() {
+    List<Joueur> getJoueurs() {
         return joueurs;
     }
 }

@@ -1,13 +1,13 @@
 package diceForge;
 
-public class DiceForgeException extends RuntimeException {
+class DiceForgeException extends RuntimeException {
     private String localisation;
-    public DiceForgeException(String localisation, String messageErreur){
+    DiceForgeException(String localisation, String messageErreur){
         super(messageErreur);
         this.localisation = localisation;
     }
 
-    public String getLocalisation() {
+    String getLocalisation() {
         return localisation;
     }
 }
