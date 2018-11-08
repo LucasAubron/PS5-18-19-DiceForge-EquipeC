@@ -310,7 +310,7 @@ abstract class Joueur {
             }
             affichage += "Face Celeste; ";
         }
-        affichage += " || ";
+        affichage += "\n";
     }
 
     @Override

@@ -92,6 +92,7 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
+        affichage += "Phase de lance des des\n";
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             if (plateau.getJoueur().size() == 2) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
