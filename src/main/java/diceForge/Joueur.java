@@ -155,6 +155,7 @@ abstract class Joueur {
             if (carte.getNom().equals("Ours"))
                 pointDeGloire += 3;
         lancerLesDes();
+        affichage += "J"+identifiant+" est chassé\n";
     }
 
     /**
