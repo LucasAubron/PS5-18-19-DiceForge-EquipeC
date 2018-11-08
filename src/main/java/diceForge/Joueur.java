@@ -147,6 +147,7 @@ abstract class Joueur {
             if (gagnerFace[i])
                 gagnerRessourceFace(faces[i]);
         this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
+        affichage += "\n";
     }
 
     Face[] getDesFaceCourante(){return DesFaceCourante;}
@@ -226,6 +227,7 @@ abstract class Joueur {
         if (!renfortsUtilisables.isEmpty())
             affichage += "J"+identifiant+" appelle: ";
         for (Renfort renfort:renfortsUtilisables){
+            affichage += renfort.toString()+"; ";
             switch (renfort){
                 case ANCIEN:
                     or -= 3;
@@ -237,7 +239,6 @@ abstract class Joueur {
                 case HIBOU:
                     gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
             }
-            affichage += renfort+"; ";
         }
         affichage += "\n";
     }
@@ -310,7 +311,6 @@ abstract class Joueur {
             }
             affichage += "Face Celeste; ";
         }
-        affichage += " || ";
     }
 
     @Override
