@@ -21,20 +21,17 @@ class Face {
 
     @Override
     public String toString() {
-        String res = "";
-        if (ressource.length == 1){
-            for (Ressource uneRess :ressource[0]) {
-                res = res + " " + uneRess.getQuantite();
-                if (uneRess instanceof Or)
-                    res = res + " Or";
-                else if (uneRess instanceof Soleil)
-                    res = res + " Soleil";
-                else if (uneRess instanceof PointDeGloire)
-                    res = res + " PointDeGloire";
-                else if (uneRess instanceof Lune)
-                    res += " Lune";
+        String affichage = "";
+        for (Ressource[] ressources:ressource){
+            if (!affichage.isEmpty())
+                affichage += "ou ";
+            for (Ressource x:ressources){
+                affichage += x.getQuantite();
+                affichage += x+"+";
             }
         }
-        return res;
+        if (!affichage.isEmpty())
+            affichage = affichage.substring(0, affichage.length()-1);//On supprime le dernier +
+        return affichage;
     }
 }

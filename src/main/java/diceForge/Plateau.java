@@ -15,6 +15,7 @@ class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
+    private String affichage = "";
 
     Plateau(boolean modeVerbeux, Joueur[] joueurs){
         portail = new PortailsOriginels(joueurs);//La ou les joueurs sont de base
@@ -42,6 +43,12 @@ class Plateau {
         new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
                 new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d invisibilite"),
                 joueurs.length)};
+
+        affichage += "Cartes présentes : ";
+        for (Ile ile:iles)
+            for(List<Carte> cartes:ile.getCartes())
+                    affichage += cartes.get(0)+"; ";
+        affichage += "\n";
     }
 
     /**
@@ -75,4 +82,11 @@ class Plateau {
     }
 
     boolean estVerbeux() {return modeVerbeux; }
+
+    @Override
+    public String toString(){
+        String s = affichage;
+        affichage = "";
+        return s;
+    }
 }

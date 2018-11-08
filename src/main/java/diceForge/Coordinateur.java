@@ -20,10 +20,13 @@ class Coordinateur {
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            System.out.println(plateau);
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
             List<Integer> infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+            for (Joueur joueur:plateau.getJoueur())
+                affichage += joueur;
             if (infoJoueurGagnant.size() == 2)//Un gagnant
                 affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant.get(1) + " gagne avec " + infoJoueurGagnant.get(0) + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
             else {//Egalité
@@ -94,10 +97,11 @@ class Coordinateur {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
             }
             x.lancerLesDes();
+            affichage += joueur;
         }
         if (plateau.estVerbeux()) {
-            affichage += ("\n\n\n\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
-            affichage += ("\n" + "Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
+            affichage += ("\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau -> affichageMarteau(marteau));
         }
@@ -137,7 +141,7 @@ class Coordinateur {
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
         if (plateau.estVerbeux())
-            choixDuJoueur.forEach(x -> affichage += "\nLe joueur " + joueur.getIdentifiant() + " active le renfort " + x + "\n");
+            affichage += joueur;
     }
     
     /**
@@ -149,8 +153,6 @@ class Coordinateur {
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
-                if (plateau.estVerbeux())
-                    affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi de forger --\n\n";
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 //Il faut que le joueur puisse s'arreter de forger
                 do
@@ -160,16 +162,14 @@ class Coordinateur {
             case EXPLOIT:
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources, on affiche plutot qu'il passe son tour au lieu de laisser "le joueur achète un exploit sans rien expliciter derrière
                     if (plateau.estVerbeux())
-                        affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
+                        affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                     return false;
                 }
-                if (plateau.estVerbeux())
-                    affichage += "\n\t\t-- Le joueur " + joueur.getIdentifiant() + " choisi d'accomplir un exploit --\n\n";
                 exploit(joueur, numeroManche);
                 break;
             case PASSER:
                 if (plateau.estVerbeux())
-                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n\n";
+                    affichage += "\n\t\t-- le joueur " + joueur.getIdentifiant() + " passe son tour --\n";
                 return false;//Si le joueur passe, on averti plus haut
         }
         return true;
@@ -186,12 +186,12 @@ class Coordinateur {
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
-            if (plateau.estVerbeux())
-                affichage += "Le joueur " + joueur.getIdentifiant() + " forge une face" + choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()) + " sur le dé n°" + choixDuJoueur.getNumDe() + " et remplace une face" + joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()) +"\n\n";
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
             joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur (n'est-ce pas Gabriel ..)
         }
         bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé, null si n'il y pas eu de craft (signifiant pour le joueur la volonté de s'arrêter)
+        for (Joueur joueur1:plateau.getJoueur())
+            affichage += joueur1;
         if (bassinsUtilises.get(bassinsUtilises.size()-1) == null) //Si le joueur n'a pas crafté alors cela signifie qu'il veut s'arrêter
             return null;
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
@@ -240,15 +240,11 @@ class Coordinateur {
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
         }
-        if (plateau.estVerbeux())
-            affichage += "Le joueur " + joueur.getIdentifiant() + " achète une carte " + carteChoisie;
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
-            if (plateau.estVerbeux())
-                affichage += " et chasse le joueur " + joueurChasse.getIdentifiant();
         }
-        if (plateau.estVerbeux())
-            affichage += "\n\n";
+        for (Joueur joueur1:plateau.getJoueur())
+            affichage += joueur1;
     }
 
     private List cartesAbordables(Joueur joueur) {
@@ -289,10 +285,12 @@ class Coordinateur {
             joueur.ajouterSoleil(-2);
             if (plateau.estVerbeux()) {
                 affichage += "---------- Le joueur " + joueur.getIdentifiant() + " choisi d'effectuer une seconde action ----------\n";
-                affichage += ("\n" + "Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n");
+                affichage += ("Ressources disponibles:\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n");
             }
             action(joueur, numeroManche);
         }
+        for (Joueur joueur1:plateau.getJoueur())
+            affichage += joueur1;
     }
 
     /**
