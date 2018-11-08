@@ -6,7 +6,7 @@ package diceForge;
  * Nom des cartes:
  * Coffre ; Herbes folles ; Ancien ; Marteau ; Ours ; Sanglier ; Biche ; Satyres
  * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerberes ; Passeur ; Casque d invisibilite
- * Gorgone ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope
+ * Gorgone ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope; Miroir Abyssal
  */
 class Carte {
     private Ressource[] cout;
