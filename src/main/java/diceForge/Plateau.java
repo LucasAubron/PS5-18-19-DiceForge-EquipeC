@@ -37,7 +37,10 @@ public class Plateau {
         new Ile(random.nextInt(2) == 1 ? ours : biche,
                 random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
         new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
-                minautore, joueurs.length)};
+                minautore, joueurs.length),
+        new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
+                new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d invisibilite"),
+                joueurs.length)};
     }
 
     /**
