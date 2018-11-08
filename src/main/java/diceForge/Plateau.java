@@ -30,6 +30,7 @@ class Plateau {
         Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
         Carte bateauCeleste = new Carte(new Ressource[]{new Soleil(2)}, 4, "Bateau celeste");
         Carte minautore = new Minautore(portail.getJoueurs());
+        Carte bouclier = new Carte(new Ressource[]{new Soleil(3)}, 6, "Bouclier");
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),
         new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),
@@ -37,7 +38,7 @@ class Plateau {
         new Ile(random.nextInt(2) == 1 ? ours : biche,
                 random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
         new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
-                minautore, joueurs.length),
+                random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
         new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
                 new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d invisibilite"),
                 joueurs.length)};

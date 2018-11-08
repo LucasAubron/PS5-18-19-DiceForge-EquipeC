@@ -118,14 +118,31 @@ abstract class Joueur {
      * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
      */
     void lancerLesDes(){
-        for (De de:des){
-            Face face = de.lancerLeDe();
-            if (de == des[0])//Pour l'affichage
-                this.premierDeFaceCourante = face;
-            else
-                this.deuxiemeDeFaceCourante = face;
-            gagnerRessourceFace(face);
+        Face[] faces = new Face[2];
+        faces[0] = des[0].lancerLeDe();//On stocke les deux lancers
+        faces[1] = des[1].lancerLeDe();
+        premierDeFaceCourante = faces[0];//pour l'affichage, mais ne va pas tarder à disparaitre
+        deuxiemeDeFaceCourante = faces[1];
+
+        Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
+        for (int i = 0; i != faces.length; ++i){//on parcours les faces que l'on a obtenu
+            if (faces[i] instanceof FaceBouclier){//On traite le cas faceBouclier
+                int x = 0, j = i==0?1:0;//j est 1 si i est 0, et 0 sinon
+                if (faces[j].getRessource().length != 1)//Si l'autre de est une face à choix
+                    x = choisirRessource(faces[j]);//le joueur choisis (oui il peut faire 2 choix différents...  :(
+                for (Ressource ressource:faces[j].getRessource()[x]){
+                    if (ressource.getClass().equals(faces[i].getRessource()[0][0].getClass())){
+                        pointDeGloire += 5;
+                        gagnerFace[i] = false;
+                        break;
+                    }
+                }
+            }
         }
+
+        for (int i = 0; i != gagnerFace.length; ++i)
+            if (gagnerFace[i])
+                gagnerRessourceFace(faces[i]);
     }
 
     /**

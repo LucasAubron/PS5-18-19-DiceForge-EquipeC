@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -231,9 +232,9 @@ class Coordinateur {
                         plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
                     else if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
-                    else if (carteChoisie.equals("Passeur")){
-                        joueur.ajouterPointDeGloire(carteChoisie.getNbrPointGloire());
-                        joueur.ajouterLune(-carteChoisie.getCout()[0].getQuantite());
+                    else if (carteChoisie.equals("Bouclier")){
+                        ChoixJoueurForge choix = joueur.choisirFaceAForger(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);
+                        joueur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
                     }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
