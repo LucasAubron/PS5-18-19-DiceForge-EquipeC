@@ -26,6 +26,7 @@ abstract class Joueur {
     private De[] des;
     private Face premierDeFaceCourante;
     private Face deuxiemeDeFaceCourante;
+    private Face[] DesFaceCourante;
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
 
@@ -145,7 +146,10 @@ abstract class Joueur {
         for (int i = 0; i != gagnerFace.length; ++i)
             if (gagnerFace[i])
                 gagnerRessourceFace(faces[i]);
+        this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
     }
+
+    Face[] getDesFaceCourante(){return DesFaceCourante;}
 
     /**
      * Méthode à appeler lorsque le joueur est chassé
