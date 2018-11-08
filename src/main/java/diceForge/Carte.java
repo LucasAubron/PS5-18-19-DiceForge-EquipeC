@@ -66,6 +66,8 @@ class Carte {
             return false;
         return (nom.equals(carte.getNom()));
     }
+
+    @Override
     public String toString(){
         return nom;
     }
