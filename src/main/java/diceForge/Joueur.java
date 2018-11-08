@@ -132,8 +132,9 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     public void estChasse(){
-        if(possedeCarte("Ours"))
-            pointDeGloire += 3;
+        for (Carte carte:cartes)
+            if (carte.getNom().equals("Ours"))
+                pointDeGloire += 3;
         lancerLesDes();
     }
 
@@ -142,8 +143,9 @@ public abstract class Joueur {
      * Elle servira uniquement lorsque l'ours sera introduit
      */
     public void chasse() {
-        if(possedeCarte("Ours"))
-            pointDeGloire += 3;
+        for (Carte carte:cartes)
+            if (carte.getNom().equals("Ours"))
+                pointDeGloire += 3;
     }
 
     public String returnStringRessourcesEtDes(int numeroManche){
