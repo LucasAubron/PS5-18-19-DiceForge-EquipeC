@@ -26,7 +26,7 @@ public class ChoixJoueurForge {
 
     int getNumDe() { return numDe; }
 
-    public Bassin getBassin() { return bassin; }
+    Bassin getBassin() { return bassin; }
 
     int getNumFace() {
         return numFace;

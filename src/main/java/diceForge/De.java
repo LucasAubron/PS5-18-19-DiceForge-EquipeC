@@ -5,11 +5,11 @@ import java.util.Random;
 /**
  * La classe représentant un dé (oui De c'est pas très intuitif, si quelqu'un a mieux il le refactor)
  */
-public class De {
+class De {
     private Face[] faces;
     private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé
 
-    public Face[] getFaces() {
+    Face[] getFaces() {
         return faces;
     }
 
@@ -34,7 +34,7 @@ public class De {
         ++nbrFaceForge;
     }
 
-    public int getNbrFaceForge() {
+    int getNbrFaceForge() {
         return nbrFaceForge;
     }
 }

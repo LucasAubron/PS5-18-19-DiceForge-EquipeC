@@ -8,7 +8,7 @@ import java.util.List;
  * Pour tester un comportement d'un joueur, il faut d'abord initialiser ce que va renvoyer le bot,
  * puis appeler la méthode à tester
  */
-public class TestBot extends Joueur {
+class TestBot extends Joueur {
     TestBot(int identifiant) {super (identifiant);}
 
     /**
@@ -16,10 +16,10 @@ public class TestBot extends Joueur {
      */
     private Action actionAChoisir;
     @Override
-    public Action choisirAction(int numManche) {
+    Action choisirAction(int numManche) {
         return actionAChoisir;
     }
-    public void setActionAChoisir(Action actionAChoisir) {
+    void setActionAChoisir(Action actionAChoisir) {
         this.actionAChoisir = actionAChoisir;
     }
 
@@ -28,19 +28,19 @@ public class TestBot extends Joueur {
      */
     private int[] num = new int[4];
     @Override
-    public ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+    ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
         return new ChoixJoueurForge(bassins.get(num[0]), num[1], num[2], num[3]);
     }
-    public void setNum(int[] num) {
+    void setNum(int[] num) {
         this.num = num;
     }
 
     private int numCarte;
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche){
+    Carte choisirCarte(List<Carte> cartes, int numManche){
         return cartes.get(numCarte);
     }
-    public void setNumCarte(int numCarte) {
+    void setNumCarte(int numCarte) {
         this.numCarte = numCarte;
     }
 
@@ -49,63 +49,66 @@ public class TestBot extends Joueur {
      */
     private boolean choix;
     @Override
-    public boolean choisirActionSupplementaire(int numManche){
+    boolean choisirActionSupplementaire(int numManche){
         if (choix) ajouterSoleil(-2);
         return choix;
     }
-    public void setChoixActionSup(boolean choix) {
+    void setChoixActionSup(boolean choix) {
         this.choix = choix;
     }
 
     private int nbrPointMarteau = 0;
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){return nbrOr-nbrPointMarteau;}
+    int choisirRepartitionOrMarteau(int nbrOr){return nbrOr-nbrPointMarteau;}
     void setNbrPointMarteau(int nbrPointMarteau) {
         this.nbrPointMarteau = nbrPointMarteau;
     }
 
     private int numRenfort;
     @Override
-    public List<Renfort> choisirRenforts(List renfortsUtilisables){
+    List<Renfort> choisirRenforts(List renfortsUtilisables){
         List<Renfort> renforts = new ArrayList<>();
         renforts.add((Renfort) renfortsUtilisables.get(numRenfort));
         return renforts;
     }
-    public void setNumRenfort(int numRenfort) {
+    void setNumRenfort(int numRenfort) {
         this.numRenfort = numRenfort;
     }
 
     private int numFace;
     @Override
-    public int choisirRessource(Face faceAChoix){
+    int choisirRessource(Face faceAChoix){
         return numFace;
     }
-    public void setNumFace(int numFace) {
+    void setNumFace(int numFace) {
         this.numFace = numFace;
     }
 
+    @Override
+    int choisirRessourceAPerdre(Face faceAChoix) {return numFace;}
+
     private int numDe;
     @Override
-    public int choisirDeBiche() { return numDe; }
-    public void setNumDe(int numDe) {
+    int choisirDeBiche() { return numDe; }
+    void setNumDe(int numDe) {
         this.numDe = numDe;
     }
 
     private int id;
     @Override
-    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
+    int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
         return id;
     }
-    public void setId(int id) {
+    void setId(int id) {
         this.id = id;
     }
 
     @Override
-    public void forgerFace(Face face){
+    void forgerFace(Face face){
         forgerDe(numDe, face, numFace);
     }
 
-    public int choisirFace(List<Face> faces) {
+    int choisirFace(List<Face> faces) {
         return numFace;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Random;
  * A voir si on met les joueurs ici ou dans le Main
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
-public class Plateau {
+class Plateau {
     private boolean modeVerbeux;
     private PortailsOriginels portail;
     private Temple temple;
@@ -21,23 +21,34 @@ public class Plateau {
         temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         Random random = new Random();
+
         Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, "Ours");
         Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, "Biche");
         Carte sanglier = new Carte(new Ressource[]{new Lune(3)}, 4, "Sanglier");
         Carte satyres = new Satyres(portail.getJoueurs());
+
+        Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
+        Carte bateauCeleste = new Carte(new Ressource[]{new Soleil(2)}, 4, "Bateau celeste");
+        Carte minautore = new Minautore(portail.getJoueurs());
+        Carte bouclier = new Carte(new Ressource[]{new Soleil(3)}, 6, "Bouclier");
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),
         new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, "Ancien"),
                 new Carte(new Ressource[]{new Soleil(1)}, 2, "Herbes folles"), joueurs.length),
         new Ile(random.nextInt(2) == 1 ? ours : biche,
-                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length)};
+                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
+        new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
+                random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
+        new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
+                new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d invisibilite"),
+                joueurs.length)};
     }
 
     /**
      * Si quelqu'un peut le faire plus clairement, qu'il le fasse
      * @return la liste des joueurs présents sur le plateau
      */
-    public List<Joueur> getJoueur() {
+    List<Joueur> getJoueur() {
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
         tempJoueur.addAll(portail.getJoueurs());

@@ -7,7 +7,7 @@ import java.util.List;
  * Les portails originels sont la ou les joueurs commence et la
  * ou ils viennent lorsqu'il sont chassés
  */
-public class PortailsOriginels {
+class PortailsOriginels {
     private List<Joueur> joueurs;
 
     PortailsOriginels(Joueur[] joueurs){
@@ -54,7 +54,7 @@ public class PortailsOriginels {
         joueurs.add(joueur);
     }
 
-    public List<Joueur> getJoueurs() {
+    List<Joueur> getJoueurs() {
         return joueurs;
     }
 }

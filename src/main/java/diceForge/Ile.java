@@ -8,11 +8,11 @@ import java.util.List;
  * C'est la où les joueurs viennent lorsqu'il choisisse une carte qui fait partie de l'ile
  * On utilise un tableau à deux dimensions pour représenter plus intuitivement les paquets de carte.
  */
-public class Ile {
+class Ile {
     private List<List<Carte>> cartes;
     private Joueur joueur = null;
 
-    public Ile(Carte[][] cartes){
+    Ile(Carte[][] cartes){
         if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale
             throw new DiceForgeException("Ile","Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
         for (int i = 0; i != cartes.length; ++i)
@@ -28,34 +28,24 @@ public class Ile {
     /**
      * Constructeur à utiliser dans le cas principal ou il y a 2 paquets de nbrCarteParPaquet chaqu'un
      */
-    public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
+    Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
         if (nbrCarteParPaquet < 2 || nbrCarteParPaquet > 4)
             throw new DiceForgeException("Ile","Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new ArrayList<>();
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i) {
-            if (carte1.getNom().equals("Marteau"))
-                cartes.get(0).add(new Marteau());
-            else if (carte1.getNom().equals("Satyres"))
-                cartes.get(0).add(new Satyres(((Satyres) carte1).getJoueurs()));
-            else
-                cartes.get(0).add(new Carte(carte1.getCout(), carte1.getNbrPointGloire(), carte1.getNom()));
+            cartes.get(0).add(carte1.clone());
         }
         cartes.add(new ArrayList<>());
         for (int i = 0; i != nbrCarteParPaquet; ++i) {
-            if (carte2.getNom().equals("Marteau"))
-                cartes.get(1).add(new Marteau());
-            else if (carte2.getNom().equals("Satyres"))
-                cartes.get(1).add(new Satyres(((Satyres) carte2).getJoueurs()));
-            else
-                cartes.get(1).add(new Carte(carte2.getCout(), carte2.getNbrPointGloire(), carte2.getNom()));
+            cartes.get(1).add(carte2.clone());
         }
     }
 
     /**
      * Sert dans le cas ou le joueur part sur une autre ile
      */
-    public Joueur retirerJoueur(){
+    Joueur retirerJoueur(){
         Joueur joueurExpulse = this.joueur;
         this.joueur=null;
 
@@ -68,7 +58,7 @@ public class Ile {
      * Elle gére aussi la prise de carte par le joueur
      * @return le joueur expulsé s'il existe sinon null
      */
-    public Joueur prendreCarte(Joueur joueur, Carte carte){
+    Joueur prendreCarte(Joueur joueur, Carte carte){
         Joueur x = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
             if (!paquet.isEmpty() && paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
@@ -99,11 +89,11 @@ public class Ile {
         return x;
     }
 
-    public Joueur getJoueur() {return joueur;}
+    Joueur getJoueur() {return joueur;}
 
     /**
      * Ne PAS utiliser pour retirer une carte !!!!
      * @return
      */
-    public List<List<Carte>> getCartes(){return cartes;}
+    List<List<Carte>> getCartes(){return cartes;}
 }

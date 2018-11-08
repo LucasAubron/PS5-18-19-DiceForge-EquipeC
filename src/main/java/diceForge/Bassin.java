@@ -12,8 +12,8 @@ public class Bassin {
      * et qu'il est plus simple de transmettre une liste
      */
     Bassin(int cout, List<Face> faces) {
-        if (cout < 1 || cout > 12)
-            throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+        if (cout < 0 || cout > 12)
+            throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;
         if (faces.size() < 2 || faces.size() > 4)
             throw new DiceForgeException("Bassin","Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.size());
@@ -24,8 +24,8 @@ public class Bassin {
      * Constructeur qui sert lorsque le bassin ne comporte que la même faces
      */
     Bassin(int cout, Face facesUnique, int nbrFace){
-        if (cout < 1 || cout > 12)
-            throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 1, max 12, actuel : "+cout);
+        if (cout < 0 || cout > 12)
+            throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;
         if (nbrFace < 2 || nbrFace > 4)
             throw new DiceForgeException("Bassin","Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);

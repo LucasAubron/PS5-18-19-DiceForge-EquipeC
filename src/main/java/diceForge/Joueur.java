@@ -14,7 +14,7 @@ import java.util.List;
  * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
-public abstract class Joueur {
+abstract class Joueur {
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -29,10 +29,10 @@ public abstract class Joueur {
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
 
-    public enum Action {FORGER, EXPLOIT, PASSER}
-    public enum Renfort{ANCIEN, BICHE}
+    enum Action {FORGER, EXPLOIT, PASSER}
+    enum Renfort{ANCIEN, BICHE, HIBOU}
 
-    public Joueur(int indentifiant){
+    Joueur(int indentifiant){
         if (identifiant < 0 || identifiant > 3)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
@@ -51,9 +51,9 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}})})};
     }
 
-    public int getOr() {return or;}
+    int getOr() {return or;}
 
-    public void ajouterOr (int quantite){
+    void ajouterOr (int quantite){
         int ajoutOr = quantite;
         if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
             ajoutOr = choisirRepartitionOrMarteau(quantite);
@@ -71,47 +71,87 @@ public abstract class Joueur {
             }
         }
         or = (or + ajoutOr > maxOr) ? maxOr : or + ajoutOr;
+        if (or < 0) or = 0;
     }
 
-    public int getSoleil() {return soleil;}
+    void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
-    public void ajouterSoleil(int quantite) {soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;}
+    int getSoleil() {return soleil;}
 
-    public int getLune() {return lune;}
+    void ajouterSoleil(int quantite) {
+        soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
+        if (soleil < 0) soleil = 0;
+    }
 
-    public void ajouterLune(int quantite) {lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;}
+    void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
 
-    public int getPointDeGloire() {return pointDeGloire;}
+    int getLune() {return lune;}
 
-    public int getIdentifiant() {return identifiant;}
+    void ajouterLune(int quantite) {
+        lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;
+        if (lune < 0) lune = 0;
+    }
 
-    public De[] getDes() {return des;}
+    void augmenterMaxLune(int augmentation) {maxLune += augmentation;}
 
-    public De getDe(int num) {return des[num];}
+    void ajouterPointDeGloire(int quantite) {
+        pointDeGloire += quantite;
+        if (pointDeGloire < 0) pointDeGloire = 0;
+    }
 
-    public List<Renfort> getRenforts() {return renforts;}
+    int getPointDeGloire() {return pointDeGloire;}
+
+    int getIdentifiant() {return identifiant;}
+
+    De[] getDes() {return des;}
+
+    De getDe(int num) {return des[num];}
+
+    List<Renfort> getRenforts() {return renforts;}
+
+    void ajouterRenfort(Renfort renfort){
+        renforts.add(renfort);
+    }
 
     /**
      * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
      * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
      */
-    public void lancerLesDes(){
-        for (De de:des){
-            Face face = de.lancerLeDe();
-            if (de == des[0])//Pour l'affichage
-                this.premierDeFaceCourante = face;
-            else
-                this.deuxiemeDeFaceCourante = face;
-            gagnerRessourceFace(face);
+    void lancerLesDes(){
+        Face[] faces = new Face[2];
+        faces[0] = des[0].lancerLeDe();//On stocke les deux lancers
+        faces[1] = des[1].lancerLeDe();
+        premierDeFaceCourante = faces[0];//pour l'affichage, mais ne va pas tarder à disparaitre
+        deuxiemeDeFaceCourante = faces[1];
+
+        Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
+        for (int i = 0; i != faces.length; ++i){//on parcours les faces que l'on a obtenu
+            if (faces[i] instanceof FaceBouclier){//On traite le cas faceBouclier
+                int x = 0, j = i==0?1:0;//j est 1 si i est 0, et 0 sinon
+                if (faces[j].getRessource().length != 1)//Si l'autre de est une face à choix
+                    x = choisirRessource(faces[j]);//le joueur choisis (oui il peut faire 2 choix différents...  :(
+                for (Ressource ressource:faces[j].getRessource()[x]){
+                    if (ressource.getClass().equals(faces[i].getRessource()[0][0].getClass())){
+                        pointDeGloire += 5;
+                        gagnerFace[i] = false;
+                        break;
+                    }
+                }
+            }
         }
+
+        for (int i = 0; i != gagnerFace.length; ++i)
+            if (gagnerFace[i])
+                gagnerRessourceFace(faces[i]);
     }
 
     /**
      * Méthode à appeler lorsque le joueur est chassé
      */
-    public void estChasse(){
-        if(possedeCarte("Ours"))
-            pointDeGloire += 3;
+    void estChasse(){
+        for (Carte carte:cartes)
+            if (carte.getNom().equals("Ours"))
+                pointDeGloire += 3;
         lancerLesDes();
     }
 
@@ -119,12 +159,13 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur en chasse un autre
      * Elle servira uniquement lorsque l'ours sera introduit
      */
-    public void chasse() {
-        if(possedeCarte("Ours"))
-            pointDeGloire += 3;
+    void chasse() {
+        for (Carte carte:cartes)
+            if (carte.getNom().equals("Ours"))
+                pointDeGloire += 3;
     }
 
-    public String returnStringRessourcesEtDes(int numeroManche){
+    String returnStringRessourcesEtDes(int numeroManche){
         String res = "\nJ" + identifiant + "\t||\t";
         res += "1er dé:" +  premierDeFaceCourante.toString() + "\t||\t" + "2ème dé:"+deuxiemeDeFaceCourante.toString();
         res += "\t||\tOr: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: "+lune + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
@@ -137,38 +178,14 @@ public abstract class Joueur {
      * @param carte
      * @return true si la carte à pu être acheté, false sinon
      */
-    public void acheterExploit(Carte carte){
+    void acheterExploit(Carte carte){
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource instanceof Soleil)
                 ajouterSoleil(-ressource.getQuantite());
             if (ressource instanceof Lune)
                 ajouterLune(-ressource.getQuantite());
         }
-        if (carte.getNom().equals("Coffre")){
-            maxOr += 4;
-            maxSoleil += 3;
-            maxLune += 3;
-        }
-        else if (carte.getNom().equals("Herbes folles")){
-            ajouterLune(3);
-            ajouterOr(3);
-        }
-        else if (carte.getNom().equals("Ancien"))
-            renforts.add(Renfort.ANCIEN);
-        else if (carte.getNom().equals("Biche"))
-            renforts.add(Renfort.BICHE);
-        else if (carte.getNom().equals("Satyres")){
-            Satyres satyres = (Satyres) carte;//On en fait de vraie satyres
-            List<Face> faces = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
-            for (Joueur joueur:satyres.getJoueurs())
-                if (joueur.getIdentifiant() != identifiant)
-                    for (De de : joueur.getDes())//Pour tous les de des autres joueurs
-                        faces.add(de.lancerLeDe());//On prend le résultat d'un lancer de dé
-            int x = choisirFace(faces);//Ce joueur choisi une face
-            gagnerRessourceFace(faces.get(x));//il gagne ce qu'il y a sur cette face
-            faces.remove(x);//Puis on l'enlève de la liste
-            gagnerRessourceFace(faces.get(choisirFace(faces)));//Et on demande pour la deuxième face et on lui fait gagné
-        }
+        carte.effetDirect(this);
         cartes.add(carte);
     }
 
@@ -177,7 +194,7 @@ public abstract class Joueur {
      * @param nom le nom de la carte demandé
      * @return true si le joueur possède la carte, false sinon
      */
-    public boolean possedeCarte(String nom){
+    boolean possedeCarte(String nom){
         for (Carte carte:cartes)
             if (carte.getNom().equals(nom))
                 return true;
@@ -187,7 +204,7 @@ public abstract class Joueur {
     /**
      * @return la liste des marteaux dans la liste des cartes. C'est une liste vide s'il n'y en a pas
      */
-    public List<Marteau> getMarteau(){
+    List<Marteau> getMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
             if (cartes.get(i).getNom().equals("Marteau")) {
@@ -197,7 +214,7 @@ public abstract class Joueur {
         return position;
     }
 
-    public void appelerRenforts(List<Renfort> renfortsUtilisables){
+    void appelerRenforts(List<Renfort> renfortsUtilisables){
         for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
@@ -207,6 +224,8 @@ public abstract class Joueur {
                 case BICHE:
                     Face face = des[choisirDeBiche()].lancerLeDe();
                     gagnerRessourceFace(face);
+                case HIBOU:
+                    gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
             }
         }
     }
@@ -214,7 +233,7 @@ public abstract class Joueur {
     /**
      * Permet de forger une face sur un dé du joueur
      */
-    public void forgerDe(int numDe, Face faceAForger, int numFace){
+    void forgerDe(int numDe, Face faceAForger, int numFace){
         if (numDe < 0 || numDe > 1)
             throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
@@ -224,7 +243,7 @@ public abstract class Joueur {
      * Sert à additionner les points donné par les cartes.
      * Est appelé une fois à la fin de la partie
      */
-    public void additionnerPointsCartes() {
+    void additionnerPointsCartes() {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
         }
@@ -234,24 +253,37 @@ public abstract class Joueur {
      * Méthode ajoutant les gains lié à une face
      * @param face
      */
-    public void gagnerRessourceFace(Face face){
-            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
-            if (face.getRessource().length != 1)
-                choix = choisirRessource(face);
-            for (Ressource ressource:face.getRessource()[choix]){//On regarde de quelle ressource il s'agit
-                if (ressource instanceof Or)
-                    ajouterOr(ressource.getQuantite());
-                else if (ressource instanceof Soleil)
-                    ajouterSoleil(ressource.getQuantite());
-                else if (ressource instanceof Lune)
-                    ajouterLune(ressource.getQuantite());
-                else if (ressource instanceof PointDeGloire)
-                    pointDeGloire += ressource.getQuantite();
+    void gagnerRessourceFace(Face face) {
+        int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
+        if (face.getRessource().length != 1)
+            choix = choisirRessource(face);
+        for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
+            if (ressource instanceof Or)
+                ajouterOr(ressource.getQuantite());
+            else if (ressource instanceof Soleil)
+                ajouterSoleil(ressource.getQuantite());
+            else if (ressource instanceof Lune)
+                ajouterLune(ressource.getQuantite());
+            else if (ressource instanceof PointDeGloire)
+                pointDeGloire += ressource.getQuantite();
+        }
+        if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
+            FaceSanglier faceSanglier = (FaceSanglier) face;
+            faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
+        } else if (face instanceof FaceBateauCeleste) {//Si c'est une face de bateau celeste
+            FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) face;//on fait comme dans le coordinateur
+            List<Bassin> bassinsAbordables = new ArrayList<>();
+            for (Bassin bassin : faceBateauCeleste.getTemple().getSanctuaire())
+                if (bassin.getCout() - 2 >= or)
+                    bassinsAbordables.add(bassin);
+            if (!bassinsAbordables.isEmpty()) {
+                ChoixJoueurForge choixJoueurForge = choisirFaceAForger(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
+                if (choixJoueurForge.getBassin() != null) {
+                    forgerDe(choixJoueurForge.getNumDe(), choixJoueurForge.getBassin().retirerFace(choixJoueurForge.getNumFace()), choixJoueurForge.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+                    ajouterOr(-choixJoueurForge.getBassin().getCout()+2);//On oublie pas de faire payer le joueur
+                }
             }
-            if (face instanceof FaceSanglier){//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
-                FaceSanglier faceSanglier = (FaceSanglier) face;
-                faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
-            }
+        }
     }
 
     /**
@@ -259,71 +291,76 @@ public abstract class Joueur {
      * @param numManche
      * @return L'action que le bot à choisi de prendre
      */
-    public abstract Action choisirAction(int numManche);
+    abstract Action choisirAction(int numManche);
 
     /**
      * Permet de forger une face sur le dé à partir de la liste des bassins abordables.
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins abordables
      */
-    public abstract ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche);
+    abstract ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable
      * @return La carte choisie
      */
-    public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
+    abstract Carte choisirCarte(List<Carte> cartes, int numManche);
 
     /**
      * Permet de choisir d'effectuer une action supplémentaire
      * @return true si le bot veut une action supplémentaire, false sinon
      */
-    public abstract boolean choisirActionSupplementaire(int numManche);
+    abstract boolean choisirActionSupplementaire(int numManche);
 
     /**
      * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectué
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
-    public abstract int choisirRepartitionOrMarteau(int nbrOr);
+    abstract int choisirRepartitionOrMarteau(int nbrOr);
 
     /**
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
+    abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible
      * @param faceAChoix la face en question
      * @return le numéro de la face choisi
      */
-    public abstract int choisirRessource(Face faceAChoix);
+    abstract int choisirRessource(Face faceAChoix);
+
+    /**
+     * La meme que la méthode au dessus, mais pour perdre la ressource
+     */
+    abstract int choisirRessourceAPerdre(Face faceAChoix);
 
     /**
      * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé
      * @return 0 ou 1
      */
-    public abstract int choisirDeBiche();
+    abstract int choisirDeBiche();
 
     /**
      * Le joueur choisis à qui il veut faire forger le sanglier
      * @param joueurs la liste des joueurs présent dans le jeu
      * @return l'id du joueur que le joueur à choisi
      */
-    public abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
+    abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
 
     /**
      * Demande au joueur de forger une face
      * Utile lorsque les exploits demande de faire forger une face
      * @param face
      */
-    public abstract void forgerFace(Face face);
+    abstract void forgerFace(Face face);
 
     /**
      * Demande au joueur de choisir une face parmit plusieurs
      * @param faces les faces disponibles
      * @return la face qu'il choisi
      */
-    public abstract int choisirFace(List<Face> faces);
+    abstract int choisirFace(List<Face> faces);
 }

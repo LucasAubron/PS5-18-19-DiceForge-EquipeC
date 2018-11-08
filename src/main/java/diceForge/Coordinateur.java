@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,11 +11,11 @@ import java.util.List;
  * il envoit toutes les possibilités aux joueurs,il s'assure lui même de les trier pour les joueurs, par exemple si
  * le joueur veut forger mais n'a que 5 or, le coordinateur ne va lui proposer que les bassins dont le coût est <=5.
  */
-public class Coordinateur {
+class Coordinateur {
     private Plateau plateau;
     private String affichage = "";
 
-    public Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
+    Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
@@ -229,6 +230,12 @@ public class Coordinateur {
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     if (carteChoisie.equals("Sanglier"))
                         plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
+                    else if (carteChoisie.equals("Bateau celeste"))
+                        joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
+                    else if (carteChoisie.equals("Bouclier")){
+                        ChoixJoueurForge choix = joueur.choisirFaceAForger(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);
+                        joueur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
+                    }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
@@ -293,7 +300,7 @@ public class Coordinateur {
      * Cette fonction additionne le nombre de point de gloire des cartes des joueurs, il faut donc ne l'appeler qu'une fois
      * @return une List, le premier élement est le nombre de point de gloire maximum, l'/les autre(s) est/sont le(s) numéro(s) du/des joueur(s) gagnant(s)
      */
-    public List<Integer> infoJoueurGagnant(){
+    List<Integer> infoJoueurGagnant(){
         List<Integer> infoJoueurGagnant = new ArrayList<>();
         infoJoueurGagnant.add(0);
         infoJoueurGagnant.add(-1);
