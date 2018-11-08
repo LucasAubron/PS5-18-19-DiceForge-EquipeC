@@ -1,5 +1,8 @@
 package diceForge;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * La classe carte peut être utilisé pour les cartes ne donnant que des points de gloire
  * Sinon il faut créer / utiliser une classe dérivée de celle ci
@@ -28,6 +31,24 @@ public class Carte {
      */
     public Carte clone(){
         return new Carte(cout, nbrPointGloire, nom);
+    }
+
+    public void effetDirect(Joueur acheteur){
+        if (nom.equals("Coffre")){
+            acheteur.augmenterMaxOr(4);
+            acheteur.augmenterMaxSoleil(3);
+            acheteur.augmenterMaxLune(3);
+        }
+        else if (nom.equals("Herbes folles")){
+            acheteur.ajouterLune(3);
+            acheteur.ajouterOr(3);
+        }
+        else if (nom.equals("Ancien"))
+            acheteur.ajouterRenfort(Joueur.Renfort.ANCIEN);
+        else if (nom.equals("Biche"))
+            acheteur.ajouterRenfort(Joueur.Renfort.BICHE);
+        else if (nom.equals("Hibou"))
+            acheteur.ajouterRenfort(Joueur.Renfort.HIBOU);
     }
 
     Ressource[] getCout() {

@@ -74,6 +74,8 @@ public abstract class Joueur {
         if (or < 0) or = 0;
     }
 
+    public void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
+
     public int getSoleil() {return soleil;}
 
     public void ajouterSoleil(int quantite) {
@@ -81,12 +83,16 @@ public abstract class Joueur {
         if (soleil < 0) soleil = 0;
     }
 
+    public void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
+
     public int getLune() {return lune;}
 
     public void ajouterLune(int quantite) {
         lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;
         if (lune < 0) lune = 0;
     }
+
+    public void augmenterMaxLune(int augmentation) {maxLune += augmentation;}
 
     public void ajouterPointDeGloire(int quantite) {
         pointDeGloire += quantite;
@@ -102,6 +108,10 @@ public abstract class Joueur {
     public De getDe(int num) {return des[num];}
 
     public List<Renfort> getRenforts() {return renforts;}
+
+    public void ajouterRenfort(Renfort renfort){
+        renforts.add(renfort);
+    }
 
     /**
      * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
@@ -156,55 +166,7 @@ public abstract class Joueur {
             if (ressource instanceof Lune)
                 ajouterLune(-ressource.getQuantite());
         }
-        if (carte.getNom().equals("Coffre")){
-            maxOr += 4;
-            maxSoleil += 3;
-            maxLune += 3;
-        }
-        else if (carte.getNom().equals("Herbes folles")){
-            ajouterLune(3);
-            ajouterOr(3);
-        }
-        else if (carte.getNom().equals("Ancien"))
-            renforts.add(Renfort.ANCIEN);
-        else if (carte.getNom().equals("Biche"))
-            renforts.add(Renfort.BICHE);
-        else if (carte.getNom().equals("Satyres")){
-            Satyres satyres = (Satyres) carte;//On en fait de vraie satyres
-            List<Face> faces = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
-            for (Joueur joueur:satyres.getJoueurs())
-                if (joueur.getIdentifiant() != identifiant)
-                    for (De de : joueur.getDes())//Pour tous les de des autres joueurs
-                        faces.add(de.lancerLeDe());//On prend le résultat d'un lancer de dé
-            int x = choisirFace(faces);//Ce joueur choisi une face
-            gagnerRessourceFace(faces.get(x));//il gagne ce qu'il y a sur cette face
-            faces.remove(x);//Puis on l'enlève de la liste
-            gagnerRessourceFace(faces.get(choisirFace(faces)));//Et on demande pour la deuxième face et on lui fait gagné
-        }
-        else if (carte.getNom().equals("Hibou"))
-            renforts.add(Renfort.HIBOU);
-        else if (carte.getNom().equals("Minautore")){
-            Minautore minautore = (Minautore) carte;
-            for (Joueur joueur:minautore.getJoueurs()){//Pour tous les joueurs
-                if (joueur.getIdentifiant() != identifiant){//Si ce n'est pas le joueur actuel
-                    for (De de:joueur.getDes()){//Pour tous les dés
-                        Face face = de.lancerLeDe();//On le lance
-                        int x = 0;
-                        if (face.getRessource().length != 1) x = joueur.choisirRessourceAPerdre(face);//On gere le cas du choix
-                        for (Ressource ressource:face.getRessource()[x]){//on parcours les ressources de la face
-                            if (ressource instanceof Or)//On retire les ressources
-                                joueur.ajouterOr(-ressource.getQuantite());
-                            else if (ressource instanceof Soleil)
-                                joueur.ajouterSoleil(-ressource.getQuantite());
-                            else if (ressource instanceof Lune)
-                                joueur.ajouterLune(-ressource.getQuantite());
-                            else if (ressource instanceof PointDeGloire)
-                                joueur.ajouterPointDeGloire(-ressource.getQuantite());
-                        }
-                    }
-                }
-            }
-        }
+        carte.effetDirect(this);
         cartes.add(carte);
     }
 
