@@ -7,6 +7,11 @@ class FaceSanglier extends Face {
         this.joueurMaitre = joueurMaitre;
     }
 
+    @Override
+    public String toString(){
+        return "Face sanglier";
+    }
+
     Joueur getJoueurMaitre() {
         return joueurMaitre;
     }

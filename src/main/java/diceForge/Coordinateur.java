@@ -20,10 +20,13 @@ class Coordinateur {
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            System.out.println(plateau);
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
             List<Integer> infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+            for (Joueur joueur:plateau.getJoueur())
+                affichage += joueur;
             if (infoJoueurGagnant.size() == 2)//Un gagnant
                 affichage += "\n\n\n\n\t\t--------------------------------------------------\n\t\t" + "| Le joueur n°" + infoJoueurGagnant.get(1) + " gagne avec " + infoJoueurGagnant.get(0) + " points de gloire ! |\n" + "\t\t--------------------------------------------------\n";
             else {//Egalité
@@ -96,8 +99,8 @@ class Coordinateur {
             x.lancerLesDes();
         }
         if (plateau.estVerbeux()) {
-            affichage += ("\n\n\n\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
-            affichage += ("\n" + "Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
+            affichage += ("\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
+            affichage += ("Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau -> affichageMarteau(marteau));
         }

@@ -10,4 +10,9 @@ class FaceBateauCeleste extends Face {
     Temple getTemple() {
         return temple;
     }
+
+    @Override
+    public String toString(){
+        return "Face bateau celeste";
+    }
 }

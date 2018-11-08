@@ -4,4 +4,9 @@ public class Soleil extends Ressource {
     Soleil(int quantite) {
         super(quantite);
     }
+
+    @Override
+    public String toString(){
+        return "Soleil";
+    }
 }

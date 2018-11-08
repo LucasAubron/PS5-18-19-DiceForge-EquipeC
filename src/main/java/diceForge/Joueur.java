@@ -29,6 +29,8 @@ abstract class Joueur {
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
 
+    protected String affichage = "";
+
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
 
@@ -179,6 +181,7 @@ abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     void acheterExploit(Carte carte){
+        affichage += "J"+identifiant+" achete l'exploit: "+carte+"\n";
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource instanceof Soleil)
                 ajouterSoleil(-ressource.getQuantite());
@@ -215,6 +218,8 @@ abstract class Joueur {
     }
 
     void appelerRenforts(List<Renfort> renfortsUtilisables){
+        if (!renfortsUtilisables.isEmpty())
+            affichage += "J"+identifiant+" appelle: ";
         for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
@@ -227,7 +232,9 @@ abstract class Joueur {
                 case HIBOU:
                     gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
             }
+            affichage += renfort+"; ";
         }
+        affichage += "\n";
     }
 
     /**
@@ -237,6 +244,7 @@ abstract class Joueur {
         if (numDe < 0 || numDe > 1)
             throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
+        affichage += "J"+identifiant+" forge "+faceAForger+"\n";
     }
 
     /**
@@ -244,9 +252,12 @@ abstract class Joueur {
      * Est appelé une fois à la fin de la partie
      */
     void additionnerPointsCartes() {
+        affichage += "Décompte des points de J"+identifiant+": ";
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
+            affichage += carte.getNom()+": "+carte.getNbrPointGloire()+"; ";
         }
+        affichage += "Total : +"+pointDeGloire+"\n";
     }
 
     /**
@@ -257,15 +268,24 @@ abstract class Joueur {
         int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
         if (face.getRessource().length != 1)
             choix = choisirRessource(face);
+        affichage += "J"+identifiant+" obtient: ";
         for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
-            if (ressource instanceof Or)
+            if (ressource instanceof Or) {
                 ajouterOr(ressource.getQuantite());
-            else if (ressource instanceof Soleil)
+                affichage += ressource.getQuantite() + "Or; ";
+            }
+            else if (ressource instanceof Soleil) {
                 ajouterSoleil(ressource.getQuantite());
-            else if (ressource instanceof Lune)
+                affichage += ressource.getQuantite() + "Sol, ";
+            }
+            else if (ressource instanceof Lune) {
                 ajouterLune(ressource.getQuantite());
-            else if (ressource instanceof PointDeGloire)
+                affichage += ressource.getQuantite() + "Lune; ";
+            }
+            else if (ressource instanceof PointDeGloire) {
                 pointDeGloire += ressource.getQuantite();
+                affichage += ressource.getQuantite() + "Pdg; ";
+            }
         }
         if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
             FaceSanglier faceSanglier = (FaceSanglier) face;
@@ -283,7 +303,16 @@ abstract class Joueur {
                     ajouterOr(-choixJoueurForge.getBassin().getCout()+2);//On oublie pas de faire payer le joueur
                 }
             }
+            affichage += "Face Celeste; ";
         }
+        affichage += " || ";
+    }
+
+    @Override
+    public String toString(){
+        String s = affichage;
+        affichage = "";
+        return s;
     }
 
     /**
