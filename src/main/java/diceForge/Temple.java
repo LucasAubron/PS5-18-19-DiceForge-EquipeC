@@ -9,9 +9,9 @@ import java.util.Random;
  * le sanctuaire comportant les bassins accessibles par la forge
  * et les jardins comportant les bassins accessibles par les cartes.
  */
-public class Temple {
+class Temple {
     private Bassin[] sanctuaire = new Bassin[10];//10 bassins dans la version finale du jeu
-    public Temple(int nbrJoueur){
+    Temple(int nbrJoueur){
         int nbrFaceParBassin = (nbrJoueur == 2 ? 2 : 4);//S'il n'y a que 2 joueurs, il y a 2 faces par bassin, sinon 4
         Random random = new Random();
         Face or = new Face(new Ressource[][]{{new Or(2)}});//On initialise la face or

@@ -9,13 +9,13 @@ package diceForge;
  * Le premier choix est dans ressource[0], le deuxième dans ressource[1]...
  * N'hésitez pas à refaire ce pavé si vous avez compris et pouvez l'expliquer plus clairement.
  */
-public class Face {
+class Face {
     private Ressource[][] ressource;
-    public Face(Ressource[][] ressource) {
+    Face(Ressource[][] ressource) {
         this.ressource = ressource;
     }
 
-    public Ressource[][] getRessource() {
+    Ressource[][] getRessource() {
         return ressource;
     }
 

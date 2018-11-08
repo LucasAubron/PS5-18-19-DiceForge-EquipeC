@@ -9,7 +9,7 @@ import java.util.Random;
  * A voir si on met les joueurs ici ou dans le Main
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
-public class Plateau {
+class Plateau {
     private boolean modeVerbeux;
     private PortailsOriginels portail;
     private Temple temple;
@@ -44,7 +44,7 @@ public class Plateau {
      * Si quelqu'un peut le faire plus clairement, qu'il le fasse
      * @return la liste des joueurs présents sur le plateau
      */
-    public List<Joueur> getJoueur() {
+    List<Joueur> getJoueur() {
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
         tempJoueur.addAll(portail.getJoueurs());

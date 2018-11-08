@@ -3,9 +3,9 @@ package diceForge;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Minautore extends Carte {
+class Minautore extends Carte {
     private List<Joueur> joueurs = new ArrayList<>();
-    public Minautore(List<Joueur> joueurs){
+    Minautore(List<Joueur> joueurs){
         super(new Ressource[]{new Soleil(3)}, 8, "Minautore");
         this.joueurs.addAll(joueurs);
     }
@@ -16,7 +16,7 @@ public class Minautore extends Carte {
     }
 
     @Override
-    public void effetDirect(Joueur acheteur){
+    void effetDirect(Joueur acheteur){
             for (Joueur joueur:joueurs){//Pour tous les joueurs
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant()){//Si ce n'est pas le joueur actuel
                     for (De de:joueur.getDes()){//Pour tous les dés
@@ -38,7 +38,7 @@ public class Minautore extends Carte {
             }
     }
 
-    public List<Joueur> getJoueurs() {
+    List<Joueur> getJoueurs() {
         return joueurs;
     }
 }
