@@ -317,7 +317,7 @@ abstract class Joueur {
                 if (bassin.getCout() - 2 >= or)
                     bassinsAbordables.add(bassin);
             if (!bassinsAbordables.isEmpty()) {
-                ChoixJoueurForge choixJoueurForge = choisirFaceAForger(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
+                ChoixJoueurForge choixJoueurForge = choisirFaceAForgerEtARemplacer(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
                 if (choixJoueurForge.getBassin() != null) {
                     forgerDe(choixJoueurForge.getNumDe(), choixJoueurForge.getBassin().retirerFace(choixJoueurForge.getNumFace()), choixJoueurForge.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
                     ajouterOr(-choixJoueurForge.getBassin().getCout()+2);//On oublie pas de faire payer le joueur
