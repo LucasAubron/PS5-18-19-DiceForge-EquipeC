@@ -5,7 +5,7 @@ package diceForge;
  * Sinon il faut créer / utiliser une classe dérivée de celle ci
  * Nom des cartes:
  * Coffre ; Herbes folles ; Ancien ; Marteau ; Ours ; Sanglier ; Biche ; Satyres
- * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerberes ; Passeur ; Casque d invisibilite
+ * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerberes ; Passeur ; Casque d'invisibilite
  * Gorgone ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope; Miroir Abyssal
  */
 class Carte {
