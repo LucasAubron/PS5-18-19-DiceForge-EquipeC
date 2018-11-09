@@ -87,7 +87,7 @@ class RandomBot extends Joueur{
     }
 
     @Override
-    int choisirFace(List<Face> faces){
+    int choisirFacePourGagnerRessource(List<Face> faces){
         return random.nextInt(faces.size());
     }
 

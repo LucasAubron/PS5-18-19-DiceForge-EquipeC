@@ -119,7 +119,7 @@ class EasyBot extends Joueur{
     }
 
     @Override
-    int choisirFace(List<Face> faces){
+    int choisirFacePourGagnerRessource(List<Face> faces){
         Random random = new Random();
         return random.nextInt(faces.size());
     }

@@ -111,7 +111,7 @@ class TestBot extends Joueur {
     }
 
     @Override
-    int choisirFace(List<Face> faces) {
+    int choisirFacePourGagnerRessource(List<Face> faces) {
         return numFace;
     }
 

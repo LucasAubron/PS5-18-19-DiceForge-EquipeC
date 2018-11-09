@@ -417,7 +417,7 @@ abstract class Joueur {
      * @param faces les faces disponibles
      * @return la face qu'il choisi
      */
-    abstract int choisirFace(List<Face> faces);
+    abstract int choisirFacePourGagnerRessource(List<Face> faces);
 
     /**
      * @param tabFaces
