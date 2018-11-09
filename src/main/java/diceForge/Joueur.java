@@ -179,13 +179,6 @@ abstract class Joueur {
                 pointDeGloire += 3;
     }
 
-    String returnStringRessourcesEtDes(int numeroManche){
-        String res = "\nJ" + identifiant + "\t||\t";
-        res += "1er dé:" +  premierDeFaceCourante.toString() + "\t||\t" + "2ème dé:"+deuxiemeDeFaceCourante.toString();
-        res += "\t||\tOr: " + or + "\t||\t" + "Soleil: " + soleil + "\t||\t" + "Lune: "+lune + "\t||\t" + "PointDeGloire: " + pointDeGloire + "\n";
-        return res;
-    }
-
     /**
      * La méthode ne gére que la partie dépense et ingestion de la carte,
      * elle ne regarde pas si il reste de cette carte.
@@ -250,7 +243,10 @@ abstract class Joueur {
     }
 
     /**
-     * Permet de forger une face sur un dé du joueur
+     * Permet de forger une face sur un dé du joueur, prends en argument:
+     * (numéro du dé sur lequel on forge,
+     * Face a forger,
+     * numéro de la face à remplacer)
      */
     void forgerDe(int numDe, Face faceAForger, int numFace){
         if (numDe < 0 || numDe > 1)
@@ -424,10 +420,10 @@ abstract class Joueur {
     abstract int choisirFace(List<Face> faces);
 
     /**
-     *
      * @param tabFaces
      * @return
      */
     abstract Face choisirFaceMiroir(Face[] tabFaces);
-    abstract int[] choisirFaceARemplacePourMiroir();
+
+    abstract int[] choisirFaceARemplacerPourMiroir();
 }

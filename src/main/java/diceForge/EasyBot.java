@@ -127,7 +127,7 @@ class EasyBot extends Joueur{
 
 
     @Override
-    int[] choisirFaceARemplacePourMiroir(){
+    int[] choisirFaceARemplacerPourMiroir(){
         int[] res = getPosFace1Or();
         Random random = new Random();
         if (res[0] != -1)
@@ -135,13 +135,6 @@ class EasyBot extends Joueur{
         return new int[]{random.nextInt(2), random.nextInt(6)};
     }
 
-
-    //2 Sol
-    //1 Sol
-    //2 Lune
-    //1 Lune
-    //2 Gloire
-    //1 Gloire
     @Override
     Face choisirFaceMiroir(Face[] tabFaces){
         int posFaceSoleil = 0, posRessourceSoleil;
