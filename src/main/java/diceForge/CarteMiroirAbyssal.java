@@ -8,7 +8,7 @@ public class CarteMiroirAbyssal extends Carte {
     CarteMiroirAbyssal(List<Joueur> joueurs){
         super(new Ressource[]{new Soleil(5)}, 10, "Miroir Abyssal");
         if (joueurs.size() < 2 || joueurs.size() > 4)
-            throw new DiceForgeException("Miroir Abyssal","Le nombre de joueurs est invalide. Min : 2, max : 4, actuel : "+joueurs.size());
+            throw new DiceForgeException("Miroir Abyssal", "Le nombre de joueurs est invalide. Min : 2, max : 4, actuel : " + joueurs.size());
         this.joueurs.addAll(joueurs);
     }
 

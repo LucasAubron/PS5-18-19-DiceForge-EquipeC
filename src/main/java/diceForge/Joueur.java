@@ -32,6 +32,8 @@ abstract class Joueur {
 
     protected String affichage = "";
 
+    public abstract int[] choisirFaceARemplacePourMiroir();
+
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
 

@@ -19,6 +19,8 @@ class Coordinateur {
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
+            for (int i = 0; i < joueurs.length; i++)
+                System.out.println(joueurs[i]);
             plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
             System.out.println(plateau);
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
@@ -242,8 +244,6 @@ class Coordinateur {
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     if (carteChoisie.equals("Sanglier"))
                         plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
-                    else if (carteChoisie.equals("Miroir Abyssal"))
-                        carteChoisie.effetDirect(joueur);
                     else if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
                     else if (carteChoisie.equals("Bouclier")){

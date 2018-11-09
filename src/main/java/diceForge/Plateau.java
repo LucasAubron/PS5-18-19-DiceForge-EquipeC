@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -45,7 +46,7 @@ class Plateau {
                 new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d'invisibilite"),
                 joueurs.length),
         new Ile(new Carte(new Ressource[]{new Soleil(4)}, 14, "Méduse"),
-                new Carte(new Ressource[]{new Soleil(5)}, 10,  "Miroir Abyssal"),
+                new CarteMiroirAbyssal(portail.getJoueurs()),
                 joueurs.length)};
 
 

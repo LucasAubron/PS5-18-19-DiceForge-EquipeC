@@ -2,7 +2,7 @@ package diceForge;
 public class Main {
     public static void main(String[] args) {
         try {//Le coordinateur, qui comprend toute la partie temporelle du jeu
-            Coordinateur coordinateur = new Coordinateur(true, new Joueur[]{new EasyBot(0), new RandomBot(0)});
+            Coordinateur coordinateur = new Coordinateur(true, new Joueur[]{new EasyBot(0), new RandomBot(1)});
             System.out.println(coordinateur);
         }
         catch (DiceForgeException e){

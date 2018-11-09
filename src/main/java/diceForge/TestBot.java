@@ -11,6 +11,7 @@ import java.util.Random;
  */
 class TestBot extends Joueur {
     private Random random = new Random();
+
     TestBot(int identifiant) {super (identifiant);}
 
     /**
@@ -29,6 +30,7 @@ class TestBot extends Joueur {
      * num[0] = numBassin, num[1] = numFace, num[2] = numDe, num[3] = posFace
      */
     private int[] num = new int[4];
+
     @Override
     ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         return new ChoixJoueurForge(bassins.get(num[0]), num[1], num[2], num[3]);
