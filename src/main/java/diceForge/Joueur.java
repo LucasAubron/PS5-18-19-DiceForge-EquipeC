@@ -357,7 +357,7 @@ abstract class Joueur {
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins abordables
      */
-    abstract ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche);
+    abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable

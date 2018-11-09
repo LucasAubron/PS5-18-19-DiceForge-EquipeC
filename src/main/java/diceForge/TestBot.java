@@ -30,7 +30,7 @@ class TestBot extends Joueur {
      */
     private int[] num = new int[4];
     @Override
-    ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+    ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         return new ChoixJoueurForge(bassins.get(num[0]), num[1], num[2], num[3]);
     }
     void setNum(int[] num) {

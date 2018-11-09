@@ -16,7 +16,7 @@ class EasyBot extends Joueur{
     }
 
     @Override
-    ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+    ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
         Bassin bassinAChoisir = null;

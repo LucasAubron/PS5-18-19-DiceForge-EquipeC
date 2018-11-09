@@ -196,10 +196,10 @@ class Coordinateur {
         List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
-        ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForger(bassinAbordable, numeroManche);//Le joueur choisi
+        ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
-            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur (n'est-ce pas Gabriel ..)
+            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
         }
         bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé, null si n'il y pas eu de craft (signifiant pour le joueur la volonté de s'arrêter)
         for (Joueur joueur1:plateau.getJoueur())
@@ -247,7 +247,7 @@ class Coordinateur {
                     else if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
                     else if (carteChoisie.equals("Bouclier")){
-                        ChoixJoueurForge choix = joueur.choisirFaceAForger(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);
+                        ChoixJoueurForge choix = joueur.choisirFaceAForgerEtARemplacer(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);
                         joueur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
                     }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un

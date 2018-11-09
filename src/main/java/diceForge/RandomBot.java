@@ -26,7 +26,7 @@ class RandomBot extends Joueur{
     }
 
     @Override
-    ChoixJoueurForge choisirFaceAForger(List<Bassin> bassins, int numManche){
+    ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         int numBassin = random.nextInt(bassins.size()+1);//On génére tout les nombres random dont on a besoin, +1 correspond au cas où il décide de s'arrêter de forger
         if (numBassin == bassins.size())
             return new ChoixJoueurForge(null, 0, 0, 0);
