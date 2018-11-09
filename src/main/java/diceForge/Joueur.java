@@ -126,7 +126,14 @@ abstract class Joueur {
         faces[1] = des[1].lancerLeDe();
         premierDeFaceCourante = faces[0];//pour l'affichage, mais ne va pas tarder à disparaitre
         deuxiemeDeFaceCourante = faces[1];
+        this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
+        affichage += "\n";
+    }
 
+    void gagnerRessource(){
+        Face[] faces = new Face[2];
+        faces[0] = premierDeFaceCourante;
+        faces[1] = deuxiemeDeFaceCourante;
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
         for (int i = 0; i != faces.length; ++i){//on parcours les faces que l'on a obtenu
             if (faces[i] instanceof FaceBouclier){//On traite le cas faceBouclier
@@ -146,10 +153,6 @@ abstract class Joueur {
         for (int i = 0; i != gagnerFace.length; ++i)
             if (gagnerFace[i])
                 gagnerRessourceFace(faces[i]);
-        this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
-
-        affichage += "\n";
-
     }
 
     Face[] getDesFaceCourante(){return DesFaceCourante;}
@@ -322,6 +325,17 @@ abstract class Joueur {
         }
     }
 
+    int[] getPosFace1Or(){
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
     @Override
     public String toString(){
         String s = affichage;
@@ -407,9 +421,6 @@ abstract class Joueur {
      */
     abstract int choisirFace(List<Face> faces);
 
-    abstract int getChoisirFace();
-
-    abstract int getChoisirDe();
-
     abstract int choisirFaceMiroir(Face[] tab);
+    abstract int[] choisirFaceARemplacePourMiroir();
 }
