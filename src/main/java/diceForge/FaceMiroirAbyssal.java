@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FaceMiroirAbyssal extends Face {
-    private Joueur joueurMaitre;
     private List<Joueur> listeJoueurs;
 
     FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
         super(new Ressource[][]{{new Lune(1)}});
-        this.joueurMaitre = joueurMaitre;
+        listeJoueurs.removeIf(x -> x.getIdentifiant() == joueurMaitre.getIdentifiant());
         this.listeJoueurs = listeJoueurs;
     }
 
@@ -18,31 +17,17 @@ public class FaceMiroirAbyssal extends Face {
      *
      * @return la liste des faces des joueurs adverses
      */
-    Face[] obtenirFacesAdervsaires() {
-        System.out.println("test1");
-        Face tabFace[] = new Face[(listeJoueurs.size()-1)*2];
-        System.out.println("test2");
-        int i = 0;
-        for (Joueur j : this.listeJoueurs) {
-            System.out.println("test3");
-            if (j.getIdentifiant() != joueurMaitre.getIdentifiant()) {
-                System.out.println("test4");
-                for (int k = 0; k < 2; k++) {
-                    System.out.println(j.getDesFaceCourante()[k]);
-                    tabFace[i] = j.getDesFaceCourante()[k];
-                    i++;
-                }
-            }
-        }
-        return tabFace;
+    List<Face> obtenirFacesAdversaires() {
+        List<Face> faces = new ArrayList<>();
+        for (Joueur joueur:listeJoueurs)
+            for(Face face:joueur.getDesFaceCourante())
+                if(!(face instanceof FaceMiroirAbyssal))
+                    faces.add(face);
+        return faces;
     }
 
     @Override
     public String toString(){
         return "Miroir Abyssal";
-    }
-
-    Joueur getJoueurMaitre() {
-        return joueurMaitre;
     }
 }

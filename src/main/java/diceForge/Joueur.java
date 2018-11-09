@@ -24,18 +24,19 @@ abstract class Joueur {
     private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
-    private Face premierDeFaceCourante;
-    private Face deuxiemeDeFaceCourante;
-    private Face[] DesFaceCourante;
+    private Face[] desFaceCourante;
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
+    private boolean verbeux;
 
     protected String affichage = "";
 
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
 
-    Joueur(int indentifiant){
+    Joueur(){}
+
+    Joueur(int indentifiant, boolean verbeux){
         if (identifiant < 0 || identifiant > 3)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
         this.identifiant = indentifiant;
@@ -52,6 +53,7 @@ abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}})})};
+        this.verbeux = verbeux;
     }
 
     int getOr() {return or;}
@@ -121,27 +123,19 @@ abstract class Joueur {
      * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
      */
     void lancerLesDes(){
-        Face[] faces = new Face[2];
-        faces[0] = des[0].lancerLeDe();//On stocke les deux lancers
-        faces[1] = des[1].lancerLeDe();
-        premierDeFaceCourante = faces[0];//pour l'affichage, mais ne va pas tarder à disparaitre
-        deuxiemeDeFaceCourante = faces[1];
-        this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
-        affichage += "\n";
+        desFaceCourante = new Face[]{des[0].lancerLeDe(), des[1].lancerLeDe()};
+        if (verbeux) affichage += "\n";
     }
 
     void gagnerRessource(){
-        Face[] faces = new Face[2];
-        faces[0] = premierDeFaceCourante;
-        faces[1] = deuxiemeDeFaceCourante;
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
-        for (int i = 0; i != faces.length; ++i){//on parcours les faces que l'on a obtenu
-            if (faces[i] instanceof FaceBouclier){//On traite le cas faceBouclier
+        for (int i = 0; i != desFaceCourante.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
+            if (desFaceCourante[i] instanceof FaceBouclier){//On traite le cas faceBouclier
                 int x = 0, j = i==0?1:0;//j est 1 si i est 0, et 0 sinon
-                if (faces[j].getRessource().length != 1)//Si l'autre de est une face à choix
-                    x = choisirRessource(faces[j]);//le joueur choisis (oui il peut faire 2 choix différents...  :(
-                for (Ressource ressource:faces[j].getRessource()[x]){
-                    if (ressource.getClass().equals(faces[i].getRessource()[0][0].getClass())){
+                if (desFaceCourante[j].getRessource().length != 1)//Si l'autre de est une face à choix
+                    x = choisirRessource(desFaceCourante[j]);//le joueur choisis (oui il peut faire 2 choix différents...  :(
+                for (Ressource ressource:desFaceCourante[j].getRessource()[x]){
+                    if (ressource.getClass().equals(desFaceCourante[i].getRessource()[0][0].getClass())){
                         pointDeGloire += 5;
                         gagnerFace[i] = false;
                         break;
@@ -152,10 +146,10 @@ abstract class Joueur {
 
         for (int i = 0; i != gagnerFace.length; ++i)
             if (gagnerFace[i])
-                gagnerRessourceFace(faces[i]);
+                gagnerRessourceFace(desFaceCourante[i]);
     }
 
-    Face[] getDesFaceCourante(){return DesFaceCourante;}
+    Face[] getDesFaceCourante(){return desFaceCourante;}
 
     /**
      * Méthode à appeler lorsque le joueur est chassé
@@ -166,7 +160,7 @@ abstract class Joueur {
                 pointDeGloire += 3;
         lancerLesDes();
         gagnerRessource();
-        affichage += "J"+identifiant+" est chassé\n";
+        if (verbeux) affichage += "J"+identifiant+" est chassé\n";
     }
 
     /**
@@ -186,7 +180,7 @@ abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     void acheterExploit(Carte carte){
-        affichage += "J"+identifiant+" achete l'exploit: "+carte+"\n";
+        if (verbeux) affichage += "J"+identifiant+" achete l'exploit: "+carte+"\n";
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource instanceof Soleil)
                 ajouterSoleil(-ressource.getQuantite());
@@ -223,10 +217,10 @@ abstract class Joueur {
     }
 
     void appelerRenforts(List<Renfort> renfortsUtilisables){
-        if (!renfortsUtilisables.isEmpty())
+        if (!renfortsUtilisables.isEmpty() && verbeux)
             affichage += "J"+identifiant+" appelle: ";
         for (Renfort renfort:renfortsUtilisables){
-            affichage += renfort.toString()+"; ";
+            if (verbeux) affichage += renfort.toString()+"; ";
             switch (renfort){
                 case ANCIEN:
                     or -= 3;
@@ -239,7 +233,7 @@ abstract class Joueur {
                     gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
             }
         }
-        affichage += "\n";
+        if (verbeux) affichage += "\n";
     }
 
     /**
@@ -252,7 +246,7 @@ abstract class Joueur {
         if (numDe < 0 || numDe > 1)
             throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
-        affichage += "J"+identifiant+" forge "+faceAForger+"\n";
+        if (verbeux) affichage += "J"+identifiant+" forge "+faceAForger+"\n";
     }
 
     /**
@@ -260,12 +254,12 @@ abstract class Joueur {
      * Est appelé une fois à la fin de la partie
      */
     void additionnerPointsCartes() {
-        affichage += "Décompte des points de J"+identifiant+": ";
+        if (verbeux) affichage += "Décompte des points de J"+identifiant+": ";
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
-            affichage += carte.getNom()+": "+carte.getNbrPointGloire()+"; ";
+            if (verbeux) affichage += carte.getNom()+": "+carte.getNbrPointGloire()+"; ";
         }
-        affichage += "Total : +"+pointDeGloire+"\n";
+        if (verbeux) affichage += "Total : +"+pointDeGloire+"\n";
     }
 
     /**
@@ -276,23 +270,23 @@ abstract class Joueur {
         int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
         if (face.getRessource().length != 1)
             choix = choisirRessource(face);
-        affichage += "J"+identifiant+" obtient: ";
+        if (verbeux) affichage += "J"+identifiant+" obtient: ";
         for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
             if (ressource instanceof Or) {
                 ajouterOr(ressource.getQuantite());
-                affichage += ressource.getQuantite() + "Or; ";
+                if (verbeux) affichage += ressource.getQuantite() + "Or; ";
             }
             else if (ressource instanceof Soleil) {
                 ajouterSoleil(ressource.getQuantite());
-                affichage += ressource.getQuantite() + "Sol, ";
+                if (verbeux) affichage += ressource.getQuantite() + "Sol, ";
             }
             else if (ressource instanceof Lune) {
                 ajouterLune(ressource.getQuantite());
-                affichage += ressource.getQuantite() + "Lune; ";
+                if (verbeux) affichage += ressource.getQuantite() + "Lune; ";
             }
             else if (ressource instanceof PointDeGloire) {
                 pointDeGloire += ressource.getQuantite();
-                affichage += ressource.getQuantite() + "Pdg; ";
+                if (verbeux) affichage += ressource.getQuantite() + "Pdg; ";
             }
         }
         if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
@@ -304,8 +298,8 @@ abstract class Joueur {
                             {new PointDeGloire(3)}}));
         } else if (face instanceof  FaceMiroirAbyssal){
             FaceMiroirAbyssal faceMiroir = (FaceMiroirAbyssal) face;
-            Face[] faceAdversaires = faceMiroir.obtenirFacesAdervsaires();
-            gagnerRessourceFace(choisirFaceMiroir(faceAdversaires));
+            List<Face> faceAdversaires = faceMiroir.obtenirFacesAdversaires();
+            gagnerRessourceFace(faceAdversaires.get(choisirFacePourGagnerRessource(faceAdversaires)));
         } else if (face instanceof FaceBateauCeleste) {//Si c'est une face de bateau celeste
             FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) face;//on fait comme dans le coordinateur
             List<Bassin> bassinsAbordables = new ArrayList<>();
@@ -319,7 +313,7 @@ abstract class Joueur {
                     ajouterOr(-choixJoueurForge.getBassin().getCout()+2);//On oublie pas de faire payer le joueur
                 }
             }
-            affichage += "Face Celeste; ";
+            if (verbeux) affichage += "Face Celeste; ";
         }
     }
 

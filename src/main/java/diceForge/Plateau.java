@@ -19,7 +19,7 @@ class Plateau {
     private String affichage = "";
 
     Plateau(boolean modeVerbeux, Joueur[] joueurs){
-        portail = new PortailsOriginels(joueurs);//La ou les joueurs sont de base
+        portail = new PortailsOriginels(joueurs, modeVerbeux);//La ou les joueurs sont de base
         temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         Random random = new Random();

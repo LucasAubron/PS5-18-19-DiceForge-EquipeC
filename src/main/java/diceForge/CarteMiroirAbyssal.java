@@ -22,7 +22,4 @@ public class CarteMiroirAbyssal extends Carte {
         int[] posFace = acheteur.choisirFaceARemplacerPourMiroir();
         acheteur.forgerDe(posFace[0], new FaceMiroirAbyssal(acheteur, this.joueurs), posFace[1]);
     }
-    List<Joueur> getJoueurs() {
-        return joueurs;
-    }
 }

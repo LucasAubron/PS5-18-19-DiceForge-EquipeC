@@ -94,7 +94,8 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
-        affichage += "Phase de lance des des\n";
+        if (plateau.estVerbeux())
+            affichage += "Phase de lance des des\n";
 
         if (plateau.getJoueur().size() == 2) {
             for (Joueur x:plateau.getJoueur())
@@ -104,7 +105,8 @@ class Coordinateur {
         }
         for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             x.lancerLesDes();
-            affichage += x;
+            if (plateau.estVerbeux())
+                affichage += x;
         }
         for (Joueur x:plateau.getJoueur())
             x.gagnerRessource();
@@ -154,8 +156,9 @@ class Coordinateur {
         List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
         //On active les renforts selon les choix du joueur
         joueur.appelerRenforts(choixDuJoueur);
-        for (Joueur x:plateau.getJoueur())
-            affichage += x;
+        if (plateau.estVerbeux())
+            for (Joueur x:plateau.getJoueur())
+                affichage += x;
     }
     
     /**
@@ -204,8 +207,9 @@ class Coordinateur {
             joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
         }
         bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé, null si n'il y pas eu de craft (signifiant pour le joueur la volonté de s'arrêter)
-        for (Joueur joueur1:plateau.getJoueur())
-            affichage += joueur1;
+        if (plateau.estVerbeux())
+            for (Joueur joueur1:plateau.getJoueur())
+                affichage += joueur1;
         if (bassinsUtilises.get(bassinsUtilises.size()-1) == null) //Si le joueur n'a pas crafté alors cela signifie qu'il veut s'arrêter
             return null;
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
@@ -257,8 +261,9 @@ class Coordinateur {
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
         }
-        for (Joueur joueur1:plateau.getJoueur())
-            affichage += joueur1;
+        if (plateau.estVerbeux())
+            for (Joueur joueur1:plateau.getJoueur())
+                affichage += joueur1;
     }
 
     private List cartesAbordables(Joueur joueur) {
@@ -303,8 +308,9 @@ class Coordinateur {
             }
             action(joueur, numeroManche);
         }
-        for (Joueur joueur1:plateau.getJoueur())
-            affichage += joueur1;
+        if (plateau.estVerbeux())
+            for (Joueur joueur1:plateau.getJoueur())
+                affichage += joueur1;
     }
 
     /**

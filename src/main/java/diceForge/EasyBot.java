@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 class EasyBot extends Joueur{
-    EasyBot(int identifiant) {super(identifiant);}
+    EasyBot(int identifiant, boolean verbeux) {super(identifiant, verbeux);}
+    EasyBot(){super();}
 
     @Override
     Action choisirAction(int numManche){
@@ -120,8 +121,30 @@ class EasyBot extends Joueur{
 
     @Override
     int choisirFacePourGagnerRessource(List<Face> faces){
-        Random random = new Random();
-        return random.nextInt(faces.size());
+        int posMaxSoleil = -1, posMaxLune = -1, posMaxOr = -1;
+        int maxSoleil = 0, maxLune = 0, maxOr = 0;
+        for (int i = 0; i != faces.size(); ++i){
+            for (Ressource[] ressources:faces.get(i).getRessource()){
+                for(Ressource ressource:ressources){
+                    if (ressource instanceof Soleil && ressource.getQuantite() > maxSoleil){
+                        posMaxSoleil = i;
+                        maxSoleil = ressource.getQuantite();
+                    }
+                    else if (ressource instanceof Lune && ressource.getQuantite() > maxLune){
+                        posMaxLune = i;
+                        maxLune = ressource.getQuantite();
+                    }
+                    else if (ressource instanceof Or && ressource.getQuantite() > maxOr){
+                        posMaxOr = i;
+                        maxOr = ressource.getQuantite();
+                    }
+                }
+            }
+        }
+        if (posMaxSoleil != -1) return posMaxSoleil;
+        if (posMaxLune != -1) return posMaxLune;
+        if (posMaxOr != -1) return posMaxOr;
+        return 0;
     }
 
 
