@@ -77,6 +77,7 @@ class Coordinateur {
      */
     private void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
+        phaseGagnerRessource();
         phaseRenforts(joueur, numeroManche);
         //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2)
@@ -106,6 +107,11 @@ class Coordinateur {
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau -> affichageMarteau(marteau));
         }
+    }
+
+    private void phaseGagnerRessource(){
+        for (Joueur x : plateau.getJoueur())
+            x.gagnerRessource();
     }
 
     private void affichageMarteau(Marteau marteau){

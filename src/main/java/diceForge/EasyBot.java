@@ -22,13 +22,9 @@ class EasyBot extends Joueur{
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
             if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
-                for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
-                    for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
-                        if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
-                            return new ChoixJoueurForge(bassin, 0, i, j);
-                        }
-                    }
-                }
+                int[] posFace = getPosFace1Or();
+                if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
+                    return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
             else if (bassinAChoisir != null && bassinAChoisir.getCout() < bassin.getCout())//Sinon, on cherche la face la plus chere
                 bassinAChoisir = bassin;
@@ -38,10 +34,14 @@ class EasyBot extends Joueur{
         for (int i = 0; i != getDes().length; ++i) {//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j) {//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1) {
-                    return new ChoixJoueurForge(bassinAChoisir, 0, i, j);
+
                 }
             }
         }
+        int[] posFace = getPosFace1Or();
+        if (posFace[0] != -1)
+            return new ChoixJoueurForge(bassinAChoisir, 0, posFace[0], posFace[1]);
+
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
@@ -124,24 +124,23 @@ class EasyBot extends Joueur{
         return random.nextInt(faces.size());
     }
 
-    @Override
-    int getChoisirFace(){
-        Random random = new Random();
-        return random.nextInt(6);
-    }
+
 
     @Override
-    int getChoisirDe(){
+    int[] choisirFaceARemplacePourMiroir(){
+        int[] res = getPosFace1Or();
         Random random = new Random();
-        return random.nextInt(3);
+        if (res[0] != -1)
+            return res;
+        return new int[]{random.nextInt(2), random.nextInt(6)};
     }
 
     @Override
     int choisirFaceMiroir(Face[] tab){
-        int maxQteLune = 0;
-        int maxQteSoleil = 0;
+        int qteLune = 0;
+        int qteSoleil = 0;
         for (int i = 0; i < tab.length; i++){
-            if ()
+            if (true){}
         }
     }
 }

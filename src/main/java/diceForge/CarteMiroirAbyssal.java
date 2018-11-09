@@ -19,12 +19,8 @@ public class CarteMiroirAbyssal extends Carte {
 
     @Override
     void effetDirect(Joueur acheteur){
-        List<Face> faces = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
-
-        //Face uneFace = acheteur.choisirFace();//Ce joueur choisi une face
-        int numDe = acheteur.getChoisirDe();
-        int numFace = acheteur.getChoisirFace();
-        acheteur.forgerDe(numDe, new FaceMiroirAbyssal(acheteur, this.joueurs), numFace);
+        int[] posFace = acheteur.choisirFaceARemplacePourMiroir();
+        acheteur.forgerDe(posFace[0], new FaceMiroirAbyssal(acheteur, this.joueurs), posFace[1]);
     }
 
     List<Joueur> getJoueurs() {
