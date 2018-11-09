@@ -231,6 +231,8 @@ class Coordinateur {
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     if (carteChoisie.equals("Sanglier"))
                         plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
+                    else if (carteChoisie.equals("Miroir Abyssal"))
+                        carteChoisie.effetDirect(joueur);
                     else if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
                     else if (carteChoisie.equals("Bouclier")){

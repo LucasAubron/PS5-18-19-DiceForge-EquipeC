@@ -147,7 +147,9 @@ abstract class Joueur {
             if (gagnerFace[i])
                 gagnerRessourceFace(faces[i]);
         this.DesFaceCourante = new Face[]{premierDeFaceCourante, deuxiemeDeFaceCourante};
+
         affichage += "\n";
+
     }
 
     Face[] getDesFaceCourante(){return DesFaceCourante;}
@@ -295,7 +297,14 @@ abstract class Joueur {
         }
         if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
             FaceSanglier faceSanglier = (FaceSanglier) face;
-            faceSanglier.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Lune(1)}, {new PointDeGloire(3)}}));
+            faceSanglier.getJoueurMaitre().gagnerRessourceFace(
+                    new Face(new Ressource[][]{
+                            {new Soleil(1)},
+                            {new Lune(1)},
+                            {new PointDeGloire(3)}}));
+        } else if (face instanceof  FaceMiroirAbyssal){
+            FaceMiroirAbyssal faceMiroir = (FaceMiroirAbyssal) face;
+            faceMiroir.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Lune(1)}}));
         } else if (face instanceof FaceBateauCeleste) {//Si c'est une face de bateau celeste
             FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) face;//on fait comme dans le coordinateur
             List<Bassin> bassinsAbordables = new ArrayList<>();
@@ -397,4 +406,10 @@ abstract class Joueur {
      * @return la face qu'il choisi
      */
     abstract int choisirFace(List<Face> faces);
+
+    abstract int getChoisirFace();
+
+    abstract int getChoisirDe();
+
+    abstract int choisirFaceMiroir(Face[] tab);
 }

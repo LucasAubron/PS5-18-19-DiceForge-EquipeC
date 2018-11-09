@@ -53,6 +53,8 @@ class EasyBot extends Joueur{
                 return carte;
             if (carte.getNom().equals("Coffre") && !possedeCarte("Coffre"))//Et un coffre
                 return carte;
+            if (carte.getNom().equals("Miroir Abyssal") && !possedeCarte("Miroir Abyssal"))
+                return  carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere
             else if (carteAChoisir == null)
@@ -120,5 +122,26 @@ class EasyBot extends Joueur{
     int choisirFace(List<Face> faces){
         Random random = new Random();
         return random.nextInt(faces.size());
+    }
+
+    @Override
+    int getChoisirFace(){
+        Random random = new Random();
+        return random.nextInt(6);
+    }
+
+    @Override
+    int getChoisirDe(){
+        Random random = new Random();
+        return random.nextInt(3);
+    }
+
+    @Override
+    int choisirFaceMiroir(Face[] tab){
+        int maxQteLune = 0;
+        int maxQteSoleil = 0;
+        for (int i = 0; i < tab.length; i++){
+            if ()
+        }
     }
 }
