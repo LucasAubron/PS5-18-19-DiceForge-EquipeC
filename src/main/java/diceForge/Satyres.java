@@ -24,10 +24,10 @@ class Satyres extends Carte {
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant())
                     for (De de : joueur.getDes())//Pour tous les de des autres joueurs
                         faces.add(de.lancerLeDe());//On prend le résultat d'un lancer de dé
-            int x = acheteur.choisirFace(faces);//Ce joueur choisi une face
+            int x = acheteur.choisirFacePourGagnerRessource(faces);//Ce joueur choisi une face
             acheteur.gagnerRessourceFace(faces.get(x));//il gagne ce qu'il y a sur cette face
             faces.remove(x);//Puis on l'enlève de la liste
-            acheteur.gagnerRessourceFace(faces.get(acheteur.choisirFace(faces)));//Et on demande pour la deuxième face et on lui fait gagné
+            acheteur.gagnerRessourceFace(faces.get(acheteur.choisirFacePourGagnerRessource(faces)));//Et on demande pour la deuxième face et on lui fait gagné
     }
 
     List<Joueur> getJoueurs() {

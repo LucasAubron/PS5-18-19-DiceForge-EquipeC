@@ -19,7 +19,7 @@ public class CarteMiroirAbyssal extends Carte {
 
     @Override
     void effetDirect(Joueur acheteur){
-        int[] posFace = acheteur.choisirFaceARemplacePourMiroir();
+        int[] posFace = acheteur.choisirFaceARemplacerPourMiroir();
         acheteur.forgerDe(posFace[0], new FaceMiroirAbyssal(acheteur, this.joueurs), posFace[1]);
     }
 
