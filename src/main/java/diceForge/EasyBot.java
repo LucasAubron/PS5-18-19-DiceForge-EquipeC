@@ -135,12 +135,71 @@ class EasyBot extends Joueur{
         return new int[]{random.nextInt(2), random.nextInt(6)};
     }
 
+
+    //2 Sol
+    //1 Sol
+    //2 Lune
+    //1 Lune
+    //2 Gloire
+    //1 Gloire
     @Override
-    int choisirFaceMiroir(Face[] tab){
-        int qteLune = 0;
-        int qteSoleil = 0;
-        for (int i = 0; i < tab.length; i++){
-            if (true){}
+    Face choisirFaceMiroir(Face[] tabFaces){
+        int posFaceSoleil = 0, posRessourceSoleil;
+        int posFaceLune = 0, posRessourceLune;
+        int posFaceGloire = 0 , posRessourceGloire;
+        int maxQteLune = 0;
+        int maxQteSoleil = 0;
+        int maxPointsDeGloire = 0;
+        for (int indexFace = 0; indexFace < tabFaces.length; indexFace++){
+            Ressource[][] ressourcesFace = tabFaces[indexFace].getRessource();
+            if (ressourcesFace.length > 1){
+                for (int indexRessource = 0; indexRessource < ressourcesFace.length; indexRessource++) {
+                    for (Ressource ress : ressourcesFace[indexRessource]) {
+                        if (ress instanceof Soleil && ress.getQuantite() > maxQteSoleil) {
+                            maxQteSoleil = ress.getQuantite();
+                            posFaceSoleil = indexFace;
+                            posRessourceSoleil = indexRessource;
+                            if (ress instanceof Soleil && ress.getQuantite() == 2) {
+                                return tabFaces[indexFace];
+                            } else if (ress instanceof Lune && ress.getQuantite() > maxQteLune) {
+                                maxQteLune = ress.getQuantite();
+                                posFaceLune = indexFace;
+                                posRessourceSoleil = indexRessource;
+                            } else if (ress instanceof PointDeGloire && ress.getQuantite() > maxPointsDeGloire) {
+                                maxPointsDeGloire = ress.getQuantite();
+                                posFaceGloire = indexFace;
+                                posRessourceGloire = indexRessource;
+                            }
+                        }
+                    }
+                }
+            } else { // faces sans choix
+                for (Ressource ress : ressourcesFace[0]) {  //on parcourt, si c est une face 1Or + 1 Soleil par ex
+                    if (ress instanceof Soleil && ress.getQuantite() > maxQteSoleil) {
+                        maxQteSoleil = ress.getQuantite();
+                        posFaceSoleil = indexFace;
+                        posRessourceSoleil = 0;
+                        if (ress instanceof Soleil && ress.getQuantite() == 2) {
+                            return tabFaces[indexFace];
+                        } else if (ress instanceof Lune && ress.getQuantite() > maxQteLune) {
+                            maxQteLune = ress.getQuantite();
+                            posFaceLune = indexFace;
+                            posRessourceSoleil = 0;
+                        } else if (ress instanceof PointDeGloire && ress.getQuantite() > maxPointsDeGloire) {
+                            maxPointsDeGloire = ress.getQuantite();
+                            posFaceGloire = indexFace;
+                            posRessourceGloire = 0;
+                        }
+                    }
+                }
+            }
+        }
+        if (maxQteSoleil == 1)
+            return tabFaces[posFaceSoleil];
+        else if (maxQteLune > 0){ //pas de soleil trouvé
+            return tabFaces[posFaceLune];
+        } else {    //pas trouvé de soleil ni de lune
+            return tabFaces[posFaceGloire];
         }
     }
 }

@@ -77,7 +77,6 @@ class Coordinateur {
      */
     private void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
-        phaseGagnerRessource();
         phaseRenforts(joueur, numeroManche);
         //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2)
@@ -94,13 +93,19 @@ class Coordinateur {
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
         affichage += "Phase de lance des des\n";
-        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
-            if (plateau.getJoueur().size() == 2) {
+
+        if (plateau.getJoueur().size() == 2) {
+            for (Joueur x:plateau.getJoueur())
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
-            }
+            for (Joueur x:plateau.getJoueur())
+                x.gagnerRessource();
+        }
+        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
             x.lancerLesDes();
             affichage += x;
         }
+        for (Joueur x:plateau.getJoueur())
+            x.gagnerRessource();
         if (plateau.estVerbeux()) {
             affichage += ("\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
             affichage += ("Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente

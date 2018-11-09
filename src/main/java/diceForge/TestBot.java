@@ -2,6 +2,7 @@ package diceForge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Classe pour tester le comportemement d'un joueur
@@ -9,6 +10,7 @@ import java.util.List;
  * puis appeler la méthode à tester
  */
 class TestBot extends Joueur {
+    private Random random = new Random();
     TestBot(int identifiant) {super (identifiant);}
 
     /**
@@ -108,7 +110,17 @@ class TestBot extends Joueur {
         forgerDe(numDe, face, numFace);
     }
 
+    @Override
     int choisirFace(List<Face> faces) {
         return numFace;
+    }
+
+    @Override
+    Face choisirFaceMiroir(Face[] tabFaces){return tabFaces[random.nextInt(tabFaces.length)];}
+
+    @Override
+    int[] choisirFaceARemplacePourMiroir(){return new int[]{
+            random.nextInt(2),
+            random.nextInt(6)};
     }
 }

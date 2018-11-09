@@ -165,6 +165,7 @@ abstract class Joueur {
             if (carte.getNom().equals("Ours"))
                 pointDeGloire += 3;
         lancerLesDes();
+        gagnerRessource();
         affichage += "J"+identifiant+" est chassé\n";
     }
 
@@ -307,7 +308,8 @@ abstract class Joueur {
                             {new PointDeGloire(3)}}));
         } else if (face instanceof  FaceMiroirAbyssal){
             FaceMiroirAbyssal faceMiroir = (FaceMiroirAbyssal) face;
-            faceMiroir.getJoueurMaitre().gagnerRessourceFace(new Face(new Ressource[][]{{new Lune(1)}}));
+            Face[] faceAdversaires = faceMiroir.obtenirFacesAdervsaires();
+            gagnerRessourceFace(choisirFaceMiroir(faceAdversaires));
         } else if (face instanceof FaceBateauCeleste) {//Si c'est une face de bateau celeste
             FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) face;//on fait comme dans le coordinateur
             List<Bassin> bassinsAbordables = new ArrayList<>();
@@ -421,6 +423,11 @@ abstract class Joueur {
      */
     abstract int choisirFace(List<Face> faces);
 
-    abstract int choisirFaceMiroir(Face[] tab);
+    /**
+     *
+     * @param tabFaces
+     * @return
+     */
+    abstract Face choisirFaceMiroir(Face[] tabFaces);
     abstract int[] choisirFaceARemplacePourMiroir();
 }
