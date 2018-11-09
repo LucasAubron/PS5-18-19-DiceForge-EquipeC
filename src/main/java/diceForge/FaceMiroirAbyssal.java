@@ -18,7 +18,7 @@ public class FaceMiroirAbyssal extends Face {
      *
      * @return la liste des faces des joueurs adverses
      */
-    Face[] executerMiroir() {
+    Face[] obtenirFacesAdervsaires() {
         Face tabFace[] = new Face[(listeJoueurs.size()-1)*2];
         int i = 0;
         for (Joueur j : this.listeJoueurs)

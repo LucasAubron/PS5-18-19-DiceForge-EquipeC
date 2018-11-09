@@ -90,4 +90,14 @@ class RandomBot extends Joueur{
     int choisirFace(List<Face> faces){
         return random.nextInt(faces.size());
     }
+
+    @Override
+    Face choisirFaceMiroir(Face[] tabFaces){return tabFaces[random.nextInt(tabFaces.length)];}
+
+    @Override
+    int[] choisirFaceARemplacePourMiroir(){return new int[]{
+            random.nextInt(2),
+            random.nextInt(6)};
+    }
+
 }
