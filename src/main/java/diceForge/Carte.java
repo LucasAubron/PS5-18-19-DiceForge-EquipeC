@@ -48,6 +48,9 @@ class Carte {
             acheteur.ajouterRenfort(Joueur.Renfort.HIBOU);
         else if(nom.equals("Triton"))
             acheteur.ajouterJeton(Joueur.Jeton.TRITON);
+        else if (nom.equals("Casque d'invisibilite")){
+            acheteur.forgerFace(new FaceX3());
+        }
     }
 
     Ressource[] getCout() {
