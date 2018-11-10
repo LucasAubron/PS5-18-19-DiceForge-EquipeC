@@ -5,7 +5,7 @@ public class Marteau extends Carte {
     private int niveau = 0;
 
     public Marteau(){
-        super (new Ressource[]{new Lune(1)}, 0, "Marteau");
+        super (new Ressource[]{new Lune(1)}, 0, Noms.Marteau);
     }
 
     @Override

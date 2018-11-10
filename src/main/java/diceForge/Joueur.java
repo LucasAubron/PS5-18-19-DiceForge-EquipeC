@@ -205,7 +205,7 @@ abstract class Joueur {
      */
     void estChasse(){
         for (Carte carte:cartes)
-            if (carte.getNom().equals("Ours"))
+            if (carte.getNom() == Carte.Noms.Ours)
                 pointDeGloire += 3;
         lancerLesDes();
         gagnerRessource();
@@ -218,7 +218,7 @@ abstract class Joueur {
      */
     void chasse() {
         for (Carte carte:cartes)
-            if (carte.getNom().equals("Ours"))
+            if (carte.getNom() == Carte.Noms.Ours)
                 pointDeGloire += 3;
     }
 
@@ -258,7 +258,7 @@ abstract class Joueur {
     List<Marteau> getMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
-            if (cartes.get(i).getNom().equals("Marteau")) {
+            if (cartes.get(i).getNom() == Carte.Noms.Marteau) {
                 Marteau marteau = (Marteau) cartes.get(i);
                 position.add(marteau);
             }

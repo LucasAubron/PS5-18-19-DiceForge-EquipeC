@@ -147,11 +147,11 @@ class Coordinateur {
         List renfortsUtilisables = new ArrayList();
         int nbrAncientAjoute = 0;
         for (Joueur.Renfort renfort:joueur.getRenforts()){
-            if ((renfort+"").equals("ANCIEN") && (nbrAncientAjoute+1)*3 <= joueur.getOr()){//On ajoute les anciens si le joueur peut
+            if (renfort == Joueur.Renfort.ANCIEN && (nbrAncientAjoute+1)*3 <= joueur.getOr()){//On ajoute les anciens si le joueur peut
                 renfortsUtilisables.add(renfort);
                 ++nbrAncientAjoute;
             }
-            else if (!(renfort+"").equals("ANCIEN")) {//Et on ajoute les autres
+            else if (renfort != Joueur.Renfort.ANCIEN) {//Et on ajoute les autres
                 renfortsUtilisables.add(renfort);
             }
         }
@@ -167,7 +167,7 @@ class Coordinateur {
     private void phaseJetonTriton(Joueur joueur, int numeroManche){
         if (!joueur.getJetons().isEmpty())
             for (Joueur.Jeton jeton : joueur.getJetons()){
-                if (jeton.equals("TRITON"))
+                if (jeton == Joueur.Jeton.TRITON)
                     joueur.utiliserJetonTriton();
             }
     }
@@ -175,7 +175,7 @@ class Coordinateur {
     private void phaseJetonCerbere(Joueur joueur, int numeroManche){
         if (!joueur.getJetons().isEmpty())
             for (Joueur.Jeton jeton : joueur.getJetons())
-                if (jeton.equals("CERBERE"))
+                if (jeton == Joueur.Jeton.CERBERE)
                     joueur.utiliserJetonCerbere();
     }
     

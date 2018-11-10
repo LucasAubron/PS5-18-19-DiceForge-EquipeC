@@ -47,7 +47,7 @@ public class JoueurTest {
     @Test
     public void appelerRenforts(){
         j0.ajouterSoleil(1);
-        Carte hf = new Carte(new Ressource[]{new Soleil(1)}, 2, "Ancien");
+        Carte hf = new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.Ancien);
         j0.acheterExploit(hf);
         j0.ajouterOr(3);
         int pdgAct = j0.getPointDeGloire();

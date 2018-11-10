@@ -6,7 +6,7 @@ import java.util.List;
 class Minautore extends Carte {
     private List<Joueur> joueurs = new ArrayList<>();
     Minautore(List<Joueur> joueurs){
-        super(new Ressource[]{new Soleil(3)}, 8, "Minautore");
+        super(new Ressource[]{new Soleil(3)}, 8, Noms.Minautore);
         this.joueurs.addAll(joueurs);
     }
 

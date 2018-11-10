@@ -7,7 +7,7 @@ public class CarteBouclier extends Carte {
     private Joueur joueurMaitre;
     private Plateau plateau;
     CarteBouclier(Plateau plateau){
-        super(new Ressource[]{new Soleil(3)}, 6, "Bouclier");
+        super(new Ressource[]{new Soleil(3)}, 6, Noms.Bouclier);
         this.plateau = plateau;
     }
 
