@@ -104,21 +104,29 @@ class EasyBot extends Joueur{
         return (getIdentifiant() == 1 ? 0 : 1);
     }
 
+    /**
+     * Permet de craft les faces spéciales, contrairement aux faces achetables avec de l'or, on a pas besoin
+     * de chercher une face a crafter puisqu'on la connait déjà, on doit juste chercher quelle face remplacer
+     * @param face
+     */
+
     @Override
     void forgerFace(Face face){
         boolean aForge = false;
-        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
-            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
-                if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
-                    forgerDe(i, face, j);
+        int[] posFace = getPosFace1Or();
+        if(posFace[0] != -1) //si on a trouvé une face 1 or sur un des dés)
+                    forgerDe(posFace[0], face, posFace[1]);
                     aForge = true;
-                }
-            }
-        }
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
             forgerDe(0, face, 0);
     }
 
+    /**
+     * Lorsqu'on doit choisir une face pour gagner les ressources indiquées dessus
+     * le easyBot cherche en particulier les faces donnant de l'or, sinon des lunes, sinon des points de victoires
+     * @param faces les faces disponibles
+     * @return position de la face dans la liste fournie
+     */
     @Override
     int choisirFacePourGagnerRessource(List<Face> faces){
         int posMaxSoleil = -1, posMaxLune = -1, posMaxOr = -1;
@@ -147,7 +155,11 @@ class EasyBot extends Joueur{
         return 0;
     }
 
-
+    /**
+     * Cherche une face à éliminer lors du craft d'une face miroir
+     * cherche une face 1or, s'il n'en trouve pas, choisis au hasard
+     * @return le numéro du dé et la position de la face sur le dé que l'on veut éliminer
+     */
 
     @Override
     int[] choisirFaceARemplacerPourMiroir(){
@@ -158,8 +170,10 @@ class EasyBot extends Joueur{
         return new int[]{random.nextInt(2), random.nextInt(6)};
     }
 
+    /*
+    a effacer ? bien moins optimisée que choisirFacePourGagnerRessource (et en plus on a pas besoin du cas spécifique ou le choix vient du miroir) :/
     @Override
-    Face choisirFaceMiroir(Face[] tabFaces){
+    Face choisirFaceMiroirPourGagnerRessource(Face[] tabFaces){
         int posFaceSoleil = 0, posRessourceSoleil;
         int posFaceLune = 0, posRessourceLune;
         int posFaceGloire = 0 , posRessourceGloire;
@@ -218,4 +232,5 @@ class EasyBot extends Joueur{
             return tabFaces[posFaceGloire];
         }
     }
+    */
 }

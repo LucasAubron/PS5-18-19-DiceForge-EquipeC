@@ -97,30 +97,27 @@ class Coordinateur {
         if (plateau.estVerbeux())
             affichage += "Phase de lance des des\n";
 
+        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
+            x.lancerLesDes();
+            if (plateau.estVerbeux())
+                affichage += x;
+        }
+        for (Joueur x:plateau.getJoueur())//et gagne les ressources correspondantes
+            x.gagnerRessource();
+
         if (plateau.getJoueur().size() == 2) {
             for (Joueur x:plateau.getJoueur())
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
             for (Joueur x:plateau.getJoueur())
                 x.gagnerRessource();
         }
-        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
-            x.lancerLesDes();
-            if (plateau.estVerbeux())
-                affichage += x;
-        }
-        for (Joueur x:plateau.getJoueur())
-            x.gagnerRessource();
+
         if (plateau.estVerbeux()) {
             affichage += ("\n--------------------------------------------------------\n" + "Manche: " + numeroManche + "\t||\t" + "Tour du joueur " + joueur.getIdentifiant() + "\t||\t" + "\n--------------------------------------------------------\n"); // annonce de la manche et du tour, les résultats des lancés ne sont pas affichés par souci de concisions
             affichage += ("Ressources disponibles:\n\tOr: " + joueur.getOr() + "\t||\t" + "Soleil: " + joueur.getSoleil() + "\t||\t" + "Lunes: " + joueur.getLune() + "\n"); //On affiche les ressources disponibles au joueur, utile pour vérifier par la suite que les ia programmées jouent de manière relativement intelligente
             if (!joueur.getMarteau().isEmpty())
                 joueur.getMarteau().forEach(marteau -> affichageMarteau(marteau));
         }
-    }
-
-    private void phaseGagnerRessource(){
-        for (Joueur x : plateau.getJoueur())
-            x.gagnerRessource();
     }
 
     private void affichageMarteau(Marteau marteau){

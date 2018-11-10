@@ -118,9 +118,6 @@ class TestBot extends Joueur {
     }
 
     @Override
-    Face choisirFaceMiroir(Face[] tabFaces){return tabFaces[random.nextInt(tabFaces.length)];}
-
-    @Override
     int[] choisirFaceARemplacerPourMiroir(){return new int[]{
             random.nextInt(2),
             random.nextInt(6)};

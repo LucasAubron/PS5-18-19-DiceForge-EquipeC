@@ -317,6 +317,12 @@ abstract class Joueur {
         }
     }
 
+
+    /**
+     * utile pour les bots autre que random
+     * permet de chercher une face de base 1 or et de renvoyer sa position
+     * @return un tableau = [numéro du dé, numéro de la face sur le dé en question]
+     */
     int[] getPosFace1Or(){
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
@@ -406,18 +412,7 @@ abstract class Joueur {
      */
     abstract void forgerFace(Face face);
 
-    /**
-     * Demande au joueur de choisir une face parmit plusieurs
-     * @param faces les faces disponibles
-     * @return la face qu'il choisi
-     */
-    abstract int choisirFacePourGagnerRessource(List<Face> faces);
-
-    /**
-     * @param tabFaces
-     * @return
-     */
-    abstract Face choisirFaceMiroir(Face[] tabFaces);
-
     abstract int[] choisirFaceARemplacerPourMiroir();
+
+    abstract int choisirFacePourGagnerRessource(List<Face> faceAdversaires);
 }
