@@ -32,7 +32,7 @@ class Plateau {
         Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
         Carte bateauCeleste = new Carte(new Ressource[]{new Soleil(2)}, 4, "Bateau celeste");
         Carte minautore = new Minautore(portail.getJoueurs());
-        Carte bouclier = new Carte(new Ressource[]{new Soleil(3)}, 6, "Bouclier");
+        Carte bouclier = new CarteBouclier(this);
 
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),

@@ -245,10 +245,6 @@ class Coordinateur {
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
                     if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
-                    else if (carteChoisie.equals("Bouclier")){
-                        ChoixJoueurForge choix = joueur.choisirFaceAForgerEtARemplacer(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);
-                        joueur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
-                    }
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
