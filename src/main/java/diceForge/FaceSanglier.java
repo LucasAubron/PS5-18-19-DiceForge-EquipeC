@@ -8,6 +8,15 @@ class FaceSanglier extends Face {
     }
 
     @Override
+    void effetActif (Joueur joueur){
+        joueurMaitre.gagnerRessourceFace(
+                new Face(new Ressource[][]{
+                        {new Soleil(1)},
+                        {new Lune(1)},
+                        {new PointDeGloire(3)}}));
+    }
+
+    @Override
     public String toString(){
         return "Face sanglier";
     }
