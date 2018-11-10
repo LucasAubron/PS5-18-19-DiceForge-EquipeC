@@ -145,25 +145,25 @@ abstract class Joueur {
                     }
                 }
             }
-            else if (desFaceCourante[i] instanceof FaceX3){
-                if (desFaceCourante[autreFace].getRessource().length > 0){
+            else if (desFaceCourante[i] instanceof FaceX3){//Si c'est une faceX3
+                if (desFaceCourante[autreFace].getRessource().length > 0){//Si l'autre face est commune
                     gagnerFace[autreFace] = false;
                     int x = 0;
                     if (desFaceCourante[autreFace].getRessource().length > 1)
                         x = choisirRessource(desFaceCourante[autreFace]);
-                    for (int j = 0; j != 3; ++j)
+                    for (int j = 0; j != 3; ++j)//On applique la récompense 3x
                         gagnerRessourceFace(desFaceCourante[autreFace], x);
                 }
-                if (desFaceCourante[autreFace] instanceof FaceBateauCeleste){
+                if (desFaceCourante[autreFace] instanceof FaceBateauCeleste){//Si c'est une face bateau celeste
                     gagnerFace[autreFace] = false;
                     FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) desFaceCourante[autreFace];
-                    faceBateauCeleste.multiplierX3Actif();
+                    faceBateauCeleste.multiplierX3Actif();//On l'active avec le bonus
                     faceBateauCeleste.effetActif(this);
                 }
                 else if (desFaceCourante[autreFace] instanceof FaceMiroirAbyssal){
                     FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) desFaceCourante[autreFace];
                     int choix = choisirFacePourGagnerRessource(faceMiroirAbyssal.obtenirFacesAdversaires());
-                    for (int j = 0; j != 3; j++){
+                    for (int j = 0; j != 3; j++){//On l'active 3 fois avec la meme face
                         faceMiroirAbyssal.setChoix(choix);
                         faceMiroirAbyssal.effetActif(this);
                     }
