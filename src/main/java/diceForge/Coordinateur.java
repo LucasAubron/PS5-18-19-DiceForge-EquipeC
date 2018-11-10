@@ -243,9 +243,7 @@ class Coordinateur {
         for (Ile ile : plateau.getIles()) {
             for (List<Carte> paquet : ile.getCartes())
                 if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
-                    if (carteChoisie.equals("Sanglier"))
-                        plateau.getJoueur().get(joueur.choisirIdJoueurPorteurSanglier(plateau.getJoueur())).forgerFace(new FaceSanglier(joueur));
-                    else if (carteChoisie.equals("Bateau celeste"))
+                    if (carteChoisie.equals("Bateau celeste"))
                         joueur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
                     else if (carteChoisie.equals("Bouclier")){
                         ChoixJoueurForge choix = joueur.choisirFaceAForgerEtARemplacer(new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), numeroManche);

@@ -26,7 +26,7 @@ class Plateau {
 
         Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, "Ours");
         Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, "Biche");
-        Carte sanglier = new Carte(new Ressource[]{new Lune(3)}, 4, "Sanglier");
+        Carte sanglier = new CarteSanglier(portail.getJoueurs());
         Carte satyres = new Satyres(portail.getJoueurs());
 
         Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
