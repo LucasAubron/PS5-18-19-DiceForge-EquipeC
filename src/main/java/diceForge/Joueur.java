@@ -132,8 +132,11 @@ abstract class Joueur {
         for (int i = 0; i != desFaceCourante.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
             if (desFaceCourante[i] instanceof FaceBouclier){//On traite le cas faceBouclier
                 int x = 0, j = i==0?1:0;//j est 1 si i est 0, et 0 sinon
-                if (desFaceCourante[j].getRessource().length != 1)//Si l'autre de est une face à choix
-                    x = choisirRessource(desFaceCourante[j]);//le joueur choisis (oui il peut faire 2 choix différents...  :(
+                if (desFaceCourante[j].getRessource().length != 1) {//Si l'autre de est une face à choix
+                    x = choisirRessource(desFaceCourante[j]);//le joueur choisis
+                    gagnerRessourceFace(desFaceCourante[j], x);//Il gagne les ressources conformément à son choix
+                    gagnerFace[j] = false;
+                }
                 for (Ressource ressource:desFaceCourante[j].getRessource()[x]){
                     if (ressource.getClass().equals(desFaceCourante[i].getRessource()[0][0].getClass())){
                         pointDeGloire += 5;
@@ -263,15 +266,11 @@ abstract class Joueur {
     }
 
     /**
-     * Méthode ajoutant les gains lié à une face
+     * Méthode ajoutant les gains lié à une face, avec un choix (si face à choix) prédéfini
      * @param face
      */
-    void gagnerRessourceFace(Face face) {
+    void gagnerRessourceFace(Face face, int choix){
         if (face.getRessource().length > 0) {
-            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
-            if (face.getRessource().length > 1) {
-                choix = choisirRessource(face);
-            }
             if (verbeux) affichage += "J" + identifiant + " obtient: ";
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or) {
@@ -315,6 +314,17 @@ abstract class Joueur {
             }
             if (verbeux) affichage += "Face Celeste; ";
         }
+    }
+
+    /**
+     * Méthode ajoutant les gains lié à une face
+     * @param face
+     */
+    void gagnerRessourceFace(Face face) {
+        int choix = 0;
+        if (face.getRessource().length > 1)
+            choix = choisirRessource(face);
+        gagnerRessourceFace(face, choix);
     }
 
 
