@@ -30,7 +30,7 @@ class Plateau {
         Carte satyres = new Satyres(portail.getJoueurs());
 
         Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
-        Carte bateauCeleste = new Carte(new Ressource[]{new Soleil(2)}, 4, "Bateau celeste");
+        Carte bateauCeleste = new CarteBateauCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
 
