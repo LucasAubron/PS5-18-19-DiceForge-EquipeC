@@ -17,7 +17,7 @@ class Coordinateur {
 
     Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
-        int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
+        int nbrManche = joueurs.length == 3 ? 9 : 10; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             for (int i = 0; i < joueurs.length; i++)
                 System.out.println(joueurs[i]);
