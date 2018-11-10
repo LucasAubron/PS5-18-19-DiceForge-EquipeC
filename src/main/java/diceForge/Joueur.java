@@ -267,26 +267,26 @@ abstract class Joueur {
      * @param face
      */
     void gagnerRessourceFace(Face face) {
-        int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
-        if (face.getRessource().length != 1)
-            choix = choisirRessource(face);
-        if (verbeux) affichage += "J"+identifiant+" obtient: ";
-        for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
-            if (ressource instanceof Or) {
-                ajouterOr(ressource.getQuantite());
-                if (verbeux) affichage += ressource.getQuantite() + "Or; ";
+        if (face.getRessource().length > 0) {
+            int choix = 0;//Représente quelle choix le joueur prend (pour les dés à plusieurs choix)
+            if (face.getRessource().length > 1) {
+                choix = choisirRessource(face);
             }
-            else if (ressource instanceof Soleil) {
-                ajouterSoleil(ressource.getQuantite());
-                if (verbeux) affichage += ressource.getQuantite() + "Sol, ";
-            }
-            else if (ressource instanceof Lune) {
-                ajouterLune(ressource.getQuantite());
-                if (verbeux) affichage += ressource.getQuantite() + "Lune; ";
-            }
-            else if (ressource instanceof PointDeGloire) {
-                pointDeGloire += ressource.getQuantite();
-                if (verbeux) affichage += ressource.getQuantite() + "Pdg; ";
+            if (verbeux) affichage += "J" + identifiant + " obtient: ";
+            for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
+                if (ressource instanceof Or) {
+                    ajouterOr(ressource.getQuantite());
+                    if (verbeux) affichage += ressource.getQuantite() + "Or; ";
+                } else if (ressource instanceof Soleil) {
+                    ajouterSoleil(ressource.getQuantite());
+                    if (verbeux) affichage += ressource.getQuantite() + "Sol, ";
+                } else if (ressource instanceof Lune) {
+                    ajouterLune(ressource.getQuantite());
+                    if (verbeux) affichage += ressource.getQuantite() + "Lune; ";
+                } else if (ressource instanceof PointDeGloire) {
+                    pointDeGloire += ressource.getQuantite();
+                    if (verbeux) affichage += ressource.getQuantite() + "Pdg; ";
+                }
             }
         }
         if (face instanceof FaceSanglier) {//On gere le cas du sanglier, qui doit faire choisir au joueur maitre de la carte une ressource
@@ -326,7 +326,7 @@ abstract class Joueur {
     int[] getPosFace1Or(){
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
-                if (getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
                     return new int[]{i,j};
                 }
             }
@@ -381,7 +381,7 @@ abstract class Joueur {
     abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
 
     /**
-     * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieur choix possible
+     * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieurs choix possible
      * @param faceAChoix la face en question
      * @return le numéro de la face choisi
      */
@@ -414,5 +414,10 @@ abstract class Joueur {
 
     abstract int[] choisirFaceARemplacerPourMiroir();
 
-    abstract int choisirFacePourGagnerRessource(List<Face> faceAdversaires);
+    /**
+     * Lorsqu'on doit choisir une face pour gagner les ressources indiquées dessus
+     * @param faces les faces disponibles
+     * @return position de la face dans la liste fournie
+     */
+    abstract int choisirFacePourGagnerRessource(List<Face> faces);
 }

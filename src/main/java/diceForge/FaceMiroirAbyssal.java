@@ -8,7 +8,7 @@ public class FaceMiroirAbyssal extends Face {
     private List<Joueur> listeJoueurs;
 
     FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
-        super(new Ressource[][]{{new Lune(1)}});
+        super(new Ressource[][]{});
         listeJoueurs.removeIf(x -> x.getIdentifiant() == joueurMaitre.getIdentifiant());
         this.listeJoueurs = listeJoueurs;
     }

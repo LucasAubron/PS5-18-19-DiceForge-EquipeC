@@ -34,6 +34,11 @@ class De {
         ++nbrFaceForge;
     }
 
+    /*int posFace1Or(){
+        for (int i = 0; i != faces.length; ++i)
+            if ()
+    }*/
+
     int getNbrFaceForge() {
         return nbrFaceForge;
     }
