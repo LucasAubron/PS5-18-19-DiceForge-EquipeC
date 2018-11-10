@@ -27,6 +27,12 @@ public class FaceMiroirAbyssal extends Face {
     }
 
     @Override
+    void effetActif(Joueur joueur){
+        List<Face> faceAdversaires = obtenirFacesAdversaires();
+        joueur.gagnerRessourceFace(faceAdversaires.get(joueur.choisirFacePourGagnerRessource(faceAdversaires)));
+    }
+
+    @Override
     public String toString(){
         return "Miroir Abyssal";
     }

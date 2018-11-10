@@ -19,6 +19,14 @@ class Face {
         return ressource;
     }
 
+    /**
+     * Méthode appelé à chaque fois que l'on tombe sur cette face,
+     * a Override si il se passe quelque chose dans ce cas la
+     * @param joueur
+     */
+    void effetActif(Joueur joueur){
+    }
+
     @Override
     public String toString() {
         String affichage = "";
