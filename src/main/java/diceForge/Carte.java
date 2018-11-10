@@ -49,6 +49,9 @@ class Carte {
         else if (nom.equals("Bouclier")){
 
         }
+        else if (nom.equals("Casque d'invisibilite")){
+            acheteur.forgerFace(new FaceX3());
+        }
     }
 
     Ressource[] getCout() {
