@@ -81,8 +81,11 @@ class Coordinateur {
         phaseLanceDe(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
         //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
-        if (action(joueur, numeroManche) && joueur.getSoleil()>= 2)
+        phaseJetonTriton(joueur, numeroManche);
+        if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) {
+            phaseJetonTriton(joueur, numeroManche);
             secondeAction(joueur, numeroManche);
+        }
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise).
@@ -156,6 +159,14 @@ class Coordinateur {
         if (plateau.estVerbeux())
             for (Joueur x:plateau.getJoueur())
                 affichage += x;
+    }
+
+    private void phaseJetonTriton(Joueur joueur, int numeroManche){
+        if (!joueur.getJetons().isEmpty())
+            for (Joueur.Jeton jeton : joueur.getJetons()){
+                if (jeton.equals("TRITON"))
+                    joueur.utiliserJetonTriton();
+            }
     }
     
     /**

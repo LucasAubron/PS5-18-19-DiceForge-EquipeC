@@ -28,11 +28,13 @@ abstract class Joueur {
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
     private boolean verbeux;
+    private List<Jeton> jetons = new ArrayList<>();
 
     protected String affichage = "";
 
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
+    enum Jeton {TRITON}
 
     Joueur(){}
 
@@ -117,6 +119,16 @@ abstract class Joueur {
     void ajouterRenfort(Renfort renfort){
         renforts.add(renfort);
     }
+    void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
+    void retirerJetonTriton(){
+        for (Jeton jeton : this.jetons){
+            if (jeton.equals("TRITON")) {
+                this.jetons.remove(jeton);
+                break;
+            }
+        }
+    }
+    List<Jeton> getJetons(){return this.jetons;}
 
     /**
      * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
@@ -405,4 +417,5 @@ abstract class Joueur {
      * @return position de la face dans la liste fournie
      */
     abstract int choisirFacePourGagnerRessource(List<Face> faces);
+    abstract void utiliserJetonTriton();
 }

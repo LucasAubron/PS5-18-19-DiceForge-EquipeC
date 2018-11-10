@@ -46,9 +46,8 @@ class Carte {
             acheteur.ajouterRenfort(Joueur.Renfort.BICHE);
         else if (nom.equals("Hibou"))
             acheteur.ajouterRenfort(Joueur.Renfort.HIBOU);
-        else if (nom.equals("Bouclier")){
-
-        }
+        else if(nom.equals("Triton"))
+            acheteur.ajouterJeton(Joueur.Jeton.TRITON);
     }
 
     Ressource[] getCout() {

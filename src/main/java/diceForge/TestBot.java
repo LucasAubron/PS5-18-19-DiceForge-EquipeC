@@ -122,4 +122,25 @@ class TestBot extends Joueur {
             random.nextInt(2),
             random.nextInt(6)};
     }
+
+    @Override
+    void utiliserJetonTriton(){
+        Random random = new Random();
+        int choix;
+        if (1 == random.nextInt(2)){
+            choix = random.nextInt(3);
+            switch (choix){
+                case 0:
+                    ajouterSoleil(2);
+                    break;
+                case 1:
+                    ajouterLune(2);
+                    break;
+                case 2:
+                    ajouterOr(6);
+                    break;
+            }
+            retirerJetonTriton();
+        }
+    }
 }

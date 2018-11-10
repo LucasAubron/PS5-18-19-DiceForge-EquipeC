@@ -33,6 +33,8 @@ class Plateau {
         Carte bateauCeleste = new CarteBateauCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
+        Carte meduse = new Carte(new Ressource[]{new Soleil(4)}, 14, "Méduse");
+        Carte triton = new Carte(new Ressource[]{new Soleil(4)}, 8, "Triton");
 
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, "Coffre"), joueurs.length),
@@ -45,7 +47,7 @@ class Plateau {
         new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
                 new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d'invisibilite"),
                 joueurs.length),
-        new Ile(new Carte(new Ressource[]{new Soleil(4)}, 14, "Méduse"),
+        new Ile(random.nextInt(2) == 1 ? meduse : triton,
                 new CarteMiroirAbyssal(portail.getJoueurs()),
                 joueurs.length)};
 
