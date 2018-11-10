@@ -180,71 +180,28 @@ class EasyBot extends Joueur{
                     ajouterOr(6);
                     break;
             }
-            retirerJetonTriton();
+            retirerJeton("TRITON");
         }
     }
 
-    /*
-    a effacer ? bien moins optimisée que choisirFacePourGagnerRessource (et en plus on a pas besoin du cas spécifique ou le choix vient du miroir) :/
     @Override
-    Face choisirFaceMiroirPourGagnerRessource(Face[] tabFaces){
-        int posFaceSoleil = 0, posRessourceSoleil;
-        int posFaceLune = 0, posRessourceLune;
-        int posFaceGloire = 0 , posRessourceGloire;
-        int maxQteLune = 0;
-        int maxQteSoleil = 0;
-        int maxPointsDeGloire = 0;
-        for (int indexFace = 0; indexFace < tabFaces.length; indexFace++){
-            Ressource[][] ressourcesFace = tabFaces[indexFace].getRessource();
-            if (ressourcesFace.length > 1){
-                for (int indexRessource = 0; indexRessource < ressourcesFace.length; indexRessource++) {
-                    for (Ressource ress : ressourcesFace[indexRessource]) {
-                        if (ress instanceof Soleil && ress.getQuantite() > maxQteSoleil) {
-                            maxQteSoleil = ress.getQuantite();
-                            posFaceSoleil = indexFace;
-                            posRessourceSoleil = indexRessource;
-                            if (ress instanceof Soleil && ress.getQuantite() == 2) {
-                                return tabFaces[indexFace];
-                            } else if (ress instanceof Lune && ress.getQuantite() > maxQteLune) {
-                                maxQteLune = ress.getQuantite();
-                                posFaceLune = indexFace;
-                                posRessourceSoleil = indexRessource;
-                            } else if (ress instanceof PointDeGloire && ress.getQuantite() > maxPointsDeGloire) {
-                                maxPointsDeGloire = ress.getQuantite();
-                                posFaceGloire = indexFace;
-                                posRessourceGloire = indexRessource;
-                            }
-                        }
-                    }
-                }
-            } else { // faces sans choix
-                for (Ressource ress : ressourcesFace[0]) {  //on parcourt, si c est une face 1Or + 1 Soleil par ex
-                    if (ress instanceof Soleil && ress.getQuantite() > maxQteSoleil) {
-                        maxQteSoleil = ress.getQuantite();
-                        posFaceSoleil = indexFace;
-                        posRessourceSoleil = 0;
-                        if (ress instanceof Soleil && ress.getQuantite() == 2) {
-                            return tabFaces[indexFace];
-                        } else if (ress instanceof Lune && ress.getQuantite() > maxQteLune) {
-                            maxQteLune = ress.getQuantite();
-                            posFaceLune = indexFace;
-                            posRessourceSoleil = 0;
-                        } else if (ress instanceof PointDeGloire && ress.getQuantite() > maxPointsDeGloire) {
-                            maxPointsDeGloire = ress.getQuantite();
-                            posFaceGloire = indexFace;
-                            posRessourceGloire = 0;
-                        }
-                    }
-                }
+    void utiliserJetonCerbere(){
+        Random random = new Random();
+        if (1 == random.nextInt(2)){
+            switch (getDernierLanceDes()){
+                case 0:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    break;
+                case 1:
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
+                case 2:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
             }
-        }
-        if (maxQteSoleil == 1)
-            return tabFaces[posFaceSoleil];
-        else if (maxQteLune > 0){ //pas de soleil trouvé
-            return tabFaces[posFaceLune];
-        } else {    //pas trouvé de soleil ni de lune
-            return tabFaces[posFaceGloire];
+            retirerJeton("CERBERE");
         }
     }
-    */
+
 }

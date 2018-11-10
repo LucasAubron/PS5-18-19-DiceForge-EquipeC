@@ -79,8 +79,11 @@ class Coordinateur {
      */
     private void tour(Joueur joueur, int numeroManche){
         phaseLanceDe(joueur, numeroManche);
+        phaseJetonCerbere(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
-        //toDo: phaseJeton: phase durant laquelle le joueur peut utiliser un jeton triton, le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
+        phaseJetonCerbere(joueur, numeroManche);
+        // phaseJetonTriton: phase durant laquelle le joueur peut utiliser un jeton triton,
+        // le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
         phaseJetonTriton(joueur, numeroManche);
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) {
             phaseJetonTriton(joueur, numeroManche);
@@ -167,6 +170,13 @@ class Coordinateur {
                 if (jeton.equals("TRITON"))
                     joueur.utiliserJetonTriton();
             }
+    }
+
+    private void phaseJetonCerbere(Joueur joueur, int numeroManche){
+        if (!joueur.getJetons().isEmpty())
+            for (Joueur.Jeton jeton : joueur.getJetons())
+                if (jeton.equals("CERBERE"))
+                    joueur.utiliserJetonCerbere();
     }
     
     /**

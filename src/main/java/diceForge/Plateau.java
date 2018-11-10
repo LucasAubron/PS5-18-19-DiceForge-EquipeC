@@ -28,6 +28,8 @@ class Plateau {
         Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, "Biche");
         Carte sanglier = new CarteSanglier(portail.getJoueurs());
         Carte satyres = new Satyres(portail.getJoueurs());
+        Carte cerbere = new Carte(new Ressource[]{new Lune(4)}, 6, "Cerbere");
+        Carte passeur = new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur");
 
         Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, "Hibou");
         Carte bateauCeleste = new CarteBateauCeleste(this);
@@ -44,12 +46,16 @@ class Plateau {
                 random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
         new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
                 random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
-        new Ile(new Carte(new Ressource[]{new Lune(4)}, 12, "Passeur"),
+        new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
                 new Carte(new Ressource[]{new Lune(5)}, 4,  "Casque d'invisibilite"),
                 joueurs.length),
         new Ile(random.nextInt(2) == 1 ? meduse : triton,
                 new CarteMiroirAbyssal(portail.getJoueurs()),
                 joueurs.length)};
+        /*
+        * /!\   lorsqu'on ajoutera les cartes qui coûtent 6 Lunes/Soleils ne pas oublier
+        *       de s'occuper du jeton Cerbère!.
+        * */
 
 
 

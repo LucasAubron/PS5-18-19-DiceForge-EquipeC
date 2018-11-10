@@ -34,7 +34,10 @@ abstract class Joueur {
 
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
-    enum Jeton {TRITON}
+    enum Jeton {TRITON, CERBERE}
+    // attribut suivant vaut 0 si seulement dé 0 lancé, 1 si seulement dé 1 lancé
+    // et 2 si les deux dés ont été lancés
+    private int dernierLanceDes;
 
     Joueur(){}
 
@@ -84,6 +87,12 @@ abstract class Joueur {
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
     int getSoleil() {return soleil;}
+    int getDernierLanceDes(){return dernierLanceDes;}
+    void setDernierLanceDes(int code){
+        if (code < 0 || code > 2)
+            throw new DiceForgeException("Joueur", "Le denier lancé de dés doit être un entier entre 0 et 2");
+        this.dernierLanceDes = code;
+    }
 
     void ajouterSoleil(int quantite) {
         soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
@@ -120,9 +129,9 @@ abstract class Joueur {
         renforts.add(renfort);
     }
     void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
-    void retirerJetonTriton(){
+    void retirerJeton(String nomJeton){
         for (Jeton jeton : this.jetons){
-            if (jeton.equals("TRITON")) {
+            if (jeton.equals(nomJeton)) {
                 this.jetons.remove(jeton);
                 break;
             }
@@ -136,6 +145,7 @@ abstract class Joueur {
      */
     void lancerLesDes(){
         desFaceCourante = new Face[]{des[0].lancerLeDe(), des[1].lancerLeDe()};
+        setDernierLanceDes(2);
     }
 
     void gagnerRessource(){
@@ -266,10 +276,14 @@ abstract class Joueur {
                     pointDeGloire += 4;
                     break;
                 case BICHE:
-                    Face face = des[choisirDeBiche()].lancerLeDe();
+                    int choix = choisirDeBiche();
+                    Face face = des[choix].lancerLeDe();
+                    setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
+                    break;
                 case HIBOU:
                     gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
+                    break;
             }
         }
         if (verbeux) affichage += "\n";
@@ -442,4 +456,5 @@ abstract class Joueur {
      */
     abstract int choisirFacePourGagnerRessource(List<Face> faces);
     abstract void utiliserJetonTriton();
+    abstract void utiliserJetonCerbere();
 }

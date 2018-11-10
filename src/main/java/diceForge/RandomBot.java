@@ -115,8 +115,28 @@ class RandomBot extends Joueur{
                     ajouterOr(6);
                     break;
             }
-            retirerJetonTriton();
+            retirerJeton("TRITON");
         }
     }
 
+    @Override
+    void utiliserJetonCerbere(){
+        Random random = new Random();
+        int choix;
+        if (1 == random.nextInt(2)){
+            switch (getDernierLanceDes()){
+                case 0:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    break;
+                case 1:
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
+                case 2:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
+            }
+            retirerJeton("CERBERE");
+        }
+    }
 }
