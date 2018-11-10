@@ -6,6 +6,7 @@ import java.util.List;
 
 public class FaceMiroirAbyssal extends Face {
     private List<Joueur> listeJoueurs;
+    private int choix = -1;
 
     FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
         super(new Ressource[][]{});
@@ -26,10 +27,17 @@ public class FaceMiroirAbyssal extends Face {
         return faces;
     }
 
+    void setChoix(int choix){
+        this.choix = choix;
+    }
+
     @Override
     void effetActif(Joueur joueur){
         List<Face> faceAdversaires = obtenirFacesAdversaires();
-        joueur.gagnerRessourceFace(faceAdversaires.get(joueur.choisirFacePourGagnerRessource(faceAdversaires)));
+        if (choix == -1)
+            choix = joueur.choisirFacePourGagnerRessource(faceAdversaires);
+        joueur.gagnerRessourceFace(faceAdversaires.get(choix));
+        choix = -1;
     }
 
     @Override

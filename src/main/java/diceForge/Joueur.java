@@ -124,24 +124,48 @@ abstract class Joueur {
      */
     void lancerLesDes(){
         desFaceCourante = new Face[]{des[0].lancerLeDe(), des[1].lancerLeDe()};
-        if (verbeux) affichage += "\n";
     }
 
     void gagnerRessource(){
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
         for (int i = 0; i != desFaceCourante.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
-            if (desFaceCourante[i] instanceof FaceBouclier){//On traite le cas faceBouclier
-                int x = 0, j = i==0?1:0;//j est 1 si i est 0, et 0 sinon
-                if (desFaceCourante[j].getRessource().length != 1) {//Si l'autre de est une face à choix
-                    x = choisirRessource(desFaceCourante[j]);//le joueur choisis
-                    gagnerRessourceFace(desFaceCourante[j], x);//Il gagne les ressources conformément à son choix
-                    gagnerFace[j] = false;
+            int autreFace = i==0?1:0;//autreFace est 1 si i est 0, et 0 sinon
+            if (desFaceCourante[i] instanceof FaceBouclier && desFaceCourante[autreFace].getRessource().length > 0){//On traite le cas faceBouclier
+                int x = 0;
+                if (desFaceCourante[autreFace].getRessource().length > 1) {//Si l'autre de est une face à choix
+                    x = choisirRessource(desFaceCourante[autreFace]);//le autreFaceoueur choisis
+                    gagnerRessourceFace(desFaceCourante[autreFace], x);//Il gagne les ressources conformément à son choix
+                    gagnerFace[autreFace] = false;
                 }
-                for (Ressource ressource:desFaceCourante[j].getRessource()[x]){
+                for (Ressource ressource:desFaceCourante[autreFace].getRessource()[x]){
                     if (ressource.getClass().equals(desFaceCourante[i].getRessource()[0][0].getClass())){
                         pointDeGloire += 5;
                         gagnerFace[i] = false;
                         break;
+                    }
+                }
+            }
+            else if (desFaceCourante[i] instanceof FaceX3){//Si c'est une faceX3
+                if (desFaceCourante[autreFace].getRessource().length > 0){//Si l'autre face est commune
+                    gagnerFace[autreFace] = false;
+                    int x = 0;
+                    if (desFaceCourante[autreFace].getRessource().length > 1)
+                        x = choisirRessource(desFaceCourante[autreFace]);
+                    for (int j = 0; j != 3; ++j)//On applique la récompense 3x
+                        gagnerRessourceFace(desFaceCourante[autreFace], x);
+                }
+                if (desFaceCourante[autreFace] instanceof FaceBateauCeleste){//Si c'est une face bateau celeste
+                    gagnerFace[autreFace] = false;
+                    FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) desFaceCourante[autreFace];
+                    faceBateauCeleste.multiplierX3Actif();//On l'active avec le bonus
+                    faceBateauCeleste.effetActif(this);
+                }
+                else if (desFaceCourante[autreFace] instanceof FaceMiroirAbyssal){
+                    FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) desFaceCourante[autreFace];
+                    int choix = choisirFacePourGagnerRessource(faceMiroirAbyssal.obtenirFacesAdversaires());
+                    for (int j = 0; j != 3; j++){//On l'active 3 fois avec la meme face
+                        faceMiroirAbyssal.setChoix(choix);
+                        faceMiroirAbyssal.effetActif(this);
                     }
                 }
             }
