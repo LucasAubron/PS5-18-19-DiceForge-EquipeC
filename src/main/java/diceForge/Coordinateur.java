@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static diceForge.Joueur.Jeton.CERBERE;
+import static diceForge.Joueur.Jeton.TRITON;
+
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
  * Il s'occupe du déroulement des de la partie, mais aussi de déplacer les joueurs et gérer leur actions.
@@ -168,26 +171,19 @@ class Coordinateur {
         joueur.appelerRenforts(choixDuJoueur);
     }
 
-    private void phaseJetonTriton(Joueur joueur, int numeroManche){
-        if (!joueur.getJetons().isEmpty())
-            for (int i = 0; i < joueur.getJetons().size(); ++i){
-                if (joueur.getJetons().get(i) == Joueur.Jeton.TRITON) {
-                    Joueur.choixJetonTriton choix = joueur.utiliserJetonTriton();
-                    if (choix != Joueur.choixJetonTriton.Rien){
-                        joueur.appliquerJetonTriton(choix);
-                    }
-                }
-            }
+    private void phaseJetonTriton(Joueur joueur, int numeroManche) {
+        for (int i = 0; i < joueur.getJetons().size() && joueur.getJetons().get(i) == TRITON; ++i) {//On parcours tout les tritons
+            Joueur.choixJetonTriton choix = joueur.utiliserJetonTriton();//On stocke le choix
+            if (choix != Joueur.choixJetonTriton.Rien)//Si il veut
+                joueur.appliquerJetonTriton(choix);//on l'applique
+        }
     }
 
-    private void phaseJetonCerbere(Joueur joueur, int numeroManche){
-        if (!joueur.getJetons().isEmpty())
-            for (int i = 0; i < joueur.getJetons().size(); ++i)
-                if (joueur.getJetons().get(i) == Joueur.Jeton.CERBERE)
-                    if (joueur.utiliserJetonCerbere())
-                        joueur.appliquerJetonCerbere();
+    private void phaseJetonCerbere(Joueur joueur, int numeroManche) {
+        for (int i = 0; i < joueur.getJetons().size() && joueur.getJetons().get(i) == CERBERE && joueur.utiliserJetonCerbere(); ++i)
+            joueur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
     }
-    
+
     /**
      * Demande ce que le bot veut faire et agit en fonction de sa réponse
      * return true si le joueur effectue une action, false s'il passe son tour,

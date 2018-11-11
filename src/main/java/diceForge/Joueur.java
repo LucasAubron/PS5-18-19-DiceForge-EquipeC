@@ -501,7 +501,15 @@ abstract class Joueur {
      */
     abstract int choisirFacePourGagnerRessource(List<Face> faces);
 
+    /**
+     * Demande au joueur s'il veut utiliser un jeton triton
+     * @return son choix sous forme d'une enum
+     */
     abstract choixJetonTriton utiliserJetonTriton();
 
+    /**
+     * Demande au joueur s'il veut utiliser un jeton cerbere
+     * @return true si oui, false sinon
+     */
     abstract boolean utiliserJetonCerbere();
 }
