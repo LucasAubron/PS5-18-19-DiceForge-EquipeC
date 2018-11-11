@@ -87,7 +87,9 @@ abstract class Joueur {
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
     int getSoleil() {return soleil;}
+
     int getDernierLanceDes(){return dernierLanceDes;}
+
     void setDernierLanceDes(int code){
         if (code < 0 || code > 2)
             throw new DiceForgeException("Joueur", "Le denier lancé de dés doit être un entier entre 0 et 2");
@@ -129,6 +131,7 @@ abstract class Joueur {
         renforts.add(renfort);
     }
     void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
+
     void retirerJeton(String nomJeton){
         for (Jeton jeton : this.jetons){
             if (jeton.equals(nomJeton)) {
@@ -209,7 +212,6 @@ abstract class Joueur {
                 pointDeGloire += 3;
         lancerLesDes();
         gagnerRessource();
-        if (verbeux) affichage += "J"+identifiant+" est chassé\n";
     }
 
     /**
@@ -286,7 +288,6 @@ abstract class Joueur {
                     break;
             }
         }
-        if (verbeux) affichage += "\n";
     }
 
     /**
@@ -299,7 +300,6 @@ abstract class Joueur {
         if (numDe < 0 || numDe > 1)
             throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
-        if (verbeux) affichage += "J"+identifiant+" forge "+faceAForger+"\n";
     }
 
     /**
@@ -307,12 +307,9 @@ abstract class Joueur {
      * Est appelé une fois à la fin de la partie
      */
     void additionnerPointsCartes() {
-        if (verbeux) affichage += "Décompte des points de J"+identifiant+": ";
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
-            if (verbeux) affichage += carte.getNom()+": "+carte.getNbrPointGloire()+"; ";
         }
-        if (verbeux) affichage += "Total : +"+pointDeGloire+"\n";
     }
 
     /**
@@ -321,20 +318,15 @@ abstract class Joueur {
      */
     void gagnerRessourceFace(Face face, int choix){
         if (face.getRessource().length > 0) {
-            if (verbeux) affichage += "J" + identifiant + " obtient: ";
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or) {
                     ajouterOr(ressource.getQuantite());
-                    if (verbeux) affichage += ressource.getQuantite() + "Or; ";
                 } else if (ressource instanceof Soleil) {
                     ajouterSoleil(ressource.getQuantite());
-                    if (verbeux) affichage += ressource.getQuantite() + "Sol, ";
                 } else if (ressource instanceof Lune) {
                     ajouterLune(ressource.getQuantite());
-                    if (verbeux) affichage += ressource.getQuantite() + "Lune; ";
                 } else if (ressource instanceof PointDeGloire) {
                     pointDeGloire += ressource.getQuantite();
-                    if (verbeux) affichage += ressource.getQuantite() + "Pdg; ";
                 }
             }
         }
@@ -366,7 +358,7 @@ abstract class Joueur {
                 }
             }
         }
-        return new int[]{-1, -1};
+        return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
     }
 
     @Override
@@ -455,6 +447,8 @@ abstract class Joueur {
      * @return position de la face dans la liste fournie
      */
     abstract int choisirFacePourGagnerRessource(List<Face> faces);
+
     abstract void utiliserJetonTriton();
+
     abstract void utiliserJetonCerbere();
 }
