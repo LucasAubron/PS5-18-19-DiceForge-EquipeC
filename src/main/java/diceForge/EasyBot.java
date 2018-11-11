@@ -73,8 +73,9 @@ class EasyBot extends Joueur{
     int choisirRessource(Face faceAChoix){
         for (int i = 0; i != faceAChoix.getRessource().length; ++i){
             for (Ressource ressource:faceAChoix.getRessource()[i]){
-                if (ressource instanceof Lune || ressource instanceof Soleil)
+                if (ressource instanceof Lune || ressource instanceof Soleil) {
                     return i;//On cherche un résultat sur la face qui donne des soleils ou des lunes
+                }
             }
         }
         return 0;

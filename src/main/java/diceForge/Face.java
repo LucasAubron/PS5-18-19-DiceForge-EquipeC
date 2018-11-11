@@ -35,7 +35,7 @@ class Face {
                 affichage += "ou ";
             for (Ressource x:ressources){
                 affichage += x.getQuantite();
-                affichage += x+"+";
+                affichage += x+" +";
             }
         }
         if (!affichage.isEmpty())

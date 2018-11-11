@@ -34,7 +34,7 @@ class Afficheur {
     }
 
     void ressourcesGagnees(Joueur joueur) {
-        info += "\nLancés des dés du joueur n°" + joueur.getIdentifiant() + "\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\t||\tRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
+        info += "\nLancés des dés du joueur n°" + joueur.getIdentifiant() + "\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
     }
 
     void desActuels(Joueur joueur) {
@@ -42,8 +42,29 @@ class Afficheur {
     }
 
     void ressourcesDisponibles(Joueur joueur) {
-    info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\n";
+    info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\nPoints de gloire: " + joueur.getPointDeGloire() + "\n";
     }
+
+    void choixFaceAChoix(Face faceAChoix, Ressource[] ressource){
+        if (modeVerbeux)
+            info += "\nLe joueur choisi la ressource " + ressource + "sur la face à choix " + faceAChoix;
+    }
+
+    void biche(int deChoisi, Face faceObtenue,Joueur joueur){
+        if (modeVerbeux){
+            deChoisi++;
+            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " .Il gagne " + faceObtenue;
+            ressourcesDisponibles(joueur);
+        }
+    }
+
+    void ancien(Joueur joueur){
+        if (modeVerbeux){
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3or pour gagner 4 points de gloire";
+            ressourcesDisponibles(joueur);
+        }
+    }
+
     @Override
     public String toString(){
         return info;

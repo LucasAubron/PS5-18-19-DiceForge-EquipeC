@@ -57,7 +57,6 @@ abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}})})};
-        this.verbeux = verbeux;
     }
 
     int getOr() {return or;}
@@ -146,6 +145,7 @@ abstract class Joueur {
             }
         }
     }
+
     List<Jeton> getJetons(){return this.jetons;}
 
     /**
@@ -208,6 +208,7 @@ abstract class Joueur {
     }
 
     Face[] getDesFaceCourante(){return desFaceCourante;}
+
 
     /**
      * Méthode à appeler lorsque le joueur est chassé
@@ -282,12 +283,14 @@ abstract class Joueur {
                 case ANCIEN:
                     or -= 3;
                     pointDeGloire += 4;
+                    afficheur.ancien(this);
                     break;
                 case BICHE:
                     int choix = choisirDeBiche();
                     Face face = des[choix].lancerLeDe();
                     setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
+                    afficheur.biche(choix, face, this);
                     break;
                 case HIBOU:
                     gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
