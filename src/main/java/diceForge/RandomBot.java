@@ -9,7 +9,6 @@ class RandomBot extends Joueur{
     RandomBot(int identifiant, boolean verbeux){
         super(identifiant, verbeux);
     }
-    RandomBot(){super();}
 
     @Override
     Action choisirAction(int numTour){

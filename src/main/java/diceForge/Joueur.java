@@ -37,8 +37,6 @@ abstract class Joueur {
     enum Jeton {TRITON, CERBERE}
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 0 en dernier, 1 si c'est le cas du dé 1, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
-    Joueur(){}//Pour pouvoir indiquer quel type de joueur on veut utiliser dans main sans a avoir a mettre des arguments aléatoires (moche)
-
     Joueur(int indentifiant, boolean verbeux){
         System.out.println(identifiant);
         //if (identifiant < 1 || identifiant > 4)

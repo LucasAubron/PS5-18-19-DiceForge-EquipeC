@@ -10,12 +10,12 @@ import java.util.List;
 class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    PortailsOriginels(String[] joueurs, boolean verbeux){
-        if (joueurs.length < 2 || joueurs.length > 4)
-            throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
+    PortailsOriginels(String[] typeJoueurs, boolean verbeux){
+        if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
+            throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
         int identifiant = 1;
-        for (String joueur:joueurs) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
+        for (String joueur:typeJoueurs) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
             if (joueur.equals("RandomBot"))
                 this.joueurs.add(new RandomBot(identifiant, verbeux));
             else if (joueur.equals("EasyBot"))
