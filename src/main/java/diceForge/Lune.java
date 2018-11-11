@@ -7,6 +7,6 @@ class Lune extends Ressource {
 
     @Override
     public String toString(){
-        return "Lune";
+        return " Lune";
     }
 }

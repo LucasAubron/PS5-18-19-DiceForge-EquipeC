@@ -6,10 +6,8 @@ import java.util.Random;
 
 class RandomBot extends Joueur{
     private Random random = new Random();
-    RandomBot(int identifiant, boolean verbeux){
-        super(identifiant, verbeux);
+    RandomBot(int identifiant, Afficheur afficheur){ super(identifiant, afficheur);
     }
-    RandomBot(){super();}
 
     @Override
     Action choisirAction(int numTour){
@@ -73,7 +71,12 @@ class RandomBot extends Joueur{
     }
 
     @Override
-    int choisirDeBiche(){
+    int choisirDeFaveurMineure(){
+        return random.nextInt(2);
+    }
+
+    @Override
+    int choisirDeCyclope(){
         return random.nextInt(2);
     }
 
@@ -99,44 +102,31 @@ class RandomBot extends Joueur{
     }
 
     @Override
-    void utiliserJetonTriton(){
-        Random random = new Random();
-        int choix;
-        if (1 == random.nextInt(2)){
-            choix = random.nextInt(3);
-            switch (choix){
-                case 0:
-                    ajouterSoleil(2);
-                    break;
-                case 1:
-                    ajouterLune(2);
-                    break;
-                case 2:
-                    ajouterOr(6);
-                    break;
-            }
-            retirerJeton("TRITON");
+    choixJetonTriton utiliserJetonTriton(){
+        int choix = random.nextInt(choixJetonTriton.values().length);
+        switch (choix){
+            case 0:
+                return choixJetonTriton.Rien;
+            case 1:
+                return choixJetonTriton.Or;
+            case 2:
+                return choixJetonTriton.Soleil;
+            case 3:
+                return choixJetonTriton.Lune;
         }
+        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoi rien !!");
     }
 
     @Override
-    void utiliserJetonCerbere(){
-        Random random = new Random();
-        int choix;
-        if (1 == random.nextInt(2)){
-            switch (getDernierLanceDes()){
-                case 0:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
-                    break;
-                case 1:
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
-                    break;
-                case 2:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
-                    break;
-            }
-            retirerJeton("CERBERE");
-        }
+    boolean utiliserJetonCerbere(){
+        return random.nextInt(2) == 1;
     }
+
+    @Override
+    boolean choisirRessourceOuPdg(Ressource ressource){
+        return random.nextInt(2) == 1;
+    }
+
+    @Override
+    public String toString(){return "RandomBot";}
 }

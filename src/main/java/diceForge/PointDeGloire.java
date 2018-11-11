@@ -7,6 +7,6 @@ class PointDeGloire extends Ressource {
 
     @Override
     public String toString(){
-        return "Point de gloire";
+        return " Point de gloire";
     }
 }

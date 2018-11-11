@@ -2,6 +2,7 @@ package diceForge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Les portails originels sont la ou les joueurs commence et la
@@ -10,18 +11,18 @@ import java.util.List;
 class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    PortailsOriginels(Joueur[] joueurs, boolean verbeux){
-        if (joueurs.length < 2 || joueurs.length > 4)
-            throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
+    PortailsOriginels(Joueur.Bot[] typeJoueurs, Afficheur afficheur){
+        if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
+            throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
-        int identifiant = 0;
-        for (Joueur joueur:joueurs) {//On copie les joueurs, pour éviter de garder le même joueur sur des plateaux différents
-            if (joueur instanceof RandomBot)//Système imparfait, mais je ne vois pas mieux à faire
-                this.joueurs.add(new RandomBot(identifiant, verbeux));
-            else if (joueur instanceof EasyBot)
-                this.joueurs.add(new EasyBot(identifiant, verbeux));
+        for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
+            if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot) {
+                this.joueurs.add(new RandomBot(identifiant, afficheur));
+            }
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot) {
+                this.joueurs.add(new EasyBot(identifiant, afficheur));
+            }
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
-            ++identifiant;
         }
     }
 
@@ -39,7 +40,7 @@ class PortailsOriginels {
         }
         if (x == null)
             throw new DiceForgeException("PortailsOriginels","Le joueur qui posséde l'indice n°"+identifiantJoueur+" n'existe pas.");
-        joueurs.remove(x);//On supprime le joueur
+        joueurs.remove(x);//On retire le joueur
         return x;
     }
 

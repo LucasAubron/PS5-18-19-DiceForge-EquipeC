@@ -8,12 +8,15 @@ import java.util.Random;
 class De {
     private Face[] faces;
     private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé
+    private Face derniereFace;
 
     Face[] getFaces() {
         return faces;
     }
 
     Face getFace(int num) { return faces[num]; }
+
+    Face derniereFace(){return derniereFace;}
 
     De(Face[] faces){
         if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
@@ -23,8 +26,8 @@ class De {
 
     Face lancerLeDe(){
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
-        int face = aleatoire.nextInt(faces.length);//Nombre entre 0 et faces.length-1
-        return faces[face];
+        derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
+        return derniereFace;
     }
 
     void forger(Face faceAForger, int numFace){
@@ -34,12 +37,12 @@ class De {
         ++nbrFaceForge;
     }
 
-    /*int posFace1Or(){
-        for (int i = 0; i != faces.length; ++i)
-            if ()
-    }*/
-
     int getNbrFaceForge() {
         return nbrFaceForge;
+    }
+
+    @Override
+    public String toString(){
+        return "" + faces[0] + " | " + faces[1] + " | " + faces[2] + " | " + faces[3] + " | " + faces[4] + " | " + faces[5];
     }
 }

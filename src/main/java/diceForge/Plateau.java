@@ -16,11 +16,9 @@ class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
-    private String affichage = "";
-
-    Plateau(boolean modeVerbeux, Joueur[] joueurs){
-        portail = new PortailsOriginels(joueurs, modeVerbeux);//La ou les joueurs sont de base
-        temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
+    Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
+        portail = new PortailsOriginels(typeJoueurs, afficheur);//La ou les joueurs sont de base
+        temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         Random random = new Random();
 
@@ -35,57 +33,64 @@ class Plateau {
         Carte bateauCeleste = new CarteBateauCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
+
         Carte meduse = new Carte(new Ressource[]{new Soleil(4)}, 14, Carte.Noms.Meduse);
         Carte triton = new Carte(new Ressource[]{new Soleil(4)}, 8, Carte.Noms.Triton);
 
+        Carte[][] ileFond = new Carte[3][typeJoueurs.length];
+        int[] ra = new int[]{random.nextInt(2), random.nextInt(2), random.nextInt(2)};
+        for (int i = 0; i != typeJoueurs.length; ++i){
+            if (ra[0] == 0)
+                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 16, Carte.Noms.Typhon);
+            else
+                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 26, Carte.Noms.Hydre);
+            if (ra[1] == 0)
+                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 6, Carte.Noms.Sentinelle);
+            else
+                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 8, Carte.Noms.Cancer);
+            if (ra[2] == 0)
+                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 10, Carte.Noms.Sphinx);
+            else
+                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 8, Carte.Noms.Cyclope);
+        }
+
         iles = new Ile[]{new Ile(new Marteau(),
-                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), joueurs.length),
-        new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
-                new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? ours : biche,
-                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
-                random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
-                new Carte(new Ressource[]{new Lune(5)}, 4,  Carte.Noms.CasqueDinvisibilite),
-                joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? meduse : triton,
-                new CarteMiroirAbyssal(portail.getJoueurs()),
-                joueurs.length)};
-        /*
-        * /!\   lorsqu'on ajoutera les cartes qui coûtent 6 Lunes/Soleils ne pas oublier
-        *       de s'occuper du jeton Cerbère!.
-        * */
-
-
-
-    affichage += "Cartes présentes : ";
-        for (Ile ile:iles)
-            for(List<Carte> cartes:ile.getCartes())
-                    affichage += cartes.get(0)+"; ";
-        affichage += "\n";
+                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), typeJoueurs.length),
+                new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
+                        new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),
+                new Ile(random.nextInt(2) == 1 ? ours : biche,
+                        random.nextInt(2) == 1 ? sanglier : satyres, typeJoueurs.length),
+                new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
+                        random.nextInt(2) == 1 ? minautore : bouclier, typeJoueurs.length),
+                new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
+                        new Carte(new Ressource[]{new Lune(5)}, 4, Carte.Noms.CasqueDinvisibilite),
+                        typeJoueurs.length),
+                new Ile(random.nextInt(2) == 1 ? meduse : triton,
+                        new CarteMiroirAbyssal(portail.getJoueurs()),
+                        typeJoueurs.length),
+                new Ile(ileFond)};
     }
 
     /**
      * Si quelqu'un peut le faire plus clairement, qu'il le fasse
      * @return la liste des joueurs présents sur le plateau
      */
-    List<Joueur> getJoueur() {
+    List<Joueur> getJoueurs() {
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
         tempJoueur.addAll(portail.getJoueurs());
         for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
-        List<Joueur> joueur = new ArrayList<>();//Pour la liste triée
-        for (int i = 0; i != tempJoueur.size(); ++i){
+        List<Joueur> joueurs = new ArrayList<>();//Pour la liste triée
+        for (int i = 1; i != tempJoueur.size()+1; ++i){
             for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
                 if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
-                    joueur.add(j);
+                    joueurs.add(j);
                     break;
                 }
         }
-        return joueur;
+        return joueurs;
     }
 
     PortailsOriginels getPortail(){return portail;}
@@ -94,14 +99,5 @@ class Plateau {
 
     Temple getTemple() {
         return temple;
-    }
-
-    boolean estVerbeux() {return modeVerbeux; }
-
-    @Override
-    public String toString(){
-        String s = affichage;
-        affichage = "";
-        return s;
     }
 }

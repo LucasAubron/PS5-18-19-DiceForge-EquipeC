@@ -29,6 +29,7 @@ public class Marteau extends Carte {
         }
         return 0;
     }
+
     int getNiveau(){return niveau;}
 
     int getPoints(){return point;}
@@ -40,5 +41,17 @@ public class Marteau extends Carte {
         if (niveau == 2)
             return 25;
         return 0;
+    }
+
+    @Override
+    public String toString(){
+        if (niveau == 0)
+            return "Marteau phase I: " + point + "/15";
+        if (niveau == 1)
+            return "Marteau phase II: " + point + "/15";
+        if (niveau == 2)
+            return "Marteau II: 15/15";
+        else
+            throw new DiceForgeException("Marteau", "Le marteau est a un niveau incorect; accepté min 0 max 2, actuel:" + niveau);
     }
 }
