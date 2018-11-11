@@ -65,6 +65,13 @@ class Afficheur {
         }
     }
 
+    void hibou(Joueur joueur, Face face){
+        if (modeVerbeux){
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + face;
+            ressourcesDisponibles(joueur);
+        }
+    }
+
     @Override
     public String toString(){
         return info;

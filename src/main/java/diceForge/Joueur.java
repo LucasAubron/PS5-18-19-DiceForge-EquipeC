@@ -276,6 +276,7 @@ abstract class Joueur {
     }
 
     void appelerRenforts(List<Renfort> renfortsUtilisables){
+        int choix;
         if (!renfortsUtilisables.isEmpty() && verbeux)
             affichage += "J"+identifiant+" appelle: ";
         for (Renfort renfort:renfortsUtilisables){
@@ -287,16 +288,21 @@ abstract class Joueur {
                     afficheur.ancien(this);
                     break;
                 case BICHE:
-                    int choix = choisirDeBiche();
+                    choix = choisirDeBiche();
                     Face face = des[choix].lancerLeDe();
                     setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
                     afficheur.biche(choix, face, this);
                     break;
                 case HIBOU:
-                   List proposition = new List(Arrays.asList();
-                   int choix = choisirFacePourGagnerRessource(proposition);
-
+                    List<Face> proposition = Arrays.asList(
+                            new Face(new Ressource[][]{{new Soleil(1)}}),
+                            new Face(new Ressource[][]{{new Lune(1)}}),
+                            new Face(new Ressource[][]{{new Or(1)}})
+                    );
+                    choix = choisirFacePourGagnerRessource(proposition);
+                    gagnerRessourceFace(proposition.get(choix));
+                    afficheur.hibou(this, proposition.get(choix));
                     break;
             }
         }
