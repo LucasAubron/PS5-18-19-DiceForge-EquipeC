@@ -7,6 +7,6 @@ public class Soleil extends Ressource {
 
     @Override
     public String toString(){
-        return "Soleil";
+        return " Soleil";
     }
 }

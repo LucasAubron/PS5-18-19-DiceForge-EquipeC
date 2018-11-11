@@ -7,6 +7,6 @@ class Or extends Ressource {
 
     @Override
     public String toString(){
-        return "Or";
+        return " Or";
     }
 }
