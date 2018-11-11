@@ -68,7 +68,7 @@ class Plateau {
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
         List<Joueur> joueurs = new ArrayList<>();//Pour la liste triée
-        for (int i = 0; i != tempJoueur.size(); ++i){
+        for (int i = 1; i != tempJoueur.size()+1; ++i){
             for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
                 if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
                     joueurs.add(j);

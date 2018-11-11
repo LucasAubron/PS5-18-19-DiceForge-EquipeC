@@ -37,11 +37,10 @@ abstract class Joueur {
     enum Jeton {TRITON, CERBERE}
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 0 en dernier, 1 si c'est le cas du dé 1, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
-    Joueur(int indentifiant, boolean verbeux){
-        System.out.println(identifiant);
-        //if (identifiant < 1 || identifiant > 4)
-        //    throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
-        this.identifiant = indentifiant;
+    Joueur(int identifiant, boolean verbeux){
+        if (identifiant < 1 || identifiant > 4)
+            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
+        this.identifiant = identifiant;
         or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Lune(1)}}),

@@ -16,11 +16,9 @@ class PortailsOriginels {
         this.joueurs = new ArrayList<>();
         for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
             if (typeJoueurs[identifiant-1].equals("RandomBot")) {
-                System.out.println(identifiant);
                 this.joueurs.add(new RandomBot(identifiant, verbeux));
             }
             else if (typeJoueurs[identifiant-1].equals("EasyBot")) {
-                System.out.println(identifiant);
                 this.joueurs.add(new EasyBot(identifiant, verbeux));
             }
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");

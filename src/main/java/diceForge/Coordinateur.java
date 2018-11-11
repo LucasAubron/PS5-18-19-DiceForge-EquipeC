@@ -29,11 +29,11 @@ class Coordinateur {
         }
         else{
             int[] nbrVictoire = new int[typeJoueurs.length];
-            int[] PtsGloireCumules = new int[typeJoueurs.length];
+            int[] ptsGloireCumules = new int[typeJoueurs.length];
             int nbrPartiesJoue = 1000; //nbrPartiesJoue = 1000 parties, comme demandé dans le kata
             for (int i = 0; i != typeJoueurs.length; ++i){
                 nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
-                PtsGloireCumules[i] = 0;
+                ptsGloireCumules[i] = 0;
             }
             for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
                 plateau = new Plateau(false, typeJoueurs);
@@ -43,9 +43,9 @@ class Coordinateur {
                 }
                 List<Integer> infoJoueurGagnant = infoJoueurGagnant();
                 for (int j = 1; j != infoJoueurGagnant.size(); ++j)
-                    nbrVictoire[infoJoueurGagnant.get(j)]++;//Puis on stocke les infos des parties
+                    nbrVictoire[infoJoueurGagnant.get(j)-1]++;//Puis on stocke les infos des parties
                 for (int j = 0; j != typeJoueurs.length; ++j)
-                    PtsGloireCumules[j] += plateau.getJoueurs().get(j).getPointDeGloire();
+                    ptsGloireCumules[j] += plateau.getJoueurs().get(j).getPointDeGloire();
             }
         }
     }
