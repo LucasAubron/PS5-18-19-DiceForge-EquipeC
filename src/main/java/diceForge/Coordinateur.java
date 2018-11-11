@@ -1,5 +1,6 @@
 package diceForge;
 
+import java.nio.file.attribute.AclFileAttributeView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +14,14 @@ import java.util.List;
  */
 class Coordinateur {
     private Plateau plateau;
-    private String affichage = "";
+    private Afficheur afficheur;
 
     Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            afficheur = new Afficheur(plateau);
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
@@ -43,9 +45,6 @@ class Coordinateur {
                     nbrVictoire[infoJoueurGagnant.get(j)]++;//Puis on stocke les infos des parties
                 for (int j = 0; j != joueurs.length; ++j)
                     PtsGloireCumules[j] += plateau.getJoueur().get(j).getPointDeGloire();
-            }
-            for (int i = 0; i != joueurs.length; ++i){//Puis on les affiches
-                affichage += "Le joueur "+i+" a gagné "+nbrVictoire[i]+" fois avec une moyenne de "+PtsGloireCumules[i]/nbrPartiesJoue+" points de gloire\n";
             }
         }
     }
@@ -292,7 +291,6 @@ class Coordinateur {
             throw new DiceForgeException("Coordinateur", "Aucun joueur a plus de 0 pt de gloire, problème !");
         return infoJoueurGagnant;
     }
-    public String toString(){
-        return affichage;
-        }
+
+    Afficheur getAffichage(){return afficheur;}
 }
