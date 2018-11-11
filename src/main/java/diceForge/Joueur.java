@@ -39,13 +39,13 @@ abstract class Joueur {
     // et 2 si les deux dés ont été lancés
     private int dernierLanceDes;
 
-    Joueur(){}
+    Joueur(){}//Pour pouvoir indiquer quel type de joueur on veut utiliser dans main sans a avoir a mettre des arguments aléatoires (moche)
 
     Joueur(int indentifiant, boolean verbeux){
-        if (identifiant < 0 || identifiant > 3)
-            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 0, max : 3, actuel : "+identifiant);
+        if (identifiant < 1 || identifiant > 4)
+            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = indentifiant;
-        or = 3-identifiant;
+        or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Lune(1)}}),
                 new Face(new Ressource[][]{{new PointDeGloire(2)}}),

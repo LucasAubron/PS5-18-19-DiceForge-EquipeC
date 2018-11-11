@@ -16,9 +16,7 @@ class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
-    private String affichage = "";
-
-    Plateau(boolean modeVerbeux, Joueur[] joueurs){
+    Plateau(boolean modeVerbeux, Joueur[] joueurs) {
         portail = new PortailsOriginels(joueurs, modeVerbeux);//La ou les joueurs sont de base
         temple = new Temple(joueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
@@ -40,30 +38,22 @@ class Plateau {
 
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), joueurs.length),
-        new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
-                new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? ours : biche,
-                random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
-                random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
-                new Carte(new Ressource[]{new Lune(5)}, 4,  Carte.Noms.CasqueDinvisibilite),
-                joueurs.length),
-        new Ile(random.nextInt(2) == 1 ? meduse : triton,
-                new CarteMiroirAbyssal(portail.getJoueurs()),
-                joueurs.length)};
+                new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
+                        new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), joueurs.length),
+                new Ile(random.nextInt(2) == 1 ? ours : biche,
+                        random.nextInt(2) == 1 ? sanglier : satyres, joueurs.length),
+                new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
+                        random.nextInt(2) == 1 ? minautore : bouclier, joueurs.length),
+                new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
+                        new Carte(new Ressource[]{new Lune(5)}, 4, Carte.Noms.CasqueDinvisibilite),
+                        joueurs.length),
+                new Ile(random.nextInt(2) == 1 ? meduse : triton,
+                        new CarteMiroirAbyssal(portail.getJoueurs()),
+                        joueurs.length)};
         /*
-        * /!\   lorsqu'on ajoutera les cartes qui coûtent 6 Lunes/Soleils ne pas oublier
-        *       de s'occuper du jeton Cerbère!.
-        * */
-
-
-
-    affichage += "Cartes présentes : ";
-        for (Ile ile:iles)
-            for(List<Carte> cartes:ile.getCartes())
-                    affichage += cartes.get(0)+"; ";
-        affichage += "\n";
+         * /!\   lorsqu'on ajoutera les cartes qui coûtent 6 Lunes/Soleils ne pas oublier
+         *       de s'occuper du jeton Cerbère!.
+         * */
     }
 
     /**
@@ -77,15 +67,15 @@ class Plateau {
         for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
-        List<Joueur> joueur = new ArrayList<>();//Pour la liste triée
+        List<Joueur> joueurs = new ArrayList<>();//Pour la liste triée
         for (int i = 0; i != tempJoueur.size(); ++i){
             for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
                 if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
-                    joueur.add(j);
+                    joueurs.add(j);
                     break;
                 }
         }
-        return joueur;
+        return joueurs;
     }
 
     PortailsOriginels getPortail(){return portail;}
@@ -94,14 +84,5 @@ class Plateau {
 
     Temple getTemple() {
         return temple;
-    }
-
-    boolean estVerbeux() {return modeVerbeux; }
-
-    @Override
-    public String toString(){
-        String s = affichage;
-        affichage = "";
-        return s;
     }
 }

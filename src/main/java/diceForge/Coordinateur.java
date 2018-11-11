@@ -21,7 +21,7 @@ class Coordinateur {
         int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
-            afficheur = new Afficheur(plateau);
+            afficheur = new Afficheur(modeVerbeux, plateau);
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
