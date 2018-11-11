@@ -4,6 +4,7 @@ import java.nio.file.attribute.AclFileAttributeView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
@@ -36,17 +37,31 @@ class Coordinateur {
                 ptsGloireCumules[i] = 0;
             }
             for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
-                plateau = new Plateau(false, typeJoueurs);
+                int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
+                List<Integer> id = new ArrayList<>();//La liste des positions possible
+                for (int j = 0; j != typeJoueurs.length; ++j)
+                    id.add(j);//Que l'on remplis
+                for (int j = 0; j != posRandom.length; ++j){
+                    Random random = new Random();//On random la position des joueurs
+                    posRandom[j] = id.remove(random.nextInt(id.size()));
+                }
+                Joueur.Bot[] listeJoueurRandom = new Joueur.Bot[typeJoueurs.length];
+                for (int j = 0; j != listeJoueurRandom.length; ++j)
+                    listeJoueurRandom[j] = typeJoueurs[posRandom[j]];//On assigne les joueurs à la position aléatoire
+                plateau = new Plateau(false, listeJoueurRandom);
 
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }
                 List<Integer> infoJoueurGagnant = infoJoueurGagnant();
-                for (int j = 1; j != infoJoueurGagnant.size(); ++j)
-                    nbrVictoire[infoJoueurGagnant.get(j)-1]++;//Puis on stocke les infos des parties
+                for (int j = 1; j != infoJoueurGagnant.size(); ++j) {
+                    nbrVictoire[posRandom[infoJoueurGagnant.get(j) - 1]]++;//Puis on stocke les infos des parties
+                }
                 for (int j = 0; j != typeJoueurs.length; ++j)
-                    ptsGloireCumules[j] += plateau.getJoueurs().get(j).getPointDeGloire();
+                    ptsGloireCumules[posRandom[j]] += plateau.getJoueurs().get(j).getPointDeGloire();
             }
+            for (int i = 0; i != nbrVictoire.length; ++i)//Affichage temporaire
+                System.out.println("J"+i+":"+nbrVictoire[i]+"; "+ptsGloireCumules[i]/nbrPartiesJoue);
         }
     }
 
