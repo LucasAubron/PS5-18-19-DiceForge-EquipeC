@@ -12,7 +12,7 @@ import java.util.Random;
 class TestBot extends Joueur {
     private Random random = new Random();
 
-    TestBot(int identifiant, boolean verbeux) {super (identifiant, verbeux);}
+    TestBot(int identifiant) {super (identifiant);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 class EasyBot extends Joueur{
-    EasyBot(int identifiant, boolean verbeux) {super(identifiant, verbeux);}
+    EasyBot(int identifiant) {super(identifiant);}
 
     @Override
     Action choisirAction(int numManche){
