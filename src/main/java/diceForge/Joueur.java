@@ -60,6 +60,8 @@ abstract class Joueur {
 
     int getOr() {return or;}
 
+    int getMaxOr(){return maxOr;} //sert uniquement à l'affichage
+
     void ajouterOr (int quantite){
         int ajoutOr = quantite;
         if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
@@ -85,6 +87,8 @@ abstract class Joueur {
 
     int getSoleil() {return soleil;}
 
+    int getMaxSoleil(){return maxSoleil;} //idem (juste pour l'affichage)
+
     int getDernierLanceDes(){return dernierLanceDes;}
 
     void setDernierLanceDes(int code){
@@ -101,6 +105,8 @@ abstract class Joueur {
     void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
 
     int getLune() {return lune;}
+
+    int getMaxLune() {return maxLune;}
 
     void ajouterLune(int quantite) {
         lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;

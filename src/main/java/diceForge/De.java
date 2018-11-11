@@ -42,4 +42,9 @@ class De {
     int getNbrFaceForge() {
         return nbrFaceForge;
     }
+
+    @Override
+    public String toString(){
+        return "" + faces[0] + " | " + faces[1] + " | " + faces[2] + " | " + faces[3] + " | " + faces[4] + " | " + faces[5];
+    }
 }
