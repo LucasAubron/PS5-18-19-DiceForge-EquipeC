@@ -35,6 +35,7 @@ abstract class Joueur {
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
     enum Jeton {TRITON, CERBERE}
+    enum Bot{RandomBot, EasyBot, TestBot}
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 0 en dernier, 1 si c'est le cas du dé 1, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
     Joueur(int identifiant, boolean verbeux){

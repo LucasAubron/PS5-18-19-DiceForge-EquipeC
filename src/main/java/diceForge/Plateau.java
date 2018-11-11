@@ -16,7 +16,7 @@ class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
-    Plateau(boolean modeVerbeux, String[] typeJoueurs) {
+    Plateau(boolean modeVerbeux, Joueur.Bot[] typeJoueurs) {
         portail = new PortailsOriginels(typeJoueurs, modeVerbeux);//La ou les joueurs sont de base
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
