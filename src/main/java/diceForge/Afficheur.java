@@ -48,6 +48,9 @@ class Afficheur {
     void ressourcesDisponibles(Joueur joueur) {
         if (modeVerbeux)
             info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\nPoints de gloire: " + joueur.getPointDeGloire() + "\n";
+            if (!joueur.getMarteau().isEmpty())
+                for (Marteau marteau: joueur.getMarteau())
+                    info += marteau + "\n";
     }
 
     void choixFaceAChoix(Face faceAChoix, Ressource[] ressource){
