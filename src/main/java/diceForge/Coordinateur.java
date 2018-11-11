@@ -126,7 +126,7 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
-        afficheur.ressourcesDisponibles(joueur);
+        afficheur.presentationLancerDes();
         for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés
             x.lancerLesDes();
             afficheur.ressourcesGagnees(x);//toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peut facilement être ignoré lors de la lecture du codea
@@ -141,8 +141,8 @@ class Coordinateur {
             for (Joueur x:plateau.getJoueurs())
                 x.gagnerRessource();
         }
-        afficheur.desActuels(joueur);
-        afficheur.ressourcesDisponibles(joueur);
+        afficheur.grandTrait();
+        afficheur.recapJoueur(joueur);
     }
 
     /**
@@ -154,6 +154,8 @@ class Coordinateur {
      */
     private void phaseRenforts(Joueur joueur, int numeroManche){
         //on créé une copie de liste des renforts du joueurs, on met les renforts ANCIEN au début de la liste
+        afficheur.grandTrait();
+        afficheur.presentationRenforts();
         List renfortsUtilisables = new ArrayList();
         int nbrAncientAjoute = 0;
         for (Joueur.Renfort renfort:joueur.getRenforts()){

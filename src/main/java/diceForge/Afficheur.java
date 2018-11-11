@@ -27,17 +27,21 @@ class Afficheur {
 
     void manche(int numManche) {
         if (modeVerbeux)
-            info += "\n--------------------------------------------------\nManche " + numManche + "\n--------------------------------------------------\n";
+            info += "\n\n\n\n\n--------------------------------------------------\n\t\t\t\tMANCHE " + numManche + "\n--------------------------------------------------\n";
     }
 
     void tour(Joueur joueur) {
-        if (modeVerbeux)
-            info += "\n\t\t--Tour du joueur n°" + joueur.getIdentifiant() + "--\n";
+        if (modeVerbeux) {
+            info += "\n";
+            petitTrait();
+            info += "\t\t--Tour du joueur n°" + joueur.getIdentifiant() + "--";
+            petitTrait();
+        }
     }
 
     void ressourcesGagnees(Joueur joueur) {
         if (modeVerbeux)
-            info += "\nLancés des dés du joueur n°" + joueur.getIdentifiant() + "\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
+            info += "\n--Lancés des dés du joueur n°" + joueur.getIdentifiant() + "--\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
     }
 
     void desActuels(Joueur joueur) {
@@ -53,31 +57,57 @@ class Afficheur {
                     info += marteau + "\n";
     }
 
-    void choixFaceAChoix(Face faceAChoix, Ressource[] ressource){
-        if (modeVerbeux)
-            info += "\nLe joueur choisi la ressource " + ressource + "sur la face à choix " + faceAChoix;
+    void recapJoueur(Joueur joueur){
+        if (modeVerbeux){
+            info += "\n\t\t|Information joueur|\n";
+            ressourcesDisponibles(joueur);
+            desActuels(joueur);
+         }
     }
-
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
-            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " . Il gagne " + faceObtenue;
-            ressourcesDisponibles(joueur);
+            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " . Il gagne " + faceObtenue + ".";
         }
     }
 
     void ancien(Joueur joueur){
         if (modeVerbeux){
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3or pour gagner 4 points de gloire";
-            ressourcesDisponibles(joueur);
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3or pour gagner 4 points de gloire.";
         }
     }
 
     void hibou(Joueur joueur, Face face){
         if (modeVerbeux){
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + face;
-            ressourcesDisponibles(joueur);
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + face + ".";
         }
+    }
+
+    void choixFace(Joueur joueur, Face face, int choix){
+        if (modeVerbeux){
+            if (face.getRessource().length > 1) {
+                info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisi: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
+            }
+        }
+    }
+    void presentationLancerDes(){
+        if (modeVerbeux)
+            info += "\n\t--Phase de lancer de dés--\n";
+    }
+
+    void presentationRenforts(){
+        if (modeVerbeux)
+            info += "\n\t--Phase de renforts--\n";
+    }
+
+    void grandTrait(){
+        if (modeVerbeux)
+            info += "\n--------------------------------------------------\n"; //pas nécessaire mais bon faut bien s'amuser
+    }
+
+    void petitTrait(){
+        if (modeVerbeux)
+            info += "\n-----------------------------------\n";
     }
 
     @Override

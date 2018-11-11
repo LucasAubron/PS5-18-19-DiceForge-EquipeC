@@ -407,6 +407,7 @@ abstract class Joueur {
         int choix = 0;
         if (face.getRessource().length > 1)
             choix = choisirRessource(face);
+        afficheur.choixFace(this, face, choix);
         gagnerRessourceFace(face, choix);
     }
 
