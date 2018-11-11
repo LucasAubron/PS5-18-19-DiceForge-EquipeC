@@ -16,35 +16,36 @@ class Coordinateur {
     private Plateau plateau;
     private Afficheur afficheur;
 
-    Coordinateur(boolean modeVerbeux, Joueur[] joueurs){
+    Coordinateur(boolean modeVerbeux, String[] typeJoueurs){
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
-        int nbrManche = joueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
+        int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
+        afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         if (modeVerbeux) {
-            plateau = new Plateau(true, joueurs);//Le plateau, qui comprend toute la partie physique du jeu
-            afficheur = new Afficheur(modeVerbeux, plateau);
+            plateau = new Plateau(true, typeJoueurs);//Le plateau, qui comprend toute la partie physique du jeu
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
             List<Integer> infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
         }
         else{
-            int[] nbrVictoire = new int[joueurs.length];
-            int[] PtsGloireCumules = new int[joueurs.length];
+            int[] nbrVictoire = new int[typeJoueurs.length];
+            int[] PtsGloireCumules = new int[typeJoueurs.length];
             int nbrPartiesJoue = 1000; //nbrPartiesJoue = 1000 parties, comme demandé dans le kata
-            for (int i = 0; i != joueurs.length; ++i){
+            for (int i = 0; i != typeJoueurs.length; ++i){
                 nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
                 PtsGloireCumules[i] = 0;
             }
             for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
-                plateau = new Plateau(false, joueurs);
+                plateau = new Plateau(false, typeJoueurs);
+
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }
                 List<Integer> infoJoueurGagnant = infoJoueurGagnant();
                 for (int j = 1; j != infoJoueurGagnant.size(); ++j)
                     nbrVictoire[infoJoueurGagnant.get(j)]++;//Puis on stocke les infos des parties
-                for (int j = 0; j != joueurs.length; ++j)
-                    PtsGloireCumules[j] += plateau.getJoueur().get(j).getPointDeGloire();
+                for (int j = 0; j != typeJoueurs.length; ++j)
+                    PtsGloireCumules[j] += plateau.getJoueurs().get(j).getPointDeGloire();
             }
         }
     }
@@ -53,7 +54,7 @@ class Coordinateur {
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
      */
     private void jouerManche(int numeroManche){
-        for (Joueur joueur:plateau.getJoueur()){
+        for (Joueur joueur:plateau.getJoueurs()){
             tour(joueur, numeroManche);
         }
     }
@@ -67,12 +68,10 @@ class Coordinateur {
         phaseLanceDe(joueur, numeroManche);
         phaseJetonCerbere(joueur, numeroManche);
         phaseRenforts(joueur, numeroManche);
-        phaseJetonCerbere(joueur, numeroManche);
-        // phaseJetonTriton: phase durant laquelle le joueur peut utiliser un jeton triton,
-        // le jeton cerbère étant utilisable juste après la phase de dés (pour doubler un résultat)
-        phaseJetonTriton(joueur, numeroManche);
-        if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) {
-            phaseJetonTriton(joueur, numeroManche);
+        phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
+        phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
+        if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
+            phaseJetonTriton(joueur, numeroManche);//idem
             secondeAction(joueur, numeroManche);
         }
     }
@@ -86,15 +85,15 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
-        for (Joueur x:plateau.getJoueur()){//En premier, tout le monde lance les dés
+        for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés
             x.lancerLesDes();
         }
-        for (Joueur x:plateau.getJoueur())//et gagne les ressources correspondantes
+        for (Joueur x:plateau.getJoueurs())//et gagne les ressources correspondantes
             x.gagnerRessource();
-        if (plateau.getJoueur().size() == 2) {
-            for (Joueur x:plateau.getJoueur())
+        if (plateau.getJoueurs().size() == 2) {
+            for (Joueur x:plateau.getJoueurs())
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
-            for (Joueur x:plateau.getJoueur())
+            for (Joueur x:plateau.getJoueurs())
                 x.gagnerRessource();
         }
 
@@ -277,7 +276,7 @@ class Coordinateur {
         List<Integer> infoJoueurGagnant = new ArrayList<>();
         infoJoueurGagnant.add(0);
         infoJoueurGagnant.add(-1);
-        for (Joueur joueur:plateau.getJoueur()){
+        for (Joueur joueur:plateau.getJoueurs()){
             joueur.additionnerPointsCartes();
             if (joueur.getPointDeGloire() > infoJoueurGagnant.get(0)){//Simple recherche d'un maximum
                 infoJoueurGagnant.set(0, joueur.getPointDeGloire());//On midifie le nbr de points de gloire maximum

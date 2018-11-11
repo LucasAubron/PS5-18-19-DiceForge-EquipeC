@@ -10,15 +10,15 @@ import java.util.List;
 class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    PortailsOriginels(Joueur[] joueurs, boolean verbeux){
+    PortailsOriginels(String[] joueurs, boolean verbeux){
         if (joueurs.length < 2 || joueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+joueurs.length);
         this.joueurs = new ArrayList<>();
         int identifiant = 1;
-        for (Joueur joueur:joueurs) {//On copie les joueurs, pour éviter de garder le même joueur sur des plateaux différents (dans le cas où on itère plusieurs parties)
-            if (joueur instanceof RandomBot)
+        for (String joueur:joueurs) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
+            if (joueur.equals("RandomBot"))
                 this.joueurs.add(new RandomBot(identifiant, verbeux));
-            else if (joueur instanceof EasyBot)
+            else if (joueur.equals("EasyBot"))
                 this.joueurs.add(new EasyBot(identifiant, verbeux));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
             ++identifiant;
@@ -39,7 +39,7 @@ class PortailsOriginels {
         }
         if (x == null)
             throw new DiceForgeException("PortailsOriginels","Le joueur qui posséde l'indice n°"+identifiantJoueur+" n'existe pas.");
-        joueurs.remove(x);//On supprime le joueur
+        joueurs.remove(x);//On retire le joueur
         return x;
     }
 

@@ -35,15 +35,14 @@ abstract class Joueur {
     enum Action {FORGER, EXPLOIT, PASSER}
     enum Renfort{ANCIEN, BICHE, HIBOU}
     enum Jeton {TRITON, CERBERE}
-    // attribut suivant vaut 0 si seulement dé 0 lancé, 1 si seulement dé 1 lancé
-    // et 2 si les deux dés ont été lancés
-    private int dernierLanceDes;
+    private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 0 en dernier, 1 si c'est le cas du dé 1, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
     Joueur(){}//Pour pouvoir indiquer quel type de joueur on veut utiliser dans main sans a avoir a mettre des arguments aléatoires (moche)
 
     Joueur(int indentifiant, boolean verbeux){
-        if (identifiant < 1 || identifiant > 4)
-            throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
+        System.out.println(identifiant);
+        //if (identifiant < 1 || identifiant > 4)
+            //throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = indentifiant;
         or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
@@ -114,7 +113,7 @@ abstract class Joueur {
 
     void ajouterPointDeGloire(int quantite) {
         pointDeGloire += quantite;
-        if (pointDeGloire < 0) pointDeGloire = 0;
+        if (pointDeGloire < 0) pointDeGloire = 0;//dans le cas où on perds plus de points de gloire qu'on ne possède à cause d'un minotaure ennemi (super rare)
     }
 
     int getPointDeGloire() {return pointDeGloire;}
@@ -130,6 +129,7 @@ abstract class Joueur {
     void ajouterRenfort(Renfort renfort){
         renforts.add(renfort);
     }
+
     void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
 
     void retirerJeton(String nomJeton){
@@ -143,12 +143,12 @@ abstract class Joueur {
     List<Jeton> getJetons(){return this.jetons;}
 
     /**
-     * C'est à partir d'ice qu'on lance les des, et que les problèmes arrivent...
-     * Cette version ne marche que pour la version minimale, il faudra peut etre tout refaire /!\
+     * On lance ses dés, le résulat est stocké dans desFaceCourante, desFacesCourante est ensuite utilisé plus tard
+     * pour réaliser ce pourquoi on a lancé les dés (pas toujours pour un gain ! --> minotaure, satyres)
      */
     void lancerLesDes(){
         desFaceCourante = new Face[]{des[0].lancerLeDe(), des[1].lancerLeDe()};
-        setDernierLanceDes(2);
+        setDernierLanceDes(2); //pour le jeton cerbère on indique quel est le dernier lancé de dé effectué (ici on lance les deux dés en même temps)
     }
 
     void gagnerRessource(){
