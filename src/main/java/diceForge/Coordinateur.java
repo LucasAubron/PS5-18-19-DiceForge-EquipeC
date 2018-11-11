@@ -19,9 +19,9 @@ class Coordinateur {
     Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
-        afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         if (modeVerbeux) {
             plateau = new Plateau(true, typeJoueurs);//Le plateau, qui comprend toute la partie physique du jeu
+            afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
@@ -37,7 +37,7 @@ class Coordinateur {
             }
             for (int i = 0; i != nbrPartiesJoue; ++i){//On fait autant de partie que l'on veut
                 plateau = new Plateau(false, typeJoueurs);
-
+                afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
                 for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                     jouerManche(numManche);
                 }

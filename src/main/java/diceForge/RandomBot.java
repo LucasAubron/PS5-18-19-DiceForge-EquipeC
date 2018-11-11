@@ -138,4 +138,6 @@ class RandomBot extends Joueur{
             retirerJeton("CERBERE");
         }
     }
+    @Override
+    public String toString(){return "RandomBot";}
 }

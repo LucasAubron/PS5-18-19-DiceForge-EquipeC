@@ -203,4 +203,6 @@ class EasyBot extends Joueur{
         }
     }
 
+    @Override
+    public String toString(){return "EasyBot";}
 }
