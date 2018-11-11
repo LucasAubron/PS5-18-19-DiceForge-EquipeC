@@ -26,23 +26,28 @@ class Afficheur {
     }
 
     void manche(int numManche) {
-        info += "\n--------------------------------------------------\nManche " + numManche + "\n--------------------------------------------------\n";
+        if (modeVerbeux)
+            info += "\n--------------------------------------------------\nManche " + numManche + "\n--------------------------------------------------\n";
     }
 
     void tour(Joueur joueur) {
-        info += "\n\t\t--Tour du joueur n°" + joueur.getIdentifiant() + "--\n";
+        if (modeVerbeux)
+            info += "\n\t\t--Tour du joueur n°" + joueur.getIdentifiant() + "--\n";
     }
 
     void ressourcesGagnees(Joueur joueur) {
-        info += "\nLancés des dés du joueur n°" + joueur.getIdentifiant() + "\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
+        if (modeVerbeux)
+            info += "\nLancés des dés du joueur n°" + joueur.getIdentifiant() + "\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
     }
 
     void desActuels(Joueur joueur) {
-        info += "\nDés du joueur n°" + joueur.getIdentifiant() + "\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
+        if (modeVerbeux)
+            info += "\nDés du joueur n°" + joueur.getIdentifiant() + "\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
     }
 
     void ressourcesDisponibles(Joueur joueur) {
-    info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\nPoints de gloire: " + joueur.getPointDeGloire() + "\n";
+        if (modeVerbeux)
+            info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\nPoints de gloire: " + joueur.getPointDeGloire() + "\n";
     }
 
     void choixFaceAChoix(Face faceAChoix, Ressource[] ressource){
@@ -53,7 +58,7 @@ class Afficheur {
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
-            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " .Il gagne " + faceObtenue;
+            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " . Il gagne " + faceObtenue;
             ressourcesDisponibles(joueur);
         }
     }
