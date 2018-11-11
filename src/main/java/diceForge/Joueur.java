@@ -40,7 +40,7 @@ abstract class Joueur {
     Joueur(int indentifiant, boolean verbeux){
         System.out.println(identifiant);
         //if (identifiant < 1 || identifiant > 4)
-            //throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
+        //    throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = indentifiant;
         or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
         des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),

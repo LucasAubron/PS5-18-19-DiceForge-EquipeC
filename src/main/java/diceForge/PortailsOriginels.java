@@ -14,14 +14,16 @@ class PortailsOriginels {
         if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
-        int identifiant = 1;
-        for (String joueur:typeJoueurs) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
-            if (joueur.equals("RandomBot"))
+        for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
+            if (typeJoueurs[identifiant-1].equals("RandomBot")) {
+                System.out.println(identifiant);
                 this.joueurs.add(new RandomBot(identifiant, verbeux));
-            else if (joueur.equals("EasyBot"))
+            }
+            else if (typeJoueurs[identifiant-1].equals("EasyBot")) {
+                System.out.println(identifiant);
                 this.joueurs.add(new EasyBot(identifiant, verbeux));
+            }
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
-            ++identifiant;
         }
     }
 

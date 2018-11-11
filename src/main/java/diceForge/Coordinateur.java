@@ -279,7 +279,7 @@ class Coordinateur {
         for (Joueur joueur:plateau.getJoueurs()){
             joueur.additionnerPointsCartes();
             if (joueur.getPointDeGloire() > infoJoueurGagnant.get(0)){//Simple recherche d'un maximum
-                infoJoueurGagnant.set(0, joueur.getPointDeGloire());//On midifie le nbr de points de gloire maximum
+                infoJoueurGagnant.set(0, joueur.getPointDeGloire());//On modifie le nbr de points de gloire maximum
                 infoJoueurGagnant.subList(1, infoJoueurGagnant.size()).clear();//On clear la liste sauf le premier élément
                 infoJoueurGagnant.add(joueur.getIdentifiant());//On ajoute son identifiant
             }
