@@ -5,6 +5,6 @@ public class FaceX3 extends Face {
 
     @Override
     public String toString(){
-        return "face X3";
+        return "X3";
     }
 }

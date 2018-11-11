@@ -80,6 +80,13 @@ class Afficheur {
         }
     }
 
+    void choixFace(Joueur joueur, Face face, int choix){
+        if (modeVerbeux){
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisi: ";
+            info += "" + face.getRessource()[choix] + "\n";
+        }
+    }
+
     @Override
     public String toString(){
         return info;

@@ -366,6 +366,7 @@ abstract class Joueur {
      */
     void gagnerRessourceFace(Face face, int choix){
         if (face.getRessource().length > 0) {
+            afficheur.choixFace(this, face, choix);
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or) {
                     ajouterOr(ressource.getQuantite());
