@@ -3,6 +3,8 @@ package diceForge;
 import java.util.List;
 import java.util.Random;
 
+import static diceForge.Joueur.Jeton.CERBERE;
+
 class EasyBot extends Joueur{
     EasyBot(int identifiant, Afficheur afficheur) {super(identifiant, afficheur);}
 
@@ -164,44 +166,26 @@ class EasyBot extends Joueur{
     }
 
     @Override
-    void utiliserJetonTriton(){
+    choixJetonTriton utiliserJetonTriton(){
         Random random = new Random();
-        int choix;
-        if (1 == random.nextInt(2)){
-            choix = random.nextInt(3);
-            switch (choix){
-                case 0:
-                    ajouterSoleil(2);
-                    break;
-                case 1:
-                    ajouterLune(2);
-                    break;
-                case 2:
-                    ajouterOr(6);
-                    break;
-            }
-            retirerJeton("TRITON");
+        int choix = random.nextInt(choixJetonTriton.values().length);
+        switch (choix){
+            case 0:
+                return choixJetonTriton.Rien;
+            case 1:
+                return choixJetonTriton.Or;
+            case 2:
+                return choixJetonTriton.Soleil;
+            case 3:
+                return choixJetonTriton.Lune;
         }
+        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoi rien !!");
     }
 
     @Override
-    void utiliserJetonCerbere(){
+    boolean utiliserJetonCerbere(){
         Random random = new Random();
-        if (1 == random.nextInt(2)){
-            switch (getDernierLanceDes()){
-                case 0:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
-                    break;
-                case 1:
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
-                    break;
-                case 2:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
-                    break;
-            }
-            retirerJeton("CERBERE");
-        }
+        return random.nextInt(2) == 1;
     }
 
     @Override

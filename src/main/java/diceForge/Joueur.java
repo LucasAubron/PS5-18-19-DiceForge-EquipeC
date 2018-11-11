@@ -38,6 +38,8 @@ abstract class Joueur {
     enum Renfort{ANCIEN, BICHE, HIBOU}
     enum Jeton {TRITON, CERBERE}
     enum Bot{RandomBot, EasyBot, TestBot}
+    enum choixJetonTriton{Rien, Or, Soleil, Lune}
+
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
     Joueur(int identifiant, Afficheur afficheur){
@@ -138,13 +140,46 @@ abstract class Joueur {
 
     void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
 
-    void retirerJeton(String nomJeton){
-        for (Jeton jeton : this.jetons){
-            if (jeton.equals(nomJeton)) {
-                this.jetons.remove(jeton);
+    void retirerJeton(Jeton jetonARetirer){
+        for (Jeton jeton : jetons){
+            if (jeton == jetonARetirer) {
+                jetons.remove(jeton);
                 break;
             }
         }
+    }
+
+    void appliquerJetonTriton(choixJetonTriton choix) {
+        if (choix != choixJetonTriton.Rien) {
+            retirerJeton(Jeton.CERBERE);
+            switch (choix) {
+                case Or:
+                    ajouterOr(6);
+                    break;
+                case Soleil:
+                    ajouterSoleil(2);
+                    break;
+                case Lune:
+                    ajouterLune(2);
+                    break;
+            }
+        }
+    }
+
+    void appliquerJetonCerbere(){
+        switch (getDernierLanceDes()){
+                case 0:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    break;
+                case 1:
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
+                case 2:
+                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    break;
+            }
+            retirerJeton(Jeton.CERBERE);
     }
 
     List<Jeton> getJetons(){return this.jetons;}
@@ -466,7 +501,7 @@ abstract class Joueur {
      */
     abstract int choisirFacePourGagnerRessource(List<Face> faces);
 
-    abstract void utiliserJetonTriton();
+    abstract choixJetonTriton utiliserJetonTriton();
 
-    abstract void utiliserJetonCerbere();
+    abstract boolean utiliserJetonCerbere();
 }

@@ -1,8 +1,6 @@
 package diceForge;
 
-import java.nio.file.attribute.AclFileAttributeView;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -172,17 +170,22 @@ class Coordinateur {
 
     private void phaseJetonTriton(Joueur joueur, int numeroManche){
         if (!joueur.getJetons().isEmpty())
-            for (Joueur.Jeton jeton : joueur.getJetons()){
-                if (jeton == Joueur.Jeton.TRITON)
-                    joueur.utiliserJetonTriton();
+            for (int i = 0; i < joueur.getJetons().size(); ++i){
+                if (joueur.getJetons().get(i) == Joueur.Jeton.TRITON) {
+                    Joueur.choixJetonTriton choix = joueur.utiliserJetonTriton();
+                    if (choix != Joueur.choixJetonTriton.Rien){
+                        joueur.appliquerJetonTriton(choix);
+                    }
+                }
             }
     }
 
     private void phaseJetonCerbere(Joueur joueur, int numeroManche){
         if (!joueur.getJetons().isEmpty())
-            for (Joueur.Jeton jeton : joueur.getJetons())
-                if (jeton == Joueur.Jeton.CERBERE)
-                    joueur.utiliserJetonCerbere();
+            for (int i = 0; i < joueur.getJetons().size(); ++i)
+                if (joueur.getJetons().get(i) == Joueur.Jeton.CERBERE)
+                    if (joueur.utiliserJetonCerbere())
+                        joueur.appliquerJetonCerbere();
     }
     
     /**
