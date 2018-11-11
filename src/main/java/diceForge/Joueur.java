@@ -1,6 +1,7 @@
 package diceForge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -293,7 +294,9 @@ abstract class Joueur {
                     afficheur.biche(choix, face, this);
                     break;
                 case HIBOU:
-                    gagnerRessourceFace(new Face(new Ressource[][]{{new Or(1)}, {new Soleil(1)}, {new Lune(1)}}));
+                   List proposition = new List(Arrays.asList();
+                   int choix = choisirFacePourGagnerRessource(proposition);
+
                     break;
             }
         }
