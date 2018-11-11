@@ -28,7 +28,6 @@ abstract class Joueur {
     private Face[] desFaceCourante;
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
-    private boolean verbeux;
     private List<Jeton> jetons = new ArrayList<>();
     private Afficheur afficheur;
 
@@ -274,7 +273,6 @@ abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     void acheterExploit(Carte carte){
-        if (verbeux) affichage += "J"+identifiant+" achete l'exploit: "+carte+"\n";
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource instanceof Soleil)
                 ajouterSoleil(-ressource.getQuantite());
@@ -312,10 +310,7 @@ abstract class Joueur {
 
     void appelerRenforts(List<Renfort> renfortsUtilisables){
         int choix;
-        if (!renfortsUtilisables.isEmpty() && verbeux)
-            affichage += "J"+identifiant+" appelle: ";
         for (Renfort renfort:renfortsUtilisables){
-            if (verbeux) affichage += renfort.toString()+"; ";
             switch (renfort){
                 case ANCIEN:
                     or -= 3;
