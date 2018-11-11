@@ -21,22 +21,21 @@ class Coordinateur {
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
-            lanceUnePartieAvecDetail(modeVerbeux, typeJoueurs, nbrManche);
+            lanceUnePartieAvecDetail(typeJoueurs, nbrManche);
         }
         else{
             int nbrParties = 1000; // comme demandé dans le kata
-            lancePlusieursPartiesAvecStats(modeVerbeux, typeJoueurs, nbrManche, nbrParties);
+            lancePlusieursPartiesAvecStats(typeJoueurs, nbrManche, nbrParties);
         }
     }
 
     /**
      * mode verbeux
-     * @param modeVerbeux
      * @param typeJoueurs
      * @param nbrManche
      */
-    private void lanceUnePartieAvecDetail(boolean modeVerbeux, Joueur.Bot[] typeJoueurs, int nbrManche) {
-        this.afficheur = new Afficheur(modeVerbeux, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+    private void lanceUnePartieAvecDetail(Joueur.Bot[] typeJoueurs, int nbrManche) {
+        this.afficheur = new Afficheur(true, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         plateau = new Plateau(typeJoueurs, afficheur);//Le plateau, qui comprend toute la partie physique du jeu
         afficheur.setJoueurs(plateau.getPortail().getJoueurs());//le plateau a besoin de l'afficheur pour le donner a ses joueurs mais l'afficheur a besoin des joueurs du portail de plateau, donc on lui donne après avoir créé le plateau
         afficheur.presentationModeVerbeux();
@@ -48,12 +47,11 @@ class Coordinateur {
 
     /**
      * mode non verbeux
-     * @param modeVerbeux
      * @param typeJoueurs
      * @param nbrManche
      * @param nbrParties
      */
-    private void lancePlusieursPartiesAvecStats(boolean modeVerbeux, Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties){
+    private void lancePlusieursPartiesAvecStats(Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties){
         int[] nbrVictoire = new int[typeJoueurs.length];
         int[] ptsGloireCumules = new int[typeJoueurs.length];
         for (int i = 0; i != typeJoueurs.length; ++i){
@@ -61,7 +59,7 @@ class Coordinateur {
             ptsGloireCumules[i] = 0;
         }
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            this.afficheur = new Afficheur(modeVerbeux, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+            this.afficheur = new Afficheur(false, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
             plateau = new Plateau(typeJoueurs, afficheur);
             int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
             List<Integer> id = new ArrayList<>();//La liste des positions possible
