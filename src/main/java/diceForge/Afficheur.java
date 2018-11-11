@@ -82,8 +82,9 @@ class Afficheur {
 
     void choixFace(Joueur joueur, Face face, int choix){
         if (modeVerbeux){
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisi: ";
-            info += "" + face.getRessource()[choix] + "\n";
+            if (face.getRessource().length > 1) {
+                info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisi: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
+            }
         }
     }
 
