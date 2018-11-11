@@ -36,8 +36,10 @@ class Coordinateur {
      * @param nbrManche
      */
     private void lanceUnePartieAvecDetail(boolean modeVerbeux, Joueur.Bot[] typeJoueurs, int nbrManche) {
-        plateau = new Plateau(typeJoueurs);//Le plateau, qui comprend toute la partie physique du jeu
-        this.afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        this.afficheur = new Afficheur(modeVerbeux, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        plateau = new Plateau(typeJoueurs, afficheur);//Le plateau, qui comprend toute la partie physique du jeu
+        afficheur.setJoueurs(plateau.getPortail().getJoueurs());//le plateau a besoin de l'afficheur pour le donner a ses joueurs mais l'afficheur a besoin des joueurs du portail de plateau, donc on lui donne après avoir créé le plateau
+        afficheur.presentationModeVerbeux();
         for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
             jouerManche(numManche);
         }
@@ -59,8 +61,8 @@ class Coordinateur {
             ptsGloireCumules[i] = 0;
         }
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            plateau = new Plateau(typeJoueurs);
-            this.afficheur = new Afficheur(modeVerbeux, this, plateau);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+            this.afficheur = new Afficheur(modeVerbeux, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+            plateau = new Plateau(typeJoueurs, afficheur);
             int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
             List<Integer> id = new ArrayList<>();//La liste des positions possible
             for (int j = 0; j != typeJoueurs.length; ++j)
@@ -72,7 +74,7 @@ class Coordinateur {
             Joueur.Bot[] listeJoueurRandom = new Joueur.Bot[typeJoueurs.length];
             for (int j = 0; j != listeJoueurRandom.length; ++j)
                 listeJoueurRandom[j] = typeJoueurs[posRandom[j]];//On assigne les joueurs à la position aléatoire
-            plateau = new Plateau(listeJoueurRandom);
+            plateau = new Plateau(listeJoueurRandom, afficheur);
 
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
@@ -337,4 +339,6 @@ class Coordinateur {
     }
 
     Afficheur getAffichage(){return afficheur;}
+
+    Plateau getPlateau(){return plateau;}
 }

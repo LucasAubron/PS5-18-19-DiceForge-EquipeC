@@ -16,8 +16,8 @@ class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
-    Plateau(Joueur.Bot[] typeJoueurs) {
-        portail = new PortailsOriginels(typeJoueurs);//La ou les joueurs sont de base
+    Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
+        portail = new PortailsOriginels(typeJoueurs, afficheur);//La ou les joueurs sont de base
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         this.modeVerbeux = modeVerbeux;
         Random random = new Random();

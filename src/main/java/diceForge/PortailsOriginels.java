@@ -11,16 +11,16 @@ import java.util.Random;
 class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    PortailsOriginels(Joueur.Bot[] typeJoueurs){
+    PortailsOriginels(Joueur.Bot[] typeJoueurs, Afficheur afficheur){
         if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
         for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
             if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot) {
-                this.joueurs.add(new RandomBot(identifiant));
+                this.joueurs.add(new RandomBot(identifiant, afficheur));
             }
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot) {
-                this.joueurs.add(new EasyBot(identifiant));
+                this.joueurs.add(new EasyBot(identifiant, afficheur));
             }
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }

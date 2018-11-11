@@ -29,6 +29,7 @@ abstract class Joueur {
     private List<Renfort> renforts = new ArrayList<>();
     private boolean verbeux;
     private List<Jeton> jetons = new ArrayList<>();
+    private Afficheur afficheur;
 
     protected String affichage = "";
 
@@ -38,7 +39,8 @@ abstract class Joueur {
     enum Bot{RandomBot, EasyBot, TestBot}
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
-    Joueur(int identifiant){
+    Joueur(int identifiant, Afficheur afficheur){
+        this.afficheur = afficheur;
         if (identifiant < 1 || identifiant > 4)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = identifiant;
