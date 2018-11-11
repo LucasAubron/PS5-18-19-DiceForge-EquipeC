@@ -71,7 +71,12 @@ class RandomBot extends Joueur{
     }
 
     @Override
-    int choisirDeBiche(){
+    int choisirDeFaveurMineure(){
+        return random.nextInt(2);
+    }
+
+    @Override
+    int choisirDeCyclope(){
         return random.nextInt(2);
     }
 
@@ -116,6 +121,12 @@ class RandomBot extends Joueur{
     boolean utiliserJetonCerbere(){
         return random.nextInt(2) == 1;
     }
+
+    @Override
+    boolean choisirRessourceOuPdg(Ressource ressource){
+        return random.nextInt(2) == 1;
+    }
+
     @Override
     public String toString(){return "RandomBot";}
 }

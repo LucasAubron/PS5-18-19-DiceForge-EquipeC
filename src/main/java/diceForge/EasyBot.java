@@ -89,7 +89,13 @@ class EasyBot extends Joueur{
     }
 
     @Override
-    int choisirDeBiche(){
+    int choisirDeFaveurMineure(){
+        Random random = new Random();
+        return random.nextInt(2);
+    }
+
+    @Override
+    int choisirDeCyclope(){
         Random random = new Random();
         return random.nextInt(2);
     }
@@ -186,6 +192,11 @@ class EasyBot extends Joueur{
     boolean utiliserJetonCerbere(){
         Random random = new Random();
         return random.nextInt(2) == 1;
+    }
+
+    @Override
+    boolean choisirRessourceOuPdg(Ressource ressource){
+        return true;
     }
 
     @Override

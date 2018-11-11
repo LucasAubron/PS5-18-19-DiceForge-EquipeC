@@ -93,10 +93,13 @@ class TestBot extends Joueur {
 
     private int numDe;
     @Override
-    int choisirDeBiche() { return numDe; }
+    int choisirDeFaveurMineure() { return numDe; }
     void setNumDe(int numDe) {
         this.numDe = numDe;
     }
+
+    @Override
+    int choisirDeCyclope(){return numDe;}
 
     private int id;
     @Override
@@ -145,5 +148,9 @@ class TestBot extends Joueur {
     }
 
     @Override
+    boolean choisirRessourceOuPdg(Ressource ressource){return choix;}
+
+    @Override
     public String toString(){return "TestBot";}
+
 }

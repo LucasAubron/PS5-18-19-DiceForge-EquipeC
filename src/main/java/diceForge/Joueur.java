@@ -25,11 +25,12 @@ abstract class Joueur {
     private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
-    private Face[] desFaceCourante;
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
     private List<Jeton> jetons = new ArrayList<>();
     private Afficheur afficheur;
+
+    private boolean jetRessourceOuPdg = false;
 
     protected String affichage = "";
 
@@ -183,51 +184,57 @@ abstract class Joueur {
 
     List<Jeton> getJetons(){return this.jetons;}
 
+    void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
+
     /**
      * On lance ses dés, le résulat est stocké dans desFaceCourante, desFacesCourante est ensuite utilisé plus tard
      * pour réaliser ce pourquoi on a lancé les dés (pas toujours pour un gain ! --> minotaure, satyres)
      */
     void lancerLesDes(){
-        desFaceCourante = new Face[]{des[0].lancerLeDe(), des[1].lancerLeDe()};
+        for (De de:des)
+            de.lancerLeDe();
         setDernierLanceDes(2); //pour le jeton cerbère on indique quel est le dernier lancé de dé effectué (ici on lance les deux dés en même temps)
     }
 
+    /**
+     * Méthode à appeler après avoir lancé les dés
+     */
     void gagnerRessource(){
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
-        for (int i = 0; i != desFaceCourante.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
+        for (int i = 0; i != des.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
             int autreFace = i==0?1:0;//autreFace est 1 si i est 0, et 0 sinon
-            if (desFaceCourante[i] instanceof FaceBouclier && desFaceCourante[autreFace].getRessource().length > 0){//On traite le cas faceBouclier
+            if (des[i].derniereFace() instanceof FaceBouclier && des[autreFace].derniereFace().getRessource().length > 0){//On traite le cas faceBouclier
                 int x = 0;
-                if (desFaceCourante[autreFace].getRessource().length > 1) {//Si l'autre de est une face à choix
-                    x = choisirRessource(desFaceCourante[autreFace]);//le autreFaceoueur choisis
-                    gagnerRessourceFace(desFaceCourante[autreFace], x);//Il gagne les ressources conformément à son choix
+                if (des[autreFace].derniereFace().getRessource().length > 1) {//Si l'autre de est une face à choix
+                    x = choisirRessource(des[autreFace].derniereFace());//le autreFaceoueur choisis
+                    gagnerRessourceFace(des[autreFace].derniereFace(), x);//Il gagne les ressources conformément à son choix
                     gagnerFace[autreFace] = false;
                 }
-                for (Ressource ressource:desFaceCourante[autreFace].getRessource()[x]){
-                    if (ressource.getClass().equals(desFaceCourante[i].getRessource()[0][0].getClass())){
+                for (Ressource ressource:des[autreFace].derniereFace().getRessource()[x]){
+                    if (ressource.getClass().equals(des[i].derniereFace().getRessource()[0][0].getClass())){
                         pointDeGloire += 5;
                         gagnerFace[i] = false;
                         break;
                     }
                 }
             }
-            else if (desFaceCourante[i] instanceof FaceX3){//Si c'est une faceX3
-                if (desFaceCourante[autreFace].getRessource().length > 0){//Si l'autre face est commune
+            else if (des[i].derniereFace() instanceof FaceX3){//Si c'est une faceX3
+                if (des[autreFace].derniereFace().getRessource().length > 0){//Si l'autre face est commune
                     gagnerFace[autreFace] = false;
                     int x = 0;
-                    if (desFaceCourante[autreFace].getRessource().length > 1)
-                        x = choisirRessource(desFaceCourante[autreFace]);
+                    if (des[autreFace].derniereFace().getRessource().length > 1)
+                        x = choisirRessource(des[autreFace].derniereFace());
                     for (int j = 0; j != 3; ++j)//On applique la récompense 3x
-                        gagnerRessourceFace(desFaceCourante[autreFace], x);
+                        gagnerRessourceFace(des[autreFace].derniereFace(), x);
                 }
-                if (desFaceCourante[autreFace] instanceof FaceBateauCeleste){//Si c'est une face bateau celeste
+                if (des[autreFace].derniereFace() instanceof FaceBateauCeleste){//Si c'est une face bateau celeste
                     gagnerFace[autreFace] = false;
-                    FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) desFaceCourante[autreFace];
+                    FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) des[autreFace].derniereFace();
                     faceBateauCeleste.multiplierX3Actif();//On l'active avec le bonus
                     faceBateauCeleste.effetActif(this);
                 }
-                else if (desFaceCourante[autreFace] instanceof FaceMiroirAbyssal){
-                    FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) desFaceCourante[autreFace];
+                else if (des[autreFace].derniereFace() instanceof FaceMiroirAbyssal){
+                    FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) des[autreFace].derniereFace();
                     int choix = choisirFacePourGagnerRessource(faceMiroirAbyssal.obtenirFacesAdversaires());
                     for (int j = 0; j != 3; j++){//On l'active 3 fois avec la meme face
                         faceMiroirAbyssal.setChoix(choix);
@@ -239,10 +246,12 @@ abstract class Joueur {
 
         for (int i = 0; i != gagnerFace.length; ++i)
             if (gagnerFace[i])
-                gagnerRessourceFace(desFaceCourante[i]);
+                gagnerRessourceFace(des[i].derniereFace());
     }
 
-    Face[] getDesFaceCourante(){return desFaceCourante;}
+    Face[] getDesFaceCourante(){
+        return new Face[]{des[0].derniereFace(), des[1].derniereFace()};
+    }
 
 
     /**
@@ -318,7 +327,7 @@ abstract class Joueur {
                     afficheur.ancien(this);
                     break;
                 case BICHE:
-                    choix = choisirDeBiche();
+                    choix = choisirDeFaveurMineure();
                     Face face = des[choix].lancerLeDe();
                     setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
@@ -357,6 +366,9 @@ abstract class Joueur {
     void additionnerPointsCartes() {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
+            if (carte.getNom() == Carte.Noms.Typhon)
+                for (De de:des)
+                    pointDeGloire += de.getNbrFaceForge();
         }
     }
 
@@ -370,9 +382,15 @@ abstract class Joueur {
                 if (ressource instanceof Or) {
                     ajouterOr(ressource.getQuantite());
                 } else if (ressource instanceof Soleil) {
-                    ajouterSoleil(ressource.getQuantite());
+                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
+                        pointDeGloire += 2*ressource.getQuantite();
+                    else
+                        ajouterSoleil(ressource.getQuantite());
                 } else if (ressource instanceof Lune) {
-                    ajouterLune(ressource.getQuantite());
+                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
+                        pointDeGloire += 2*ressource.getQuantite();
+                    else
+                        ajouterLune(ressource.getQuantite());
                 } else if (ressource instanceof PointDeGloire) {
                     pointDeGloire += ressource.getQuantite();
                 }
@@ -471,7 +489,13 @@ abstract class Joueur {
      * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé
      * @return 0 ou 1
      */
-    abstract int choisirDeBiche();
+    abstract int choisirDeFaveurMineure();
+
+    /**
+     * Permet de choisir le dé à lancer avec la carte cyclope
+     * @return 0 ou 1
+     */
+    abstract int choisirDeCyclope();
 
     /**
      * Le joueur choisis à qui il veut faire forger le sanglier
@@ -507,4 +531,11 @@ abstract class Joueur {
      * @return true si oui, false sinon
      */
     abstract boolean utiliserJetonCerbere();
+
+    /**
+     * Permet de choisir si le joueur veut garder la ressource ou la transformer en point de gloire
+     * @param ressource
+     * @return true s'il veut avoir des points de gloires, false sinon
+     */
+    abstract boolean choisirRessourceOuPdg(Ressource ressource);
 }

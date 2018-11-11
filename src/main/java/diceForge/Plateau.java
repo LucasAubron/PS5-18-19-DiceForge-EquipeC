@@ -33,8 +33,26 @@ class Plateau {
         Carte bateauCeleste = new CarteBateauCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
+
         Carte meduse = new Carte(new Ressource[]{new Soleil(4)}, 14, Carte.Noms.Meduse);
         Carte triton = new Carte(new Ressource[]{new Soleil(4)}, 8, Carte.Noms.Triton);
+
+        Carte[][] ileFond = new Carte[3][typeJoueurs.length];
+        int[] ra = new int[]{random.nextInt(2), random.nextInt(2), random.nextInt(2)};
+        for (int i = 0; i != typeJoueurs.length; ++i){
+            if (ra[0] == 0)
+                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 16, Carte.Noms.Typhon);
+            else
+                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 26, Carte.Noms.Hydre);
+            if (ra[1] == 0)
+                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 6, Carte.Noms.Sentinelle);
+            else
+                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 8, Carte.Noms.Cancer);
+            if (ra[2] == 0)
+                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 10, Carte.Noms.Sphinx);
+            else
+                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 8, Carte.Noms.Cyclope);
+        }
 
         iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), typeJoueurs.length),
@@ -49,11 +67,8 @@ class Plateau {
                         typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? meduse : triton,
                         new CarteMiroirAbyssal(portail.getJoueurs()),
-                        typeJoueurs.length)};
-        /*
-         * /!\   lorsqu'on ajoutera les cartes qui coûtent 6 Lunes/Soleils ne pas oublier
-         *       de s'occuper du jeton Cerbère!.
-         * */
+                        typeJoueurs.length),
+                new Ile(ileFond)};
     }
 
     /**

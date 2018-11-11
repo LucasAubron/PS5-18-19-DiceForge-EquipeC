@@ -1,5 +1,7 @@
 package diceForge;
 
+import static diceForge.Joueur.Jeton.CERBERE;
+
 /**
  * La classe carte peut être utilisé pour les cartes ne donnant que des points de gloire
  * Sinon il faut créer / utiliser une classe dérivée de celle ci
@@ -15,7 +17,7 @@ class Carte {
 
     public enum Noms {Coffre, HerbesFolles, Ancien, Marteau, Ours, Sanglier, Biche, Satyres,
     Hibou, Minautore, BateauCeleste, Bouclier, Cerbere, Passeur, CasqueDinvisibilite,
-    Meduse, Triton, Abysse, Sentinelle, Cancer, Hydre, Typhon, Sphinx, Cyclope, MiroirAbyssal}
+    Meduse, Triton, Sentinelle, Cancer, Hydre, Typhon, Sphinx, Cyclope, MiroirAbyssal}
 
     Carte(Ressource[] cout, int nbrPointGloire, Noms nom){
         if (cout.length <= 0)
@@ -58,10 +60,66 @@ class Carte {
                 acheteur.ajouterJeton(Joueur.Jeton.TRITON);
                 break;
             case Cerbere:
-                acheteur.ajouterJeton(Joueur.Jeton.CERBERE);
+                acheteur.ajouterJeton(CERBERE);
                 break;
             case CasqueDinvisibilite:
                 acheteur.forgerFace(new FaceX3());
+                break;
+            case Cancer:
+                acheteur.setDernierLanceDes(2);
+                acheteur.lancerLesDes();
+                acheteur.gagnerRessource();
+                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
+                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                acheteur.lancerLesDes();
+                acheteur.gagnerRessource();
+                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
+                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                break;
+            case Sphinx:
+                int choix = acheteur.choisirDeFaveurMineure();
+                acheteur.setDernierLanceDes(choix);
+                for (int i = 0; i != 4; ++i) {
+                    acheteur.gagnerRessourceFace(acheteur.getDes()[choix].lancerLeDe());
+                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                }
+                break;
+            case Sentinelle:
+                acheteur.setDernierLanceDes(2);
+                acheteur.setJetRessourceOuPdg(true);
+                for(int i = 0; i != 2; ++i){
+                    acheteur.lancerLesDes();
+                    acheteur.gagnerRessource();
+                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                }
+                acheteur.setJetRessourceOuPdg(false);
+                break;
+            case Cyclope:
+                int choixDe = acheteur.choisirDeFaveurMineure();
+                acheteur.setDernierLanceDes(choixDe);
+                for (int i = 0; i != 4; ++i){
+                    Face face = acheteur.getDes()[choixDe].lancerLeDe();
+                    if (face.getRessource().length > 0) {
+                        int choixRes = 0;
+                        if (face.getRessource().length > 1)
+                            choixRes = acheteur.choisirRessource(face);
+                        for (int j = 0; j != face.getRessource()[choixRes].length; ++j){
+                            if (face.getRessource()[choixRes][j] instanceof Or && acheteur.choisirRessourceOuPdg(face.getRessource()[choixRes][j])){
+                                face.getRessource()[choixRes][j] = null;
+                            }
+                        }
+                        acheteur.gagnerRessourceFace(face, choixRes);
+                        for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                            acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                    }
+                    else {
+                        acheteur.gagnerRessourceFace(face);
+                        for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                            acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+                    }
+                }
                 break;
         }
     }
