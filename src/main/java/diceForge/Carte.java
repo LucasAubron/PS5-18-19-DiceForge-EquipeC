@@ -97,7 +97,7 @@ public class Carte {
                 acheteur.setJetRessourceOuPdg(false);
                 break;
             case Cyclope:
-                int choixDe = acheteur.choisirDeFaveurMineure();
+                int choixDe = acheteur.choisirDeCyclope();
                 acheteur.setDernierLanceDes(choixDe);
                 for (int i = 0; i != 4; ++i){
                     Face face = acheteur.getDes()[choixDe].lancerLeDe();

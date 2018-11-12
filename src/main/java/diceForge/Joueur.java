@@ -101,7 +101,7 @@ public abstract class Joueur {
         this.dernierLanceDes = code;
     }
 
-    public void ajouterSoleil(int quantite) {
+    void ajouterSoleil(int quantite) {
         soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
         if (soleil < 0) soleil = 0;
     }
@@ -437,6 +437,7 @@ public abstract class Joueur {
 
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
+     * Elle permet de choisir qu'elle action le bot choisi d'effectuer
      * @param numManche
      * @return L'action que le bot à choisi de prendre
      */
@@ -450,7 +451,7 @@ public abstract class Joueur {
     public abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche);
 
     /**
-     * Permet de choisir une carte parmis une liste de carte affordable
+     * Permet de choisir une carte parmis une liste de carte abordable
      * @return La carte choisie
      */
     public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
@@ -462,7 +463,7 @@ public abstract class Joueur {
     public abstract boolean choisirActionSupplementaire(int numManche);
 
     /**
-     * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectué
+     * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectuer
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
@@ -487,7 +488,7 @@ public abstract class Joueur {
     public abstract int choisirRessourceAPerdre(Face faceAChoix);
 
     /**
-     * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé
+     * Permet de choisir le dé à lancer lorsque le joueur à le droit à une (ou plusieurs) faveur mineure
      * @return 0 ou 1
      */
     public abstract int choisirDeFaveurMineure();
@@ -508,10 +509,15 @@ public abstract class Joueur {
     /**
      * Demande au joueur de forger une face
      * Utile lorsque les exploits demande de faire forger une face
+     * ATTENTION: IL FAUT ACTUELLEMENT FORGER LE DE DANS LA METHODE
      * @param face
      */
     public abstract void forgerFace(Face face);
 
+    /**
+     * Cherche une face à éliminer lors du craft d'une face miroir
+     * @return le numéro du dé et la position de la face sur le dé que l'on veut éliminer
+     */
     public abstract int[] choisirFaceARemplacerPourMiroir();
 
     /**

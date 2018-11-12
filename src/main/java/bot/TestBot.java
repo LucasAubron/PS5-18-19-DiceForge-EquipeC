@@ -4,7 +4,6 @@ import diceForge.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Classe pour tester le comportemement d'un joueur
@@ -12,7 +11,6 @@ import java.util.Random;
  * puis appeler la méthode à tester
  */
 public class TestBot extends Joueur {
-    private Random random = new Random();
 
     public TestBot(int identifiant, Afficheur afficheur) {super (identifiant, afficheur);}
 
@@ -56,7 +54,6 @@ public class TestBot extends Joueur {
     private boolean choix;
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        if (choix) ajouterSoleil(-2);
         return choix;
     }
     public void setChoixActionSup(boolean choix) {
@@ -122,16 +119,17 @@ public class TestBot extends Joueur {
         return numFace;
     }
 
+    private int[] choixMiroir = new int[2];
     @Override
-    public int[] choisirFaceARemplacerPourMiroir(){return new int[]{
-            random.nextInt(2),
-            random.nextInt(6)};
+    public int[] choisirFaceARemplacerPourMiroir(){
+        return choixMiroir;
     }
+    public void setChoixMiroir(int a, int b){choixMiroir[0] = a; choixMiroir[1] = b;}
 
+    private int choixTriton;
     @Override
     public choixJetonTriton utiliserJetonTriton(){
-        int choix = random.nextInt(choixJetonTriton.values().length);
-        switch (choix){
+        switch (choixTriton){
             case 0:
                 return choixJetonTriton.Rien;
             case 1:
@@ -143,10 +141,13 @@ public class TestBot extends Joueur {
         }
         throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoi rien !!");
     }
+    public void setChoixTriton(int choixTriton) {
+        this.choixTriton = choixTriton;
+    }
 
     @Override
     public boolean utiliserJetonCerbere(){
-        return random.nextInt(2) == 1;
+        return choix;
     }
 
     @Override

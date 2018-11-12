@@ -158,11 +158,6 @@ public class EasyBot extends Joueur {
         return 0;
     }
 
-    /**
-     * Cherche une face à éliminer lors du craft d'une face miroir
-     * cherche une face 1or, s'il n'en trouve pas, choisis au hasard
-     * @return le numéro du dé et la position de la face sur le dé que l'on veut éliminer
-     */
 
     @Override
     public int[] choisirFaceARemplacerPourMiroir(){
