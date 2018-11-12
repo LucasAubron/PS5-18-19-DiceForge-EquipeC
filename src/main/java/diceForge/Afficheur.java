@@ -110,6 +110,12 @@ class Afficheur {
             info += "\n-----------------------------------\n";
     }
 
+    void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
+        for (int i = 0; i != nbrVictoire.length; ++i){
+            info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloires\n";
+        }
+    }
+
     @Override
     public String toString(){
         return info;

@@ -54,6 +54,7 @@ class Coordinateur {
      */
     private void lancePlusieursPartiesAvecStats(Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties){
         int[] nbrVictoire = new int[typeJoueurs.length];
+        int[] nbrEgalite = new int[typeJoueurs.length];
         int[] ptsGloireCumules = new int[typeJoueurs.length];
         for (int i = 0; i != typeJoueurs.length; ++i){
             nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
@@ -79,14 +80,16 @@ class Coordinateur {
                 jouerManche(numManche);
             }
             List<Integer> infoJoueurGagnant = infoJoueurGagnant();
-            for (int j = 1; j != infoJoueurGagnant.size(); ++j) {
-                nbrVictoire[posRandom[infoJoueurGagnant.get(j) - 1]]++;//Puis on stocke les infos des parties
-            }
+            if (infoJoueurGagnant.size() > 2)
+                for (int j = 1; j != infoJoueurGagnant.size(); ++j) {
+                    nbrEgalite[posRandom[infoJoueurGagnant.get(j) - 1]]++;//Puis on stocke les infos des parties
+                }
+            else
+                nbrVictoire[posRandom[infoJoueurGagnant.get(1)-1]]++;
             for (int j = 0; j != typeJoueurs.length; ++j)
                 ptsGloireCumules[posRandom[j]] += plateau.getJoueurs().get(j).getPointDeGloire();
         }
-        for (int i = 0; i != nbrVictoire.length; ++i)//Affichage temporaire
-            System.out.println("J"+i+":"+nbrVictoire[i]+"; "+ptsGloireCumules[i]/nbrParties);
+        afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, nbrParties);
     }
 
     /**
