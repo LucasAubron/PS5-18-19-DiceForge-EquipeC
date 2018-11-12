@@ -31,8 +31,10 @@ public class Face {
     public String toString() {
         String affichage = "";
         for (Ressource[] ressources:ressource){
-            if (!affichage.isEmpty())
+            if (!affichage.isEmpty()) {
+                affichage = affichage.substring(0, affichage.length()-1);//On supprime le dernier +
                 affichage += "ou ";
+            }
             for (Ressource x:ressources){
                 if (x != null) {
                     affichage += x.getQuantite();
