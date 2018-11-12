@@ -67,13 +67,13 @@ public class Afficheur {
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
-            info += "\nLe joueur n°: " + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " . Il gagne " + faceObtenue + ".";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + ". Il gagne " + faceObtenue + ".";
         }
     }
 
     void ancien(Joueur joueur){
         if (modeVerbeux){
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3or pour gagner 4 points de gloire.";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3 or pour gagner 4 points de gloire.";
         }
     }
 
@@ -107,7 +107,7 @@ public class Afficheur {
 
     void petitTrait(){
         if (modeVerbeux)
-            info += "\n-----------------------------------\n";
+            info += "\n-----------------------------------\n"; //idem
     }
 
     void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
