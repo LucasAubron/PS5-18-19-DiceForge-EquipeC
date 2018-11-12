@@ -1,7 +1,7 @@
 package diceForge;
 
 public class Soleil extends Ressource {
-    Soleil(int quantite) {
+    public Soleil(int quantite) {
         super(quantite);
     }
 

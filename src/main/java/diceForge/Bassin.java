@@ -34,7 +34,7 @@ public class Bassin {
             faces.add(new Face(facesUnique.getRessource()));
     }
 
-    int getCout() {
+    public int getCout() {
         return cout;
     }
 
@@ -46,7 +46,7 @@ public class Bassin {
         return faces;
     }
 
-    Face getFace(int num) {
+    public Face getFace(int num) {
         return faces.get(num);
     }
     /**
@@ -57,7 +57,7 @@ public class Bassin {
         return faces.remove(numFace);
     }
 
-    boolean equals(Bassin bassin){
+    public boolean equals(Bassin bassin){
         if (faces.isEmpty() && bassin.getFaces().isEmpty() && cout == bassin.getCout())
             return true;
         if (cout == bassin.getCout() && faces.size() == bassin.getFaces().size() && faces.get(0).toString().equals(bassin.getFaces().get(0).toString()))

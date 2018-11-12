@@ -17,7 +17,7 @@ public class ChoixJoueurForge {
     private int numDe;
     private int numFace;
     private int posFace;
-    ChoixJoueurForge(Bassin bassin, int numFace, int numDe, int posFace){
+    public ChoixJoueurForge(Bassin bassin, int numFace, int numDe, int posFace){
         this.bassin = bassin;
         this.numDe = numDe;
         this.numFace = numFace;

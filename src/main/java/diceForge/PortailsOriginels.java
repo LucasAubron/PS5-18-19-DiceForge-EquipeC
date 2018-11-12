@@ -1,8 +1,10 @@
 package diceForge;
 
+import bot.EasyBot;
+import bot.RandomBot;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Les portails originels sont la ou les joueurs commence et la

@@ -1,7 +1,7 @@
 package diceForge;
 
-class Lune extends Ressource {
-    Lune(int quantite){
+public class Lune extends Ressource {
+    public Lune(int quantite){
         super(quantite);
     }
 

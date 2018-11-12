@@ -15,7 +15,7 @@ import java.util.List;
  * qui permet d'identifier le joueur par rapport au autre (un peu comme dans une base de donnée).
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
-abstract class Joueur {
+public abstract class Joueur {
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -34,15 +34,15 @@ abstract class Joueur {
 
     protected String affichage = "";
 
-    enum Action {FORGER, EXPLOIT, PASSER}
-    enum Renfort{ANCIEN, BICHE, HIBOU}
-    enum Jeton {TRITON, CERBERE}
-    enum Bot{RandomBot, EasyBot, TestBot}
-    enum choixJetonTriton{Rien, Or, Soleil, Lune}
+    public enum Action {FORGER, EXPLOIT, PASSER}
+    public enum Renfort{ANCIEN, BICHE, HIBOU}
+    public enum Jeton {TRITON, CERBERE}
+    public enum Bot{RandomBot, EasyBot, TestBot}
+    public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
-    Joueur(int identifiant, Afficheur afficheur){
+    public Joueur(int identifiant, Afficheur afficheur){
         this.afficheur = afficheur;
         if (identifiant < 1 || identifiant > 4)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
@@ -62,9 +62,9 @@ abstract class Joueur {
                 new Face(new Ressource[][]{{new Or(1)}})})};
     }
 
-    int getOr() {return or;}
+    public int getOr() {return or;}
 
-    int getMaxOr(){return maxOr;} //sert uniquement à l'affichage
+    public int getMaxOr(){return maxOr;} //sert uniquement à l'affichage
 
     void ajouterOr (int quantite){
         int ajoutOr = quantite;
@@ -89,11 +89,11 @@ abstract class Joueur {
 
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
-    int getSoleil() {return soleil;}
+    public int getSoleil() {return soleil;}
 
-    int getMaxSoleil(){return maxSoleil;} //idem (juste pour l'affichage)
+    public int getMaxSoleil(){return maxSoleil;} //idem (juste pour l'affichage)
 
-    int getDernierLanceDes(){return dernierLanceDes;}
+    public int getDernierLanceDes(){return dernierLanceDes;}
 
     void setDernierLanceDes(int code){
         if (code < 0 || code > 2)
@@ -101,16 +101,16 @@ abstract class Joueur {
         this.dernierLanceDes = code;
     }
 
-    void ajouterSoleil(int quantite) {
+    public void ajouterSoleil(int quantite) {
         soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
         if (soleil < 0) soleil = 0;
     }
 
     void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
 
-    int getLune() {return lune;}
+    public int getLune() {return lune;}
 
-    int getMaxLune() {return maxLune;}
+    public int getMaxLune() {return maxLune;}
 
     void ajouterLune(int quantite) {
         lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;
@@ -124,15 +124,15 @@ abstract class Joueur {
         if (pointDeGloire < 0) pointDeGloire = 0;//dans le cas où on perds plus de points de gloire qu'on ne possède à cause d'un minotaure ennemi (super rare)
     }
 
-    int getPointDeGloire() {return pointDeGloire;}
+    public int getPointDeGloire() {return pointDeGloire;}
 
-    int getIdentifiant() {return identifiant;}
+    public int getIdentifiant() {return identifiant;}
 
-    De[] getDes() {return des;}
+    public De[] getDes() {return des;}
 
-    De getDe(int num) {return des[num];}
+    public De getDe(int num) {return des[num];}
 
-    List<Renfort> getRenforts() {return renforts;}
+    public List<Renfort> getRenforts() {return renforts;}
 
     void ajouterRenfort(Renfort renfort){
         renforts.add(renfort);
@@ -182,7 +182,7 @@ abstract class Joueur {
             retirerJeton(Jeton.CERBERE);
     }
 
-    List<Jeton> getJetons(){return this.jetons;}
+    public List<Jeton> getJetons(){return this.jetons;}
 
     void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
 
@@ -249,7 +249,7 @@ abstract class Joueur {
                 gagnerRessourceFace(des[i].derniereFace());
     }
 
-    Face[] getDesFaceCourante(){
+    public Face[] getDesFaceCourante(){
         return new Face[]{des[0].derniereFace(), des[1].derniereFace()};
     }
 
@@ -297,7 +297,7 @@ abstract class Joueur {
      * @param nom le nom de la carte demandé
      * @return true si le joueur possède la carte, false sinon
      */
-    boolean possedeCarte(String nom){
+    public boolean possedeCarte(String nom){
         for (Carte carte:cartes)
             if (carte.getNom().equals(nom))
                 return true;
@@ -353,7 +353,7 @@ abstract class Joueur {
      * Face a forger,
      * numéro de la face à remplacer)
      */
-    void forgerDe(int numDe, Face faceAForger, int numFace){
+    public void forgerDe(int numDe, Face faceAForger, int numFace){
         if (numDe < 0 || numDe > 1)
             throw new DiceForgeException("Joueur","Le numéro du dé est invalide. Min : 0, max : 1, actuel : "+numDe);
         des[numDe].forger(faceAForger, numFace);
@@ -417,7 +417,7 @@ abstract class Joueur {
      * permet de chercher une face de base 1 or et de renvoyer sa position
      * @return un tableau = [numéro du dé, numéro de la face sur le dé en question]
      */
-    int[] getPosFace1Or(){
+    public int[] getPosFace1Or(){
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
@@ -440,103 +440,103 @@ abstract class Joueur {
      * @param numManche
      * @return L'action que le bot à choisi de prendre
      */
-    abstract Action choisirAction(int numManche);
+    public abstract Action choisirAction(int numManche);
 
     /**
      * Permet de forger une face sur le dé à partir de la liste des bassins abordables.
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins abordables
      */
-    abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche);
+    public abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche);
 
     /**
      * Permet de choisir une carte parmis une liste de carte affordable
      * @return La carte choisie
      */
-    abstract Carte choisirCarte(List<Carte> cartes, int numManche);
+    public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
 
     /**
      * Permet de choisir d'effectuer une action supplémentaire
      * @return true si le bot veut une action supplémentaire, false sinon
      */
-    abstract boolean choisirActionSupplementaire(int numManche);
+    public abstract boolean choisirActionSupplementaire(int numManche);
 
     /**
      * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectué
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
-    abstract int choisirRepartitionOrMarteau(int nbrOr);
+    public abstract int choisirRepartitionOrMarteau(int nbrOr);
 
     /**
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
+    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieurs choix possible
      * @param faceAChoix la face en question
      * @return le numéro de la face choisi
      */
-    abstract int choisirRessource(Face faceAChoix);
+    public abstract int choisirRessource(Face faceAChoix);
 
     /**
      * La meme que la méthode au dessus, mais pour perdre la ressource
      */
-    abstract int choisirRessourceAPerdre(Face faceAChoix);
+    public abstract int choisirRessourceAPerdre(Face faceAChoix);
 
     /**
      * Permet de choisir le dé à lancer lorsque le renfort BICHE est activé
      * @return 0 ou 1
      */
-    abstract int choisirDeFaveurMineure();
+    public abstract int choisirDeFaveurMineure();
 
     /**
      * Permet de choisir le dé à lancer avec la carte cyclope
      * @return 0 ou 1
      */
-    abstract int choisirDeCyclope();
+    public abstract int choisirDeCyclope();
 
     /**
      * Le joueur choisis à qui il veut faire forger le sanglier
      * @param joueurs la liste des joueurs présent dans le jeu
      * @return l'id du joueur que le joueur à choisi
      */
-    abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
+    public abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
 
     /**
      * Demande au joueur de forger une face
      * Utile lorsque les exploits demande de faire forger une face
      * @param face
      */
-    abstract void forgerFace(Face face);
+    public abstract void forgerFace(Face face);
 
-    abstract int[] choisirFaceARemplacerPourMiroir();
+    public abstract int[] choisirFaceARemplacerPourMiroir();
 
     /**
      * Lorsqu'on doit choisir une face pour gagner les ressources indiquées dessus
      * @param faces les faces disponibles
      * @return position de la face dans la liste fournie
      */
-    abstract int choisirFacePourGagnerRessource(List<Face> faces);
+    public abstract int choisirFacePourGagnerRessource(List<Face> faces);
 
     /**
      * Demande au joueur s'il veut utiliser un jeton triton
      * @return son choix sous forme d'une enum
      */
-    abstract choixJetonTriton utiliserJetonTriton();
+    public abstract choixJetonTriton utiliserJetonTriton();
 
     /**
      * Demande au joueur s'il veut utiliser un jeton cerbere
      * @return true si oui, false sinon
      */
-    abstract boolean utiliserJetonCerbere();
+    public abstract boolean utiliserJetonCerbere();
 
     /**
      * Permet de choisir si le joueur veut garder la ressource ou la transformer en point de gloire
      * @param ressource
      * @return true s'il veut avoir des points de gloires, false sinon
      */
-    abstract boolean choisirRessourceOuPdg(Ressource ressource);
+    public abstract boolean choisirRessourceOuPdg(Ressource ressource);
 }

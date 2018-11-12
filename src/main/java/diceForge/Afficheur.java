@@ -2,7 +2,7 @@ package diceForge;
 
 import java.util.List;
 
-class Afficheur {
+public class Afficheur {
 
     private Plateau plateau;
     private String info = "";

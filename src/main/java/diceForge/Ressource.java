@@ -7,7 +7,7 @@ package diceForge;
  */
 public abstract class Ressource {
     private int quantite;
-    int getQuantite(){return quantite;}
+    public int getQuantite(){return quantite;}
     Ressource(int quantite){
         if (quantite < 0)
             throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);

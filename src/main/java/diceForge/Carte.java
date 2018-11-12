@@ -10,7 +10,7 @@ import static diceForge.Joueur.Jeton.CERBERE;
  * Hibou ; Minautore ; Bateau celeste ; Bouclier ; Cerbere ; Passeur ; Casque d'invisibilite
  * Meduse ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope; Miroir Abyssal
  */
-class Carte {
+public class Carte {
     private Ressource[] cout;
     private int nbrPointGloire;
     private Noms nom;
@@ -19,7 +19,7 @@ class Carte {
     Hibou, Minautore, BateauCeleste, Bouclier, Cerbere, Passeur, CasqueDinvisibilite,
     Meduse, Triton, Sentinelle, Cancer, Hydre, Typhon, Sphinx, Cyclope, MiroirAbyssal}
 
-    Carte(Ressource[] cout, int nbrPointGloire, Noms nom){
+    public Carte(Ressource[] cout, int nbrPointGloire, Noms nom){
         if (cout.length <= 0)
             throw new DiceForgeException("Carte","Une carte doit couter quelque chose. Cout donné : "+cout);
         this.cout = cout;
@@ -124,7 +124,7 @@ class Carte {
         }
     }
 
-    Ressource[] getCout() {
+    public Ressource[] getCout() {
         return cout;
     }
 
@@ -132,7 +132,7 @@ class Carte {
         return nbrPointGloire;
     }
 
-    Noms getNom() { return nom; }
+    public Noms getNom() { return nom; }
 
     boolean equals(Carte carte){
         if (carte == null)
