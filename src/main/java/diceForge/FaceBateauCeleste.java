@@ -33,6 +33,6 @@ class FaceBateauCeleste extends Face {
 
     @Override
     public String toString(){
-        return "Face bateau celeste";
+        return "bateau celeste ";
     }
 }

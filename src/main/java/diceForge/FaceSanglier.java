@@ -18,7 +18,7 @@ class FaceSanglier extends Face {
 
     @Override
     public String toString(){
-        return "sanglier(joueur n°" + joueurMaitre.getIdentifiant() +")";
+        return "sanglier(joueur n°" + joueurMaitre.getIdentifiant() +") ";
     }
 
     Joueur getJoueurMaitre() {

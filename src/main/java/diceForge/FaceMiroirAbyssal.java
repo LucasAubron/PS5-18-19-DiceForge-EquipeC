@@ -42,6 +42,6 @@ public class FaceMiroirAbyssal extends Face {
 
     @Override
     public String toString(){
-        return "Miroir Abyssal";
+        return "Miroir Abyssal ";
     }
 }

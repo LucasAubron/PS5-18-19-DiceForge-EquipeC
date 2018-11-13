@@ -209,6 +209,7 @@ public abstract class Joueur {
         for (De de:des)
             de.lancerLeDe();
         setDernierLanceDes(2); //pour le jeton cerbère on indique quel est le dernier lancé de dé effectué (ici on lance les deux dés en même temps)
+        afficheur.ressourcesGagnees(this);
     }
 
     /**
