@@ -56,15 +56,22 @@ public class Afficheur {
                     info += marteau + "\n";
     }
 
+    private void carteRenfortJetonDisponible(Joueur joueur){
+        if (modeVerbeux)
+            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\nJetons Disponibles: " + joueur.getJetons() + "\n";
+    }
+
     void recapJoueur(Joueur joueur){
         if (modeVerbeux){
             grandTrait();
             info += "\n\t\t|Information joueur|\n";
             ressourcesDisponibles(joueur);
             desActuels(joueur);
-            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\n";
+            carteRenfortJetonDisponible(joueur);
+
          }
     }
+
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;

@@ -129,10 +129,9 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
-        afficheur.presentationLancerDes();
+        afficheur.presentationLancerDes(); //toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peut facilement être ignoré lors de la lecture du code
         for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés
             x.lancerLesDes();
-            afficheur.ressourcesGagnees(x);//toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peut facilement être ignoré lors de la lecture du codea
         }
         for (Joueur x:plateau.getJoueurs()) {//et gagne les ressources correspondantes
             x.gagnerRessource();
@@ -140,7 +139,6 @@ class Coordinateur {
         if (plateau.getJoueurs().size() == 2) {
             for (Joueur x:plateau.getJoueurs()) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
-                afficheur.ressourcesGagnees(x);
             }
             for (Joueur x:plateau.getJoueurs()) {
                 x.gagnerRessource();
