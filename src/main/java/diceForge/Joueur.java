@@ -70,6 +70,7 @@ public abstract class Joueur {
         int ajoutOr = quantite;
         if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
             ajoutOr = choisirRepartitionOrMarteau(quantite);
+            afficheur.remplissageMarteau(this, ajoutOr, quantite);
             List<Marteau> marteaux = getMarteau();
             int i = 0;
             int restant = 0;
@@ -86,6 +87,8 @@ public abstract class Joueur {
         or = (or + ajoutOr > maxOr) ? maxOr : or + ajoutOr;
         if (or < 0) or = 0;
     }
+
+    List<Carte> getCartes(){ return  cartes; }
 
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
@@ -258,9 +261,12 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     void estChasse(){
+        afficheur.estChasse(this);
         for (Carte carte:cartes)
-            if (carte.getNom() == Carte.Noms.Ours)
+            if (carte.getNom() == Carte.Noms.Ours) {
+                afficheur.ours(this);
                 pointDeGloire += 3;
+            }
         lancerLesDes();
         gagnerRessource();
     }
@@ -270,9 +276,12 @@ public abstract class Joueur {
      * Elle servira uniquement lorsque l'ours sera introduit
      */
     void chasse() {
+        afficheur.chasse(this);
         for (Carte carte:cartes)
-            if (carte.getNom() == Carte.Noms.Ours)
+            if (carte.getNom() == Carte.Noms.Ours) {
+                afficheur.ours(this);
                 pointDeGloire += 3;
+            }
     }
 
     /**
@@ -282,6 +291,7 @@ public abstract class Joueur {
      * @return true si la carte à pu être acheté, false sinon
      */
     void acheterExploit(Carte carte){
+        afficheur.achatCarte(carte, this);
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource instanceof Soleil)
                 ajouterSoleil(-ressource.getQuantite());

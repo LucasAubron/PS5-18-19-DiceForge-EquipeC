@@ -115,6 +115,7 @@ class Coordinateur {
         phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
         phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
+            afficheur.secondeAction(joueur);
             phaseJetonTriton(joueur, numeroManche);//idem
             secondeAction(joueur, numeroManche);
         }
@@ -144,7 +145,6 @@ class Coordinateur {
             for (Joueur x:plateau.getJoueurs())
                 x.gagnerRessource();
         }
-        afficheur.grandTrait();
         afficheur.recapJoueur(joueur);
     }
 
@@ -157,8 +157,7 @@ class Coordinateur {
      */
     private void phaseRenforts(Joueur joueur, int numeroManche){
         //on créé une copie de liste des renforts du joueurs, on met les renforts ANCIEN au début de la liste
-        afficheur.grandTrait();
-        afficheur.presentationRenforts();
+        afficheur.presentationRenforts(joueur);
         List renfortsUtilisables = new ArrayList();
         int nbrAncientAjoute = 0;
         for (Joueur.Renfort renfort:joueur.getRenforts()){
@@ -195,9 +194,11 @@ class Coordinateur {
      * utile pour lui demander s'il souhaite réaliser une seconde action.
      */
     private boolean action(Joueur joueur, int numeroManche){
+        afficheur.presentationAction();
         Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
+                afficheur.actionForger(joueur);
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 //Il faut que le joueur puisse s'arreter de forger
                 do
@@ -205,12 +206,15 @@ class Coordinateur {
                 while(bassinsAEnlever != null);
                 break;
             case EXPLOIT:
+                afficheur.actionExploit(joueur);
                 if (cartesAbordables(joueur).isEmpty()) { //Si le bot est suffisament "stupide" pour décider d'acheter un exploit sans avoir les ressources
+                    afficheur.actionBete(joueur);
                     return false;
                 }
                 exploit(joueur, numeroManche);
                 break;
             case PASSER:
+                afficheur.actionPasser(joueur);
                 return false;//Si le joueur passe, on averti plus haut
         }
         return true;
@@ -227,6 +231,7 @@ class Coordinateur {
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable, numeroManche);//Le joueur choisi
         if (choixDuJoueur.getBassin() != null) {
+            afficheur.forger(joueur, choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()), joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()), choixDuJoueur.getBassin()); //atroce mais bon ça fait partie de l'afficheur qui n'était pas demandé dans les specs c:
             joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
             joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
         }

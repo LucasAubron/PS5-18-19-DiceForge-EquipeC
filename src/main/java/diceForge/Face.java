@@ -20,7 +20,7 @@ public class Face {
     }
 
     /**
-     * Méthode appelé à chaque fois que l'on tombe sur cette face,
+     * Méthode appeler à chaque fois que l'on tombe sur cette face,
      * a Override si il se passe quelque chose dans ce cas la
      * @param joueur
      */
@@ -32,18 +32,18 @@ public class Face {
         String affichage = "";
         for (Ressource[] ressources:ressource){
             if (!affichage.isEmpty()) {
-                affichage = affichage.substring(0, affichage.length()-1);//On supprime le dernier +
+                affichage = affichage.substring(0, affichage.length()-2);//On supprime le dernier +
                 affichage += "ou ";
             }
             for (Ressource x:ressources){
                 if (x != null) {
                     affichage += x.getQuantite();
-                    affichage += x + " +";
+                    affichage += x + " + ";
                 }
             }
         }
         if (!affichage.isEmpty())
-            affichage = affichage.substring(0, affichage.length()-1);//On supprime le dernier +
+            affichage = affichage.substring(0, affichage.length()-2);//On supprime le dernier +
         return affichage;
     }
 }
