@@ -141,8 +141,9 @@ class Coordinateur {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
                 afficheur.ressourcesGagnees(x);
             }
-            for (Joueur x:plateau.getJoueurs())
+            for (Joueur x:plateau.getJoueurs()) {
                 x.gagnerRessource();
+            }
         }
         afficheur.recapJoueur(joueur);
     }

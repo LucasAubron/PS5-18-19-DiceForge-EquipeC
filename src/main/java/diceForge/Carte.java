@@ -37,7 +37,6 @@ public class Carte {
     }
 
     void effetDirect(Joueur acheteur){
-        System.out.println(nom.toString());
         switch (nom) {
             case Coffre:
                 acheteur.augmenterMaxOr(4);
