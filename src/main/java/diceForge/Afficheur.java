@@ -4,15 +4,12 @@ import java.util.List;
 
 public class Afficheur {
 
-    private Plateau plateau;
     private String info = "";
     private boolean modeVerbeux;
-    private Coordinateur coordinateur;
     private List joueurs;
 
-    Afficheur(boolean modeVerbeux, Coordinateur coordinateur) {
+    Afficheur(boolean modeVerbeux) {
         this.modeVerbeux = modeVerbeux;
-        this.coordinateur = coordinateur;
     }
 
     void setJoueurs(List joueurs){ this.joueurs = joueurs ;}
@@ -64,7 +61,7 @@ public class Afficheur {
             info += "\n\t\t|Information joueur|\n";
             ressourcesDisponibles(joueur);
             desActuels(joueur);
-            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts();
+            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\n";
          }
     }
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
@@ -89,7 +86,7 @@ public class Afficheur {
     void choixFace(Joueur joueur, Face face, int choix){
         if (modeVerbeux){
             if (face.getRessource().length > 1) {
-                info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisi: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
+                info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisit: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
             }
         }
     }
@@ -115,12 +112,12 @@ public class Afficheur {
 
     void chasse(Joueur joueur){
         if (modeVerbeux)
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " chasse le joueur n°";
+            info += joueur.getIdentifiant() + "\n";
     }
 
     void estChasse(Joueur joueur){
         if (modeVerbeux)
-            info += joueur.getIdentifiant() + "\n";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " est chassé par le joueur n°";
     }
 
     void ours(Joueur joueur){

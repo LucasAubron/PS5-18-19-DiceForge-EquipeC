@@ -1,70 +1,124 @@
 package diceForge;
 
+import bot.TestBot;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class JoueurTest {
-    /*
-    private TestBot j0 = new TestBot(0);
-    private TestBot j1 = new TestBot(1);
-    private TestBot j2 = new TestBot(2);
-    private TestBot j3 = new TestBot(3);
+    private Joueur j1 = new TestBot(1, new Afficheur(false));
 
     @Test
-    public void getOr(){
-        assertEquals(j0.getOr(), 3);
-        assertEquals(j1.getOr(), 2);
-        assertEquals(j2.getOr(), 1);
-        assertEquals(j3.getOr(), 0);
+    public void ajouterOrSansMarteau(){
+        assertEquals(3, j1.getOr());
+        j1.ajouterOr(3);
+        assertEquals(6, j1.getOr());
+        j1.ajouterOr(7);
+        assertEquals(12, j1.getOr());
     }
 
     @Test
-    public void ajouterOr(){
-        j0.ajouterOr(6);
-        assertEquals(j0.getOr(), 9);
-        j0.ajouterOr(3);
-        assertEquals(j0.getOr(), 12);
-        j0.ajouterOr(1);
-        assertEquals(j0.getOr(), 12);
-        j0.ajouterOr(9999999);
-        assertEquals(j0.getOr(), 12);
-        j0.ajouterOr(-2);
-        assertEquals(j0.getOr(), 10);
+    public void AjouterOrAvecMarteau(){
+        assertEquals(0, j1.getLune());
+        j1.ajouterLune(1);
+        assertEquals(1, j1.getLune());
+        j1.acheterExploit(new Marteau());
+        assertEquals(0, j1.getLune());
+        assertTrue(j1.possedeCarte(Carte.Noms.Marteau));
+        TestBot j1T = (TestBot) j1;
+        j1T.setNbrPointMarteau(8);
+        assertEquals(3, j1.getOr());
+        j1.ajouterOr(8);
+        assertEquals(3, j1.getOr());
+        assertEquals(8, j1.getMarteau().get(0).getPoints());
+        j1.ajouterOr(8);
+        assertEquals(1, j1.getMarteau().get(0).getPoints());
+        assertEquals(10, j1.getMarteau().get(0).getNbrPointGloire());
+        j1.ajouterLune(1);
+        j1.acheterExploit(new Marteau());
+        j1.ajouterOr(8);
+        assertEquals(9, j1.getMarteau().get(0).getPoints());
+        assertEquals(0, j1.getMarteau().get(1).getPoints());
+        j1.ajouterOr(8);
+        assertEquals(25, j1.getMarteau().get(0).getNbrPointGloire());
+        assertEquals(2, j1.getMarteau().get(1).getPoints());
+        assertEquals(3, j1.getOr());
+        j1.ajouterOr(10);
+        assertEquals(10, j1.getMarteau().get(1).getPoints());
+        assertEquals(5, j1.getOr());
+        j1.ajouterOr(8);
+        j1.ajouterOr(8);
+        j1.ajouterOr(8);
+        assertEquals(25, j1.getMarteau().get(1).getNbrPointGloire());
+        assertEquals(9, j1.getOr());
     }
 
     @Test
-    public void possedeMarteau(){
-        j0.ajouterLune(1);
-        j0.acheterExploit(new Marteau());
-        //assertTrue(j0.possedeMarteau().get(0).equals(new Marteau()));
+    public void jetons(){
+        assertEquals(3, j1.getOr());
+        j1.ajouterJeton(Joueur.Jeton.TRITON);
+        assertEquals(Joueur.Jeton.TRITON, j1.getJetons().get(0));
+        j1.appliquerJetonTriton(Joueur.choixJetonTriton.Or);
+        assertEquals(9, j1.getOr());
+        j1.retirerJeton(Joueur.Jeton.TRITON);
+        assertEquals(0, j1.getJetons().size());
+        j1.ajouterJeton(Joueur.Jeton.TRITON);
+        j1.ajouterJeton(Joueur.Jeton.TRITON);
+        assertEquals(2, j1.getJetons().size());
+        j1.retirerJeton(Joueur.Jeton.TRITON);
+        assertEquals(1, j1.getJetons().size());
     }
 
     @Test
-    public void appelerRenforts(){
-        j0.ajouterSoleil(1);
-        Carte hf = new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.Ancien);
-        j0.acheterExploit(hf);
-        j0.ajouterOr(3);
-        int pdgAct = j0.getPointDeGloire();
-        j0.appelerRenforts(new ArrayList<Joueur.Renfort>(Arrays.asList(Joueur.Renfort.ANCIEN)));
-        assertEquals(j0.getPointDeGloire(), pdgAct+4);
+    public void renforts(){
+        List<Joueur.Renfort> listeR = new ArrayList<>();
+        listeR.add(Joueur.Renfort.ANCIEN);
+        listeR.add(Joueur.Renfort.BICHE);
+        listeR.add(Joueur.Renfort.HIBOU);
+        TestBot j1T = (TestBot) j1;
+        j1T.setNumDe(1);
+        j1T.setNumFace(1);
+        j1.appelerRenforts(listeR);
+        assertEquals(4, j1.getPointDeGloire());
+        assertTrue(j1.getOr() == 1 || j1.getSoleil() == 1);
+        assertEquals(1, j1.getLune());
     }
 
     @Test
-    public void repartitionOrMarteau(){
-        j0.ajouterLune(1);
-        j0.acheterExploit(new Marteau());
-        j0.setNbrPointMarteau(15);
-        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 0);
-        j0.ajouterOr(15);
-        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 10);
-        j0.ajouterOr(15);
-        assertEquals(j0.getMarteau().get(0).getNbrPointGloire(), 25);
+    public void forgerDe(){
+        j1.forgerDe(1, new FaceX3(), 1);
+        assertEquals(new FaceX3().toString(), j1.getDes()[1].getFace(1).toString());
     }
-    */
+
+    @Test
+    public void additionerPointsCartes(){
+        j1.additionnerPointsCartes();
+        assertEquals(0, j1.getPointDeGloire());
+        j1.ajouterLune(5);
+        j1.ajouterSoleil(5);
+        j1.acheterExploit(new Carte(new Ressource[]{new Or(5), new Lune(5)}, 26, Carte.Noms.Hydre));
+        j1.additionnerPointsCartes();
+        assertEquals(26, j1.getPointDeGloire());
+    }
+
+    @Test
+    public void getPosFace1Or(){
+        assertEquals(0, j1.getPosFace1Or()[0]);
+        assertEquals(0, j1.getPosFace1Or()[1]);
+        j1.forgerDe(0, new FaceX3(), 0);
+        assertEquals(0, j1.getPosFace1Or()[0]);
+        assertEquals(3, j1.getPosFace1Or()[1]);
+        j1.forgerDe(0, new FaceX3(), 3);
+        assertEquals(0, j1.getPosFace1Or()[0]);
+        assertEquals(4, j1.getPosFace1Or()[1]);
+        j1.forgerDe(0, new FaceX3(), 4);
+        assertEquals(0, j1.getPosFace1Or()[0]);
+        assertEquals(5, j1.getPosFace1Or()[1]);
+        j1.forgerDe(0, new FaceX3(), 5);
+        assertEquals(1, j1.getPosFace1Or()[0]);
+        assertEquals(0, j1.getPosFace1Or()[1]);
+    }
 }

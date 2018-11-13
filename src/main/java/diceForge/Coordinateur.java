@@ -36,7 +36,7 @@ class Coordinateur {
      * @param nbrManche
      */
     private void lanceUnePartieAvecDetail(Joueur.Bot[] typeJoueurs, int nbrManche) {
-        this.afficheur = new Afficheur(true, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        this.afficheur = new Afficheur(true);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         plateau = new Plateau(typeJoueurs, afficheur);//Le plateau, qui comprend toute la partie physique du jeu
         afficheur.setJoueurs(plateau.getPortail().getJoueurs());//le plateau a besoin de l'afficheur pour le donner a ses joueurs mais l'afficheur a besoin des joueurs du portail de plateau, donc on lui donne après avoir créé le plateau
         afficheur.presentationModeVerbeux();
@@ -61,7 +61,7 @@ class Coordinateur {
             ptsGloireCumules[i] = 0;
         }
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            this.afficheur = new Afficheur(false, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+            this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
             plateau = new Plateau(typeJoueurs, afficheur);
             int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
             List<Integer> id = new ArrayList<>();//La liste des positions possible
@@ -115,7 +115,6 @@ class Coordinateur {
         phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
         phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
-            afficheur.secondeAction(joueur);
             phaseJetonTriton(joueur, numeroManche);//idem
             secondeAction(joueur, numeroManche);
         }
@@ -316,6 +315,7 @@ class Coordinateur {
     }
     private void secondeAction(Joueur joueur, int numeroManche) {
         if (joueur.choisirActionSupplementaire(numeroManche)) {//S'il peut, et il veut, il re-agit
+            afficheur.secondeAction(joueur);
             joueur.ajouterSoleil(-2);
             action(joueur, numeroManche);
         }
