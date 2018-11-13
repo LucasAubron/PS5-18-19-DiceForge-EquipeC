@@ -270,7 +270,6 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     void estChasse(){
-        afficheur.estChasse(this);
         for (Carte carte:cartes)
             if (carte.getNom() == Carte.Noms.Ours) {
                 afficheur.ours(this);
@@ -284,8 +283,7 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur en chasse un autre
      * Elle servira uniquement lorsque l'ours sera introduit
      */
-    void chasse() {
-        afficheur.chasse(this);
+    void chasse(){
         for (Carte carte:cartes)
             if (carte.getNom() == Carte.Noms.Ours) {
                 afficheur.ours(this);
