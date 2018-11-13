@@ -117,9 +117,10 @@ public class EasyBot extends Joueur {
     public void forgerFace(Face face){
         boolean aForge = false;
         int[] posFace = getPosFace1Or();
-        if(posFace[0] != -1) //si on a trouvé une face 1 or sur un des dés)
-                    forgerDe(posFace[0], face, posFace[1]);
-                    aForge = true;
+        if(posFace[0] != -1) { //si on a trouvé une face 1 or sur un des dés)
+            forgerDe(posFace[0], face, posFace[1]);
+            aForge = true;
+        }
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
             forgerDe(0, face, 0);
     }

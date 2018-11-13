@@ -121,4 +121,14 @@ public class JoueurTest {
         assertEquals(1, j1.getPosFace1Or()[0]);
         assertEquals(0, j1.getPosFace1Or()[1]);
     }
+
+    @Test
+    public void gagnerRessourceFace(){
+        j1.gagnerRessourceFace(new Face(new Ressource[][]{{new Lune(5)}}));
+        assertEquals(5, j1.getLune());
+        TestBot j1T = (TestBot) j1;
+        j1T.setNumFace(1);
+        j1.gagnerRessourceFace(new Face(new Ressource[][]{{new Soleil(1)}, {new Soleil(2)}, {new Soleil(3)}}));
+        assertEquals(2, j1.getSoleil());
+    }
 }
