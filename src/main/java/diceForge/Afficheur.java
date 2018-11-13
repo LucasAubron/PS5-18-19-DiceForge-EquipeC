@@ -23,6 +23,7 @@ public class Afficheur {
         }
     }
 
+
     void manche(int numManche) {
         if (modeVerbeux)
             info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
@@ -39,12 +40,12 @@ public class Afficheur {
 
     void ressourcesGagnees(Joueur joueur) {
         if (modeVerbeux)
-            info += "\n--Lancés des dés du joueur n°" + joueur.getIdentifiant() + "--\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
+            info += "\n--Lancés des dés du joueur n°" + joueur.getIdentifiant() + "--\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n\n";
     }
 
     void desActuels(Joueur joueur) {
         if (modeVerbeux)
-            info += "\nDés du joueur n°" + joueur.getIdentifiant() + "\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
+            info += "\nDés du joueur n°" + joueur.getIdentifiant() + ":\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
     }
 
     void ressourcesDisponibles(Joueur joueur) {
@@ -67,7 +68,7 @@ public class Afficheur {
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
-            info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " et gagne " + faceObtenue;
+            info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + ", il gagne " + faceObtenue;
         }
     }
 
@@ -110,26 +111,21 @@ public class Afficheur {
         }
     }
 
-    void chasse(Joueur joueur){
-        if (modeVerbeux)
-            info += joueur.getIdentifiant() + "\n";
-    }
-
-    void estChasse(Joueur joueur){
-        if (modeVerbeux)
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " est chassé par le joueur n°";
+    void chasse(Joueur chasseur, Joueur chasse){
+        if (modeVerbeux && chasse != null)
+            info += "\nLe joueur n°" + chasseur.getIdentifiant() + " chasse le joueur n°" + chasse.getIdentifiant() + ", ce dernier lance ses dés\n";
     }
 
     void ours(Joueur joueur){
         if (modeVerbeux)
-            info += "Le joueur n°" + joueur.getIdentifiant() + " gagne 3 points de gloire grace à sa carte ours\n";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " gagne 3 points de gloire grace à sa carte ours\n";
     }
 
     void remplissageMarteau(Joueur joueur, int or, int quantité){
         if (modeVerbeux){
             int pointMarteau = quantité - or;
             if (pointMarteau !=0)
-                info += "\nLe joueur n°" + joueur.getIdentifiant() + " donne " + pointMarteau + " or a son marteau\n";
+                info += "Le joueur n°" + joueur.getIdentifiant() + " donne " + pointMarteau + " or a son marteau\n";
         }
     }
 
@@ -157,7 +153,7 @@ public class Afficheur {
 
     void actionPasser(Joueur joueur){
         if (modeVerbeux)
-            info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de passer son tour-\n";
+            info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de ne pas effectuer d'action-\n";
     }
 
     void secondeAction(Joueur joueur){
