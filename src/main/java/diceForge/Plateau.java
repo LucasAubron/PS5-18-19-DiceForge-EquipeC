@@ -54,12 +54,12 @@ class Plateau {
                 ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 8, Carte.Noms.Cyclope);
         }
 
-        iles = new Ile[]{/*new Ile(new Marteau(),
+        iles = new Ile[]{new Ile(new Marteau(),
                 new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), typeJoueurs.length),
                 new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
-                        new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),*/
+                        new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? ours : biche,
-                        /*random.nextInt(2) == 1 ? */sanglier/* : satyres*/, typeJoueurs.length)/*,
+                        random.nextInt(2) == 1 ? sanglier : satyres, typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
                         random.nextInt(2) == 1 ? minautore : bouclier, typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
@@ -68,7 +68,7 @@ class Plateau {
                 new Ile(random.nextInt(2) == 1 ? meduse : triton,
                         new CarteMiroirAbyssal(portail.getJoueurs()),
                         typeJoueurs.length),
-                new Ile(ileFond)*/};
+                new Ile(ileFond)};
     }
 
     /**
