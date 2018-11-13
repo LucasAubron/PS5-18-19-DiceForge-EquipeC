@@ -84,7 +84,7 @@ public class RandomBot extends Joueur {
 
     @Override
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
-        return (getIdentifiant() == 1 ? 1 : 2);
+        return (getIdentifiant() == 1 ? 2 : 1);
     }
 
     @Override
