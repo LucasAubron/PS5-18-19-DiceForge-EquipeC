@@ -19,7 +19,7 @@ public class CarteTest {
         Carte sanglier = new CarteSanglier(listeJ);
         TestBot j1T = (TestBot) j1;
         TestBot j2T = (TestBot) j2;
-        j1T.setId(1);
+        j1T.setId(2);
         j2T.setNumDe(0);
         j2T.setNumFace(0);
         j1.acheterExploit(sanglier);

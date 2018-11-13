@@ -11,7 +11,7 @@ public class PortailsOriginelsTest {
     private Joueur j0 = new RandomBot(1,new Afficheur(false));
     private Joueur j1 = new RandomBot(2,new Afficheur(false));
     
-    private PortailsOriginels p0 = new PortailsOriginels(new Joueur.Bot[]{Joueur.Bot.EasyBot,Joueur.Bot.RandomBot,Joueur.Bot.EasyBot,Joueur.Bot.RandomBot}, new Afficheur(false));
+    private PortailsOriginels p0 = new PortailsOriginels(new Joueur.Bot[]{/*Joueur.Bot.EasyBot,Joueur.Bot.RandomBot,*/Joueur.Bot.EasyBot,Joueur.Bot.RandomBot}, new Afficheur(false));
 
     @Test
     public void retirerJoueur() {

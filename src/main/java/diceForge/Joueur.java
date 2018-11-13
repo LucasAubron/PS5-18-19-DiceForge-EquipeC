@@ -355,6 +355,8 @@ public abstract class Joueur {
                     Face face = des[choix].lancerLeDe();
                     setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
+                    for (int j = 0; j < getJetons().size() && getJetons().get(j) == Joueur.Jeton.CERBERE && utiliserJetonCerbere(); ++j)
+                        appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                     afficheur.biche(choix, face, this);
                     break;
                 case HIBOU:
