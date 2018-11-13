@@ -159,16 +159,6 @@ public class EasyBot extends Joueur {
         return 0;
     }
 
-
-    @Override
-    public int[] choisirFaceARemplacerPourMiroir(){
-        int[] res = getPosFace1Or();
-        Random random = new Random();
-        if (res[0] != -1)
-            return res;
-        return new int[]{random.nextInt(2), random.nextInt(6)};
-    }
-
     @Override
     public choixJetonTriton utiliserJetonTriton(){
         Random random = new Random();

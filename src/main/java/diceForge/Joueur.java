@@ -532,12 +532,6 @@ public abstract class Joueur {
     public abstract void forgerFace(Face face);
 
     /**
-     * Cherche une face à éliminer lors du craft d'une face miroir
-     * @return le numéro du dé et la position de la face sur le dé que l'on veut éliminer
-     */
-    public abstract int[] choisirFaceARemplacerPourMiroir();
-
-    /**
      * Lorsqu'on doit choisir une face pour gagner les ressources indiquées dessus
      * @param faces les faces disponibles
      * @return position de la face dans la liste fournie
