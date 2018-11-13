@@ -69,12 +69,8 @@ public class Carte {
                 acheteur.setDernierLanceDes(2);
                 acheteur.lancerLesDes();
                 acheteur.gagnerRessource();
-                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
-                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 acheteur.lancerLesDes();
                 acheteur.gagnerRessource();
-                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
-                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 break;
             case Sphinx:
                 int choix = acheteur.choisirDeFaveurMineure();
@@ -91,8 +87,6 @@ public class Carte {
                 for(int i = 0; i != 2; ++i){
                     acheteur.lancerLesDes();
                     acheteur.gagnerRessource();
-                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
-                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }
                 acheteur.setJetRessourceOuPdg(false);
                 break;
@@ -102,6 +96,8 @@ public class Carte {
                 acheteur.setJetOrOuPdg(true);
                 for (int i = 0; i != 4; ++i){
                     acheteur.gagnerRessourceFace(acheteur.getDes()[choixDe].lancerLeDe());
+                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }
                 acheteur.setJetOrOuPdg(false);
                 break;

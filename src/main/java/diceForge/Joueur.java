@@ -260,8 +260,11 @@ public abstract class Joueur {
         }
 
         for (int i = 0; i != gagnerFace.length; ++i)
-            if (gagnerFace[i])
+            if (gagnerFace[i]) {
                 gagnerRessourceFace(des[i].derniereFace());
+                for (int j = 0; j < getJetons().size() && getJetons().get(j) == Jeton.CERBERE && utiliserJetonCerbere(); ++j)
+                    appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+            }
     }
 
     public Face[] getDesFaceCourante(){

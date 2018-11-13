@@ -134,8 +134,9 @@ class Coordinateur {
             x.lancerLesDes();
             afficheur.ressourcesGagnees(x);//toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peut facilement être ignoré lors de la lecture du codea
         }
-        for (Joueur x:plateau.getJoueurs())//et gagne les ressources correspondantes
+        for (Joueur x:plateau.getJoueurs()) {//et gagne les ressources correspondantes
             x.gagnerRessource();
+        }
         if (plateau.getJoueurs().size() == 2) {
             for (Joueur x:plateau.getJoueurs()) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
