@@ -7,8 +7,11 @@ import java.util.Random;
  */
 public class De {
     private Face[] faces;
-    private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé
+    private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé (pour la carte typhon)
     private Face derniereFace;
+    private Afficheur afficheur;//sert uniquement pour l'afficheur
+    private Joueur proprietaire;//idem
+    private int id;//idem
 
     public Face[] getFaces() {
         return faces;
@@ -18,13 +21,17 @@ public class De {
 
     public Face derniereFace(){return derniereFace;}
 
-    De(Face[] faces){
+    De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){
+        this.proprietaire = joueur;
+        this.afficheur = afficheur;
+        this.id = id;
         if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
             throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
         this.faces = faces;
     }
 
     Face lancerLeDe(){
+        afficheur.resultatDe(proprietaire, id);
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
         derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
         return derniereFace;
