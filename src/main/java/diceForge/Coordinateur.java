@@ -115,7 +115,6 @@ class Coordinateur {
         phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
         phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
         if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
-            afficheur.secondeAction(joueur);
             phaseJetonTriton(joueur, numeroManche);//idem
             secondeAction(joueur, numeroManche);
         }
@@ -316,6 +315,7 @@ class Coordinateur {
     }
     private void secondeAction(Joueur joueur, int numeroManche) {
         if (joueur.choisirActionSupplementaire(numeroManche)) {//S'il peut, et il veut, il re-agit
+            afficheur.secondeAction(joueur);
             joueur.ajouterSoleil(-2);
             action(joueur, numeroManche);
         }
