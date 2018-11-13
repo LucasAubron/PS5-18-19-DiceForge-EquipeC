@@ -46,11 +46,11 @@ public class EasyBot extends Joueur {
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
-            if (carte.getNom().equals("Marteau") && !possedeCarte("Marteau"))//Au moins 1 marteau
+            if (carte.getNom().equals("Marteau") && !possedeCarte(Carte.Noms.Marteau))//Au moins 1 marteau
                 return carte;
-            if (carte.getNom().equals("Coffre") && !possedeCarte("Coffre"))//Et un coffre
+            if (carte.getNom().equals("Coffre") && !possedeCarte(Carte.Noms.Coffre))//Et un coffre
                 return carte;
-            if (carte.getNom().equals("Miroir Abyssal") && !possedeCarte("Miroir Abyssal"))
+            if (carte.getNom().equals("Miroir Abyssal") && !possedeCarte( Carte.Noms.MiroirAbyssal))
                 return  carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere

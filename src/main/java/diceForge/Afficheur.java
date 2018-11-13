@@ -4,15 +4,12 @@ import java.util.List;
 
 public class Afficheur {
 
-    private Plateau plateau;
     private String info = "";
     private boolean modeVerbeux;
-    private Coordinateur coordinateur;
     private List joueurs;
 
-    Afficheur(boolean modeVerbeux, Coordinateur coordinateur) {
+    Afficheur(boolean modeVerbeux) {
         this.modeVerbeux = modeVerbeux;
-        this.coordinateur = coordinateur;
     }
 
     void setJoueurs(List joueurs){ this.joueurs = joueurs ;}

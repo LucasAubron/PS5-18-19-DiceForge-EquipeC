@@ -36,7 +36,7 @@ class Coordinateur {
      * @param nbrManche
      */
     private void lanceUnePartieAvecDetail(Joueur.Bot[] typeJoueurs, int nbrManche) {
-        this.afficheur = new Afficheur(true, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        this.afficheur = new Afficheur(true);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         plateau = new Plateau(typeJoueurs, afficheur);//Le plateau, qui comprend toute la partie physique du jeu
         afficheur.setJoueurs(plateau.getPortail().getJoueurs());//le plateau a besoin de l'afficheur pour le donner a ses joueurs mais l'afficheur a besoin des joueurs du portail de plateau, donc on lui donne après avoir créé le plateau
         afficheur.presentationModeVerbeux();
@@ -61,7 +61,7 @@ class Coordinateur {
             ptsGloireCumules[i] = 0;
         }
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            this.afficheur = new Afficheur(false, this);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+            this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
             plateau = new Plateau(typeJoueurs, afficheur);
             int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
             List<Integer> id = new ArrayList<>();//La liste des positions possible

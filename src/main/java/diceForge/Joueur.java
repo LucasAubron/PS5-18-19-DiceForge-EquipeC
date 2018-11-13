@@ -42,6 +42,10 @@ public abstract class Joueur {
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
 
+    /**
+     * @param identifiant comprit entre 1 et 4 inclus
+     * @param afficheur
+     */
     public Joueur(int identifiant, Afficheur afficheur){
         this.afficheur = afficheur;
         if (identifiant < 1 || identifiant > 4)
@@ -154,7 +158,7 @@ public abstract class Joueur {
 
     void appliquerJetonTriton(choixJetonTriton choix) {
         if (choix != choixJetonTriton.Rien) {
-            retirerJeton(Jeton.CERBERE);
+            retirerJeton(Jeton.TRITON);
             switch (choix) {
                 case Or:
                     ajouterOr(6);
@@ -187,6 +191,11 @@ public abstract class Joueur {
 
     public List<Jeton> getJetons(){return this.jetons;}
 
+    /**
+     * Pour la carte qui demande de choisir entre gagner la ressource ou des points de gloire
+     * lorsque on trouve une ressource
+     * @param bo true lorsque on veut que le joueur puisse choisir, false sinon
+     */
     void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
 
     /**
@@ -307,9 +316,9 @@ public abstract class Joueur {
      * @param nom le nom de la carte demandé
      * @return true si le joueur possède la carte, false sinon
      */
-    public boolean possedeCarte(String nom){
+    public boolean possedeCarte(Carte.Noms nom){
         for (Carte carte:cartes)
-            if (carte.getNom().equals(nom))
+            if (carte.getNom() == nom)
                 return true;
         return false;
     }
