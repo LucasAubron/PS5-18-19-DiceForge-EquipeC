@@ -200,9 +200,13 @@ class Coordinateur {
                 afficheur.actionForger(joueur);
                 List<Bassin> bassinsAEnlever = new ArrayList<>();
                 //Il faut que le joueur puisse s'arreter de forger
-                do
+                int compteurForge = -1; //compteur de faces forgées, si i == 0 alors l'afficheur prévient que le joueur ne veut ou ne peut finalement pas forger (sert uniquement à l'afficheur)
+                do {
                     bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
+                    compteurForge++;
+                }
                 while(bassinsAEnlever != null);
+                afficheur.actionDebile(compteurForge);
                 break;
             case EXPLOIT:
                 afficheur.actionExploit(joueur);
@@ -225,7 +229,7 @@ class Coordinateur {
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
     private List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
-        List<Bassin> bassinAbordable = BassinAbordable(joueur, bassinsUtilises);
+        List<Bassin> bassinAbordable = bassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable, numeroManche);//Le joueur choisi
@@ -247,7 +251,7 @@ class Coordinateur {
      * @param bassinsUtilises
      * @return
      */
-    private List<Bassin> BassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
+    private List<Bassin> bassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean estDejaUtilise = false;

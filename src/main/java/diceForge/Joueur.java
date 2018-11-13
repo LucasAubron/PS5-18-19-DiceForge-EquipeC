@@ -58,13 +58,13 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new PointDeGloire(2)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})}),
+                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 0),
         new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Soleil(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})})};
+                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 1)};
     }
 
     public int getOr() {return or;}
@@ -206,10 +206,11 @@ public abstract class Joueur {
      * pour réaliser ce pourquoi on a lancé les dés (pas toujours pour un gain ! --> minotaure, satyres)
      */
     void lancerLesDes(){
+        afficheur.lancerDes(this);
         for (De de:des)
             de.lancerLeDe();
         setDernierLanceDes(2); //pour le jeton cerbère on indique quel est le dernier lancé de dé effectué (ici on lance les deux dés en même temps)
-        afficheur.ressourcesGagnees(this);
+        afficheur.retourALaLigne();
     }
 
     /**
