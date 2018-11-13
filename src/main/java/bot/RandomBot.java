@@ -98,12 +98,6 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public int[] choisirFaceARemplacerPourMiroir(){return new int[]{
-            random.nextInt(2),
-            random.nextInt(6)};
-    }
-
-    @Override
     public choixJetonTriton utiliserJetonTriton(){
         int choix = random.nextInt(choixJetonTriton.values().length);
         switch (choix){

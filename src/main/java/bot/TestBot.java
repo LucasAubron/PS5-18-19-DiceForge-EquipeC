@@ -120,10 +120,7 @@ public class TestBot extends Joueur {
     }
 
     private int[] choixMiroir = new int[2];
-    @Override
-    public int[] choisirFaceARemplacerPourMiroir(){
-        return choixMiroir;
-    }
+
     public void setChoixMiroir(int a, int b){choixMiroir[0] = a; choixMiroir[1] = b;}
 
     private int choixTriton;
