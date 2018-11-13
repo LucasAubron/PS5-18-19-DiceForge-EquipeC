@@ -5,7 +5,7 @@ import diceForge.*;
 import java.util.List;
 
 public class AubotLeGrand extends Joueur{
-    public AubotLeGrand(int identifiant, Afficheur afficheur){ super(identifiant, afficheur); }
+    public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
 
     @Override
     public Joueur.Action choisirAction(int numManche){
