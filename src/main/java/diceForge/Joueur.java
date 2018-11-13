@@ -502,7 +502,7 @@ public abstract class Joueur {
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
+    public abstract List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieurs choix possible
@@ -531,7 +531,7 @@ public abstract class Joueur {
     /**
      * Le joueur choisis à qui il veut faire forger le sanglier
      * @param joueurs la liste des joueurs présent dans le jeu
-     * @return l'id du joueur que le joueur à choisi
+     * @return l'id du joueur que le joueur à choisi, compris entre 1 et le nombre de joueur
      */
     public abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
 
