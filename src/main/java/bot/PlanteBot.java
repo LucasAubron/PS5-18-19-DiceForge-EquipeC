@@ -5,8 +5,8 @@ import diceForge.*;
 import java.util.List;
 
 public class PlanteBot extends Joueur {//Plus communément appelé MLG Bot
-    public PlanteBot(int identifiant, Afficheur afficheur){
-        super(identifiant, afficheur);
+    public PlanteBot(int identifiant, Afficheur afficheur, Plateau plateau){
+        super(identifiant, afficheur, plateau);
     }
 
     @Override

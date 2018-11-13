@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TestBot extends Joueur {
 
-    public TestBot(int identifiant, Afficheur afficheur) {super (identifiant, afficheur);}
+    public TestBot(int identifiant, Afficheur afficheur, Plateau plateau) {super (identifiant, afficheur, plateau);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir

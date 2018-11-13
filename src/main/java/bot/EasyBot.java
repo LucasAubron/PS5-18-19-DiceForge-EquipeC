@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public class EasyBot extends Joueur {
-    public EasyBot(int identifiant, Afficheur afficheur) {super(identifiant, afficheur);}
+    public EasyBot(int identifiant, Afficheur afficheur, Plateau plateau) {super(identifiant, afficheur, plateau);}
 
     @Override
     public Action choisirAction(int numManche){

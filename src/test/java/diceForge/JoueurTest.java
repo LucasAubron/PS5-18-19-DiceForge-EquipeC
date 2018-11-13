@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class JoueurTest {
-    private Joueur j1 = new TestBot(1, new Afficheur(false));
+    private Joueur j1 = new TestBot(1, new Afficheur(false), null);
 
     @Test
     public void ajouterOrSansMarteau(){

@@ -10,8 +10,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class CarteTest {
-    private Joueur j1 = new TestBot(1, new Afficheur(false));
-    private Joueur j2 = new TestBot(2, new Afficheur(false));
+    private Joueur j1 = new TestBot(1, new Afficheur(false), null);
+    private Joueur j2 = new TestBot(2, new Afficheur(false), null);
 
     @Test
     public void effetDirectSanglier(){

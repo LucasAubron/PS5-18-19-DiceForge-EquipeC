@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class RandomBot extends Joueur {
     private Random random = new Random();
-    public RandomBot(int identifiant, Afficheur afficheur){ super(identifiant, afficheur);
+    public RandomBot(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau);
     }
 
     @Override
