@@ -11,10 +11,6 @@ class FaceBateauCeleste extends Face {
         this.temple = temple;
     }
 
-    Temple getTemple() {
-        return temple;
-    }
-
     void multiplierX3Actif(){
         multiplierX3 = 3;
     }

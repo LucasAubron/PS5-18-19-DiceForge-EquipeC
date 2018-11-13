@@ -25,4 +25,5 @@ public class CarteTest {
         j1.acheterExploit(sanglier);
         assertEquals(new FaceSanglier(j1).toString(), j2.getDes()[0].getFace(0).toString());
     }
+
 }

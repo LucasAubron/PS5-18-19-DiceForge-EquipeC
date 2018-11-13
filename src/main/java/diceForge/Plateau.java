@@ -11,7 +11,6 @@ import java.util.Random;
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
 class Plateau {
-    private boolean modeVerbeux;
     private PortailsOriginels portail;
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
@@ -19,7 +18,6 @@ class Plateau {
     Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
         portail = new PortailsOriginels(typeJoueurs, afficheur);//La ou les joueurs sont de base
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
-        this.modeVerbeux = modeVerbeux;
         Random random = new Random();
 
         Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, Carte.Noms.Ours);
