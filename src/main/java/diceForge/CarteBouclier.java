@@ -16,6 +16,10 @@ public class CarteBouclier extends Carte {
         ChoixJoueurForge choix = acheteur.choisirFaceAForgerEtARemplacer(
                 new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), 5);
         acheteur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
+    }
 
+    @Override
+    public Carte clone(){
+        return new CarteBouclier(plateau);
     }
 }

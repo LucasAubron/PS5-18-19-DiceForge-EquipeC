@@ -3,7 +3,7 @@ package diceForge;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarteSanglier extends  Carte {
+public class CarteSanglier extends Carte {
     private List<Joueur> joueurs = new ArrayList<>();
 
     CarteSanglier(List<Joueur> joueurs){
@@ -21,8 +21,11 @@ public class CarteSanglier extends  Carte {
      */
     @Override
     void effetDirect(Joueur acheteur){
-        this.joueurs
-                .get(acheteur.choisirIdJoueurPorteurSanglier(this.joueurs))
-                .forgerFace(new FaceSanglier(acheteur));
+        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueurs)).forgerFace(new FaceSanglier(acheteur));
+    }
+
+    @Override
+    public Carte clone(){
+        return new CarteSanglier(joueurs);
     }
 }
