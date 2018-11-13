@@ -31,6 +31,7 @@ public abstract class Joueur {
     private Afficheur afficheur;
 
     private boolean jetRessourceOuPdg = false;
+    private boolean jetOrOuPdg = false;
 
     protected String affichage = "";
 
@@ -197,6 +198,8 @@ public abstract class Joueur {
      * @param bo true lorsque on veut que le joueur puisse choisir, false sinon
      */
     void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
+
+    void setJetOrOuPdg(boolean bo){jetOrOuPdg = bo;}
 
     /**
      * On lance ses dés, le résulat est stocké dans desFaceCourante, desFacesCourante est ensuite utilisé plus tard
@@ -397,7 +400,10 @@ public abstract class Joueur {
         if (face.getRessource().length > 0) {
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or) {
-                    ajouterOr(ressource.getQuantite());
+                    if(jetOrOuPdg && choisirRessourceOuPdg(ressource))
+                        pointDeGloire += ressource.getQuantite();
+                    else
+                        ajouterOr(ressource.getQuantite());
                 } else if (ressource instanceof Soleil) {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
                         pointDeGloire += 2*ressource.getQuantite();

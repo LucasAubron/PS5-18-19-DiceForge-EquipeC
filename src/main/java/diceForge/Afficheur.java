@@ -186,6 +186,8 @@ public class Afficheur {
 
     @Override
     public String toString(){
-        return info;
+        String x = info;
+        info = "";
+        return x;
     }
 }
