@@ -462,6 +462,9 @@ public abstract class Joueur {
         return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
     }
 
+
+
+
     @Override
     public String toString(){
         String s = affichage;
