@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Random;
 
 public class MLGBot extends Joueur {
-    private Random random = new Random();
+    private Random notLuckButSkill = new Random();
     private int numeroManche = -1;//On est jamais mieux servi que par soi même
-    private int maxPdg = -1;
+    private int getOnMyLevel = -1;
     private int[] choixAction;//0 = forger, 1 = exploit, 2 = passer
-    private String infoPartie = ";";
+    private String cheatCode = ";";
     public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
     }
 
-    private int getPdgAvecCarte(){
+    private int pwned(){
         int pdg = getPointDeGloire();
         for (Carte carte:getCartes()){
             pdg += carte.getNbrPointGloire();
@@ -30,13 +30,13 @@ public class MLGBot extends Joueur {
         return pdg;
     }
 
-    private void ecrire(){
+    private void Xx360xX_NoScope(){
         try {
             RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBot\\MLGBotProp.txt", "rw");
             FileChannel channel = file.getChannel();
-            ByteBuffer buffer = ByteBuffer.allocate(infoPartie.length());
+            ByteBuffer buffer = ByteBuffer.allocate(cheatCode.length());
             buffer.clear();
-            buffer.put(infoPartie.getBytes());
+            buffer.put(cheatCode.getBytes());
             buffer.flip();
             while (buffer.hasRemaining())
                 channel.write(buffer, file.length());
@@ -46,9 +46,9 @@ public class MLGBot extends Joueur {
         }
     }
 
-    private void refresh(){
-        if (getPointDeGloire() > maxPdg){
-            maxPdg = getPointDeGloire();
+    private void gettingGood(){
+        if (getPointDeGloire() > getOnMyLevel){
+            getOnMyLevel = getPointDeGloire();
         }
     }
 
@@ -58,7 +58,7 @@ public class MLGBot extends Joueur {
         if (numeroManche == 0)
             choixAction = new int[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         Action actionChoisi = null;
-        int rand = random.nextInt(3);
+        int rand = notLuckButSkill.nextInt(3);
         switch (rand){
             case 0: actionChoisi = Action.FORGER; break;
             case 1: actionChoisi = Action.EXPLOIT; break;
@@ -66,14 +66,14 @@ public class MLGBot extends Joueur {
         }
         choixAction[numeroManche] = rand;
         if (numeroManche == choixAction.length-1)
-            ecrire();
-        refresh();
+            Xx360xX_NoScope();
+        gettingGood();
         return actionChoisi;
     }
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        refresh();
+        gettingGood();
         if (!bassins.isEmpty())
             return new ChoixJoueurForge(bassins.get(0), 0, 0, 0);
         return null;
@@ -81,84 +81,84 @@ public class MLGBot extends Joueur {
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        refresh();
+        gettingGood();
         return cartes.get(0);
     }
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        refresh();
+        gettingGood();
         return true;
     }
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public List<Renfort> choisirRenforts(List<Renfort> renforts){
-        refresh();
+        gettingGood();
         return renforts;
     }
 
     @Override
     public int choisirRessource(Face face){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public int choisirRessourceAPerdre(Face face){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public int choisirDeFaveurMineure(){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public int choisirDeCyclope(){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
-        refresh();
+        gettingGood();
         return getIdentifiant() == 1 ? 2 : 1;
     }
 
     @Override
     public void forgerFace(Face face){
-        refresh();
+        gettingGood();
     }
 
     @Override
     public int choisirFacePourGagnerRessource(List<Face> faces){
-        refresh();
+        gettingGood();
         return 0;
     }
 
     @Override
     public choixJetonTriton utiliserJetonTriton(){
-        refresh();
+        gettingGood();
         return choixJetonTriton.Soleil;
     }
 
     @Override
     public boolean utiliserJetonCerbere(){
-        refresh();
+        gettingGood();
         return true;
     }
 
     @Override
     public boolean choisirRessourceOuPdg(Ressource ressource) {
-        refresh();
+        gettingGood();
         return true;
     }
 }
