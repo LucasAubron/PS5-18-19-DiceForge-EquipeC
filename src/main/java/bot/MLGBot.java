@@ -4,9 +4,9 @@ import diceForge.*;
 
 import java.util.List;
 
-public class PlanteBot extends Joueur {//Plus communément appelé MLG Bot
+public class MLGBot extends Joueur {
     private int numManche = 1;//On est jamais mieux servi que par soi même
-    public PlanteBot(int identifiant, Afficheur afficheur, Plateau plateau){
+    public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
     }
 

@@ -1,7 +1,7 @@
 package diceForge;
 
 import bot.EasyBot;
-import bot.PlanteBot;
+import bot.MLGBot;
 import bot.RandomBot;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ class PortailsOriginels {
                 this.joueurs.add(new EasyBot(identifiant, afficheur, plateau));
             }
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
-                this.joueurs.add(new PlanteBot(identifiant, afficheur, plateau));
+                this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }
