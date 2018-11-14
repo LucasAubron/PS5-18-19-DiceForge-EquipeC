@@ -60,7 +60,7 @@ class PortailsOriginels {
         joueurs.add(joueur);
     }
 
-    List<Joueur> getJoueurs() {
+    public List<Joueur> getJoueurs() {
         return joueurs;
     }
 }
