@@ -19,9 +19,10 @@ public class Afficheur {
             info += "\n\n\n\t\t-----------------------------------------------------------------------------------\n\t\t| Cette partie oppose les bots (affichés dans l'odre de jeu): ";
             for (int i = 0; i < joueurs.size(); i++)
                 info += joueurs.get(i) + ", ";
-            info += "|\n\t\t-----------------------------------------------------------------------------------";
+            info += "|\n\t\t-----------------------------------------------------------------------------------\n\nL'affichage pour chaque tour apparait dans l'ordre suivant, chaque étape étant séparée par des pointillés:\n1. Phase de lancer des dés\n2. Phase d'activation des renforts\n3. Phase d'action\n4. Seconde Action s'il le joueur décide de rejouer";
         }
     }
+
 
     void manche(int numManche) {
         if (modeVerbeux)
@@ -37,14 +38,16 @@ public class Afficheur {
         }
     }
 
-    void ressourcesGagnees(Joueur joueur) {
-        if (modeVerbeux)
-            info += "\n--Lancés des dés du joueur n°" + joueur.getIdentifiant() + "--\nRésultate dé n°1 : " + joueur.getDesFaceCourante()[0] + "\nRésultat dé n°2 : " + joueur.getDesFaceCourante()[1] + "\n";
+    void resultatDe(Joueur joueur, int idDe) {
+        if (modeVerbeux) {
+            idDe++;
+            info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[0] + "\n";
+        }
     }
 
     void desActuels(Joueur joueur) {
         if (modeVerbeux)
-            info += "\nDés du joueur n°" + joueur.getIdentifiant() + "\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
+            info += "\nDés du joueur n°" + joueur.getIdentifiant() + ":\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
     }
 
     void ressourcesDisponibles(Joueur joueur) {
@@ -55,19 +58,26 @@ public class Afficheur {
                     info += marteau + "\n";
     }
 
+    private void carteRenfortJetonDisponible(Joueur joueur){
+        if (modeVerbeux)
+            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\nJetons Disponibles: " + joueur.getJetons() + "\n";
+    }
+
     void recapJoueur(Joueur joueur){
         if (modeVerbeux){
             grandTrait();
-            info += "\n\t\t|Information joueur|\n";
+            info += "\n\t\t|Information joueur n°" + joueur.getIdentifiant() + "|\n";
             ressourcesDisponibles(joueur);
             desActuels(joueur);
-            info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\n";
+            carteRenfortJetonDisponible(joueur);
+
          }
     }
+
     void biche(int deChoisi, Face faceObtenue,Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
-            info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + " et gagne " + faceObtenue;
+            info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + ", il gagne " + faceObtenue;
         }
     }
 
@@ -86,7 +96,7 @@ public class Afficheur {
     void choixFace(Joueur joueur, Face face, int choix){
         if (modeVerbeux){
             if (face.getRessource().length > 1) {
-                info += "\nLe joueur n°" + joueur.getIdentifiant() + " choisit: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
+                info += "Le joueur n°" + joueur.getIdentifiant() + " choisit: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
             }
         }
     }
@@ -94,6 +104,11 @@ public class Afficheur {
         if (modeVerbeux) {
             info += "\n\t--Phase de lancer de dés--\n";
         }
+    }
+
+    void lancerDes(Joueur joueur){
+        if (modeVerbeux)
+            info += "\n-Le joueur n°" + joueur.getIdentifiant() + " lance ses dés-\n";
     }
 
     void presentationRenforts(Joueur joueur){
@@ -110,26 +125,21 @@ public class Afficheur {
         }
     }
 
-    void chasse(Joueur joueur){
-        if (modeVerbeux)
-            info += joueur.getIdentifiant() + "\n";
-    }
-
-    void estChasse(Joueur joueur){
-        if (modeVerbeux)
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " est chassé par le joueur n°";
+    void chasse(Joueur chasseur, Joueur chasse){
+        if (modeVerbeux && chasse != null)
+            info += "\nLe joueur n°" + chasseur.getIdentifiant() + " chasse le joueur n°" + chasse.getIdentifiant() + ", ce dernier lance ses dés\n";
     }
 
     void ours(Joueur joueur){
         if (modeVerbeux)
-            info += "Le joueur n°" + joueur.getIdentifiant() + " gagne 3 points de gloire grace à sa carte ours\n";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " gagne 3 points de gloire grace à sa carte ours\n";
     }
 
     void remplissageMarteau(Joueur joueur, int or, int quantité){
         if (modeVerbeux){
             int pointMarteau = quantité - or;
             if (pointMarteau !=0)
-                info += "\nLe joueur n°" + joueur.getIdentifiant() + " donne " + pointMarteau + " or a son marteau\n";
+                info += "Le joueur n°" + joueur.getIdentifiant() + " donne " + pointMarteau + " or a son marteau\n";
         }
     }
 
@@ -157,7 +167,7 @@ public class Afficheur {
 
     void actionPasser(Joueur joueur){
         if (modeVerbeux)
-            info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de passer son tour-\n";
+            info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de ne pas effectuer d'action-\n";
     }
 
     void secondeAction(Joueur joueur){
@@ -172,6 +182,11 @@ public class Afficheur {
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " n'a pas assez de ressource pour acheter une carte, il passe son tour\n";
     }
 
+    void actionDebile(int compteur){
+        if (modeVerbeux && compteur == 0)
+            info += "\n-Le joueur revient sur sa décision et passe son tour-\n";
+    }
+
     void grandTrait(){
         if (modeVerbeux)
             info += "\n--------------------------------------------------\n"; //pas nécessaire mais bon faut bien s'amuser
@@ -182,6 +197,11 @@ public class Afficheur {
             info += "\n-----------------------------------\n"; //idem
     }
 
+    void retourALaLigne(){
+        if (modeVerbeux)
+            info += "\n";
+    }
+
     void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
         for (int i = 0; i != nbrVictoire.length; ++i){
             info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire\n";
@@ -190,6 +210,8 @@ public class Afficheur {
 
     @Override
     public String toString(){
-        return info;
+        String x = info;
+        info = "";
+        return x;
     }
 }

@@ -14,11 +14,13 @@ class FaceSanglier extends Face {
                         {new Soleil(1)},
                         {new Lune(1)},
                         {new PointDeGloire(3)}}));
+        for (int j = 0; j < joueur.getJetons().size() && joueur.getJetons().get(j) == Joueur.Jeton.CERBERE && joueur.utiliserJetonCerbere(); ++j)
+            joueur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
     }
 
     @Override
     public String toString(){
-        return "sanglier(" + joueurMaitre +")";
+        return "sanglier(joueur n°" + joueurMaitre.getIdentifiant() +") ";
     }
 
     Joueur getJoueurMaitre() {

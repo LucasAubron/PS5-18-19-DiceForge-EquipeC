@@ -16,6 +16,7 @@ import java.util.List;
  * Cette classe est abstraite, on ne peut pas en faire un objet, il faut instancier un bot
  */
 public abstract class Joueur {
+    private Plateau plateau;
     private int or;
     private int maxOr = 12;
     private int soleil = 0;
@@ -31,13 +32,14 @@ public abstract class Joueur {
     private Afficheur afficheur;
 
     private boolean jetRessourceOuPdg = false;
+    private boolean jetOrOuPdg = false;
 
     protected String affichage = "";
 
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
@@ -46,7 +48,7 @@ public abstract class Joueur {
      * @param identifiant comprit entre 1 et 4 inclus
      * @param afficheur
      */
-    public Joueur(int identifiant, Afficheur afficheur){
+    public Joueur(int identifiant, Afficheur afficheur, Plateau plateau){
         this.afficheur = afficheur;
         if (identifiant < 1 || identifiant > 4)
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
@@ -57,14 +59,17 @@ public abstract class Joueur {
                 new Face(new Ressource[][]{{new PointDeGloire(2)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})}),
+                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 0),
         new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Soleil(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
                 new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})})};
+                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 1)};
+        this.plateau = plateau;
     }
+
+    protected Plateau getPlateau(){return plateau;}
 
     public int getOr() {return or;}
 
@@ -198,14 +203,18 @@ public abstract class Joueur {
      */
     void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
 
+    void setJetOrOuPdg(boolean bo){jetOrOuPdg = bo;}
+
     /**
      * On lance ses dés, le résulat est stocké dans desFaceCourante, desFacesCourante est ensuite utilisé plus tard
      * pour réaliser ce pourquoi on a lancé les dés (pas toujours pour un gain ! --> minotaure, satyres)
      */
     void lancerLesDes(){
+        afficheur.lancerDes(this);
         for (De de:des)
             de.lancerLeDe();
         setDernierLanceDes(2); //pour le jeton cerbère on indique quel est le dernier lancé de dé effectué (ici on lance les deux dés en même temps)
+        afficheur.retourALaLigne();
     }
 
     /**
@@ -257,8 +266,11 @@ public abstract class Joueur {
         }
 
         for (int i = 0; i != gagnerFace.length; ++i)
-            if (gagnerFace[i])
+            if (gagnerFace[i]) {
                 gagnerRessourceFace(des[i].derniereFace());
+                for (int j = 0; j < getJetons().size() && getJetons().get(j) == Jeton.CERBERE && utiliserJetonCerbere(); ++j)
+                    appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
+            }
     }
 
     public Face[] getDesFaceCourante(){
@@ -270,7 +282,6 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     void estChasse(){
-        afficheur.estChasse(this);
         for (Carte carte:cartes)
             if (carte.getNom() == Carte.Noms.Ours) {
                 afficheur.ours(this);
@@ -284,8 +295,7 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur en chasse un autre
      * Elle servira uniquement lorsque l'ours sera introduit
      */
-    void chasse() {
-        afficheur.chasse(this);
+    void chasse(){
         for (Carte carte:cartes)
             if (carte.getNom() == Carte.Noms.Ours) {
                 afficheur.ours(this);
@@ -350,6 +360,8 @@ public abstract class Joueur {
                     Face face = des[choix].lancerLeDe();
                     setDernierLanceDes(choix);
                     gagnerRessourceFace(face);
+                    for (int j = 0; j < getJetons().size() && getJetons().get(j) == Joueur.Jeton.CERBERE && utiliserJetonCerbere(); ++j)
+                        appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                     afficheur.biche(choix, face, this);
                     break;
                 case HIBOU:
@@ -399,7 +411,10 @@ public abstract class Joueur {
         if (face.getRessource().length > 0) {
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource instanceof Or) {
-                    ajouterOr(ressource.getQuantite());
+                    if(jetOrOuPdg && choisirRessourceOuPdg(ressource))
+                        pointDeGloire += ressource.getQuantite();
+                    else
+                        ajouterOr(ressource.getQuantite());
                 } else if (ressource instanceof Soleil) {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
                         pointDeGloire += 2*ressource.getQuantite();
@@ -492,7 +507,7 @@ public abstract class Joueur {
      * Permet de choisir quel renfort appeler
      * @return la liste des renforts à appeler
      */
-    public abstract List<Renfort> choisirRenforts(List renfortsUtilisables);
+    public abstract List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables);
 
     /**
      * Permet de choisir quelle ressource le joueur choisi sur une face de dé où il y a plusieurs choix possible
@@ -521,7 +536,7 @@ public abstract class Joueur {
     /**
      * Le joueur choisis à qui il veut faire forger le sanglier
      * @param joueurs la liste des joueurs présent dans le jeu
-     * @return l'id du joueur que le joueur à choisi
+     * @return l'id du joueur que le joueur à choisi, compris entre 1 et le nombre de joueur
      */
     public abstract int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs);
 
@@ -532,12 +547,6 @@ public abstract class Joueur {
      * @param face
      */
     public abstract void forgerFace(Face face);
-
-    /**
-     * Cherche une face à éliminer lors du craft d'une face miroir
-     * @return le numéro du dé et la position de la face sur le dé que l'on veut éliminer
-     */
-    public abstract int[] choisirFaceARemplacerPourMiroir();
 
     /**
      * Lorsqu'on doit choisir une face pour gagner les ressources indiquées dessus

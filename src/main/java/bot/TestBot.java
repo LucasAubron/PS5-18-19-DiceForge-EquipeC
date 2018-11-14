@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TestBot extends Joueur {
 
-    public TestBot(int identifiant, Afficheur afficheur) {super (identifiant, afficheur);}
+    public TestBot(int identifiant, Afficheur afficheur, Plateau plateau) {super (identifiant, afficheur, plateau);}
 
     /**
      * Pour tester choisirAction, il faut initialiser setActionAChoisir
@@ -120,10 +120,7 @@ public class TestBot extends Joueur {
     }
 
     private int[] choixMiroir = new int[2];
-    @Override
-    public int[] choisirFaceARemplacerPourMiroir(){
-        return choixMiroir;
-    }
+
     public void setChoixMiroir(int a, int b){choixMiroir[0] = a; choixMiroir[1] = b;}
 
     private int choixTriton;

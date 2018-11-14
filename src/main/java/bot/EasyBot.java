@@ -5,10 +5,8 @@ import diceForge.*;
 import java.util.List;
 import java.util.Random;
 
-import static diceForge.Joueur.Jeton.CERBERE;
-
 public class EasyBot extends Joueur {
-    public EasyBot(int identifiant, Afficheur afficheur) {super(identifiant, afficheur);}
+    public EasyBot(int identifiant, Afficheur afficheur, Plateau plateau) {super(identifiant, afficheur, plateau);}
 
     @Override
     public Action choisirAction(int numManche){
@@ -46,12 +44,10 @@ public class EasyBot extends Joueur {
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
-            if (carte.getNom().equals("Marteau") && !possedeCarte(Carte.Noms.Marteau))//Au moins 1 marteau
+            if (carte.getNom().equals(Carte.Noms.Marteau) && !possedeCarte(Carte.Noms.Marteau))//Au moins 1 marteau
                 return carte;
-            if (carte.getNom().equals("Coffre") && !possedeCarte(Carte.Noms.Coffre))//Et un coffre
+            if (carte.getNom().equals(Carte.Noms.Coffre) && !possedeCarte(Carte.Noms.Coffre))//Et un coffre
                 return carte;
-            if (carte.getNom().equals("Miroir Abyssal") && !possedeCarte( Carte.Noms.MiroirAbyssal))
-                return  carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere
             else if (carteAChoisir == null)
@@ -104,7 +100,7 @@ public class EasyBot extends Joueur {
 
     @Override
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
-        return (getIdentifiant() == 1 ? 0 : 1);
+        return (getIdentifiant() == 1 ? 2 : 1);
     }
 
     /**
@@ -157,16 +153,6 @@ public class EasyBot extends Joueur {
         if (posMaxLune != -1) return posMaxLune;
         if (posMaxOr != -1) return posMaxOr;
         return 0;
-    }
-
-
-    @Override
-    public int[] choisirFaceARemplacerPourMiroir(){
-        int[] res = getPosFace1Or();
-        Random random = new Random();
-        if (res[0] != -1)
-            return res;
-        return new int[]{random.nextInt(2), random.nextInt(6)};
     }
 
     @Override

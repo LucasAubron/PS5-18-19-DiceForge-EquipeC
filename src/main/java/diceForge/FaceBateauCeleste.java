@@ -11,10 +11,6 @@ class FaceBateauCeleste extends Face {
         this.temple = temple;
     }
 
-    Temple getTemple() {
-        return temple;
-    }
-
     void multiplierX3Actif(){
         multiplierX3 = 3;
     }
@@ -23,7 +19,7 @@ class FaceBateauCeleste extends Face {
     void effetActif(Joueur joueur){
             List<Bassin> bassinsAbordables = new ArrayList<>();
             for (Bassin bassin : temple.getSanctuaire())
-                if (bassin.getCout() - 2*multiplierX3 >= joueur.getOr())
+                if (bassin.getCout() - 2*multiplierX3 >= joueur.getOr() && !bassin.getFaces().isEmpty())
                     bassinsAbordables.add(bassin);
             if (!bassinsAbordables.isEmpty()) {
                 ChoixJoueurForge choixJoueurForge = joueur.choisirFaceAForgerEtARemplacer(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
@@ -37,6 +33,6 @@ class FaceBateauCeleste extends Face {
 
     @Override
     public String toString(){
-        return "Face bateau celeste";
+        return "bateau celeste ";
     }
 }

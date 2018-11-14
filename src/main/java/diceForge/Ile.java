@@ -81,6 +81,7 @@ class Ile {
     private Joueur ajouterJoueur(Joueur joueur){
         Joueur x = null;
         if(this.joueur!=null){//S'il y a déjà un joueur présent, il y a une chasse
+            //afficheur.chasse(joueur, this.joueur);
             this.joueur.estChasse();
             joueur.chasse();
             x = retirerJoueur();

@@ -7,6 +7,6 @@ public class FaceBouclier extends Face {
 
     @Override
     public String toString(){
-        return "Face bouclier";
+        return "bouclier ";
     }
 }

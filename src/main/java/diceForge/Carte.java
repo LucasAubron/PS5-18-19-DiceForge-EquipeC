@@ -69,12 +69,8 @@ public class Carte {
                 acheteur.setDernierLanceDes(2);
                 acheteur.lancerLesDes();
                 acheteur.gagnerRessource();
-                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
-                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 acheteur.lancerLesDes();
                 acheteur.gagnerRessource();
-                for (int i = 0; i < acheteur.getJetons().size() && acheteur.getJetons().get(i) == CERBERE && acheteur.utiliserJetonCerbere(); ++i)
-                    acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 break;
             case Sphinx:
                 int choix = acheteur.choisirDeFaveurMineure();
@@ -91,35 +87,19 @@ public class Carte {
                 for(int i = 0; i != 2; ++i){
                     acheteur.lancerLesDes();
                     acheteur.gagnerRessource();
-                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
-                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }
                 acheteur.setJetRessourceOuPdg(false);
                 break;
             case Cyclope:
                 int choixDe = acheteur.choisirDeCyclope();
                 acheteur.setDernierLanceDes(choixDe);
+                acheteur.setJetOrOuPdg(true);
                 for (int i = 0; i != 4; ++i){
-                    Face face = acheteur.getDes()[choixDe].lancerLeDe();
-                    if (face.getRessource().length > 0) {
-                        int choixRes = 0;
-                        if (face.getRessource().length > 1)
-                            choixRes = acheteur.choisirRessource(face);
-                        for (int j = 0; j != face.getRessource()[choixRes].length; ++j){
-                            if (face.getRessource()[choixRes][j] instanceof Or && acheteur.choisirRessourceOuPdg(face.getRessource()[choixRes][j])){
-                                face.getRessource()[choixRes][j] = null;
-                            }
-                        }
-                        acheteur.gagnerRessourceFace(face, choixRes);
-                        for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
-                            acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
-                    }
-                    else {
-                        acheteur.gagnerRessourceFace(face);
-                        for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
-                            acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
-                    }
+                    acheteur.gagnerRessourceFace(acheteur.getDes()[choixDe].lancerLeDe());
+                    for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
+                        acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }
+                acheteur.setJetOrOuPdg(false);
                 break;
         }
     }

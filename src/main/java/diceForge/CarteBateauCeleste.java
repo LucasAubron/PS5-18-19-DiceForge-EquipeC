@@ -11,4 +11,9 @@ public class CarteBateauCeleste extends Carte {
     void effetDirect(Joueur acheteur){
         acheteur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
     }
+
+    @Override
+    public Carte clone(){
+        return new CarteBateauCeleste(plateau);
+    }
 }

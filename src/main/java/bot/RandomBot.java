@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class RandomBot extends Joueur {
     private Random random = new Random();
-    public RandomBot(int identifiant, Afficheur afficheur){ super(identifiant, afficheur);
+    public RandomBot(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class RandomBot extends Joueur {
 
     @Override
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
-        return (getIdentifiant() == 1 ? 0 : 1);
+        return (getIdentifiant() == 1 ? 2 : 1);
     }
 
     @Override
@@ -95,12 +95,6 @@ public class RandomBot extends Joueur {
     @Override
     public int choisirFacePourGagnerRessource(List<Face> faces){
         return random.nextInt(faces.size());
-    }
-
-    @Override
-    public int[] choisirFaceARemplacerPourMiroir(){return new int[]{
-            random.nextInt(2),
-            random.nextInt(6)};
     }
 
     @Override
