@@ -97,7 +97,7 @@ public abstract class Joueur {
         if (or < 0) or = 0;
     }
 
-    List<Carte> getCartes(){ return  cartes; }
+    public List<Carte> getCartes(){ return  cartes; }
 
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 

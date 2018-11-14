@@ -14,22 +14,32 @@ public class MLGBot extends Joueur {
     private int numeroManche = -1;//On est jamais mieux servi que par soi même
     private int maxPdg = -1;
     private int[] choixAction;//0 = forger, 1 = exploit, 2 = passer
+    private String infoPartie = ";";
     public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
     }
 
-    private void ecrireAction(){
+    private int getPdgAvecCarte(){
+        int pdg = getPointDeGloire();
+        for (Carte carte:getCartes()){
+            pdg += carte.getNbrPointGloire();
+            if (carte.getNom() == Carte.Noms.Typhon)
+                for (De de:getDes())
+                    pdg += de.getNbrFaceForge();
+        }
+        return pdg;
+    }
+
+    private void ecrire(){
         try {
-            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBotProp\\MLGBotAction.txt", "rw");
+            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBotProp.txt", "rw");
             FileChannel channel = file.getChannel();
-            ByteBuffer buffer = ByteBuffer.allocate(choixAction.length+5);
-            String s = "";
-            for (int i = 0; i != choixAction.length; ++i)
-                s += choixAction[i];
-            s += ";"+getPointDeGloire()+"\n";
-            buffer.put(s.getBytes());
+            ByteBuffer buffer = ByteBuffer.allocate(infoPartie.length());
+            buffer.clear();
+            buffer.put(infoPartie.getBytes());
             buffer.flip();
-            channel.write(buffer, file.length());
+            while (buffer.hasRemaining())
+                channel.write(buffer, file.length());
             file.close();
         }catch (IOException ex){
             ex.printStackTrace();
@@ -56,7 +66,7 @@ public class MLGBot extends Joueur {
         }
         choixAction[numeroManche] = rand;
         if (numeroManche == choixAction.length-1)
-            ecrireAction();
+            ecrire();
         refresh();
         return actionChoisi;
     }
@@ -120,7 +130,7 @@ public class MLGBot extends Joueur {
     @Override
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
         refresh();
-        return 0;
+        return getIdentifiant() == 1 ? 2 : 1;
     }
 
     @Override
