@@ -1,5 +1,6 @@
 package diceForge;
 
+import bot.AubotLeGrand;
 import bot.EasyBot;
 import bot.MLGBot;
 import bot.RandomBot;
@@ -19,14 +20,14 @@ class PortailsOriginels {
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
         for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
-            if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot) {
+            if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot)
                 this.joueurs.add(new RandomBot(identifiant, afficheur, plateau));
-            }
-            else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot) {
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot)
                 this.joueurs.add(new EasyBot(identifiant, afficheur, plateau));
-            }
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
                 this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBot)
+                this.joueurs.add(new AubotLeGrand(identifiant, afficheur, plateau));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }
@@ -60,7 +61,7 @@ class PortailsOriginels {
         joueurs.add(joueur);
     }
 
-    List<Joueur> getJoueurs() {
+    public List<Joueur> getJoueurs() {
         return joueurs;
     }
 }
