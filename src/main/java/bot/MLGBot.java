@@ -32,7 +32,7 @@ public class MLGBot extends Joueur {
 
     private void ecrire(){
         try {
-            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBotProp.txt", "rw");
+            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBot\\MLGBotProp.txt", "rw");
             FileChannel channel = file.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(infoPartie.length());
             buffer.clear();

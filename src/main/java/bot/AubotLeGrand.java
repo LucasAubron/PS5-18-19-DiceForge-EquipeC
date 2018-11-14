@@ -5,20 +5,35 @@ import diceForge.*;
 import java.util.List;
 
 public class AubotLeGrand extends Joueur{
-    private int numManche = 0;
+    private int manche = 0;
+    private float de1or;
+    private float de1soleil;
+    private float de1lune;
+    private float de1pdg;
+    private float de2or;
+    private float de2soleil;
+    private float de2lune;
+    private float de2pdg;
+    private float deOr;
+    private float deSoleil;
+    private float deLune;
+    private float dePdg;
     public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
 
     @Override
     public Joueur.Action choisirAction(int numManche){
-        numManche++;
-        switch(this.numManche) {
+        statsDe(0); statsDe(1);
+        manche++;
+        switch(manche) {
             case 1:
                 if (getLune() == 0 && getSoleil() == 0)
                     return Action.FORGER;
                 if (getOr() < 4 && getLune() == 1 && getSoleil() == 1)
                     return Action.EXPLOIT;
-                if (getOr() == 4 && getSoleil() >=2 && getLune() >=2)
+                if (getOr() == 4 && ((getSoleil() >=2 && getLune() >=1) || getSoleil() >= 3))
                     return Action.EXPLOIT;
+                else
+                    return Action.FORGER;
             case 2:
                 break;
             case 3:
@@ -48,8 +63,16 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        switch(1) {
+        switch(manche) {
             case 1:
+                for (Carte carte: cartes){
+                    if (carte.equals("HerbesFolles"));
+                        return carte;
+                }
+                for (Carte carte: cartes){
+                    if (carte.equals("Coffre"));
+                        return carte;
+                }
                 break;
             case 2:
                 break;
@@ -75,7 +98,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        switch(1) {
+        switch(manche) {
             case 1:
                 break;
             case 2:
@@ -102,7 +125,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        switch(1) {// trouver un moyen d'envoyer le numéro de la manche
+        switch(manche) {// trouver un moyen d'envoyer le numéro de la manche
             case 1:
                 break;
             case 2:
@@ -134,7 +157,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public int choisirRessource(Face face){
-        switch(1) {//trouver un moyen d'envoyer le numéro de la manche
+        switch(manche) {//trouver un moyen d'envoyer le numéro de la manche
             case 1:
                 break;
             case 2:
@@ -209,7 +232,7 @@ public class AubotLeGrand extends Joueur{
      * @param numDe
      * @return un tableau des ressources moyennes gagnées par lancé par le dé dans l'ordre suivant: or/soleil/lune/pdg
      */
-    private float[] statsDe(int numDe) {
+    private void statsDe(int numDe) {
         int or = 0, soleil = 0, lune = 0, pdg = 0;
         for (Face face : getDes()[numDe].getFaces()) {
             if (face.getRessource().length > 1){ //Si face a choix
@@ -250,7 +273,10 @@ public class AubotLeGrand extends Joueur{
             }
 
         }
-        float[] tab = {or / 6, soleil / 6, lune / 6, pdg / 6};
-        return tab;
+        if (numDe == 0)
+            de1or = or/(float)6; de1soleil = soleil/(float)6; de1lune = lune/(float)6; de1pdg = pdg/(float)6;
+        if (numDe == 1)
+            de2or = or/(float)6; de2soleil = soleil/(float)6; de2lune = lune/(float)6; de2pdg = pdg/(float)6;
+        deOr = de1or +de2or; deSoleil = de1soleil + de2soleil; deLune = de1lune + de2lune; dePdg = de1pdg + de2pdg;
     }
 }
