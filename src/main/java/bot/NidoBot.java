@@ -7,12 +7,10 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
-
+/*
 public class NidoBot extends Joueur {
-    /*
     * stratégie globale:    forger max lune, soleil, pour acheter hydre, gorgogne, pince
     *
-    * */
     private int numeroManche = 0;//On est jamais mieux servi que par soi même
     private int maxPdg = 0;
     private int[] choixAction;//0 = forger, 1 = exploit, 2 = passer
@@ -115,3 +113,4 @@ public class NidoBot extends Joueur {
     public boolean choisirRessourceOuPdg(Ressource ressource) {
     }
 }
+*/
