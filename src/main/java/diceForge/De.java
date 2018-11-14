@@ -1,5 +1,7 @@
 package diceForge;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -46,6 +48,33 @@ public class De {
 
     public int getNbrFaceForge() {
         return nbrFaceForge;
+    }
+
+    public int getNbFacesSoleil(){
+        int res = 0;
+        for (Face face : faces)
+            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Soleil)
+                res++;
+        return res;
+    }
+
+    public int getNbFacesLune(){
+        int res = 0;
+        for (Face face : faces)
+            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Lune)
+                res++;
+        return res;
+    }
+
+    public int getPosFaceOrQteMin(){ //recherche de min classique
+        int min = 10000;
+        int res = -1;
+            for (int i = 0; i < faces.length; i++){
+                if (faces[i].getRessource().length == 1 && faces[i].getRessource()[0][0] instanceof Or
+                        && faces[i].getRessource()[0][0].getQuantite() < min)
+                    res = i;
+            }
+        return res;
     }
 
     @Override
