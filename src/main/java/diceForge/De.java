@@ -50,21 +50,7 @@ public class De {
         return nbrFaceForge;
     }
 
-    public int getNbFacesSoleil(){
-        int res = 0;
-        for (Face face : faces)
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Soleil)
-                res++;
-        return res;
-    }
 
-    public int getNbFacesLune(){
-        int res = 0;
-        for (Face face : faces)
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Lune)
-                res++;
-        return res;
-    }
 
     public int getPosFaceOrQteMin(){ //recherche de min classique
         int min = 10000;
