@@ -5,10 +5,41 @@ import diceForge.*;
 import java.util.List;
 
 public class AubotLeGrand extends Joueur{
+    private int numManche = 0;
     public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
 
     @Override
-    public Joueur.Action choisirAction(int numManche){ return null; }
+    public Joueur.Action choisirAction(int numManche){
+        numManche++;
+        switch(this.numManche) {
+            case 1:
+                if (getLune() == 0 && getSoleil() == 0)
+                    return Action.FORGER;
+                if (getOr() < 4 && getLune() == 1 && getSoleil() == 1)
+                    return Action.EXPLOIT;
+                if (getOr() == 4 && getSoleil() >=2 && getLune() >=2)
+                    return Action.EXPLOIT;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
+        return Action.FORGER; //temporaire pour compiler
+    }
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
@@ -17,16 +48,82 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        return null;
+        switch(1) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
+        return cartes.get(0);
     }
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
+        switch(1) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
         return true;
     }
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
+        switch(1) {// trouver un moyen d'envoyer le numéro de la manche
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
         return 0;
     }
 
@@ -37,6 +134,28 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public int choisirRessource(Face face){
+        switch(1) {//trouver un moyen d'envoyer le numéro de la manche
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+        }
         return 0;
     }
 
@@ -131,6 +250,7 @@ public class AubotLeGrand extends Joueur{
             }
 
         }
-        return new float[]{or/6, soleil/6, lune/6, pdg/6};
+        float[] tab = {or / 6, soleil / 6, lune / 6, pdg / 6};
+        return tab;
     }
 }
