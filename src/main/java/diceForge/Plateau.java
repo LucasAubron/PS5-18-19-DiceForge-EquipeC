@@ -73,7 +73,7 @@ public class Plateau {
      * Si quelqu'un peut le faire plus clairement, qu'il le fasse
      * @return la liste des joueurs présents sur le plateau
      */
-    List<Joueur> getJoueurs() {
+    public List<Joueur> getJoueurs() {
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
         tempJoueur.addAll(portail.getJoueurs());
@@ -91,11 +91,11 @@ public class Plateau {
         return joueurs;
     }
 
-    PortailsOriginels getPortail(){return portail;}
+    public PortailsOriginels getPortail(){return portail;}
 
-    Ile[] getIles() {return iles;}
+    public Ile[] getIles() {return iles;}
 
-    Temple getTemple() {
+    public Temple getTemple() {
         return temple;
     }
 }
