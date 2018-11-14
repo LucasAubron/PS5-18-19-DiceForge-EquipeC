@@ -108,7 +108,7 @@ public class Carte {
         return cout;
     }
 
-    int getNbrPointGloire() {
+    public int getNbrPointGloire() {
         return nbrPointGloire;
     }
 

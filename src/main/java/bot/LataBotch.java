@@ -45,9 +45,9 @@ public class LataBotch extends Joueur{
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
-            if (carte.getNom().equals(Carte.Noms.Marteau))//Au moins 1 marteau
+            if (carte.getNom().equals(Carte.Noms.Marteau) )//Au moins 1 marteau
                 return carte;
-            if (carte.getNom().equals(Carte.Noms.Coffre))//Et un coffre
+            if (carte.getNom().equals(Carte.Noms.Coffre) && !possedeCarte(Carte.Noms.Coffre))//Et un coffre
                 return carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere

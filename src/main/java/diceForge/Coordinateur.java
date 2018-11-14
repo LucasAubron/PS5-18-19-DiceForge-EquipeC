@@ -18,7 +18,7 @@ class Coordinateur {
     private Plateau plateau;
     private Afficheur afficheur;
 
-    Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){
+    Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){//typeJoueurs = [Joueur.BOT.EasyBot, Joueur.BOT.RandomBot]
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
