@@ -39,7 +39,7 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, RomanetBot}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
@@ -97,7 +97,7 @@ public abstract class Joueur {
         if (or < 0) or = 0;
     }
 
-    List<Carte> getCartes(){ return  cartes; }
+    public List<Carte> getCartes(){ return  cartes; }
 
     void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
