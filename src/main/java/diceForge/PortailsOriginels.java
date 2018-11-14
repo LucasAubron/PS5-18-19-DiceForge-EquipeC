@@ -1,5 +1,6 @@
 package diceForge;
 
+import bot.AubotLeGrand;
 import bot.EasyBot;
 import bot.PlanteBot;
 import bot.RandomBot;
@@ -27,6 +28,9 @@ class PortailsOriginels {
             }
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
                 this.joueurs.add(new PlanteBot(identifiant, afficheur, plateau));
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBot){
+                this.joueurs.add(new AubotLeGrand(identifiant, afficheur, plateau));
+            }
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }
