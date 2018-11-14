@@ -6,6 +6,7 @@ import java.util.List;
 
 public class AubotLeGrand extends Joueur{
     private int manche = 0;
+    private int nombreDeJoueurs;
     private float de1or;
     private float de1soleil;
     private float de1lune;
@@ -18,7 +19,10 @@ public class AubotLeGrand extends Joueur{
     private float deSoleil;
     private float deLune;
     private float dePdg;
-    public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
+    public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){
+        super(identifiant, afficheur, plateau);
+        this.nombreDeJoueurs = plateau.getJoueurs().size();
+    }
 
     @Override
     public Joueur.Action choisirAction(int numManche){
@@ -26,14 +30,7 @@ public class AubotLeGrand extends Joueur{
         manche++;
         switch(manche) {
             case 1:
-                if (getLune() == 0 && getSoleil() == 0)
-                    return Action.FORGER;
-                if (getOr() < 4 && getLune() == 1 && getSoleil() == 1)
-                    return Action.EXPLOIT;
-                if (getOr() == 4 && ((getSoleil() >=2 && getLune() >=1) || getSoleil() >= 3))
-                    return Action.EXPLOIT;
-                else
-                    return Action.FORGER;
+                break;
             case 2:
                 break;
             case 3:
@@ -65,14 +62,6 @@ public class AubotLeGrand extends Joueur{
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         switch(manche) {
             case 1:
-                for (Carte carte: cartes){
-                    if (carte.equals("HerbesFolles"));
-                        return carte;
-                }
-                for (Carte carte: cartes){
-                    if (carte.equals("Coffre"));
-                        return carte;
-                }
                 break;
             case 2:
                 break;
@@ -226,6 +215,7 @@ public class AubotLeGrand extends Joueur{
         return true;
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * Extrêmement utile pour connaitre la force des dés du bot, lui permet de savoir quelles stratégies
      * il devra adopter.
@@ -278,5 +268,24 @@ public class AubotLeGrand extends Joueur{
         if (numDe == 1)
             de2or = or/(float)6; de2soleil = soleil/(float)6; de2lune = lune/(float)6; de2pdg = pdg/(float)6;
         deOr = de1or +de2or; deSoleil = de1soleil + de2soleil; deLune = de1lune + de2lune; dePdg = de1pdg + de2pdg;
+    }
+
+    private int nombreCartesDisponible(Carte carteAChercher){
+        int nombre = 0;
+        for (Ile ile: getPlateau().getIles())
+            for (List<Carte> typeCarte: ile.getCartes())
+                for (Carte carte: typeCarte)
+                    if (carte.getNom() == carteAChercher.getNom())
+                        nombre++;
+        return nombre;
+    }
+
+    private int nombreFacesDisponible(Face faceAChercher){
+        int nombre = 0;
+        for (Bassin bassin: getPlateau().getTemple().getSanctuaire())
+            for (Face face: bassin.getFaces())
+                if (face.equals(faceAChercher))
+                    nombre++;
+        return nombre;
     }
 }
