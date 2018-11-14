@@ -7,36 +7,30 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
+import java.util.Random;
 
 public class MLGBot extends Joueur {
-    private int numeroManche = 0;//On est jamais mieux servi que par soi même
-    private int maxPdg = 0;
+    private Random random = new Random();
+    private int numeroManche = -1;//On est jamais mieux servi que par soi même
+    private int maxPdg = -1;
     private int[] choixAction;//0 = forger, 1 = exploit, 2 = passer
     public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
-        choixAction = new int[plateau.getJoueurs().size() == 3 ? 10 : 9];
-    }
-
-    private byte[] pdgToByte(){
-        byte[] bytes = new byte[3];
-        bytes[2] = (byte)(getPointDeGloire() % 10);
-        bytes[1] = (byte)((getPointDeGloire()%100)/10);
-        bytes[0] = (byte)(getPointDeGloire()/100);
-        return bytes;
     }
 
     private void ecrireAction(){
         try {
-            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBotProp\\MLGBotAction", "rw");
+            RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\MLGBotProp\\MLGBotAction.txt", "rw");
             FileChannel channel = file.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(choixAction.length+5);
+            String s = "";
             for (int i = 0; i != choixAction.length; ++i)
-                buffer.put((byte)choixAction[i]);
-            buffer.put((byte)';');
-            buffer.put(pdgToByte());
-            buffer.put((byte)'\n');
+                s += choixAction[i];
+            s += ";"+getPointDeGloire()+"\n";
+            buffer.put(s.getBytes());
             buffer.flip();
             channel.write(buffer, file.length());
+            file.close();
         }catch (IOException ex){
             ex.printStackTrace();
         }
@@ -50,14 +44,18 @@ public class MLGBot extends Joueur {
 
     @Override
     public Action choisirAction(int numManche){
-        numeroManche++;
+        numeroManche = numManche-1;
+        if (numeroManche == 0)
+            choixAction = new int[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         Action actionChoisi = null;
-        switch (actionChoisi){
-            case FORGER: choixAction[numeroManche] = 0;
-            case EXPLOIT: choixAction[numeroManche] = 1;
-            case PASSER: choixAction[numeroManche] = 2;
+        int rand = random.nextInt(3);
+        switch (rand){
+            case 0: actionChoisi = Action.FORGER; break;
+            case 1: actionChoisi = Action.EXPLOIT; break;
+            case 2: actionChoisi = Action.PASSER; break;
         }
-        if (numeroManche == choixAction.length)
+        choixAction[numeroManche] = rand;
+        if (numeroManche == choixAction.length-1)
             ecrireAction();
         refresh();
         return actionChoisi;
@@ -66,13 +64,15 @@ public class MLGBot extends Joueur {
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         refresh();
+        if (!bassins.isEmpty())
+            return new ChoixJoueurForge(bassins.get(0), 0, 0, 0);
         return null;
     }
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         refresh();
-        return null;
+        return cartes.get(0);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MLGBot extends Joueur {
     @Override
     public List<Renfort> choisirRenforts(List<Renfort> renforts){
         refresh();
-        return null;
+        return renforts;
     }
 
     @Override
@@ -137,7 +137,7 @@ public class MLGBot extends Joueur {
     @Override
     public choixJetonTriton utiliserJetonTriton(){
         refresh();
-        return null;
+        return choixJetonTriton.Soleil;
     }
 
     @Override
