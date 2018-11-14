@@ -1,9 +1,6 @@
 package diceForge;
 
-import bot.AubotLeGrand;
-import bot.EasyBot;
-import bot.MLGBot;
-import bot.RandomBot;
+import bot.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +25,8 @@ class PortailsOriginels {
                 this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBot)
                 this.joueurs.add(new AubotLeGrand(identifiant, afficheur, plateau));
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
+                this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }
