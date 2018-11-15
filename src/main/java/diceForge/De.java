@@ -41,7 +41,7 @@ public class De {
 
     void forger(Face faceAForger, int numFace){
         if (numFace < 0 || numFace > faces.length-1)
-            throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 1, max : "+(faces.length-1)+", actuel : "+numFace);
+            throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 0, max : "+(faces.length-1)+", actuel : "+numFace);
         faces[numFace] = faceAForger;
         ++nbrFaceForge;
     }
