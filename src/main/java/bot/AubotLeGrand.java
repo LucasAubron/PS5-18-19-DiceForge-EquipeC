@@ -19,18 +19,30 @@ public class AubotLeGrand extends Joueur{
     private float deSoleil;
     private float deLune;
     private float dePdg;
+    private Plateau plateau;
+    private Joueur.Action[] historiqueAction;
     public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
-        this.nombreDeJoueurs = plateau.getJoueurs().size();
     }
 
     @Override
     public Joueur.Action choisirAction(int numManche){
+        if (manche == 0){
+            this.nombreDeJoueurs = getPlateau().getJoueurs().size();
+            historiqueAction = (nombreDeJoueurs == 3) ? new Joueur.Action[10] : new Joueur.Action[9];
+        }
         statsDe(0); statsDe(1);
         manche++;
         switch(manche) {
             case 1:
-                break;
+                if (getOr() >= 5)
+                    return Action.FORGER;
+                if (getLune() >= 2 && nombreDeJoueurs > 2)
+                    return Action.EXPLOIT;
+                if (getOr() == 3 && getLune() >=1)
+                    return Action.EXPLOIT;
+                else
+                    return Action.FORGER;
             case 2:
                 break;
             case 3:
@@ -55,14 +67,22 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        return null;
+        return new ChoixJoueurForge(bassins.get(0), 0,0,0);
     }
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         switch(manche) {
             case 1:
-                break;
+                Carte carte = chercheCarteDansListe(Carte.Noms.Ours, cartes);
+                if (carte != null && nombreDeJoueurs > 2)
+                    return carte;
+                carte = chercheCarteDansListe(Carte.Noms.Marteau, cartes);
+                if (carte != null)
+                    return carte;
+                carte = chercheCarteDansListe(Carte.Noms.Ancien, cartes);
+                if (carte != null)
+                    return carte;
             case 2:
                 break;
             case 3:
@@ -87,88 +107,22 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        switch(manche) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                break;
-        }
-        return true;
+        return false; //if true, faire manche--
     }
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        switch(manche) {// trouver un moyen d'envoyer le numéro de la manche
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                break;
-        }
         return 0;
     }
 
     @Override
     public List<Joueur.Renfort> choisirRenforts(List<Joueur.Renfort> renforts){
-        return null;
+        return renforts;
     }
 
     @Override
     public int choisirRessource(Face face){
-        switch(manche) {//trouver un moyen d'envoyer le numéro de la manche
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                break;
-        }
-        return 0;
+        return  0;
     }
 
     @Override
@@ -216,6 +170,7 @@ public class AubotLeGrand extends Joueur{
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Extrêmement utile pour connaitre la force des dés du bot, lui permet de savoir quelles stratégies
      * il devra adopter.
@@ -287,5 +242,13 @@ public class AubotLeGrand extends Joueur{
                 if (face.equals(faceAChercher))
                     nombre++;
         return nombre;
+    }
+
+    private Carte chercheCarteDansListe(Carte.Noms nom, List<Carte> cartes){
+        for (Carte carte: cartes) {
+            if (carte.getNom() == nom)
+                return carte;
+        }
+        return null;
     }
 }
