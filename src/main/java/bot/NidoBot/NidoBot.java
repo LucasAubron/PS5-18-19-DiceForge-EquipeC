@@ -30,9 +30,26 @@ public class NidoBot extends Joueur {
         return count;
     }
 
+    public int getPosFaceQteMin(int numDe, De[] jeuDes, Ressource uneRess){ //recherche de min classique
+        int min = 10000;
+        int res = -1;
+        Face[] faces = jeuDes[numDe].getFaces();
+        for (int i = 0; i < faces.length; i++)
+            if (faces[i].getRessource().length == 1)
+                if (faces[i].getRessource()[0][0] instanceof Or
+                    && uneRess.getClass().getName().equals("diceForge.Or")
+                    && faces[i].getRessource()[0][0].getQuantite() < min) {
+                    min = faces[i].getRessource()[0][0].getQuantite();
+                    res = i;
+                }
+        return res;
+    }
+
     @Override
     public Action choisirAction(int numManche){
-        return null;
+        if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+            return Action.FORGER;
+        else return Action.PASSER;
     }
 
     @Override
@@ -41,25 +58,41 @@ public class NidoBot extends Joueur {
             return new ChoixJoueurForge(null, 0, 0, 0);
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
-            if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches //forger de l'or un max!
+            if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches //forger de l'or au maximum.
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
-//            else if (bassinAChoisir != null && bassin.getFaces().get(0).getRessource().length == 1) {
-//                for (int indexDe = 0; indexDe < getDes().length; indexDe++)
-//                    if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil && getDes()[indexDe].getNbFacesSoleil() <= 2) {
-//                        int posFace = getDes()[indexDe].getPosFaceOrQteMin();
-//                        if (posFace != -1)
-//                            return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
-//                    }
-//                if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune && getDe().getNbFacesLune() <= 2) {
-//
-//                }
-
-                //bassinAChoisir = bassin;
-        }
-        return null;
+            else if (bassin.getFaces().get(0).getRessource().length == 1)
+                for (int indexDe = 0; indexDe < getDes().length; indexDe++) //on parcourt tous les dés
+                    if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil)
+                        if (getNbFaces(indexDe, getDes(), new Soleil(1)).getNbSoleils() <= 2) {
+                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Or(1));
+                            if (posFace != -1)
+                                return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
+                        } else {
+                            //on a deja au moins 3 faces Soleil alors on remplace la face Soleil la moins valuable
+                            //par une face Soleil plus chère
+                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Soleil(1));
+                            if (bassin.getFaces().get(0).getRessource()[0][0].getQuantite() >
+                                    getDes()[indexDe].getFaces()[posFace].getRessource()[0][0].getQuantite() )
+                                return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
+                        }
+                    else if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune)
+                        if (getNbFaces(indexDe, getDes(), new Lune(1)).getNbLunes() <= 2) {
+                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Or(1));
+                            if (posFace != -1)
+                                return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
+                        } else {
+                            //on a deja au moins 3 faces Lune alors on remplace la face Lune la moins valuable
+                            //par une face Lune plus chère
+                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Lune(1));
+                            if (bassin.getFaces().get(0).getRessource()[0][0].getQuantite() >
+                                    getDes()[indexDe].getFaces()[posFace].getRessource()[0][0].getQuantite() )
+                                return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
+                        }
+            }
+        return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
 

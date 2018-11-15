@@ -50,19 +50,6 @@ public class De {
         return nbrFaceForge;
     }
 
-
-
-    public int getPosFaceOrQteMin(){ //recherche de min classique
-        int min = 10000;
-        int res = -1;
-            for (int i = 0; i < faces.length; i++){
-                if (faces[i].getRessource().length == 1 && faces[i].getRessource()[0][0] instanceof Or
-                        && faces[i].getRessource()[0][0].getQuantite() < min)
-                    res = i;
-            }
-        return res;
-    }
-
     @Override
     public String toString(){
         return "" + faces[0] + " | " + faces[1] + " | " + faces[2] + " | " + faces[3] + " | " + faces[4] + " | " + faces[5];
