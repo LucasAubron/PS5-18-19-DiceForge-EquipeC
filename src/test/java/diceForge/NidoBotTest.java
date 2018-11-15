@@ -2,6 +2,11 @@ package diceForge;
 
 import bot.NidoBot.NidoBot;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class NidoBotTest {
@@ -61,5 +66,21 @@ public class NidoBotTest {
                         null, nb, 1)};
         assertEquals(nb.getPosFaceQteMin(0, des, new Or(1)), 0); //!\
         assertEquals(nb.getPosFaceQteMin(1, des, new Or(1)), 5);
+    }
+
+    @Test
+    public void TestgetNbCarteType(){
+        NidoBot nb = new NidoBot();
+        Carte[] cartes = {
+                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre),
+                new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
+                new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles),
+                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre),
+                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre),
+                new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien)
+        };
+        assertEquals(nb.getNbCarteType(Arrays.asList(cartes), Carte.Noms.Coffre),3);
+        assertEquals(nb.getNbCarteType(Arrays.asList(cartes), Carte.Noms.Ancien),2);
+        assertEquals(nb.getNbCarteType(Arrays.asList(cartes),  Carte.Noms.Cyclope), 0);
     }
 }

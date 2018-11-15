@@ -169,7 +169,7 @@ public class EasyBot extends Joueur {
             case 3:
                 return choixJetonTriton.Lune;
         }
-        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoi rien !!");
+        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoit rien !!");
     }
 
     @Override
