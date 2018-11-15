@@ -27,15 +27,15 @@ public class De {
         this.proprietaire = joueur;
         this.afficheur = afficheur;
         this.id = id;
-        if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
+        if (faces.length != 6)
             throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
         this.faces = faces;
     }
 
     Face lancerLeDe(){
-        afficheur.resultatDe(proprietaire, id);
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
         derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
+        afficheur.resultatDe(proprietaire, id);
         return derniereFace;
     }
 

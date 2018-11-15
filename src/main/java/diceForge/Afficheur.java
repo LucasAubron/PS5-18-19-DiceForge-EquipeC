@@ -41,7 +41,7 @@ public class Afficheur {
     void resultatDe(Joueur joueur, int idDe) {
         if (modeVerbeux) {
             idDe++;
-            info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[0] + "\n";
+            info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[idDe-1] + "\n";
         }
     }
 
