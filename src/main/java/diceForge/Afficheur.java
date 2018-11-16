@@ -55,7 +55,10 @@ public class Afficheur {
         }
     }
 
-
+    public void NidoBotAfficheur(String str){
+        if (modeVerbeux)
+            info += "\n\n-----> " + str;
+    }
     void manche(int numManche) {
         if (modeVerbeux)
             info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
