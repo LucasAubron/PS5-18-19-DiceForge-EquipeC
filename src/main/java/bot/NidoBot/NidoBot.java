@@ -57,6 +57,9 @@ public class NidoBot extends Joueur {
                     min = faces[i].getRessource()[0][0].getQuantite();
                     res = i;
                 }
+
+//        System.out.println(jeuDes[numDe]);
+//        System.out.println("posFaceQteMin ==> " + res);
         return res;
     }
 
@@ -64,10 +67,6 @@ public class NidoBot extends Joueur {
         return (int) cartes.stream()
                 .filter(carte -> carte.getNom() == nom)
                 .count();
-    }
-
-    public void setCartes(List<Carte> cartes){
-        this.cartes = cartes;
     }
 
     @Override
@@ -81,8 +80,10 @@ public class NidoBot extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        if (bassins.isEmpty())
+        if (bassins.isEmpty()){
+            System.out.println("bassins empty in choisirFaceAForgerEtARemplacer");
             return new ChoixJoueurForge(null, 0, 0, 0);
+        }
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
             if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches //forger de l'or au maximum.
@@ -114,14 +115,12 @@ public class NidoBot extends Joueur {
                             //on a deja au moins 3 faces Lune alors on remplace la face Lune la moins valuable
                             //par une face Lune plus chère
                             int posFace = getPosFaceQteMin(indexDe, getDes(), new Lune(1));
-//                            for (De unde: getDes())
-                            System.out.println(getDes()[indexDe]);
-                            System.out.println("posFace ==> " + posFace);
                             if (bassin.getFaces().get(0).getRessource()[0][0].getQuantite() >
                                     getDes()[indexDe].getFaces()[posFace].getRessource()[0][0].getQuantite() )
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         }
             }
+        System.out.println("end of function choisirFaceAForgerEtARemplacer");
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
@@ -202,13 +201,23 @@ public class NidoBot extends Joueur {
     @Override
     public void forgerFace(Face face){
         boolean aForge = false;
+        int posFaceQteMin;
         int[] posFace = getPosFace1Or();
         if(posFace[0] != -1) { //si on a trouvé une face 1 or sur un des dés)
             forgerDe(posFace[0], face, posFace[1]);
             aForge = true;
         }
+
+        posFaceQteMin = getPosFaceQteMin(0, getDes(), new Lune(1));
+        if (posFaceQteMin == -1)
+            posFaceQteMin = getPosFaceQteMin(0, getDes(), new Soleil(1));
+        //else
+            //posFaceQteMin = getPosFaceQteMin(0, getDes(), new Random().nextInt(6));
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
-            forgerDe(0, face, getPosFaceQteMin(0, getDes(), new Lune(1)));
+            if (posFaceQteMin != -1)
+                forgerDe(0, face, posFaceQteMin);
+            else
+                forgerDe(0, face, new Random().nextInt(6));
 
     }
 
