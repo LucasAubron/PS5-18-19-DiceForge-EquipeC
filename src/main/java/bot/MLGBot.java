@@ -120,8 +120,8 @@ public class MLGBot extends Joueur {
                     int pdg = trouverPDG(bytes, i);
                     if (pdg > maxPdg-15){
                         byte[] byteLigne = new byte[i-curseur];
-                        for (; curseur != i; ++curseur)
-                            byteLigne[curseur-(i-byteLigne.length)] = bytes[curseur];
+                        for (++curseur; curseur != i; ++curseur)
+                            byteLigne[curseur-(i-byteLigne.length)-1] = bytes[curseur];
                         byteList.add(new StatLine(byteLigne));
                     }
                     curseur = i;
@@ -169,6 +169,8 @@ public class MLGBot extends Joueur {
         if (intensiveTraining) {
             ByteBuffer buffer = ByteBuffer.allocate(128);
             buffer.clear();
+            if (choixActionNext.length < 9 || choixActionNext.length > 10)
+                throw new DiceForgeException("MLGBot","Le nombre de manche est incorrect. Min: 9, max: 10, actuel: "+choixActionNext.length);
             for (int i = 0; i != choixActionNext.length; ++i)
                 buffer.put(choixActionNext[i]);
             buffer.put(";".getBytes());
