@@ -118,22 +118,10 @@ public class MLGBot extends Joueur {
                 if (bytes[i] == "@".getBytes()[0]){
                     int pdg = trouverPDG(bytes, i);
                     if (pdg > maxPdg-15){
-                        List<Byte> actionLigne = new ArrayList<>();
-                        List<Byte> secActionLigne = new ArrayList<>();
-                        List<Byte> bassinLigne = new ArrayList<>();
-                        List<Byte> carteLigne = new ArrayList<>();
-                        for (; bytes[curseur] != ";".getBytes()[0]; ++curseur)
-                            actionLigne.add(bytes[curseur]);
-                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
-                            secActionLigne.add(bytes[curseur]);
-                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; curseur += 3){
-                            bassinLigne.add(bytes[curseur]);
-                            bassinLigne.add(bytes[curseur+1]);
-                            bassinLigne.add(bytes[curseur+2]);
-                        }
-                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
-                            carteLigne.add(bytes[curseur]);
-                        byteList.add(new StatLine(actionLigne, secActionLigne, bassinLigne, carteLigne));
+                        byte[] byteLigne = new byte[i-curseur];
+                        for (; curseur != i; ++curseur)
+                            byteLigne[curseur-(i-byteLigne.length)] = bytes[curseur];
+                        byteList.add(new StatLine(byteLigne));
                     }
                     curseur = i;
                 }
