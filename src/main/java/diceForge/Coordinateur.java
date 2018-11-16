@@ -207,7 +207,7 @@ class Coordinateur {
                     compteurForge++;
                 }
                 while(bassinsAEnlever != null);
-                afficheur.actionDebile(compteurForge);
+                afficheur.actionDebile(compteurForge, joueur, this);
                 break;
             case EXPLOIT:
                 afficheur.actionExploit(joueur);
@@ -252,7 +252,7 @@ class Coordinateur {
      * @param bassinsUtilises
      * @return
      */
-    private List<Bassin> bassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
+    List<Bassin> bassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean estDejaUtilise = false;

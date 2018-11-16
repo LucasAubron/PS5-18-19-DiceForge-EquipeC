@@ -282,11 +282,13 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     void estChasse(){
-        for (Carte carte:cartes)
+        afficheur.estChasse(this);
+        for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
-                afficheur.ours(this);
                 pointDeGloire += 3;
+                afficheur.ours(this);
             }
+        }
         lancerLesDes();
         gagnerRessource();
     }
@@ -296,11 +298,12 @@ public abstract class Joueur {
      * Elle servira uniquement lorsque l'ours sera introduit
      */
     void chasse(){
-        for (Carte carte:cartes)
+        for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
-                afficheur.ours(this);
                 pointDeGloire += 3;
+                afficheur.ours(this);
             }
+        }
     }
 
     /**
@@ -461,9 +464,6 @@ public abstract class Joueur {
         }
         return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
     }
-
-
-
 
     @Override
     public String toString(){
