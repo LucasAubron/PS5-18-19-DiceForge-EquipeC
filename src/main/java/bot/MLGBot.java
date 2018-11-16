@@ -75,7 +75,7 @@ public class MLGBot extends Joueur {
             positionCHEF = genFile.length();
             //get the data to create the bot
             if (intensiveTraining){
-                if (positionCHEF > 100000)
+                if (positionCHEF > 5000)
                     remuerLaSoupe(nbrJoueur);
             }
         }
@@ -84,36 +84,29 @@ public class MLGBot extends Joueur {
         choixCarteNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
     }
 
-    private byte[] trouverPDG(String string){
-        String[] s = string.split(";");
-        return s[s.length-1].substring(0, s[s.length-1].length()-1).getBytes();
-    }
-
     private void remuerLaSoupe(int nbrJoueur){
         try {
             RandomAccessFile file = new RandomAccessFile(cible, "rw");
             FileChannel channel = file.getChannel();
-            List<String> darkMatter = new ArrayList<>();
-            ByteBuffer buf = ByteBuffer.allocate(1024);
-            for (long i = 0; i < file.length();){
-                buf.clear();
-                int x = channel.read(buf);
-                String s = buf.toString();
-                String[] sList = s.split("\n");
-                if (!darkMatter.isEmpty() && !darkMatter.get(darkMatter.size()-1).substring(darkMatter.get(darkMatter.size()-1).length()-1).equals("\n"))
-                    darkMatter.set(darkMatter.size()-1, darkMatter.get(darkMatter.size()-1)+sList[0]+"\n");
-                else
-                    darkMatter.add(sList[0]+"\n");
-                for (int j = 1; j != sList.length; ++j)
-                    darkMatter.add(sList[j]+"\n");
-                i = channel.position();
+            byte[] bytes = new byte[(int)file.length()];
+            ByteBuffer buf = ByteBuffer.allocate((int)file.length());
+            int x = channel.read(buf);
+            if (x != file.length())
+                throw new DiceForgeException("MLGBot.java", "Le buffer n'a pas lu tout le fichier");
+            int max = 0;
+            for (int i = 0; i != x; ++i) {
+                bytes[i] = buf.get(i);
+                if (bytes[i] == "@".getBytes()[0]){
+                    List<Integer> pdg = new ArrayList<>();
+                    for (int j = i-1; bytes[j] != ";".getBytes()[0]; --j)
+                        pdg.add(Integer.parseInt(new String(new byte[]{bytes[j]})));
+                    int reelPdg = 0;
+                    for (int j = 0; j != pdg.size(); ++j)
+                        reelPdg += pdg.get(j)*Math.pow(10, j);
+                    if (reelPdg > max) max = reelPdg;
+                }
             }
             file.close();
-            List<List<String>> darkEnergy = new ArrayList<>();
-            int max = 0;
-            for (String dark:darkMatter){
-                System.out.println(trouverPDG(dark));
-            }
         } catch (IOException ex){
             ex.printStackTrace();
             System.exit(1);
@@ -152,36 +145,36 @@ public class MLGBot extends Joueur {
 
     private void Xx360xX_NoScope(){
         if (intensiveTraining) {
-            String newCheatCode = "";
+            ByteBuffer buffer = ByteBuffer.allocate(128);
+            buffer.clear();
             for (int i = 0; i != choixActionNext.length; ++i)
-                newCheatCode += choixActionNext[i];
-            newCheatCode += ";";
+                buffer.put(choixActionNext[i]);
+            buffer.put(";".getBytes());
             for (int i = 0; i != choixActionNext.length; ++i)
-                newCheatCode += choixSecondeActionNext[i];
-            newCheatCode += ";";
+                buffer.put(choixSecondeActionNext[i]);
+            buffer.put(";".getBytes());
             for (int i = 0; i != choixBassinNext.size(); ++i) {
-                newCheatCode += choixBassinNext.get(i);
-                newCheatCode += choixBassinManche.get(i);
-                newCheatCode += puissanceOr.get(i);
+                buffer.put(choixBassinNext.get(i));
+                buffer.put(choixBassinManche.get(i));
+                buffer.put(puissanceOr.get(i));
             }
-            newCheatCode += ";";
+            buffer.put(";".getBytes());
             int count = 0;
             for (int i = 0; i != choixActionNext.length; ++i){
-                newCheatCode += choixCarteNext[i];
                 if (choixCarteNext[i] != 0){
-                    newCheatCode += puissanceSoleil.get(count);
-                    newCheatCode += puissanceLune.get(count);
+                    buffer.put(choixCarteNext[i]);
+                    buffer.put(puissanceSoleil.get(count));
+                    buffer.put(puissanceLune.get(count));
                     ++count;
                 }
+                if (i != choixActionNext.length-1)
+                    buffer.put(",".getBytes());
             }
 
-            newCheatCode += ";"+pwned()+"\n";
+            buffer.put((";"+pwned()+"@").getBytes());
             try {
                 RandomAccessFile file = new RandomAccessFile(cible, "rw");
                 FileChannel channel = file.getChannel();
-                ByteBuffer buffer = ByteBuffer.allocate(newCheatCode.length());
-                buffer.clear();
-                buffer.put(newCheatCode.getBytes());
                 buffer.flip();
                 while (buffer.hasRemaining())
                     channel.write(buffer, positionCHEF);
