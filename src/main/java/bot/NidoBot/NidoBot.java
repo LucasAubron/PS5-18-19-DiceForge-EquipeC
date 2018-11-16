@@ -2,6 +2,7 @@ package bot.NidoBot;
 
 import diceForge.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -69,9 +70,17 @@ public class NidoBot extends Joueur {
                 .count();
     }
 
+    private List<Bassin> getBassinsAbordable() {
+        List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
+        for (Bassin bassin : getPlateau().getTemple().getSanctuaire())
+            if (!bassin.getFaces().isEmpty() && bassin.getCout() <= getOr())//Si on peut ajouter ce bassin
+                bassinAbordable.add(bassin);//On l'ajoute
+        return bassinAbordable;
+    }
+
     @Override
     public Action choisirAction(int numManche){
-        if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty())//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -91,7 +100,7 @@ public class NidoBot extends Joueur {
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
-            else if (bassin.getFaces().get(0).getRessource().length == 1)
+            else if (bassin.getFaces().get(0).getRessource().length == 1 && numManche >= 3)
                 for (int indexDe = 0; indexDe < getDes().length; indexDe++) //on parcourt tous les dés
                     if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil)
                         if (getNbFaces(indexDe, getDes(), new Soleil(1)).getNbSoleils() <= 2) {
@@ -130,7 +139,7 @@ public class NidoBot extends Joueur {
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
-            if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) < getPlateau().getJoueurs().size() - 1)//Et un coffre
+            if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Hydre))
                 return carte;
@@ -140,8 +149,8 @@ public class NidoBot extends Joueur {
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Passeur))
                 return carte;
-            if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
-                carteAChoisir = carte;//Sinon on cherche la carte la plus chere
+            if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() > carte.getCout()[0].getQuantite())
+                carteAChoisir = carte;//Sinon on cherche la carte la moins chere
             else if (carteAChoisir == null)
                 carteAChoisir = carte;
         }
