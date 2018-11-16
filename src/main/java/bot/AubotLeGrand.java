@@ -2,6 +2,7 @@ package bot;
 
 import diceForge.*;
 
+import java.awt.*;
 import java.util.List;
 
 public class AubotLeGrand extends Joueur{
@@ -37,14 +38,20 @@ public class AubotLeGrand extends Joueur{
             case 1:
                 if (getOr() >= 5)
                     return Action.FORGER;
-                if (getLune() >= 2 && nombreDeJoueurs > 2)
+                if (getLune() >= 2 && nombreDeJoueurs > 2) {
+                    historiqueAction[0] = Action.EXPLOIT;
                     return Action.EXPLOIT;
-                if (getOr() == 3 && getLune() >=1)
+                }
+                if (getOr() <= 3 && getLune() >=1) {
+                    historiqueAction[0] = Action.EXPLOIT;
                     return Action.EXPLOIT;
-                else
+                }
+                else {
+                    historiqueAction[0] = Action.FORGER;
                     return Action.FORGER;
+                }
             case 2:
-                break;
+                return Action.FORGER;
             case 3:
                 break;
             case 4:
@@ -67,7 +74,86 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        return new ChoixJoueurForge(bassins.get(0), 0,0,0);
+        Bassin bassin = null;
+        int numFace = -1;
+        int numDe = -1;
+        int posFace = -1;
+        switch(manche) {
+            case 1:
+                if (getOr() >= 6)
+                    bassin = trouveBassin(bassins, 4, "Or");
+                    if (bassin != null) {
+                        numFace = trouvePosFace(bassin, 6, "Or");
+                    }
+                if (bassin == null && getOr() >=5)
+                    bassin = trouveBassin(bassins, 3, "Or");
+                    if (bassin != null) {
+                        numFace = trouvePosFace(bassin, 4, "Or");
+                    }
+                if (bassin == null) {
+                    bassin = trouveBassin(bassins, 2, "Or");
+                    numFace = trouvePosFace(bassin, 3, "Or");
+                }
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 2:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 3:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 4:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 5:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 6:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 7:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 8:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 9:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+            case 10:
+                bassin = bassins.get(0);
+                numFace = 0;
+                numDe = 0;
+                posFace = 0;
+                break;
+        }
+        return new ChoixJoueurForge(bassin, numFace, numDe, posFace);
     }
 
     @Override
@@ -169,6 +255,11 @@ public class AubotLeGrand extends Joueur{
         return true;
     }
 
+    @Override
+    public String toString(){
+        return "AubotLeGrand (bot de Lucas)";
+    }
+
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -251,4 +342,69 @@ public class AubotLeGrand extends Joueur{
         }
         return null;
     }
+
+    private Bassin trouveBassin(List<Bassin> bassins, int cout, String typeRessource) {
+        if (typeRessource.equals("Or"))
+            for (Bassin bassin: bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face: bassin.getFaces())
+                        for (Ressource[] ressources: face.getRessource())
+                            for (Ressource ressource: ressources)
+                                if (ressource instanceof Or)
+                                    return bassin;
+        if (typeRessource.equals("Soleil"))
+            for (Bassin bassin: bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face: bassin.getFaces())
+                        for (Ressource[] ressources: face.getRessource())
+                            for (Ressource ressource: ressources)
+                                if (ressource instanceof Soleil)
+                                    return bassin;
+        if (typeRessource.equals("Lune"))
+            for (Bassin bassin: bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face: bassin.getFaces())
+                        for (Ressource[] ressources: face.getRessource())
+                            for (Ressource ressource: ressources)
+                                if (ressource instanceof Lune)
+                                    return bassin;
+        if (typeRessource.equals("PointDeGloire"))
+            for (Bassin bassin: bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face: bassin.getFaces())
+                        for (Ressource[] ressources: face.getRessource())
+                            for (Ressource ressource: ressources)
+                                if (ressource instanceof PointDeGloire)
+                                    return bassin;
+        return null;
+    }
+
+    private int trouvePosFace(Bassin bassin, int quantite, String typeRessource){
+        if (typeRessource.equals("Or"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Or && ressource.getQuantite() == quantite)
+                            return i;
+        if (typeRessource.equals("Soleil"))
+            for (int i=0; i<bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil && ressource.getQuantite() == quantite)
+                            return i;
+        if (typeRessource.equals("Lune"))
+            for (int i=0; i<bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Lune && ressource.getQuantite() == quantite)
+                            return i;
+        if (typeRessource.equals("PointDeGloire"))
+            for (int i=0; i<bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof PointDeGloire && ressource.getQuantite() == quantite)
+                            return i;
+         return -1;
+    }
+
 }
