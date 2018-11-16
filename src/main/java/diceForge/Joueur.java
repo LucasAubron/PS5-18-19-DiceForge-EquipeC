@@ -26,7 +26,7 @@ public abstract class Joueur {
     private int pointDeGloire = 0;
     private int identifiant;
     private De[] des;
-    protected List<Carte> cartes = new ArrayList<>();
+    private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
     private List<Jeton> jetons = new ArrayList<>();
     private Afficheur afficheur;
