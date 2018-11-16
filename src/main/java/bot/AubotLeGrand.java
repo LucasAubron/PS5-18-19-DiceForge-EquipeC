@@ -84,9 +84,6 @@ public class AubotLeGrand extends Joueur{
                     bassin = trouveBassin(bassins, 4, "Or");
                     if (bassin != null) {
                         numFace = trouvePosFace(bassin, 6, "Or");
-                        if (numFace == -1) {
-                            numFace = trouvePosFace(bassin, 2, "Or");
-                        }
                     }
                 if (bassin == null && getOr() >=5)
                     bassin = trouveBassin(bassins, 3, "Or");
@@ -97,9 +94,9 @@ public class AubotLeGrand extends Joueur{
                     bassin = trouveBassin(bassins, 2, "Or");
                     numFace = trouvePosFace(bassin, 3, "Or");
                 }
+                numFace = 0;
                 numDe = 0;
                 posFace = 0;
-                numFace = 0;
                 break;
             case 2:
                 bassin = bassins.get(0);
@@ -256,6 +253,11 @@ public class AubotLeGrand extends Joueur{
     @Override
     public boolean choisirRessourceOuPdg(Ressource ressource) {
         return true;
+    }
+
+    @Override
+    public String toString(){
+        return "AubotLeGrand (bot de Lucas)";
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
