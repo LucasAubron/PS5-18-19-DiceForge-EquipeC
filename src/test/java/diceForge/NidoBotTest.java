@@ -83,4 +83,26 @@ public class NidoBotTest {
         assertEquals(nb.getNbCarteType(Arrays.asList(cartes), Carte.Noms.Ancien),2);
         assertEquals(nb.getNbCarteType(Arrays.asList(cartes),  Carte.Noms.Cyclope), 0);
     }
+
+    @Test
+    public void TesthaveSoleilsOuLunesBassins(){
+        NidoBot nb = new NidoBot();
+        int nbrFaceParBassin = 3;
+        Bassin[] sanctuaire1 = {
+                new Bassin(2, new Face(new Ressource[][]{{new Or(3)}}), nbrFaceParBassin),
+                new Bassin(2, new Face(new Ressource[][]{{new Lune(1)}}), nbrFaceParBassin),
+                new Bassin(3, new Face(new Ressource[][]{{new Or(4)}}), nbrFaceParBassin),
+                new Bassin(3, new Face(new Ressource[][]{{new Soleil(1)}}), nbrFaceParBassin)};
+        Bassin[] sanctuaire2 = {
+                new Bassin(2, new Face(new Ressource[][]{{new Or(3)}}), nbrFaceParBassin),
+                new Bassin(2, new Face(new Ressource[][]{{new Lune(1)}}), nbrFaceParBassin),
+                new Bassin(3, new Face(new Ressource[][]{{new Or(4)}}), nbrFaceParBassin)};
+        Bassin[] sanctuaire3 = {
+                new Bassin(2, new Face(new Ressource[][]{{new Or(3)}}), nbrFaceParBassin),
+                new Bassin(2, new Face(new Ressource[][]{{new PointDeGloire(1)}}), nbrFaceParBassin),
+                new Bassin(3, new Face(new Ressource[][]{{new Or(4)}}), nbrFaceParBassin)};
+        assertTrue(nb.haveSoleilsOuLunesBassins(sanctuaire1));
+        assertTrue(nb.haveSoleilsOuLunesBassins(sanctuaire2));
+        assertFalse(nb.haveSoleilsOuLunesBassins(sanctuaire3));
+    }
 }

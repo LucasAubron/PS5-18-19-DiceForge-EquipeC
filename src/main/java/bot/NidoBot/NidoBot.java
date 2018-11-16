@@ -58,9 +58,6 @@ public class NidoBot extends Joueur {
                     min = faces[i].getRessource()[0][0].getQuantite();
                     res = i;
                 }
-
-//        System.out.println(jeuDes[numDe]);
-//        System.out.println("posFaceQteMin ==> " + res);
         return res;
     }
 
@@ -78,10 +75,29 @@ public class NidoBot extends Joueur {
         return bassinAbordable;
     }
 
+    public boolean haveSoleilsOuLunesBassins(Bassin[] sanctuaire){
+        boolean have = false;
+        int i = 0;
+//        Bassin[] sanctuaire = getPlateau().getTemple().getSanctuaire();
+        while (!have && i < sanctuaire.length){
+            if (!sanctuaire[i].getFaces().isEmpty() && (
+                    sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Soleil ||
+                    sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Lune
+            ))
+                have = true;
+            i++;
+        }
+        return have;
+    }
+
     @Override
     public Action choisirAction(int numManche){
-        if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty())//Si on est au début du jeu et que l'on a assez d'or, on forge
+        //Si on est au début du jeu et que l'on a assez d'or, on forge
+        if ( numManche < 3 && getOr() > 5 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
+//        else if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty() &&
+//        )
+
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
         else return Action.PASSER;
@@ -90,7 +106,7 @@ public class NidoBot extends Joueur {
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
         if (bassins.isEmpty()){
-            System.out.println("bassins empty in choisirFaceAForgerEtARemplacer");
+            afficheur.NidoBotAfficheur("bassins empty in choisirFaceAForgerEtARemplacer");
             return new ChoixJoueurForge(null, 0, 0, 0);
         }
         Bassin bassinAChoisir = null;
@@ -101,8 +117,10 @@ public class NidoBot extends Joueur {
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
             else if (bassin.getFaces().get(0).getRessource().length == 1 && numManche >= 3)
-                for (int indexDe = 0; indexDe < getDes().length; indexDe++) //on parcourt tous les dés
+                //on parcourt tous les dés
+                for (int indexDe = 0; indexDe < getDes().length; indexDe++)
                     if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil)
+                        // on replace la face Or la moins valuable si elle existe par la face Soleil du bassin
                         if (getNbFaces(indexDe, getDes(), new Soleil(1)).getNbSoleils() <= 2) {
                             int posFace = getPosFaceQteMin(indexDe, getDes(), new Or(1));
                             if (posFace != -1)
@@ -129,7 +147,7 @@ public class NidoBot extends Joueur {
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         }
             }
-        System.out.println("end of function choisirFaceAForgerEtARemplacer");
+        afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
@@ -141,15 +159,15 @@ public class NidoBot extends Joueur {
         for (Carte carte:cartes){
             if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
                 return carte;
-            if (carte.getNom().equals(Carte.Noms.Hydre))
+            if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
                 return carte;
-            if (carte.getNom().equals(Carte.Noms.Typhon))
+            if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Meduse))
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Passeur))
                 return carte;
-            if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() > carte.getCout()[0].getQuantite())
+            if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la moins chere
             else if (carteAChoisir == null)
                 carteAChoisir = carte;
