@@ -1,5 +1,6 @@
 package bot;
 
+import bot.mlgBot.StatLine;
 import diceForge.*;
 
 import java.io.File;
@@ -84,6 +85,16 @@ public class MLGBot extends Joueur {
         choixCarteNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
     }
 
+    private int trouverPDG(byte[] bytes, int pos){
+        List<Integer> pdg = new ArrayList<>();
+        for (int j = pos-1; bytes[j] != ";".getBytes()[0]; --j)
+            pdg.add(Integer.parseInt(new String(new byte[]{bytes[j]})));
+        int reelPdg = 0;
+        for (int j = 0; j != pdg.size(); ++j)
+            reelPdg += pdg.get(j)*Math.pow(10, j);
+        return reelPdg;
+    }
+
     private void remuerLaSoupe(int nbrJoueur){
         try {
             RandomAccessFile file = new RandomAccessFile(cible, "rw");
@@ -93,17 +104,38 @@ public class MLGBot extends Joueur {
             int x = channel.read(buf);
             if (x != file.length())
                 throw new DiceForgeException("MLGBot.java", "Le buffer n'a pas lu tout le fichier");
-            int max = 0;
+            int maxPdg = 0;
             for (int i = 0; i != x; ++i) {
                 bytes[i] = buf.get(i);
                 if (bytes[i] == "@".getBytes()[0]){
-                    List<Integer> pdg = new ArrayList<>();
-                    for (int j = i-1; bytes[j] != ";".getBytes()[0]; --j)
-                        pdg.add(Integer.parseInt(new String(new byte[]{bytes[j]})));
-                    int reelPdg = 0;
-                    for (int j = 0; j != pdg.size(); ++j)
-                        reelPdg += pdg.get(j)*Math.pow(10, j);
-                    if (reelPdg > max) max = reelPdg;
+                    int pdg = trouverPDG(bytes, i);
+                    if (pdg > maxPdg) maxPdg = pdg;
+                }
+            }
+            List<StatLine> byteList = new ArrayList<>();
+            int curseur = 0;
+            for (int i = 0; i != x; ++i){
+                if (bytes[i] == "@".getBytes()[0]){
+                    int pdg = trouverPDG(bytes, i);
+                    if (pdg > maxPdg-15){
+                        List<Byte> actionLigne = new ArrayList<>();
+                        List<Byte> secActionLigne = new ArrayList<>();
+                        List<Byte> bassinLigne = new ArrayList<>();
+                        List<Byte> carteLigne = new ArrayList<>();
+                        for (; bytes[curseur] != ";".getBytes()[0]; ++curseur)
+                            actionLigne.add(bytes[curseur]);
+                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
+                            secActionLigne.add(bytes[curseur]);
+                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; curseur += 3){
+                            bassinLigne.add(bytes[curseur]);
+                            bassinLigne.add(bytes[curseur+1]);
+                            bassinLigne.add(bytes[curseur+2]);
+                        }
+                        for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
+                            carteLigne.add(bytes[curseur]);
+                        byteList.add(new StatLine(actionLigne, secActionLigne, bassinLigne, carteLigne));
+                    }
+                    curseur = i;
                 }
             }
             file.close();
