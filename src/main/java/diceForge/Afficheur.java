@@ -282,7 +282,7 @@ public class Afficheur {
         }
         int nombreDeGagnants = idGagnant.size();
         if (nombreDeGagnants==1)
-            info += "Le joueur n°" + idGagnant.get(0) + " gagne ! Bravo à lui et a son créateur";
+            info += "Le joueur n°" + idGagnant.get(0) + " gagne ! Bravo à lui et à son créateur";
         else if (nombreDeGagnants == 2)
             info += "Les joueurs n°" + idGagnant.get(0) + " et n°" + idGagnant.get(1) + " se partagent la victoire";
         else if(nombreDeGagnants == 3)
