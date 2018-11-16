@@ -9,6 +9,7 @@ public class StatLine {
     private byte[] choixAction;
     private byte[] choixSecondeAction;
     private byte[] choixBassin;
+    private byte[][] newChoixBassin;
     private byte[] choixCarte;
 
     public StatLine(byte[] bytes){
@@ -45,6 +46,10 @@ public class StatLine {
         this.choixCarte = new byte[carteLigne.size()];
         for (int i = 0; i != carteLigne.size(); ++i)
             this.choixCarte[i] = carteLigne.get(i);
+        newChoixBassin = new byte[choixBassin.length/3][3];
+        for (int i = 0; i != newChoixBassin.length; ++i)
+            for (int j = 0; j != 3; ++j)
+                newChoixBassin[i][j] = choixBassin[i*3+j];
     }
 
     public byte[] getChoixAction(){
@@ -56,10 +61,6 @@ public class StatLine {
     }
 
     public byte[][] getChoixBassin(){
-        byte[][] newChoixBassin = new byte[choixBassin.length/3][3];
-        for (int i = 0; i != newChoixBassin.length; ++i)
-            for (int j = 0; j != 3; ++j)
-                newChoixBassin[i][j] = choixBassin[i*3+j];
         return newChoixBassin;
     }
 

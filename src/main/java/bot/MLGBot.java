@@ -1,6 +1,6 @@
 package bot;
 
-import bot.mlgBot.SourceLine;
+import bot.mlgBot.SourceLines;
 import bot.mlgBot.StatLine;
 import diceForge.*;
 
@@ -127,13 +127,7 @@ public class MLGBot extends Joueur {
                     curseur = i;
                 }
             }
-            List<SourceLine> ligneSource = new ArrayList<>();
-            for (int i = 0; i != byteList.size(); ++i){
-                if (i%10 == 0 && i != 0)
-                    ligneSource.add(new SourceLine(byteList.subList(i-10, i)));
-            }
-            if (byteList.size()%10 != 0)
-                ligneSource.add(new SourceLine(byteList.subList(byteList.size()-byteList.size()%10, byteList.size())));
+            SourceLines lignesSources = new SourceLines(byteList);
             file.close();
         } catch (IOException ex){
             ex.printStackTrace();
