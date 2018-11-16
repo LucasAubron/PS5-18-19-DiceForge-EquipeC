@@ -157,9 +157,9 @@ public class Afficheur {
         }
     }
 
-    void chasse(Joueur chasseur, Joueur chasse){
-        if (modeVerbeux && chasse != null)
-            info += "\nLe joueur n°" + chasseur.getIdentifiant() + " chasse le joueur n°" + chasse.getIdentifiant() + ", ce dernier lance ses dés\n";
+    void estChasse(Joueur chasse){
+        if (modeVerbeux)
+            info += "\nLe joueur n°" + chasse.getIdentifiant() + " est chassé\n";
     }
 
     void ours(Joueur joueur){
@@ -194,7 +194,7 @@ public class Afficheur {
 
     void achatCarte(Carte carte, Joueur joueur){
         if (modeVerbeux)
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " achète la carte " + carte + "\n";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " achète la carte " + carte + "\n\n";
     }
 
     void actionPasser(Joueur joueur){
@@ -214,9 +214,17 @@ public class Afficheur {
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " n'a pas assez de ressource pour acheter une carte, il passe son tour\n";
     }
 
-    void actionDebile(int compteur){
-        if (modeVerbeux && compteur == 0)
-            info += "\n-Le joueur revient sur sa décision et passe son tour-\n";
+    void actionDebile(int compteur, Joueur joueur, Coordinateur coordinateur){
+        if (modeVerbeux && compteur == 0) {
+            int coutMin = 0;
+            for (Bassin bassin : plateau.getTemple().getSanctuaire())//on regarde la raison qui a poussé le joueur a ne rien forger (sa décision ou forcé)
+                if (!bassin.getFaces().isEmpty())
+                    coutMin = bassin.getCout();
+            if (joueur.getOr()<coutMin)
+                info += "\nLe joueur n'a pas assez d'or pour forger la moindre face, il passe son tour\n";
+            else
+                info += "\nLe joueur revient sur sa décision et passe son tour\n";
+        }
     }
 
     void grandTrait(){
