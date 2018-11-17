@@ -1,6 +1,7 @@
 package diceForge;
 
 import bot.*;
+import bot.AubotV2.AubotV2;
 import bot.NidoBot.NidoBot;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ class PortailsOriginels {
                 this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBot)
                 this.joueurs.add(new NidoBot(identifiant, afficheur, plateau));
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }

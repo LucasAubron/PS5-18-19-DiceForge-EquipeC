@@ -1,15 +1,13 @@
-package bot;
+package bot.AubotV2;
 
-import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
 import diceForge.*;
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import static diceForge.Carte.Noms.*;
 import static diceForge.Carte.Noms.Bouclier;
 
-public class AubotLeGrand extends Joueur{
+public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
     private boolean secondeAction = false;
@@ -27,12 +25,18 @@ public class AubotLeGrand extends Joueur{
     private int soleilDe = 3;
     private int luneDe = 2;
     //--------------------------------------------
-    public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){
+
+    /**
+     * @param identifiant comprit entre 1 et 4 inclus
+     * @param afficheur
+     * @param plateau
+     */
+    public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);
         compteurForge = 0;
         desComplet = false;
         random = new Random();
-        }
+    }
 
     @Override
     public Joueur.Action choisirAction(int numManche) {
@@ -43,167 +47,48 @@ public class AubotLeGrand extends Joueur{
         }
         manche++;
         statsDe();
-        if (secondeAction) {
-            secondeAction = false;
-            return Action.EXPLOIT;
-        }
-        if (desComplet || manche == 1 && getOr() < 5 || manche == 2 && getOr() < 8 || manche >= 4)
-            return Action.EXPLOIT;
-        else
-            return Action.FORGER;
+        return Action.FORGER;
     }
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        Bassin bassin;
+        Bassin bassin = bassins.get(0);
         int numFace = 0;
-        int numDe;
-        int posFace;
+        int numDe = 0;
+        int posFace = 0;
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
-        switch(compteurForge) {
-            case 0:
-                bassin = trouveBassinCout(bassins, 2, "Or");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 1:
-                bassin = trouveBassinCout(bassins, 3, "Or");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 2:
-                bassin = trouveBassinCout(bassins, 2, "Lune");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 3:
-                bassin = trouveBassinCout(bassins, 8, "Soleil");
-                numDe = 1;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 5:
-                bassin = trouveBassinCout(bassins, 3, "Soleil");
-                numDe = 1;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            default:
-                bassin = bassins.get(0);
-                for (Bassin bassinAcheter: bassins){
-                    if (bassinAcheter.getCout()>bassin.getCout()){
-                        bassin = bassinAcheter;
-                    }
-                }
-                numFace = 0;
-                int posFaceTest;
-                posFace = -1;
-                numDe = -1;
-                for (int i=1; i>0; i--) {
-                    posFaceTest = getPosFace1Or(i);
-                    if (numFace != -1) {
-                        posFace = posFaceTest;
-                        numDe = i;
-                        break;
-                    }
-                }
-                if (posFace == -1){
-                    posFace = random.nextInt(6);
-                }
-                if (numDe == -1){
-                    numDe = 0;
-                }
-        }
-        if (bassin != null)
-            compteurForge++;
         return new ChoixJoueurForge(bassin, numFace, numDe, posFace);
     }
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        Carte carteLaPlusChere = cartes.get(0);
-        for (Carte carte: cartes) {
-            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 1)
-                return carte;
-            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 2 && nombreDeJoueurs == 2)//cheese du marteau
-                return carte;
-            if (carte.getNom() == Ours && nombreDeJoueurs == 4)
-                return carte;
-            if (carte.getNom() == Ancien && nombreCartePossedee(Ancien) < 1 && manche <=5)
-                return carte;
-            if (carte.getNom() == HerbesFolles && nombreCartePossedee(HerbesFolles) == 0 && manche <= 2)
-                return carte;
-            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
-                return carte;
-            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0)
-                return carte;
-            if (carte.getNom() == Hydre || carte.getNom() == Typhon && manche >=5)
-                return carte;
-            if (carteLaPlusChere.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
-                carteLaPlusChere = carte;
-        }
-        return carteLaPlusChere;
+        return cartes.get(0);
     }
 
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        if ((!desComplet || getOr() < 3* nombreCartePossedee(Ancien)) && getOr() + quantiteOr <= getMaxOr())
-            return quantiteOr;
         return 0;
     }
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        boolean rejouer = (nombreCartePossedee(Ancien) == 0 && getSoleil()>=3 || nombreCartePossedee(Marteau)==0 && getLune()>=1)? true:false;
-        if (rejouer)
-            manche--;
-        secondeAction = true;
-        return rejouer;
+        return false;
     }
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        if (!desComplet) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
-            return new ArrayList<>();
-        }
         return renfortsUtilisables;
     }
 
     @Override
     public int choisirRessource(Face faceAChoix){
-        ressourceManquante();
-        int i;
-        if (soleilManquant != 0){
-            for (i=0; i<faceAChoix.getRessource().length; i++)
-                if (faceAChoix.getRessource()[i][0] instanceof Soleil)
-                    return i;
-        }
-        if (luneManquant != 0){
-            for (i=0; i<faceAChoix.getRessource().length; i++)
-                if (faceAChoix.getRessource()[i][0] instanceof Lune)
-                    return i;
-        }
         return 0;
     }
 
     @Override
     public int choisirRessourceAPerdre(Face faceAChoix){
-        int indice = -1;
-        for (Ressource[] ressources: faceAChoix.getRessource()) {
-            indice++;
-            if (ressources[0] instanceof Or)
-                return indice;
-        }
         return 0;
     }
 
@@ -224,16 +109,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public void forgerFace(Face face){
-        int numFace;
-        for (int i=1; i>0; i--){
-            numFace = getPosFace1Or(i);
-            if (numFace !=-1) {
-                forgerDe(i, face, numFace);
-                break;
-            }
-        }
-
-
+        forgerDe(0, face, 0);
     }
 
 
@@ -261,10 +137,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public boolean utiliserJetonCerbere(){
-        ressourceManquante();
-        if (soleilManquant >= 3 && getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil)
-            return true;
-        return false;
+        return true;
     }
 
     @Override
@@ -274,7 +147,7 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public String toString(){
-        return "AubotLeGrand (bot de Lucas)";
+        return "AubotV2 (bot de Lucas)";
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
