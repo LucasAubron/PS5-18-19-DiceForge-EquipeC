@@ -17,7 +17,11 @@ public class AubotLeGrand extends Joueur{
     private int nombreDeJoueurs;
     private int manche = 0;
     private int compteurForge;
-    private Carte cartesDispo[];
+    private int orManquant;
+    private int luneManquant;
+    private int soleilManquant;
+
+
     //--------------------------------------------
     private int orDe = 11;
     private int soleilDe = 3;
@@ -26,7 +30,6 @@ public class AubotLeGrand extends Joueur{
     public AubotLeGrand(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
         compteurForge = 0;
-        cartesDispo = new Carte[15];
         desComplet = false;
         random = new Random();
         }
@@ -120,6 +123,10 @@ public class AubotLeGrand extends Joueur{
                 return carte;
             if (carte.getNom() == HerbesFolles && nombreCartePossedee(HerbesFolles) == 0 && manche <= 2)
                 return carte;
+            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
+                return carte;
+            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0)
+                return carte;
             if (carte.getNom() == Hydre || carte.getNom() == Typhon && manche >=5)
                 return carte;
             if (carteLaPlusChere.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
@@ -147,20 +154,26 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        List indiceAEnlever = new ArrayList();
         if (!desComplet) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
-            for (int indice = 0; indice < renfortsUtilisables.size(); indice++) {
-                if (renfortsUtilisables.get(indice) == Ancien)
-                    indiceAEnlever.add(indice);
-            }
-            for (int i = 0; i < indiceAEnlever.size(); i++)
-                renfortsUtilisables.remove(i);
+            return new ArrayList<>();
         }
         return renfortsUtilisables;
     }
 
     @Override
     public int choisirRessource(Face faceAChoix){
+        ressourceManquante();
+        int i;
+        if (soleilManquant != 0){
+            for (i=0; i<faceAChoix.getRessource().length; i++)
+                if (faceAChoix.getRessource()[i][0] instanceof Soleil)
+                    return i;
+        }
+        if (luneManquant != 0){
+            for (i=0; i<faceAChoix.getRessource().length; i++)
+                if (faceAChoix.getRessource()[i][0] instanceof Lune)
+                    return i;
+        }
         return 0;
     }
 
@@ -229,8 +242,10 @@ public class AubotLeGrand extends Joueur{
 
     @Override
     public boolean utiliserJetonCerbere(){
-        Random random = new Random();
-        return random.nextInt(2) == 1;
+        ressourceManquante();
+        if (soleilManquant >= 3 && getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil)
+            return true;
+        return false;
     }
 
     @Override
@@ -318,5 +333,11 @@ public class AubotLeGrand extends Joueur{
             if (carte.getNom() == nom)
                 compte++;
         return compte;
+    }
+
+    private void ressourceManquante(){
+        orManquant = getMaxOr() - getOr();
+        luneManquant = getMaxLune() - getLune();
+        soleilManquant = getMaxSoleil() - getSoleil();
     }
 }
