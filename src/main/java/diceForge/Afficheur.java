@@ -221,7 +221,7 @@ public class Afficheur {
         if (modeVerbeux && compteur == 0) {
             int coutMin = 0;
             for (Bassin bassin : plateau.getTemple().getSanctuaire())//on regarde la raison qui a poussé le joueur a ne rien forger (sa décision ou forcé)
-                if (!bassin.getFaces().isEmpty())
+                if (!bassin.getFaces().isEmpty() && bassin.getCout() < coutMin)
                     coutMin = bassin.getCout();
             if (joueur.getOr()<coutMin)
                 info += "\nLe joueur n'a pas assez d'or pour forger la moindre face, il passe son tour\n";
