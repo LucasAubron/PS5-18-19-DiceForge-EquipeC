@@ -2,6 +2,10 @@ package bot.mlgBot;
 
 import diceForge.DiceForgeException;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +16,7 @@ public class SourceLines {
 
     public SourceLines(List<StatLine> statLines){
         lignes = new ArrayList<>();
-        int nbrLigneCombine = 100;
+        int nbrLigneCombine = 50;
         if (statLines.size() < nbrLigneCombine)
             lignes.add(combinerStatLines(statLines));
         else{
@@ -22,6 +26,30 @@ public class SourceLines {
                 else
                     lignes.add(combinerStatLines(statLines.subList(i*nbrLigneCombine, statLines.size())));
             }
+        }
+    }
+
+    public SourceLines(String nomFichier){
+        try{
+            RandomAccessFile file = new RandomAccessFile(nomFichier, "rw");
+            FileChannel channel = file.getChannel();
+            ByteBuffer buf = ByteBuffer.allocate((int)file.length());
+            int x = channel.read(buf);
+            if (x != file.length())
+                throw new DiceForgeException("SourceLine", "Le buffeur n'a pas lu tout le fichier");
+            lignes = new ArrayList<>();
+            lignes.add(new ArrayList<>());
+            for (int i = 0; i != x-1; ++i){
+                byte a = buf.get(i);
+                if (a == "@".getBytes()[0])
+                    lignes.add(new ArrayList<>());
+                else
+                    lignes.get(lignes.size()-1).add(a);
+            }
+            file.close();
+        } catch (IOException ex){
+            ex.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -105,11 +133,7 @@ public class SourceLines {
         return ligne;
     }
 
-    public byte[][] getLigne() {
-        byte[][] bytes = new byte[lignes.size()][lignes.get(0).size()];
-        for (int i = 0; i != lignes.size(); ++i)
-            for (int j = 0;  j != lignes.get(0).size(); ++j)
-                bytes[i][j] = lignes.get(i).get(j);
-        return bytes;
+    public List<List<Byte>> getLigne() {
+        return lignes;
     }
 }
