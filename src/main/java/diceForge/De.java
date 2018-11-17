@@ -27,54 +27,27 @@ public class De {
         this.proprietaire = joueur;
         this.afficheur = afficheur;
         this.id = id;
-        if (faces.length != 6)//Pour la version minimale, le dé à 3 faces
+        if (faces.length != 6)
             throw new DiceForgeException("Dé","Le nombre de face est invalide. Attendu : 6, actuel : "+faces.length);
         this.faces = faces;
     }
 
     Face lancerLeDe(){
-        afficheur.resultatDe(proprietaire, id);
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
         derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
+        afficheur.resultatDe(proprietaire, id);
         return derniereFace;
     }
 
     void forger(Face faceAForger, int numFace){
         if (numFace < 0 || numFace > faces.length-1)
-            throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 1, max : "+(faces.length-1)+", actuel : "+numFace);
+            throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 0, max : "+(faces.length-1)+", actuel : "+numFace);
         faces[numFace] = faceAForger;
         ++nbrFaceForge;
     }
 
     public int getNbrFaceForge() {
         return nbrFaceForge;
-    }
-
-    public int getNbFacesSoleil(){
-        int res = 0;
-        for (Face face : faces)
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Soleil)
-                res++;
-        return res;
-    }
-
-    public int getNbFacesLune(){
-        int res = 0;
-        for (Face face : faces)
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Lune)
-                res++;
-        return res;
-    }
-
-    public int getPosFaceOrQteMin(){ //recherche de min classique
-        int min = 10000;
-        int res = -1;
-            for (int i = 0; i < faces.length; i++){
-                if (faces[i].getRessource().length == 1 && faces[i].getRessource()[0][0] instanceof Or
-                        && faces[i].getRessource()[0][0].getQuantite() < min)
-                    res = i;
-            }
-        return res;
     }
 
     @Override

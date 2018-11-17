@@ -38,12 +38,13 @@ class Coordinateur {
     private void lanceUnePartieAvecDetail(Joueur.Bot[] typeJoueurs, int nbrManche) {
         this.afficheur = new Afficheur(true);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
         plateau = new Plateau(typeJoueurs, afficheur);//Le plateau, qui comprend toute la partie physique du jeu
-        afficheur.setJoueurs(plateau.getPortail().getJoueurs());//le plateau a besoin de l'afficheur pour le donner a ses joueurs mais l'afficheur a besoin des joueurs du portail de plateau, donc on lui donne après avoir créé le plateau
+        afficheur.setPlateau(plateau); //l'afficheur a besoin du plateau et le plateau de l'afficheur, donc une fois que le plateau est mis en place on le passe à l'afficheur
         afficheur.presentationModeVerbeux();
+        afficheur.presentationCartesEtBassin(plateau);
         for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
             jouerManche(numManche);
         }
-        List<Integer> infoJoueurGagnant = infoJoueurGagnant();//On récupère les infos du joueur gagnant
+        afficheur.finDePartie();
     }
 
     /**
@@ -206,7 +207,7 @@ class Coordinateur {
                     compteurForge++;
                 }
                 while(bassinsAEnlever != null);
-                afficheur.actionDebile(compteurForge);
+                afficheur.actionDebile(compteurForge, joueur, this);
                 break;
             case EXPLOIT:
                 afficheur.actionExploit(joueur);
@@ -251,7 +252,7 @@ class Coordinateur {
      * @param bassinsUtilises
      * @return
      */
-    private List<Bassin> bassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
+    List<Bassin> bassinAbordable(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : plateau.getTemple().getSanctuaire()) {
             boolean estDejaUtilise = false;

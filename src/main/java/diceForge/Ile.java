@@ -8,7 +8,7 @@ import java.util.List;
  * C'est la où les joueurs viennent lorsqu'il choisisse une carte qui fait partie de l'ile
  * On utilise un tableau à deux dimensions pour représenter plus intuitivement les paquets de carte.
  */
-class Ile {
+public class Ile {
     private List<List<Carte>> cartes;
     private Joueur joueur = null;
 
@@ -90,11 +90,11 @@ class Ile {
         return x;
     }
 
-    Joueur getJoueur() {return joueur;}
+    public Joueur getJoueur() {return joueur;}
 
     /**
      * Ne PAS utiliser pour retirer une carte !!!!
      * @return
      */
-    List<List<Carte>> getCartes(){return cartes;}
+    public List<List<Carte>> getCartes(){return cartes;}
 }

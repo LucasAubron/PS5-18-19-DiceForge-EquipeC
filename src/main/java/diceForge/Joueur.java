@@ -29,7 +29,7 @@ public abstract class Joueur {
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
     private List<Jeton> jetons = new ArrayList<>();
-    private Afficheur afficheur;
+    protected Afficheur afficheur;
 
     private boolean jetRessourceOuPdg = false;
     private boolean jetOrOuPdg = false;
@@ -39,7 +39,7 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, RomanetBot}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, RomanetBot, NidoBot}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
@@ -282,11 +282,13 @@ public abstract class Joueur {
      * Méthode à appeler lorsque le joueur est chassé
      */
     void estChasse(){
-        for (Carte carte:cartes)
+        afficheur.estChasse(this);
+        for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
-                afficheur.ours(this);
                 pointDeGloire += 3;
+                afficheur.ours(this);
             }
+        }
         lancerLesDes();
         gagnerRessource();
     }
@@ -296,11 +298,12 @@ public abstract class Joueur {
      * Elle servira uniquement lorsque l'ours sera introduit
      */
     void chasse(){
-        for (Carte carte:cartes)
+        for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
-                afficheur.ours(this);
                 pointDeGloire += 3;
+                afficheur.ours(this);
             }
+        }
     }
 
     /**
@@ -461,9 +464,6 @@ public abstract class Joueur {
         }
         return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
     }
-
-
-
 
     @Override
     public String toString(){

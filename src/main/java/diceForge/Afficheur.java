@@ -1,29 +1,64 @@
 package diceForge;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Afficheur {
 
     private String info = "";
     private boolean modeVerbeux;
-    private List joueurs;
+    private Plateau plateau;
 
     Afficheur(boolean modeVerbeux) {
         this.modeVerbeux = modeVerbeux;
     }
 
-    void setJoueurs(List joueurs){ this.joueurs = joueurs ;}
+    void setPlateau(Plateau plateau){
+        this.plateau = plateau;
+    }
 
     void presentationModeVerbeux() {
         if (modeVerbeux) {
-            info += "\n\n\n\t\t-----------------------------------------------------------------------------------\n\t\t| Cette partie oppose les bots (affichés dans l'odre de jeu): ";
-            for (int i = 0; i < joueurs.size(); i++)
-                info += joueurs.get(i) + ", ";
-            info += "|\n\t\t-----------------------------------------------------------------------------------\n\nL'affichage pour chaque tour apparait dans l'ordre suivant, chaque étape étant séparée par des pointillés:\n1. Phase de lancer des dés\n2. Phase d'activation des renforts\n3. Phase d'action\n4. Seconde Action s'il le joueur décide de rejouer";
+            info += "\n\n\n\t\t| Cette partie oppose les bots (affichés dans l'odre de jeu): ";
+            for (int i = 0; i < plateau.getJoueurs().size(); i++)
+                info += plateau.getJoueurs().get(i) + ", ";
+            info += "|\n\n\n\n\nL'affichage pour chaque tour apparait dans l'ordre suivant, chaque étape étant séparée par des pointillés:\n1. Phase de lancer des dés\n2. Phase d'activation des renforts\n3. Phase d'action\n4. Seconde Action s'il le joueur décide de rejouer";
         }
     }
 
+    void presentationCartesEtBassin(Plateau plateau){
+        if (modeVerbeux) {
+            info += "\n\nCartes tirées et disponibles aux plateau.getJoueurs():\n";
+            for (Ile ile: plateau.getIles()) {
+                for (List<Carte> carte : ile.getCartes())
+                    info += carte.get(0).getNom().toString() + "\t||\t";
+            }
+            info += "\n";
+            if (plateau.getJoueurs().size() == 2){
+                info += "\nIl n'y a que deux joueurs, les bassins sont incomplets et les faces disponibles aux joueurs sont tirées au hasard pour les bassins de coût 4 or et 12 or:";
+                int i = 0;
+                for (Bassin bassin: plateau.getTemple().getSanctuaire()) {
+                    i++;
+                    if (i==5){
+                        info += "\nBassin au coût de 4 or: ";
+                        for (Face face : bassin.getFaces())
+                            info += face + " || ";
+                    }
+                    else if (i==10){
+                        info += "\nBassin au coût de 12 or: ";
+                        for (Face face : bassin.getFaces())
+                            info += face + " || ";
+                    }
+                }
+            }
+        }
+    }
 
+    public void NidoBotAfficheur(String str){
+        if (modeVerbeux)
+            info += "\n\n-----> " + str;
+    }
     void manche(int numManche) {
         if (modeVerbeux)
             info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
@@ -41,7 +76,7 @@ public class Afficheur {
     void resultatDe(Joueur joueur, int idDe) {
         if (modeVerbeux) {
             idDe++;
-            info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[0] + "\n";
+            info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[idDe-1] + "\n";
         }
     }
 
@@ -125,9 +160,9 @@ public class Afficheur {
         }
     }
 
-    void chasse(Joueur chasseur, Joueur chasse){
-        if (modeVerbeux && chasse != null)
-            info += "\nLe joueur n°" + chasseur.getIdentifiant() + " chasse le joueur n°" + chasse.getIdentifiant() + ", ce dernier lance ses dés\n";
+    void estChasse(Joueur chasse){
+        if (modeVerbeux)
+            info += "\nLe joueur n°" + chasse.getIdentifiant() + " est chassé\n";
     }
 
     void ours(Joueur joueur){
@@ -162,7 +197,7 @@ public class Afficheur {
 
     void achatCarte(Carte carte, Joueur joueur){
         if (modeVerbeux)
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " achète la carte " + carte + "\n";
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " achète la carte " + carte + "\n\n";
     }
 
     void actionPasser(Joueur joueur){
@@ -182,9 +217,17 @@ public class Afficheur {
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " n'a pas assez de ressource pour acheter une carte, il passe son tour\n";
     }
 
-    void actionDebile(int compteur){
-        if (modeVerbeux && compteur == 0)
-            info += "\n-Le joueur revient sur sa décision et passe son tour-\n";
+    void actionDebile(int compteur, Joueur joueur, Coordinateur coordinateur){
+        if (modeVerbeux && compteur == 0) {
+            int coutMin = 0;
+            for (Bassin bassin : plateau.getTemple().getSanctuaire())//on regarde la raison qui a poussé le joueur a ne rien forger (sa décision ou forcé)
+                if (!bassin.getFaces().isEmpty() && bassin.getCout() < coutMin)
+                    coutMin = bassin.getCout();
+            if (joueur.getOr()<coutMin)
+                info += "\nLe joueur n'a pas assez d'or pour forger la moindre face, il passe son tour\n";
+            else
+                info += "\nLe joueur revient sur sa décision et passe son tour\n";
+        }
     }
 
     void grandTrait(){
@@ -206,6 +249,49 @@ public class Afficheur {
         for (int i = 0; i != nbrVictoire.length; ++i){
             info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire\n";
         }
+    }
+
+    void finDePartie() {
+        info += "\n\n\n";
+        grandTrait();
+        info += "\t\t\t\t--FIN DE PARTIE--";
+        additionPointCarte(plateau.getJoueurs());
+    }
+
+    void additionPointCarte(List<Joueur> joueurs) {
+        int total;
+        int totalMax = -1;
+        int id;
+        List<Integer> idGagnant = new ArrayList<>(Arrays.asList(-1));
+        grandTrait();
+        retourALaLigne();
+        for (Joueur joueur : joueurs) {
+            id = joueur.getIdentifiant();
+            total = joueur.getPointDeGloire();
+            info += "Points de gloire initiaux du joueur n°" + id + ": " + joueur.getPointDeGloire() + "\nCartes:\n";
+            for (Carte carte : joueur.getCartes()) {
+                total += carte.getNbrPointGloire();
+                info += "\t|" + carte.getNom() + ": " + carte.getNbrPointGloire() + " points de gloire\n";
+            }
+            info += "\nTOTAL: " + total + " points de gloire";
+            grandTrait();
+            if (total > totalMax) {
+                totalMax = total;
+                idGagnant.clear();
+                idGagnant.add(id);
+            } else if (total == totalMax) {
+                idGagnant.add(id);
+            }
+        }
+        int nombreDeGagnants = idGagnant.size();
+        if (nombreDeGagnants==1)
+            info += "Le joueur n°" + idGagnant.get(0) + " gagne ! Bravo à lui et à son créateur";
+        else if (nombreDeGagnants == 2)
+            info += "Les joueurs n°" + idGagnant.get(0) + " et n°" + idGagnant.get(1) + " se partagent la victoire";
+        else if(nombreDeGagnants == 3)
+            info += "Les joueurs n°" + idGagnant.get(0) + " et n°" + idGagnant.get(1) + " et n°" + idGagnant.get(2) + " se partagent la victoire";
+        else if(nombreDeGagnants == 4)
+            info += "Les 4 joueurs sont à égalité ! Incroyable !";
     }
 
     @Override

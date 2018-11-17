@@ -9,7 +9,7 @@ import java.util.Random;
  * le sanctuaire comportant les bassins accessibles par la forge
  * et les jardins comportant les bassins accessibles par les cartes.
  */
-class Temple {
+public class Temple {
     private Bassin[] sanctuaire = new Bassin[10];//10 bassins dans la version finale du jeu
     private Bassin[] jardin = new Bassin[1];//Pour l'instant qu'1 bassin dans le jardin
 
@@ -57,7 +57,7 @@ class Temple {
         jardin[0] = new Bassin(0, faceJardin0);
     }
 
-    Bassin[] getSanctuaire() {return sanctuaire;}
+    public Bassin[] getSanctuaire() {return sanctuaire;}
 
     public Bassin[] getJardin() {
         return jardin;
