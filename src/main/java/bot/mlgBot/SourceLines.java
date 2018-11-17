@@ -40,11 +40,11 @@ public class SourceLines {
         for (int i = 0; i != statLines.get(0).getChoixAction().length; ++i)
             bassinSelonOrEtManche.add(new ArrayList<>());
         int approxOr = 3;
-        for (int i = 0; i != statLines.size(); ++i){
-            for (int j = 0; j != statLines.get(i).getChoixBassin().length; ++j){
-                while(statLines.get(i).getChoixBassin()[j][2]/approxOr >= bassinSelonOrEtManche.get(statLines.get(i).getChoixBassin()[j][1]).size())
-                    bassinSelonOrEtManche.get(statLines.get(i).getChoixBassin()[j][1]).add(new ArrayList<>());
-                bassinSelonOrEtManche.get(statLines.get(i).getChoixBassin()[j][1]).get(statLines.get(i).getChoixBassin()[j][2]/approxOr).add(statLines.get(i).getChoixBassin()[j][0]);
+        for (StatLine statLine:statLines){
+            for (int j = 0; j != statLine.getChoixBassin().length; ++j){
+                while(statLine.getChoixBassin()[j][2]/approxOr >= bassinSelonOrEtManche.get(statLine.getChoixBassin()[j][1]).size())
+                    bassinSelonOrEtManche.get(statLine.getChoixBassin()[j][1]).add(new ArrayList<>());
+                bassinSelonOrEtManche.get(statLine.getChoixBassin()[j][1]).get(statLine.getChoixBassin()[j][2]/approxOr).add(statLine.getChoixBassin()[j][0]);
             }
         }
         for(int i = 0; i != bassinSelonOrEtManche.size(); ++i){
@@ -59,11 +59,38 @@ public class SourceLines {
             }
         }
         ligne.add(";".getBytes()[0]);//--------------------------------------CARTE--------------------------------------
-        List<List<List<List<Byte>>>> carte = new ArrayList<>();//Manche(Soleil/2(Lune/2(numBassin))
-        for (int i = 0; i != statLines.get(0).getChoixAction().length; ++i)
-            carte.add(new ArrayList<>());
         int approxRessource = 2;
-
+        List<List<List<List<Byte>>>> cartes = new ArrayList<>();//2 listes(manche(cout(carte)))
+        for (int i = 0; i != 2; ++i) {
+            cartes.add(new ArrayList<>());
+            for (int j = 0; j != statLines.get(0).getChoixAction().length; ++j)
+                cartes.get(i).add(new ArrayList<>());
+        }
+        for (int i = 0; i != statLines.get(0).getChoixAction().length; ++i) {
+            for (StatLine statLine : statLines) {
+                if (statLine.getChoixCarte()[i][0] != 0){
+                    int numRessource = (statLine.getChoixCarte()[i][0] <= 13 ? 0 : 1);
+                    while (statLine.getChoixCarte()[i][numRessource+1]/approxRessource >= cartes.get(numRessource).get(i).size())
+                        cartes.get(numRessource).get(i).add(new ArrayList<>());
+                    cartes.get(numRessource).get(i).get(statLine.getChoixCarte()[i][numRessource+1]/approxRessource).add(statLine.getChoixCarte()[i][0]);
+                }
+            }
+        }
+        for (int k = 0; k != statLines.get(0).getChoixAction().length; ++k) {
+            if (k != 0)
+                ligne.add(",".getBytes()[0]);
+            for (int i = 0; i != 2; ++i) {
+                if (i != 0)
+                    ligne.add("?".getBytes()[0]);
+                for (int j = 0; j != cartes.get(i).get(k).size(); ++j) {
+                    ligne.add((byte) (j * approxRessource));
+                    ligne.add(":".getBytes()[0]);
+                    Set<Byte> antiDoublon = new HashSet<>();
+                    antiDoublon.addAll(cartes.get(i).get(k).get(j));
+                    ligne.addAll(antiDoublon);
+                }
+            }
+        }
         return ligne;
     }
 

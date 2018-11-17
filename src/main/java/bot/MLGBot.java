@@ -38,6 +38,9 @@ public class MLGBot extends Joueur {
         super(identifiant, afficheur, plateau);
     }
 
+    enum NomCarteOverride{Ancien, HerbesFolles, Hibou, Minautore, BateauCeleste, Bouclier, Meduse, MiroirAbyssal, Triton, Cyclope, Sphinx, Hydre, Typhon,//On ne prend on compte que les soleils pour hydre et typhon
+    Marteau, Coffre, Biche, Ours, Sanglier, Satyres, Cerbere, Passeur, CasqueDinvisibilite, Sentinelle, Cancer}
+
     private void goGoGo(int nbrJoueur){
         try{
             RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\mlgBot\\MLGBotProp", "rw");
@@ -93,6 +96,8 @@ public class MLGBot extends Joueur {
         int reelPdg = 0;
         for (int j = 0; j != pdg.size(); ++j)
             reelPdg += pdg.get(j)*Math.pow(10, j);
+        if (reelPdg < 1)
+            throw new DiceForgeException("MLGBot","Le nombre de point de gloire est invalide. Min: 1, actuel: "+reelPdg);
         return reelPdg;
     }
 
@@ -114,7 +119,7 @@ public class MLGBot extends Joueur {
                 }
             }
             List<StatLine> byteList = new ArrayList<>();
-            int curseur = 0;
+            int curseur = -1;
             for (int i = 0; i != x; ++i){
                 if (bytes[i] == "@".getBytes()[0]){
                     int pdg = trouverPDG(bytes, i);
@@ -278,6 +283,7 @@ public class MLGBot extends Joueur {
                 throw new DiceForgeException("MLGBot", "Bassin mal detecte. Nom : " + bassins.get(numBassin).toString());
             choixBassinManche.add((byte)numeroManche);
             puissanceOr.add((byte)getOr());
+            MOVEMENT = true;
         }
         gettingGood();
         if (!bassins.isEmpty())
@@ -288,8 +294,8 @@ public class MLGBot extends Joueur {
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         int numCarte = notLuckButSkill.nextInt(cartes.size());
-        for (int i = 0; i != Carte.Noms.values().length; ++i) {
-            if (Carte.Noms.values()[i] == cartes.get(numCarte).getNom()) {
+        for (int i = 0; i != NomCarteOverride.values().length; ++i) {
+            if (NomCarteOverride.values()[i].toString().equals(cartes.get(numCarte).getNom().toString())) {
                 choixCarteNext[numeroManche] = (byte)(i + 1);
                 break;
             }
@@ -298,6 +304,7 @@ public class MLGBot extends Joueur {
             throw new DiceForgeException("MLGBot", "Carte non detecte. Nom : "+cartes.get(numCarte).getNom().toString());
         puissanceSoleil.add((byte)getSoleil());
         puissanceLune.add((byte)getLune());
+        MOVEMENT = true;
         gettingGood();
         return cartes.get(numCarte);
     }
