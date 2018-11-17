@@ -110,6 +110,7 @@ public class MLGBot extends Joueur {
             int x = channel.read(buf);
             if (x != file.length())
                 throw new DiceForgeException("MLGBot.java", "Le buffer n'a pas lu tout le fichier");
+            file.setLength(0);
             int maxPdg = 0;
             for (int i = 0; i != x; ++i) {
                 bytes[i] = buf.get(i);
@@ -133,6 +134,13 @@ public class MLGBot extends Joueur {
                 }
             }
             SourceLines lignesSources = new SourceLines(byteList);
+            for (byte[] sourceByte:lignesSources.getLigne()){
+                buf = ByteBuffer.allocate(sourceByte.length);
+                buf.clear();
+                buf.put(sourceByte);
+                buf.flip();
+                channel.write(buf, file.length());
+            }
             file.close();
         } catch (IOException ex){
             ex.printStackTrace();

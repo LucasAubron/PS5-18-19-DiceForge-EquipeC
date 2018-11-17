@@ -12,7 +12,17 @@ public class SourceLines {
 
     public SourceLines(List<StatLine> statLines){
         lignes = new ArrayList<>();
-        lignes.add(combinerStatLines(statLines));
+        int nbrLigneCombine = 100;
+        if (statLines.size() < nbrLigneCombine)
+            lignes.add(combinerStatLines(statLines));
+        else{
+            for(int i = 0; i != statLines.size()/nbrLigneCombine; ++i){
+                if (i != statLines.size()/nbrLigneCombine-1)
+                    lignes.add(combinerStatLines(statLines.subList(i*nbrLigneCombine, (i+1)*nbrLigneCombine)));
+                else
+                    lignes.add(combinerStatLines(statLines.subList(i*nbrLigneCombine, statLines.size())));
+            }
+        }
     }
 
     private List<Byte> combinerStatLines(List<StatLine> statLines){
@@ -60,7 +70,7 @@ public class SourceLines {
         }
         ligne.add(";".getBytes()[0]);//--------------------------------------CARTE--------------------------------------
         int approxRessource = 2;
-        List<List<List<List<Byte>>>> cartes = new ArrayList<>();//2 listes(manche(cout(carte)))
+        List<List<List<List<Byte>>>> cartes = new ArrayList<>();//2 listes or/lune(manche(cout(carte)))
         for (int i = 0; i != 2; ++i) {
             cartes.add(new ArrayList<>());
             for (int j = 0; j != statLines.get(0).getChoixAction().length; ++j)
@@ -91,6 +101,7 @@ public class SourceLines {
                 }
             }
         }
+        ligne.add("@".getBytes()[0]);
         return ligne;
     }
 
