@@ -99,10 +99,29 @@ public class AubotLeGrand extends Joueur{
                 break;
             default:
                 bassin = bassins.get(0);
-                numDe = 1;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
+                for (Bassin bassinAcheter: bassins){
+                    if (bassinAcheter.getCout()>bassin.getCout()){
+                        bassin = bassinAcheter;
+                    }
+                }
+                numFace = 0;
+                int posFaceTest;
+                posFace = -1;
+                numDe = -1;
+                for (int i=1; i>0; i--) {
+                    posFaceTest = getPosFace1Or(i);
+                    if (numFace != -1) {
+                        posFace = posFaceTest;
+                        numDe = i;
+                        break;
+                    }
+                }
+                if (posFace == -1){
                     posFace = random.nextInt(6);
+                }
+                if (numDe == -1){
+                    numDe = 0;
+                }
         }
         if (bassin != null)
             compteurForge++;
