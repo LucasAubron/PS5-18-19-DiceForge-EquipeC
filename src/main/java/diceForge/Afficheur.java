@@ -36,7 +36,7 @@ public class Afficheur {
             }
             info += "\n";
             if (plateau.getJoueurs().size() == 2){
-                info += "\nIl n'y a que deux plateau.getJoueurs(), les bassins sont incomplets et les faces disponibles aux plateau.getJoueurs() sont tirées au hasard pour les bassins de coût 4 or et 12 or:";
+                info += "\nIl n'y a que deux joueurs, les bassins sont incomplets et les faces disponibles aux joueurs sont tirées au hasard pour les bassins de coût 4 or et 12 or:";
                 int i = 0;
                 for (Bassin bassin: plateau.getTemple().getSanctuaire()) {
                     i++;
