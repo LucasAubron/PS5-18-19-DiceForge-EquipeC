@@ -11,19 +11,21 @@ public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
     private boolean secondeAction = false;
-    private boolean desComplet;
     private int nombreDeJoueurs;
     private int manche = 0;
     private int compteurForge;
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
-
+    private boolean desComplet;
 
     //--------------------------------------------
-    private int orDe = 11;
-    private int soleilDe = 3;
-    private int luneDe = 2;
+    private int orDeIdeal = 11;
+    private int soleilDeIdeal = 3;
+    private int luneDeIdeal = 2;
+    private boolean orComplet = false;
+    private boolean soleilComplet = false;
+    private boolean luneComplet = false;
     //--------------------------------------------
 
     /**
@@ -34,19 +36,19 @@ public class AubotV2 extends Joueur{
     public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);
         compteurForge = 0;
-        desComplet = false;
         random = new Random();
     }
 
     @Override
     public Joueur.Action choisirAction(int numManche) {
         if (manche == 0) {//on fait ici ce qu'on n'a pas pu faire dans le constructeur (du fait que le plateau n'est pas encore complètement initialisé à ce moment là)
-            int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
         }
         manche++;
         statsDe();
+        if (orComplet && soleilComplet && luneComplet)
+            return Action.EXPLOIT;
         return Action.FORGER;
     }
 
@@ -69,6 +71,8 @@ public class AubotV2 extends Joueur{
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
+        if ((!desComplet || getOr() < 3* nombreCartePossedee(Ancien)) && getOr() + quantiteOr <= getMaxOr())
+            return quantiteOr;
         return 0;
     }
 
@@ -161,7 +165,7 @@ public class AubotV2 extends Joueur{
         int or = 0;
         int lune = 0;
         int soleil = 0;
-        if (!desComplet)
+        if (!(orComplet && luneComplet && soleilComplet))
             for (De de : getDes())
                 for (Face face : de.getFaces())
                     for (Ressource[] ressources : face.getRessource())
@@ -173,9 +177,13 @@ public class AubotV2 extends Joueur{
                             if (ressource instanceof Lune)
                                 lune += ressource.getQuantite();
                         }
-        //System.out.println("or: " + or + "\nsoleil:" + soleil + "\nlune: " + lune);
-        //System.out.println("\n\n\n");
-        if (or >= orDe && lune >= luneDe && soleil >= soleilDe)
+        if (or >= orDeIdeal)
+            orComplet = true;
+        if (lune >= luneDeIdeal)
+            luneComplet = true;
+        if (soleil >= soleilDeIdeal)
+            luneComplet = true;
+        if (orComplet && luneComplet && soleilComplet)
             desComplet = true;
     }
 
