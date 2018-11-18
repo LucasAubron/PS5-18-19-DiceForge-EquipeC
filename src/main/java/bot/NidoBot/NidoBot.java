@@ -95,8 +95,9 @@ public class NidoBot extends Joueur {
         //Si on est au début du jeu et que l'on a assez d'or, on forge
         if ( numManche < 3 && getOr() > 5 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
-//        else if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty() &&
-//        )
+        else if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty() &&
+                haveSoleilsOuLunesBassins(getPlateau().getTemple().getSanctuaire()))
+            return Action.FORGER;
 
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -111,12 +112,29 @@ public class NidoBot extends Joueur {
         }
         Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
-            if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches //forger de l'or au maximum.
+            if (numManche < 2 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches //forger de l'or au maximum.
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
-            else if (bassin.getFaces().get(0).getRessource().length == 1 && numManche >= 3)
+            else if (bassin.getFaces().get(0).getRessource().length == 1 && numManche >= 2)     //forger lune et soleil  pendant les 2 premiers tours 1face 3, or , 4 or, 1 lune
+                // manche 1 7or alors faire
+                // face lune sur dé ou il y a lune et face or achetées répartir sur les 2 dés cout 3+2+2
+                //gere exception pas 7 or a chaque fois pour commencer
+                /*
+                * on a 13 or sur le dé maintenant
+                * 13/12 un peu plus d'un or par lancé
+                * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
+                * 
+                * manche 2 forger 2soleil sur le dé ou y a deja un soleil
+                *
+                * macnche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 => 2 lune sur le dé ou il y a lune+ 1 soleil sur dé ou il y a un soleil
+                *
+                * 1 dé ou : 1 lune, 1lune, 2lune, 2pdg, 1 or, 3/4or
+                * 2 dé: 2soleil, 1sol, 1sol, 1 or, 1or, 3/4Or
+                *
+                * acheter marteau eventuellement
+                * */
                 //on parcourt tous les dés
                 for (int indexDe = 0; indexDe < getDes().length; indexDe++)
                     if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil)
@@ -158,6 +176,7 @@ public class NidoBot extends Joueur {
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
             if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
+                // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
                 return carte;
@@ -165,7 +184,7 @@ public class NidoBot extends Joueur {
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Meduse))
                 return carte;
-            if (carte.getNom().equals(Carte.Noms.Passeur))
+            if (carte.getNom().equals(Carte.Noms.Passeur)) //miroir abyssal
                 return carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la moins chere
