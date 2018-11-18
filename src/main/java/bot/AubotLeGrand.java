@@ -1,8 +1,6 @@
 package bot;
 
-import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
 import diceForge.*;
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
