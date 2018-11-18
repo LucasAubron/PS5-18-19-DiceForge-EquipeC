@@ -230,8 +230,6 @@ public class AubotLeGrand extends Joueur{
                 break;
             }
         }
-
-
     }
 
 
