@@ -11,8 +11,14 @@ public class StatLine {
     private byte[] choixSecondeAction;
     private byte[][] choixBassin;
     private byte[][] choixCarte;
+    private int pdg = 0;
 
-    public StatLine(byte[] bytes){
+    public int getPdg(){
+        return pdg;
+    }
+
+    public StatLine(byte[] bytes, int pdg){
+        this.pdg = pdg;
         List<Byte> actionLigne = new ArrayList<>();
         List<Byte> secActionLigne = new ArrayList<>();
         List<Byte> bassinLigne = new ArrayList<>();
