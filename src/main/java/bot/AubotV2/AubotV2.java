@@ -8,6 +8,11 @@ import java.util.Random;
 import static diceForge.Carte.Noms.*;
 import static diceForge.Carte.Noms.Bouclier;
 
+/**
+ * lire un fichier d'information bot
+ * première ligne (en hexadécimal): Manche a partir de laquelle on ne forge plus/ nombre de point d'or sur dé / idem pour soleil / idem pour lune/ Nombre d'or a avoir pour forger manche 1 / idem manche 2/ .../ idem manche 6
+ * de la deuxième ligne à la 11ème: ordre de priorité des cartes à acheter pour chacun des tours dans l'ordre croissant
+ */
 public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
@@ -22,29 +27,11 @@ public class AubotV2 extends Joueur{
 
 
     //--------------------------------------------
-    private int orDe = 11;
-    private int soleilDe = 3;
-    private int luneDe = 2;
-    private int orForgeM1 = 5;
-    private int orForgeM2 = 8;
-    private int orForgeM3 = 8;
-    private int orForgeM4 = 0;
-    private int orForgeM5 = 0;
-    private int orForgeM6 = 0;
-    private int mancheExploit = 4;
-    private Hashtable ordrePrioM1 = new Hashtable(15);
-    private Hashtable ordrePrioM2 = new Hashtable(15);
-    private Hashtable ordrePrioM3 = new Hashtable(15);
-    private Hashtable ordrePrioM4 = new Hashtable(15);
-    private Hashtable ordrePrioM5 = new Hashtable(15);
-    private Hashtable ordrePrioM6 = new Hashtable(15);
-    private Hashtable ordrePrioM7 = new Hashtable(15);
-    private Hashtable ordrePrioM8 = new Hashtable(15);
-    private Hashtable ordrePrioM9 = new Hashtable(15);
-    private Hashtable ordrePrioM10 = new Hashtable(15);
-
+    private int desOpti[] = new int[3]; //orDe, soleilDe, luneDe
+    private int orPourForgerManche[] = new int[6];
+    private int mancheExploit;
+    private Hashtable[] ordrePrioManche = new Hashtable[10];
     //--------------------------------------------
-
     /**
      * @param identifiant comprit entre 1 et 4 inclus
      * @param afficheur
@@ -62,6 +49,7 @@ public class AubotV2 extends Joueur{
             int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
+            initValeur();
         }
         manche++;
         statsDe();
@@ -73,6 +61,10 @@ public class AubotV2 extends Joueur{
             return Action.EXPLOIT;
         else
             return Action.FORGER;
+    }
+
+    private void initValeur(){
+
     }
 
     @Override
@@ -152,28 +144,92 @@ public class AubotV2 extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        Carte carteLaPlusChere = cartes.get(0);
-        for (Carte carte: cartes) {
-            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 1)
-                return carte;
-            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 2 && nombreDeJoueurs == 2)//cheese du marteau
-                return carte;
-            if (carte.getNom() == Ours && nombreDeJoueurs == 4)
-                return carte;
-            if (carte.getNom() == Ancien && nombreCartePossedee(Ancien) < 1 && manche <=5)
-                return carte;
-            if (carte.getNom() == HerbesFolles && nombreCartePossedee(HerbesFolles) == 0 && manche <= 2)
-                return carte;
-            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
-                return carte;
-            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0)
-                return carte;
-            if (carte.getNom() == Hydre || carte.getNom() == Typhon && manche >=5)
-                return carte;
-            if (carteLaPlusChere.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
-                carteLaPlusChere = carte;
+        Hashtable ordrePrio = new Hashtable(24);
+        switch (manche){
+            case 1:
+                ordrePrio.putAll(ordrePrioManche[0]);
+                break;
+            case 2:
+                ordrePrio.putAll(ordrePrioManche[2]);
+                break;
+            case 3:
+                ordrePrio.putAll(ordrePrioManche[3]);
+                break;
+            case 4:
+                ordrePrio.putAll(ordrePrioManche[4]);
+                break;
+            case 5:
+                ordrePrio.putAll(ordrePrioManche[5]);
+                break;
+            case 6:
+                ordrePrio.putAll(ordrePrioManche[6]);
+                break;
+            case 7:
+                ordrePrio.putAll(ordrePrioManche[7]);
+                break;
+            case 8:
+                ordrePrio.putAll(ordrePrioManche[8]);
+                break;
+            case 9:
+                ordrePrio.putAll(ordrePrioManche[9]);
+                break;
+            case 10:
+                ordrePrio.putAll(ordrePrioManche[10]);
+                break;
         }
-        return carteLaPlusChere;
+        for (Carte carte: cartes) {
+            if (carte.getNom() == ordrePrio.get(1))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(2))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(3))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(4))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(5))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(6))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(7))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(8))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(9))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(10))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(11))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(12))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(13))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(14))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(15))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(16))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(17))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(18))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(19))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(20))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(21))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(22))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(23))
+                return carte;
+            if (carte.getNom() == ordrePrio.get(24))
+                return carte;
+            else
+                throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue:" + carte);
+        }
+        throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue");
     }
 
 
@@ -186,17 +242,22 @@ public class AubotV2 extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        boolean rejouer = (nombreCartePossedee(Ancien) == 0 && getSoleil()>=3 || nombreCartePossedee(Marteau)==0 && getLune()>=1)? true:false;
-        if (rejouer)
-            manche--;
-        secondeAction = true;
-        return rejouer;
+        if (manche < mancheExploit && (getSoleil() >= 6 || getLune() >= 4))
+            return false;
+        manche--;
+        return true;
+
     }
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
         if (!desComplet) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
-            return new ArrayList<>();
+            try{
+                renfortsUtilisables.remove(Ancien);
+            }
+            finally {
+                return renfortsUtilisables;
+            }
         }
         return renfortsUtilisables;
     }
@@ -231,7 +292,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public int choisirDeFaveurMineure(){
-        return 0;
+        return 1;
     }
 
     @Override
@@ -264,19 +325,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public choixJetonTriton utiliserJetonTriton(){
-        Random random = new Random();
-        int choix = random.nextInt(choixJetonTriton.values().length);
-        switch (choix){
-            case 0:
-                return choixJetonTriton.Rien;
-            case 1:
-                return choixJetonTriton.Or;
-            case 2:
-                return choixJetonTriton.Soleil;
-            case 3:
-                return choixJetonTriton.Lune;
-        }
-        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoit rien !!");
+        return choixJetonTriton.Soleil;
     }
 
     @Override
@@ -322,7 +371,7 @@ public class AubotV2 extends Joueur{
                         }
         //System.out.println("or: " + or + "\nsoleil:" + soleil + "\nlune: " + lune);
         //System.out.println("\n\n\n");
-        if (or >= orDe && lune >= luneDe && soleil >= soleilDe)
+        if (or >= desOpti[0] && lune >= desOpti[2] && soleil >= desOpti[1])
             desComplet = true;
     }
 
