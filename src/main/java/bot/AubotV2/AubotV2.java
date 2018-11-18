@@ -2,6 +2,7 @@ package bot.AubotV2;
 
 import diceForge.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 import static diceForge.Carte.Noms.*;
@@ -11,23 +12,37 @@ public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
     private boolean secondeAction = false;
+    private boolean desComplet;
     private int nombreDeJoueurs;
     private int manche = 0;
     private int compteurForge;
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
-    private boolean desComplet;
+
 
     //--------------------------------------------
-    private int orDeIdeal = 11;
-    private int soleilDeIdeal = 3;
-    private int luneDeIdeal = 2;
-    private int maxMancheForge = 3;
-    //--------------------------------------------
-    private boolean orComplet = false;
-    private boolean soleilComplet = false;
-    private boolean luneComplet = false;
+    private int orDe = 11;
+    private int soleilDe = 3;
+    private int luneDe = 2;
+    private int orForgeM1 = 5;
+    private int orForgeM2 = 8;
+    private int orForgeM3 = 8;
+    private int orForgeM4 = 0;
+    private int orForgeM5 = 0;
+    private int orForgeM6 = 0;
+    private int mancheExploit = 4;
+    private Hashtable ordrePrioM1 = new Hashtable(15);
+    private Hashtable ordrePrioM2 = new Hashtable(15);
+    private Hashtable ordrePrioM3 = new Hashtable(15);
+    private Hashtable ordrePrioM4 = new Hashtable(15);
+    private Hashtable ordrePrioM5 = new Hashtable(15);
+    private Hashtable ordrePrioM6 = new Hashtable(15);
+    private Hashtable ordrePrioM7 = new Hashtable(15);
+    private Hashtable ordrePrioM8 = new Hashtable(15);
+    private Hashtable ordrePrioM9 = new Hashtable(15);
+    private Hashtable ordrePrioM10 = new Hashtable(15);
+
     //--------------------------------------------
 
     /**
@@ -44,85 +59,94 @@ public class AubotV2 extends Joueur{
     @Override
     public Joueur.Action choisirAction(int numManche) {
         if (manche == 0) {//on fait ici ce qu'on n'a pas pu faire dans le constructeur (du fait que le plateau n'est pas encore complètement initialisé à ce moment là)
+            int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
         }
         manche++;
         statsDe();
-        if (secondeAction){
+        if (secondeAction) {
             secondeAction = false;
             return Action.EXPLOIT;
         }
-        if (orComplet && soleilComplet && luneComplet || manche>maxMancheForge)
+        if (desComplet || manche == 1 && getOr() < 5 || manche == 2 && getOr() < 8 || manche >= 4)
             return Action.EXPLOIT;
-        return Action.FORGER;
+        else
+            return Action.FORGER;
     }
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        statsDe();
+        Bassin bassin;
+        int numFace = 0;
+        int numDe;
+        int posFace;
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
-        Bassin bassin = bassins.get(0);
-        int numFace = 0;
-        int numDe = 0;
-        int posFace = 0;
-        if (!orComplet){
-            bassin = trouveBassinCout(bassins, -1, "Or");
-            if (bassin != null) {
-                numFace = trouveFaceRessourceBassin(bassin, "Or");
+        switch(compteurForge) {
+            case 0:
+                bassin = trouveBassinCout(bassins, 2, "Or");
                 numDe = 0;
                 posFace = getPosFace1Or(numDe);
-            }
-        }
-        else if (!soleilComplet){
-            bassin = trouveBassinCout(bassins, -1, "Soleil");
-            if (bassin != null) {
-                numFace = trouveFaceRessourceBassin(bassin, "Soleil");
+                if (posFace == -1)
+                    posFace = random.nextInt(6);
+                break;
+            case 1:
+                bassin = trouveBassinCout(bassins, 3, "Or");
+                numDe = 0;
+                posFace = getPosFace1Or(numDe);
+                if (posFace == -1)
+                    posFace = random.nextInt(6);
+                break;
+            case 2:
+                bassin = trouveBassinCout(bassins, 2, "Lune");
+                numDe = 0;
+                posFace = getPosFace1Or(numDe);
+                if (posFace == -1)
+                    posFace = random.nextInt(6);
+                break;
+            case 3:
+                bassin = trouveBassinCout(bassins, 8, "Soleil");
                 numDe = 1;
                 posFace = getPosFace1Or(numDe);
-            }
-        }
-        else if (!orComplet){
-            if (bassin != null) {
-                bassin = trouveBassinCout(bassins, -1, "Lune");
-                numFace = trouveFaceRessourceBassin(bassin, "Lune");
-                numDe = 0;
+                if (posFace == -1)
+                    posFace = random.nextInt(6);
+                break;
+            case 5:
+                bassin = trouveBassinCout(bassins, 3, "Soleil");
+                numDe = 1;
                 posFace = getPosFace1Or(numDe);
-            }
-        }
-        else{
-            bassin = bassins.get(0);
-            for (Bassin bassinAcheter: bassins){
-                if (bassinAcheter.getCout()>bassin.getCout()){
-                    bassin = bassinAcheter;
+                if (posFace == -1)
+                    posFace = random.nextInt(6);
+                break;
+            default:
+                bassin = bassins.get(0);
+                for (Bassin bassinAcheter: bassins){
+                    if (bassinAcheter.getCout()>bassin.getCout()){
+                        bassin = bassinAcheter;
+                    }
                 }
-            }
-            numFace = 0;
-            int posFaceTest;
-            posFace = -1;
-            numDe = -1;
-            for (int i=1; i>0; i--) {
-                posFaceTest = getPosFace1Or(i);
-                if (numFace != -1) {
-                    posFace = posFaceTest;
-                    numDe = i;
-                    break;
+                numFace = 0;
+                int posFaceTest;
+                posFace = -1;
+                numDe = -1;
+                for (int i=1; i>0; i--) {
+                    posFaceTest = getPosFace1Or(i);
+                    if (numFace != -1) {
+                        posFace = posFaceTest;
+                        numDe = i;
+                        break;
+                    }
                 }
-            }
-            if (posFace == -1){
-                posFace = random.nextInt(6);
-            }
-            if (numDe == -1) {
-                numDe = 0;
-            }
+                if (posFace == -1){
+                    posFace = random.nextInt(6);
+                }
+                if (numDe == -1){
+                    numDe = 0;
+                }
         }
-        if (bassin == null)
-            bassin = bassins.get(0);
-        if (numFace == -1)
-            numFace = 0;
-        if (posFace == -1)
-            posFace = random.nextInt(6);
+        if (bassin != null)
+            compteurForge++;
         return new ChoixJoueurForge(bassin, numFace, numDe, posFace);
     }
 
@@ -151,6 +175,7 @@ public class AubotV2 extends Joueur{
         }
         return carteLaPlusChere;
     }
+
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
@@ -231,6 +256,7 @@ public class AubotV2 extends Joueur{
         }
     }
 
+
     @Override
     public int choisirFacePourGagnerRessource(List<Face> faces){
         return 0;
@@ -268,7 +294,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public String toString(){
-        return "AubotV2 (bot de Lucas)";
+        return "AubotLeGrand (bot de Lucas)";
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -282,7 +308,7 @@ public class AubotV2 extends Joueur{
         int or = 0;
         int lune = 0;
         int soleil = 0;
-        if (!(orComplet && luneComplet && soleilComplet))
+        if (!desComplet)
             for (De de : getDes())
                 for (Face face : de.getFaces())
                     for (Ressource[] ressources : face.getRessource())
@@ -294,13 +320,9 @@ public class AubotV2 extends Joueur{
                             if (ressource instanceof Lune)
                                 lune += ressource.getQuantite();
                         }
-        if (or >= orDeIdeal)
-            orComplet = true;
-        if (lune >= luneDeIdeal)
-            luneComplet = true;
-        if (soleil >= soleilDeIdeal)
-            luneComplet = true;
-        if (orComplet && luneComplet && soleilComplet)
+        //System.out.println("or: " + or + "\nsoleil:" + soleil + "\nlune: " + lune);
+        //System.out.println("\n\n\n");
+        if (or >= orDe && lune >= luneDe && soleil >= soleilDe)
             desComplet = true;
     }
 
@@ -316,7 +338,7 @@ public class AubotV2 extends Joueur{
     private Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
         if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
             for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout || cout == -1)
+                if (bassin.getCout() == cout)
                     for (Face face : bassin.getFaces())
                         for (Ressource[] ressources : face.getRessource())
                             for (Ressource ressource : ressources)
@@ -325,7 +347,7 @@ public class AubotV2 extends Joueur{
         }
         if (typeRessource.equals("Soleil")||typeRessource.equals("Tout")) {
             for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout || cout == -1)
+                if (bassin.getCout() == cout)
                     for (Face face : bassin.getFaces())
                         for (Ressource[] ressources : face.getRessource())
                             for (Ressource ressource : ressources)
@@ -334,7 +356,7 @@ public class AubotV2 extends Joueur{
         }
         if (typeRessource.equals("Lune")||typeRessource.equals("Tout")) {
             for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout || cout == -1)
+                if (bassin.getCout() == cout)
                     for (Face face : bassin.getFaces())
                         for (Ressource[] ressources : face.getRessource())
                             for (Ressource ressource : ressources)
@@ -350,12 +372,6 @@ public class AubotV2 extends Joueur{
             if (carte.getNom() == nom)
                 compte++;
         return compte;
-    }
-
-    private void ressourceManquante(){
-        orManquant = getMaxOr() - getOr();
-        luneManquant = getMaxLune() - getLune();
-        soleilManquant = getMaxSoleil() - getSoleil();
     }
 
     private int trouveFaceRessourceBassin(Bassin bassin, String typeRessource){
@@ -378,5 +394,11 @@ public class AubotV2 extends Joueur{
                         if (ressource instanceof Lune)
                             return i;
         return -1;
+    }
+
+    private void ressourceManquante(){
+        orManquant = getMaxOr() - getOr();
+        luneManquant = getMaxLune() - getLune();
+        soleilManquant = getMaxSoleil() - getSoleil();
     }
 }

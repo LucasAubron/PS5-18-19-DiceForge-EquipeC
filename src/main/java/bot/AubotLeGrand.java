@@ -350,6 +350,28 @@ public class AubotLeGrand extends Joueur{
         return compte;
     }
 
+    private int trouveFaceRessourceBassin(Bassin bassin, String typeRessource){
+        if (typeRessource.equals("Or"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Or)
+                            return i;
+        if (typeRessource.equals("Soleil"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil)
+                            return i;
+        if (typeRessource.equals("Lune"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Lune)
+                            return i;
+        return -1;
+    }
+
     private void ressourceManquante(){
         orManquant = getMaxOr() - getOr();
         luneManquant = getMaxLune() - getLune();
