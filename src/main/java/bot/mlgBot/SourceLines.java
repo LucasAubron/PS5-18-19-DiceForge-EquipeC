@@ -12,21 +12,10 @@ import java.util.List;
 import java.util.Set;
 
 public class SourceLines {
-    private List<List<Byte>> lignes;
+    private List<Byte> lignes;
 
     public SourceLines(List<StatLine> statLines){
-        lignes = new ArrayList<>();
-        int nbrLigneCombine = 50;
-        if (statLines.size() < nbrLigneCombine)
-            lignes.add(combinerStatLines(statLines));
-        else{
-            for(int i = 0; i != statLines.size()/nbrLigneCombine; ++i){
-                if (i != statLines.size()/nbrLigneCombine-1)
-                    lignes.add(combinerStatLines(statLines.subList(i*nbrLigneCombine, (i+1)*nbrLigneCombine)));
-                else
-                    lignes.add(combinerStatLines(statLines.subList(i*nbrLigneCombine, statLines.size())));
-            }
-        }
+        lignes = combinerStatLines(statLines);
     }
 
     public SourceLines(String nomFichier){
@@ -38,15 +27,10 @@ public class SourceLines {
             if (x != file.length())
                 throw new DiceForgeException("SourceLine", "Le buffeur n'a pas lu tout le fichier");
             lignes = new ArrayList<>();
-            lignes.add(new ArrayList<>());
-            for (int i = 0; i != x-1; ++i){
-                byte a = buf.get(i);
-                if (a == "@".getBytes()[0])
-                    lignes.add(new ArrayList<>());
-                else
-                    lignes.get(lignes.size()-1).add(a);
-            }
+            for (int i = 0; i != x; ++i)
+                lignes.add(buf.get(i));
             file.close();
+
         } catch (IOException ex){
             ex.printStackTrace();
             System.exit(1);
@@ -129,11 +113,10 @@ public class SourceLines {
                 }
             }
         }
-        ligne.add("@".getBytes()[0]);
         return ligne;
     }
 
-    public List<List<Byte>> getLigne() {
+    public List<Byte> getLigne() {
         return lignes;
     }
 }
