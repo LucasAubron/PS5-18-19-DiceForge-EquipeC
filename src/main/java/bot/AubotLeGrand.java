@@ -1,8 +1,6 @@
 package bot;
 
-import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
 import diceForge.*;
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -232,8 +230,6 @@ public class AubotLeGrand extends Joueur{
                 break;
             }
         }
-
-
     }
 
 
@@ -352,6 +348,28 @@ public class AubotLeGrand extends Joueur{
             if (carte.getNom() == nom)
                 compte++;
         return compte;
+    }
+
+    private int trouveFaceRessourceBassin(Bassin bassin, String typeRessource){
+        if (typeRessource.equals("Or"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Or)
+                            return i;
+        if (typeRessource.equals("Soleil"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil)
+                            return i;
+        if (typeRessource.equals("Lune"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Lune)
+                            return i;
+        return -1;
     }
 
     private void ressourceManquante(){
