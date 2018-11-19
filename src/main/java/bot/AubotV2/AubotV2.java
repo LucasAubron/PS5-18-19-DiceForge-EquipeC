@@ -20,19 +20,19 @@ import static diceForge.Carte.Noms.*;
  * g: Passeur
  * h: Cerbères
  * i: Casque d'invisibilité
- * j: Pince
+ * j: Pince (aka cancer)
  * k: Sentinelle
  * l: Hydre
  * m: Typhon
- * n: Enigme
+ * n: Enigme(aka sphynx)
  * o: Cyclope
  * p: Miroir abyssal
  * q: Méduse
  * r: Triton
- * s: minotaure
+ * s: Minotaure
  * t: Bouclier de la gardienne (aka boulier)
  * u: Aile de la gardienne (aka hibou)
- * v: Voile celeste
+ * v: Voile celeste (bateau celeste)
  * w: Herbes Folles
  * x: Ancien
  */
@@ -40,7 +40,7 @@ import static diceForge.Carte.Noms.*;
 public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
-    private boolean secondeAction = false;
+    private boolean secondeAction;
     private boolean desComplet;
     private int nombreDeJoueurs;
     private int manche = 0;
@@ -67,6 +67,7 @@ public class AubotV2 extends Joueur{
     public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau, String file) {
         super(identifiant, afficheur, plateau);
         this.compteurForge = 0;
+        this.secondeAction = false;
         this.f = new File(file);
         try{
             this.fr = new FileReader(f);
@@ -76,6 +77,7 @@ public class AubotV2 extends Joueur{
         }
         this.br = new BufferedReader(fr);
         this.random = new Random();
+        initValeur();
     }
 
     @Override
@@ -84,7 +86,6 @@ public class AubotV2 extends Joueur{
             int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
-            initValeur();
             /*
             System.out.println("MancheExploit: "+ mancheExploit);
             System.out.println("Or pour forger 1: " + orPourForgerManche[0]);
@@ -239,7 +240,7 @@ public class AubotV2 extends Joueur{
             if (carte.getNom() == ordrePrio[23])
                 return carte;
             else
-                throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue:" + carte);
+                throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue: " + carte);
         }
         throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue");
     }
@@ -499,53 +500,53 @@ public class AubotV2 extends Joueur{
                     l--;
                     tabLx = ligne.toCharArray();
                     for (int indice=0; indice <24; indice++){
-                        if (tabLx[indice] == 'a')
+                        if (tabLx[indice] == 'A')
                             tabOrMx[indice] = Carte.Noms.Marteau;
-                        else if (tabLx[indice] == 'b')
+                        else if (tabLx[indice] == 'B')
                             tabOrMx[indice] = Carte.Noms.Coffre;
-                        else if (tabLx[indice] == 'c')
+                        else if (tabLx[indice] == 'C')
                             tabOrMx[indice] = Carte.Noms.Biche;
-                        else if (tabLx[indice] == 'd')
+                        else if (tabLx[indice] == 'D')
                             tabOrMx[indice] = Carte.Noms.Ours;
-                        else if (tabLx[indice] == 'e')
+                        else if (tabLx[indice] == 'E')
                             tabOrMx[indice] = Carte.Noms.Satyres;
-                        else if (tabLx[indice] == 'f')
+                        else if (tabLx[indice] == 'F')
                             tabOrMx[indice] = Carte.Noms.Sanglier;
-                        else if (tabLx[indice] == 'g')
+                        else if (tabLx[indice] == 'G')
                             tabOrMx[indice] = Carte.Noms.Passeur;
-                        else if (tabLx[indice] == 'h')
+                        else if (tabLx[indice] == 'H')
                             tabOrMx[indice] = Carte.Noms.Cerbere;
-                        else if (tabLx[indice] == 'i')
+                        else if (tabLx[indice] == 'I')
                             tabOrMx[indice] = Carte.Noms.CasqueDinvisibilite;
-                        else if (tabLx[indice] == 'j')
+                        else if (tabLx[indice] == 'J')
                             tabOrMx[indice] = Carte.Noms.Cancer;
-                        else if (tabLx[indice] == 'k')
+                        else if (tabLx[indice] == 'K')
                             tabOrMx[indice] = Carte.Noms.Sentinelle;
-                        else if (tabLx[indice] == 'l')
+                        else if (tabLx[indice] == 'L')
                             tabOrMx[indice] = Carte.Noms.Hydre;
-                        else if (tabLx[indice] == 'm')
+                        else if (tabLx[indice] == 'M')
                             tabOrMx[indice] = Carte.Noms.Typhon;
-                        else if (tabLx[indice] == 'n')
+                        else if (tabLx[indice] == 'N')
                             tabOrMx[indice] = Carte.Noms.Sphinx;
-                        else if (tabLx[indice] == 'o')
+                        else if (tabLx[indice] == 'O')
                             tabOrMx[indice] = Carte.Noms.Cyclope;
-                        else if (tabLx[indice] == 'p')
+                        else if (tabLx[indice] == 'P')
                             tabOrMx[indice] = Carte.Noms.MiroirAbyssal;
-                        else if (tabLx[indice] == 'q')
+                        else if (tabLx[indice] == 'Q')
                             tabOrMx[indice] = Carte.Noms.Meduse;
-                        else if (tabLx[indice] == 'r')
+                        else if (tabLx[indice] == 'R')
                             tabOrMx[indice] = Carte.Noms.Triton;
-                        else if (tabLx[indice] == 's')
+                        else if (tabLx[indice] == 'S')
                             tabOrMx[indice] = Carte.Noms.Minautore;
-                        else if (tabLx[indice] == 't')
+                        else if (tabLx[indice] == 'T')
                             tabOrMx[indice] = Carte.Noms.Bouclier;
-                        else if (tabLx[indice] == 'u')
+                        else if (tabLx[indice] == 'U')
                             tabOrMx[indice] = Carte.Noms.Hibou;
-                        else if (tabLx[indice] == 'v')
+                        else if (tabLx[indice] == 'V')
                             tabOrMx[indice] = Carte.Noms.BateauCeleste;
-                        else if (tabLx[indice] == 'w')
+                        else if (tabLx[indice] == 'W')
                             tabOrMx[indice] = Carte.Noms.HerbesFolles;
-                        else if (tabLx[indice] == 'x')
+                        else if (tabLx[indice] == 'X')
                             tabOrMx[indice] = Carte.Noms.Ancien;
                     }
                     for (int i=0; i<24; i++){
