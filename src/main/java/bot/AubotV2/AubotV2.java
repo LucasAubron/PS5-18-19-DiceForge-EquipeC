@@ -247,7 +247,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        if ((!desComplet || getOr() < 3* nombreCartePossedee(Ancien)) && getOr() + quantiteOr <= getMaxOr())
+        if ((!desComplet && manche < mancheExploit|| getOr() < 3* nombreCartePossedee(Ancien)) && getOr() + quantiteOr <= getMaxOr())
             return quantiteOr;
         return 0;
     }
