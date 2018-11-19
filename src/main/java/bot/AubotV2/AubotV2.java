@@ -10,7 +10,8 @@ import static diceForge.Carte.Noms.*;
 /**
  * lire un fichier d'information bot
  * première ligne (en hexadécimal): Manche a partir de laquelle on ne forge plus/ nombre de point d'or sur dé / idem pour soleil / idem pour lune/ Nombre d'or a avoir pour forger manche 1 / idem manche 2/ .../ idem manche 6
- * de la deuxième ligne à la 11ème: ordre de priorité des cartes à acheter pour chacun des tours dans l'ordre croissant
+ *
+ * De la 2ème ligne à la 11ème: ordre de priorité des cartes à acheter pour chacun des tours dans l'ordre croissant
  * a: Marteau
  * b: Coffre
  * c: Sabots d'argent (aka biche)
@@ -35,16 +36,19 @@ import static diceForge.Carte.Noms.*;
  * v: Voile celeste (bateau celeste)
  * w: Herbes Folles
  * x: Ancien
+ *
+ * 12ème ligne: nombre de carte max a acheter pour les cartes a faible cout (deux ou moins de cout) dans l'ordre suivant: Marteau, Coffre, Biche, Ours, Hibou, Bateau celeste, Herbes Folles, Ancien
  */
 
 public class AubotV2 extends Joueur{
+    private boolean montrerInfo = false;
     private int nombreDeLancerParManche;
     private Random random;
-    private boolean secondeAction;
+    private boolean secondeAction = false;
     private boolean desComplet;
     private int nombreDeJoueurs;
     private int manche = 0;
-    private int compteurForge;
+    private int compteurForge = 0;
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
@@ -52,12 +56,12 @@ public class AubotV2 extends Joueur{
     private FileReader fr;
     private BufferedReader br;
 
-
     //--------------------------------------------
     private int desOpti[] = new int[3]; //orDe, soleilDe, luneDe
-    private int orPourForgerManche[] = new int[6];
-    private int mancheExploit;
-    private Enum[][] ordrePrioManche = new Enum[10][24];
+    private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < mancheExploit)
+    private int mancheExploit;//Manche à partir de laquelle on ne fait plus que acheter des exploits
+    private Enum[][] ordrePrioManche = new Enum[10][6];//Quelles cartes a acheter en priorité et a quelle manche (lorsqu'on choisit de forger)
+    private int[] nombreCarteMax = new int[8];//Nombre de carte de même type max que le joueur peut acheter (pour les cartes coutant 2 et moins)
     //--------------------------------------------
     /**
      * @param identifiant comprit entre 1 et 4 inclus
@@ -66,8 +70,6 @@ public class AubotV2 extends Joueur{
      */
     public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau, String file) {
         super(identifiant, afficheur, plateau);
-        this.compteurForge = 0;
-        this.secondeAction = false;
         this.f = new File(file);
         try{
             this.fr = new FileReader(f);
@@ -86,45 +88,7 @@ public class AubotV2 extends Joueur{
             int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
-            System.out.println("MancheExploit: "+ mancheExploit);
-            System.out.println("Or pour forger 1: " + orPourForgerManche[0]);
-            System.out.println("Or pour forger 2: " + orPourForgerManche[1]);
-            System.out.println("Or pour forger 3: " + orPourForgerManche[2]);
-            System.out.println("Or pour forger 4: " + orPourForgerManche[3]);
-            System.out.println("Or pour forger 5: " + orPourForgerManche[4]);
-            System.out.println("Or pour forger 6: " + orPourForgerManche[5]);
-            System.out.println("Or a avoir sur le dé: " + desOpti[0]);
-            System.out.println("Soleil a avoir sur le dé: " + desOpti[1]);
-            System.out.println("Lune a avoir sur le dé: " + desOpti[2]);
-            for (Enum e: ordrePrioManche[0])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[1])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[2])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[3])
-                System.out.println(e);
-            for (Enum e: ordrePrioManche[4])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[5])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[6])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[7])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[8])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[9])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
+            printInfo();
         }
         manche++;
         statsDe();
@@ -132,7 +96,14 @@ public class AubotV2 extends Joueur{
             secondeAction = false;
             return Action.EXPLOIT;
         }
-        if (desComplet || manche == 1 && getOr() < orPourForgerManche[0] || manche == 2 && getOr() < orPourForgerManche[1] || manche == 3 && getOr() < orPourForgerManche[2] || manche == 4 && getOr() < orPourForgerManche[3] ||manche == 5 && getOr() < orPourForgerManche[4] ||manche == 6 && getOr() < orPourForgerManche[5] || manche >= mancheExploit)
+        if (desComplet ||
+            manche == 1 && getOr() < orPourForgerManche[0] ||
+            manche == 2 && getOr() < orPourForgerManche[1] ||
+            manche == 3 && getOr() < orPourForgerManche[2] ||
+            manche == 4 && getOr() < orPourForgerManche[3] ||
+            manche == 5 && getOr() < orPourForgerManche[4] ||
+            manche == 6 && getOr() < orPourForgerManche[5] ||
+            manche >= mancheExploit)
             return Action.EXPLOIT;
         else
             return Action.FORGER;
@@ -217,63 +188,33 @@ public class AubotV2 extends Joueur{
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Enum[] ordrePrio = ordrePrioManche[manche-1];
-        Carte carteAChoisir = null;
+        Carte carteLaPlusChere = cartes.get(0);
         for (Carte carte: cartes) {
-            if (carte.getNom() == Carte.Noms.Ancien || carte.getNom() == Carte.Noms.Marteau && nombreCartePossedee(carte.getNom()) >=1 )
+            if ((carte.getNom() == Carte.Noms.Marteau && nombreCartePossedee(Carte.Noms.Marteau) >= nombreCarteMax[0]||
+                 carte.getNom() == Carte.Noms.Coffre && nombreCartePossedee(Carte.Noms.Coffre) >= nombreCarteMax[1]||
+                 carte.getNom() == Carte.Noms.Biche && nombreCartePossedee(Carte.Noms.Biche) >= nombreCarteMax[2]||
+                    carte.getNom() == Carte.Noms.Ours && nombreCartePossedee(Carte.Noms.Ours) >= nombreCarteMax[3]||
+                    carte.getNom() == Carte.Noms.Hibou && nombreCartePossedee(Carte.Noms.Hibou) >= nombreCarteMax[4]||
+                    carte.getNom() == Carte.Noms.BateauCeleste && nombreCartePossedee(Carte.Noms.BateauCeleste) >= nombreCarteMax[5]||
+                    carte.getNom() == Carte.Noms.HerbesFolles && nombreCartePossedee(Carte.Noms.HerbesFolles) >= nombreCarteMax[6]||
+                    carte.getNom() == Carte.Noms.Ancien && nombreCartePossedee(Carte.Noms.Ancien) >= nombreCarteMax[7]))
                 continue;
             if (carte.getNom() == ordrePrio[0])
-                carteAChoisir = carte;
+                return carte;
             else if (carte.getNom() == ordrePrio[1])
-                carteAChoisir = carte;
+                return carte;
             else if (carte.getNom() == ordrePrio[2])
-                carteAChoisir = carte;
+                return carte;
             else if (carte.getNom() == ordrePrio[3])
-                carteAChoisir = carte;
+                return carte;
             else if (carte.getNom() == ordrePrio[4])
-                carteAChoisir = carte;
+                return carte;
             else if (carte.getNom() == ordrePrio[5])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[6])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[7])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[8])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[9])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[10])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[11])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[12])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[13])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[14])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[15])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[16])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[17])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[18])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[19])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[20])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[21])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[22])
-                carteAChoisir = carte;
-            else if (carte.getNom() == ordrePrio[23])
-                carteAChoisir = carte;
-            if (carteAChoisir == null)
-                throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue: " + carte);
-            return carteAChoisir;
+                return carte;
+            if (carteLaPlusChere.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
+                carteLaPlusChere = carte;
         }
-        throw new DiceForgeException("AubotV2", "une carte n'est pas reconnue");
+            return carteLaPlusChere;
     }
 
 
@@ -500,8 +441,8 @@ public class AubotV2 extends Joueur{
         try {
             String ligne = br.readLine();
             char[] tabL1 = ligne.toCharArray();//On décompose la première ligne string en tableau d'array
-            char[] tabLx = new char[24];//Le reste des lignes
-            Enum[] tabOrMx = new Enum[24];
+            char[] tabLx = new char[6];//Le reste des lignes
+            Enum[] tabOrMx = new Enum[6];
             while (ligne != null) {
                 if (l == 0) {//première ligne, voir commentaire de la classe
                     for (int i = 0; i <= 9; i++) {//conversion de héxa à décimal
@@ -527,10 +468,10 @@ public class AubotV2 extends Joueur{
                             orPourForgerManche[i - 4] = (int) tabL1[i] - 48;
                     }
                 }
-                else{
+                else if(l>0 && l<11){
                     l--;
                     tabLx = ligne.toCharArray();
-                    for (int indice=0; indice <24; indice++){
+                    for (int indice=0; indice <6; indice++){
                         if (tabLx[indice] == 'A')
                             tabOrMx[indice] = Carte.Noms.Marteau;
                         else if (tabLx[indice] == 'B')
@@ -580,10 +521,16 @@ public class AubotV2 extends Joueur{
                         else if (tabLx[indice] == 'X')
                             tabOrMx[indice] = Carte.Noms.Ancien;
                     }
-                    for (int i=0; i<24; i++){
+                    for (int i=0; i<6; i++){
                         ordrePrioManche[l][i] = tabOrMx[i];
                     }
                     l++;
+                }
+                else if(l==11){
+                    char[] tabCarteMax;
+                    tabCarteMax = ligne.toCharArray();
+                    for (int k=0; k<8; k++)
+                        nombreCarteMax[k] = (int) tabCarteMax[k] - 48;
                 }
                 l++;
                 ligne = br.readLine();
@@ -598,6 +545,52 @@ public class AubotV2 extends Joueur{
         }
         catch (IOException exception) {
             System.out.println("Erreur lors de la fermeture du fichier: " + exception);
+        }
+    }
+
+    private void printInfo(){
+        if (montrerInfo){
+            System.out.println("MancheExploit: "+ mancheExploit);
+            System.out.println("Or pour forger 1: " + orPourForgerManche[0]);
+            System.out.println("Or pour forger 2: " + orPourForgerManche[1]);
+            System.out.println("Or pour forger 3: " + orPourForgerManche[2]);
+            System.out.println("Or pour forger 4: " + orPourForgerManche[3]);
+            System.out.println("Or pour forger 5: " + orPourForgerManche[4]);
+            System.out.println("Or pour forger 6: " + orPourForgerManche[5]);
+            System.out.println("Or a avoir sur le dé: " + desOpti[0]);
+            System.out.println("Soleil a avoir sur le dé: " + desOpti[1]);
+            System.out.println("Lune a avoir sur le dé: " + desOpti[2]);
+            for (Enum e: ordrePrioManche[0])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[1])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[2])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[3])
+                System.out.println(e);
+            for (Enum e: ordrePrioManche[4])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[5])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[6])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[7])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[8])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioManche[9])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (int i: nombreCarteMax)
+                System.out.println(i);
         }
     }
 }

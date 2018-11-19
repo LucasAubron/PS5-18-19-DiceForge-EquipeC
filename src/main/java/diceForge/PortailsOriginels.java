@@ -32,7 +32,7 @@ class PortailsOriginels {
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBot)
                 this.joueurs.add(new NidoBot(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/Bot1"));
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot1"));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
     }
