@@ -52,6 +52,9 @@ public class AubotV2 extends Joueur{
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
+    private File f;
+    private FileReader fr;
+    private BufferedReader br;
 
 
     //--------------------------------------------
@@ -65,10 +68,18 @@ public class AubotV2 extends Joueur{
      * @param afficheur
      * @param plateau
      */
-    public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau) {
+    public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau, String file) {
         super(identifiant, afficheur, plateau);
-        compteurForge = 0;
-        random = new Random();
+        this.compteurForge = 0;
+        this.f = new File(file);
+        try{
+            this.fr = new FileReader(f);
+        }
+        catch (IOException e) {
+            System.out.println("Le fichier n'a pas été trouvé");
+        }
+        this.br = new BufferedReader(fr);
+        this.random = new Random();
     }
 
     @Override
@@ -92,26 +103,46 @@ public class AubotV2 extends Joueur{
     }
 
     private void initValeur() {
+        int l = 0;
         try {
-            int l = 0;
-            File f = new File("src/main/java/bot/AubotV2/Population1");
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            try {
-                String ligne = br.readLine();
-                while (ligne != null) {
-                    System.out.println(ligne);
-                    ligne = br.readLine();
+            String ligne = br.readLine();
+            char[] tabL1 = ligne.toCharArray();
+            //for (char c: tabL1)
+            //  System.out.println(c);
+            while (ligne != null) {
+                if (l == 0) {
+                    for (int i = 0; i <= 9; i++) {//conversion de héxa à décimal
+                        if (tabL1[i] == 'a')
+                            tabL1[i] = 58;
+                        else if (tabL1[i] == 'b')
+                            tabL1[i] = 59;
+                        else if (tabL1[i] == 'c')
+                            tabL1[i] = 60;
+                        else if (tabL1[i] == 'd')
+                            tabL1[i] = 61;
+                        else if (tabL1[i] == 'e')
+                            tabL1[i] = 62;
+                        else if (tabL1[i] == 'f')
+                            tabL1[i] = 63;
+                        else if (tabL1[i] == 'g')
+                            tabL1[i] = 64;
+                        if (i == 0)
+                            mancheExploit = (int) tabL1[i] - 48;
+                        else if (i > 0 && i < 4)
+                            desOpti[i - 1] = (int) tabL1[i] - 48;
+                        else if (i > 3)
+                            orPourForgerManche[i - 4] = (int) tabL1[i] - 48;
+                    }
                 }
-                br.close();
-                fr.close();
-            } catch (IOException exception) {
-                System.out.println("Erreur lors de la lecture du fichier:" + exception.getMessage());
+                l++;
+                ligne = br.readLine();
             }
+            br.close();
+            fr.close();
         }
-        catch (FileNotFoundException exception) {
-                System.out.println("Le fichier n'a pas été trouvé");
-            }
+        catch (IOException exception) {
+            System.out.println("Erreur lors de la lecture du fichier:" + exception.getMessage());
+        }
     }
 
     @Override
