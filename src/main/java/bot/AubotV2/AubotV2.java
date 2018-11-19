@@ -37,7 +37,7 @@ import static diceForge.Carte.Noms.*;
  * w: Herbes Folles
  * x: Ancien
  *
- * 12ème ligne: nombre de carte max a acheter pour les cartes a faible cout (deux ou moins de cout) dans l'ordre suivant: Marteau, Coffre, Biche, Ours, Hibou, Bateau celeste, Herbes Folles, Ancien
+ * 12ème ligne: nombre de carte max a acheter pour les cartes a faible cout (deux ou moins de cout) dans l'ordre suivant: Marteau, Coffre, Biche, Ours, Satyres, Sanglier, Passeur, Cerbères, Méduse, Triton, Minotaure, Bouclier, Hibou, Bateau celeste, Herbes Folles, Ancien
  */
 
 public class AubotV2 extends Joueur{
@@ -61,7 +61,7 @@ public class AubotV2 extends Joueur{
     private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < mancheExploit)
     private int mancheExploit;//Manche à partir de laquelle on ne fait plus que acheter des exploits
     private Enum[][] ordrePrioManche = new Enum[10][6];//Quelles cartes a acheter en priorité et a quelle manche (lorsqu'on choisit de forger)
-    private int[] nombreCarteMax = new int[8];//Nombre de carte de même type max que le joueur peut acheter (pour les cartes coutant 2 et moins)
+    private int[] nombreCarteMax = new int[16];//Nombre de carte de même type max que le joueur peut acheter (pour les cartes coutant 2 et moins)
     //--------------------------------------------
     /**
      * @param identifiant comprit entre 1 et 4 inclus
@@ -193,11 +193,19 @@ public class AubotV2 extends Joueur{
             if ((carte.getNom() == Carte.Noms.Marteau && nombreCartePossedee(Carte.Noms.Marteau) >= nombreCarteMax[0]||
                  carte.getNom() == Carte.Noms.Coffre && nombreCartePossedee(Carte.Noms.Coffre) >= nombreCarteMax[1]||
                  carte.getNom() == Carte.Noms.Biche && nombreCartePossedee(Carte.Noms.Biche) >= nombreCarteMax[2]||
-                    carte.getNom() == Carte.Noms.Ours && nombreCartePossedee(Carte.Noms.Ours) >= nombreCarteMax[3]||
-                    carte.getNom() == Carte.Noms.Hibou && nombreCartePossedee(Carte.Noms.Hibou) >= nombreCarteMax[4]||
-                    carte.getNom() == Carte.Noms.BateauCeleste && nombreCartePossedee(Carte.Noms.BateauCeleste) >= nombreCarteMax[5]||
-                    carte.getNom() == Carte.Noms.HerbesFolles && nombreCartePossedee(Carte.Noms.HerbesFolles) >= nombreCarteMax[6]||
-                    carte.getNom() == Carte.Noms.Ancien && nombreCartePossedee(Carte.Noms.Ancien) >= nombreCarteMax[7]))
+                 carte.getNom() == Carte.Noms.Ours && nombreCartePossedee(Carte.Noms.Ours) >= nombreCarteMax[3]||
+                 carte.getNom() == Carte.Noms.Satyres && nombreCartePossedee(Carte.Noms.Satyres) >= nombreCarteMax[4]||
+                 carte.getNom() == Carte.Noms.Sanglier && nombreCartePossedee(Carte.Noms.Sanglier) >= nombreCarteMax[5]||
+                 carte.getNom() == Carte.Noms.Passeur && nombreCartePossedee(Carte.Noms.Passeur) >= nombreCarteMax[6]||
+                 carte.getNom() == Carte.Noms.Cerbere && nombreCartePossedee(Carte.Noms.Cerbere) >= nombreCarteMax[7]||
+                 carte.getNom() == Carte.Noms.Meduse && nombreCartePossedee(Carte.Noms.Meduse) >= nombreCarteMax[8]||
+                 carte.getNom() == Carte.Noms.Triton && nombreCartePossedee(Carte.Noms.Triton) >= nombreCarteMax[9]||
+                 carte.getNom() == Carte.Noms.Minautore && nombreCartePossedee(Carte.Noms.Minautore) >= nombreCarteMax[10]||
+                 carte.getNom() == Carte.Noms.Bouclier && nombreCartePossedee(Carte.Noms.Bouclier) >= nombreCarteMax[11]||
+                 carte.getNom() == Carte.Noms.Hibou && nombreCartePossedee(Carte.Noms.Hibou) >= nombreCarteMax[12]||
+                 carte.getNom() == Carte.Noms.BateauCeleste && nombreCartePossedee(Carte.Noms.BateauCeleste) >= nombreCarteMax[13]||
+                 carte.getNom() == Carte.Noms.HerbesFolles && nombreCartePossedee(Carte.Noms.HerbesFolles) >= nombreCarteMax[14]||
+                 carte.getNom() == Carte.Noms.Ancien && nombreCartePossedee(Carte.Noms.Ancien) >= nombreCarteMax[15]))
                 continue;
             if (carte.getNom() == ordrePrio[0])
                 return carte;
@@ -316,7 +324,9 @@ public class AubotV2 extends Joueur{
     @Override
     public boolean utiliserJetonCerbere(){
         ressourceManquante();
-        if (soleilManquant >= 3 && getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil)
+        if (soleilManquant >= 3 &&
+                (getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil ||
+                getDesFaceCourante()[0].getRessource()[0][0] instanceof PointDeGloire))
             return true;
         return false;
     }
@@ -529,7 +539,7 @@ public class AubotV2 extends Joueur{
                 else if(l==11){
                     char[] tabCarteMax;
                     tabCarteMax = ligne.toCharArray();
-                    for (int k=0; k<8; k++)
+                    for (int k=0; k<16; k++)
                         nombreCarteMax[k] = (int) tabCarteMax[k] - 48;
                 }
                 l++;
