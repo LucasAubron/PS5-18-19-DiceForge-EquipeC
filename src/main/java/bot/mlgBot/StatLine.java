@@ -29,12 +29,12 @@ public class StatLine {
         for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
             carteLigne.add(bytes[curseur]);
 
-        if (actionLigne.size() < 27 || actionLigne.size() > 30)
+        if (actionLigne.size() < 18 || actionLigne.size() > 20)
             throw new DiceForgeException("StatLine","Le nombre de choix d'action est invalide. Min : 9, max : 10, actuel : "+actionLigne.size());
-        choixAction = new byte[actionLigne.size()/3][3];
+        choixAction = new byte[actionLigne.size()/2][2];
         for (int i = 0; i != choixAction.length; ++i) {
-            for (int j = 0; j != 3; ++j) {
-                choixAction[i][j] = actionLigne.get(i * 3 + j);
+            for (int j = 0; j != 2; ++j) {
+                choixAction[i][j] = actionLigne.get(i * 2 + j);
             }
         }
         choixBassin = new byte[bassinLigne.size()/3][3];

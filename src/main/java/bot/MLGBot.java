@@ -19,9 +19,8 @@ public class MLGBot extends Joueur {
     private int getOnMyLevel = -1;
     private boolean MOVEMENT = true;
     private byte[] choixActionNext;//0 = forger, 1 = exploit, 2 = passer
-    private List<List<List<List<Byte>>>> choixAction;//Manche(Soleil+Lune(Or(Action))
+    private List<List<List<Byte>>> choixAction;//Manche(Or(Action))
     private byte[] choixActionOr;
-    private byte[] choixActionRes;
     private byte[] choixCarteNext;
     private List<Byte> puissanceSoleil = new ArrayList<>();
     private List<Byte> puissanceLune = new ArrayList<>();
@@ -97,7 +96,7 @@ public class MLGBot extends Joueur {
         else {
             positionCHEF = genFile.length();
             if (intensiveTraining) {
-                if (positionCHEF > 65*400)//Nbr de charactere avant de passer à la génération suivante(Environ 65 characteres/partie)
+                if (positionCHEF > 70*100)//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
                     remuerLaSoupe(nbrJoueur);
             }
         }
@@ -108,7 +107,6 @@ public class MLGBot extends Joueur {
             ordreCarte = ligneSource.getOrdreCarte();
         }
         choixActionNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
-        choixActionRes = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         choixActionOr = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         choixCarteNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
     }
@@ -133,7 +131,7 @@ public class MLGBot extends Joueur {
             buf.clear();
             int x = channel.read(buf);
             String s = new String(buf.array());
-            moyennePrecedente = Integer.parseInt(s.split(";")[nbrJoueur-2].split(":")[1])-20;
+            moyennePrecedente = Integer.parseInt(s.split(";")[nbrJoueur-2].split(":")[1])-2;
             file.close();
 
 
@@ -160,7 +158,7 @@ public class MLGBot extends Joueur {
                 }
             }
             moyenneParties = (int)(somme / (float) nbrPartie);
-            if (moyenneParties > moyennePrecedente) {
+            if (moyenneParties > moyennePrecedente || gen < 2) {
                 List<StatLine> byteList = new ArrayList<>();
                 int curseur = -1;
                 for (int i = 0; i != x; ++i) {
@@ -198,12 +196,12 @@ public class MLGBot extends Joueur {
             ex.printStackTrace();
             System.exit(1);
         }
-        if (moyenneParties > moyennePrecedente) {
+        if (moyenneParties > moyennePrecedente || gen < 2) {
             //Partie update des fichiers
             ++gen;
             cible = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen;
-            if (gen > 2) {
-                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 3);
+            if (gen > 29) {
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 30);
                 File delFile = new File(cibleSuppr);
                 delFile.delete();
             }
@@ -236,6 +234,43 @@ public class MLGBot extends Joueur {
                 System.exit(1);
             }
         }
+        else {
+            File aSuppr = new File(cible);
+            aSuppr.delete();
+            try{
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 1);
+                RandomAccessFile file = new RandomAccessFile(cibleSuppr, "rw");
+                file.setLength(0);
+                file.close();
+                file = new RandomAccessFile("src\\main\\java\\bot\\mlgBot\\MLGBotProp", "rw");
+                FileChannel channel = file.getChannel();
+                ByteBuffer buf = ByteBuffer.allocate((int) file.length());
+                buf.clear();
+                int x = channel.read(buf);
+                file.setLength(0);
+                String[] s = new String(buf.array()).split(";");
+                String[] ss = s[nbrJoueur-2].split(":");
+                ss[0] = ""+(gen-1);
+                s[nbrJoueur-2] = ss[0] +":"+ ss[1];
+                String update = "";
+                for (int i = 0; i != s.length; ++i) {
+                    update += s[i];
+                    if (i != s.length-1)
+                        update += ";";
+                }
+                buf = ByteBuffer.allocate(update.getBytes().length);
+                buf.clear();
+                buf.put(update.getBytes());
+                buf.flip();
+                channel.write(buf, 0);
+                file.close();
+                positionCHEF = 0;
+                gen -= 1;
+            } catch (IOException ex){
+                ex.printStackTrace();
+                System.exit(1);
+            }
+        }
     }
 
     private int pwned(){
@@ -257,7 +292,6 @@ public class MLGBot extends Joueur {
                 throw new DiceForgeException("MLGBot","Le nombre de manche est incorrect. Min: 9, max: 10, actuel: "+choixActionNext.length);
             for (int i = 0; i != choixActionNext.length; ++i) {
                 buffer.put(choixActionNext[i]);
-                buffer.put(choixActionRes[i]);
                 buffer.put(choixActionOr[i]);
             }
             buffer.put(";".getBytes());
@@ -297,7 +331,7 @@ public class MLGBot extends Joueur {
     private void gettingGood(){
         if (gen == -2)
             goGoGo(getPlateau().getJoueurs().size());
-        if (numeroManche > 8 && numeroManche == choixActionNext.length-1) {
+        if (numeroManche > 7 && numeroManche == choixActionNext.length-1) {
             if (pwned() > getOnMyLevel) {
                 getOnMyLevel = pwned();
                 MOVEMENT = true;
@@ -376,12 +410,12 @@ public class MLGBot extends Joueur {
         Action actionChoisi = null;
         int numChoixAction = notLuckButSkill.nextInt(2)+1;
         if (gen > 0 && (!estRandom || !intensiveTraining)) {
-            if (choixAction.get(numeroManche).size() > (getSoleil()+getLune())/approxRessource){
-                for (int i = (getSoleil()+getLune())/approxRessource; i != 0; --i) {
-                    if (choixAction.get(numeroManche).get(i).size() > getOr()/approxOr){
-                        for (int j = getOr()/approxOr; j != 0; --j){
-                            numChoixAction = choixAction.get(numeroManche).get(i).get(j).get(0);
-                        }
+            int max = (choixAction.get(numeroManche).size() > getOr() / approxOr ? getOr() / approxOr : choixAction.get(numeroManche).size()-1);
+            if (max != -1) {
+                for (int i = max; i != 0; --i) {
+                    if (!choixAction.get(numeroManche).get(i).isEmpty()) {
+                        numChoixAction = choixAction.get(numeroManche).get(i).get(0);
+                        break;
                     }
                 }
             }
@@ -401,12 +435,9 @@ public class MLGBot extends Joueur {
         }
         if (!secondeAction) {
             choixActionNext[numeroManche] = (byte) numChoixAction;
-            choixActionRes[numeroManche] = (byte) ((getSoleil() + getLune()) / approxRessource);
             choixActionOr[numeroManche] = (byte)(getOr()/approxOr);
         }
         MOVEMENT = true;
-        if (numeroManche == choixActionNext.length-1)
-            Xx360xX_NoScope();
         gettingGood();
         return actionChoisi;
     }
@@ -421,10 +452,11 @@ public class MLGBot extends Joueur {
                 break;
             }
         }
-        if (gen > 0 && (!estRandom || !intensiveTraining)){
-            if (ordreBassin.get(numeroManche).size()*approxOr > getOr()){
+        if (gen > 0 && (!estRandom || !intensiveTraining)) {
+            int max = (ordreBassin.get(numeroManche).size() * approxOr > getOr() ? getOr() / approxOr : ordreBassin.get(numeroManche).size() - 1);
+            if (max != -1) {
                 boolean continuer = true;
-                for (int j = getOr()/approxOr; j != 0 && continuer; --j) {
+                for (int j = max; j != 0 && continuer; --j) {
                     for (byte b : ordreBassin.get(numeroManche).get(j)) {
                         for (int i = 0; i != bassins.size(); ++i) {
                             if (getPlateau().getTemple().getSanctuaire()[b - 1].toString().equals(bassins.get(i).toString())) {
@@ -462,11 +494,12 @@ public class MLGBot extends Joueur {
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         int numCarte = notLuckButSkill.nextInt(cartes.size());
-        if (gen > 0 && (!estRandom || !intensiveTraining)){
+        if (gen > 0 && (!estRandom || !intensiveTraining)) {
             int soleilOuLune = (getSoleil() >= getLune() ? 0 : 1);
-            if (ordreCarte.get(numeroManche).get(soleilOuLune).size()*approxRessource > (soleilOuLune == 0 ? getSoleil() : getLune())){
+            int max = (ordreCarte.get(numeroManche).get(soleilOuLune).size() * approxRessource > (soleilOuLune == 0 ? getSoleil() : getLune()) ? (soleilOuLune == 0 ? getSoleil() : getLune()) : ordreCarte.get(numeroManche).get(soleilOuLune).size() - 1);
+            if (max != -1) {
                 boolean continuer = true;
-                for (int j = (soleilOuLune == 0 ? getSoleil() : getLune())/approxRessource; j != 0 && continuer; --j) {
+                for (int j = max; j != 0 && continuer; --j) {
                     for (byte b : ordreCarte.get(numeroManche).get(soleilOuLune).get(j)) {
                         for (int i = 0; i != cartes.size(); ++i) {
                             if (NomCarteOverride.values()[b - 1].toString().equals(cartes.get(i).toString())) {
