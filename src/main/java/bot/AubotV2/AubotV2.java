@@ -1,6 +1,9 @@
 package bot.AubotV2;
 
 import diceForge.*;
+
+import java.io.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -12,7 +15,32 @@ import static diceForge.Carte.Noms.Bouclier;
  * lire un fichier d'information bot
  * première ligne (en hexadécimal): Manche a partir de laquelle on ne forge plus/ nombre de point d'or sur dé / idem pour soleil / idem pour lune/ Nombre d'or a avoir pour forger manche 1 / idem manche 2/ .../ idem manche 6
  * de la deuxième ligne à la 11ème: ordre de priorité des cartes à acheter pour chacun des tours dans l'ordre croissant
+ * a: Coffre
+ * b: Marteau
+ * c: Sabots d'argent (aka biche)
+ * d: Ours
+ * e: Satyres
+ * f: Sanglier
+ * g: Passeur
+ * h: Cerbères
+ * i: Casque d'invisibilité
+ * j: Pince
+ * k: Sentinelle
+ * l: Hydre
+ * m: Typhon
+ * n: Enigme
+ * o: Cyclope
+ * p: Miroir abyssal
+ * q: Méduse
+ * r: Triton
+ * s: minotaure
+ * t: Bouclier de la gardienne (aka boulier)
+ * u: Aile de la gardienne (aka hibou)
+ * v: Voile celeste
+ * w: Herbes Folles
+ * x: Ancien
  */
+
 public class AubotV2 extends Joueur{
     private int nombreDeLancerParManche;
     private Random random;
@@ -63,8 +91,27 @@ public class AubotV2 extends Joueur{
             return Action.FORGER;
     }
 
-    private void initValeur(){
-
+    private void initValeur() {
+        try {
+            int l = 0;
+            File f = new File("src/main/java/bot/AubotV2/Population1");
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            try {
+                String ligne = br.readLine();
+                while (ligne != null) {
+                    System.out.println(ligne);
+                    ligne = br.readLine();
+                }
+                br.close();
+                fr.close();
+            } catch (IOException exception) {
+                System.out.println("Erreur lors de la lecture du fichier:" + exception.getMessage());
+            }
+        }
+        catch (FileNotFoundException exception) {
+                System.out.println("Le fichier n'a pas été trouvé");
+            }
     }
 
     @Override
