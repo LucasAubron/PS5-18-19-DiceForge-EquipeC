@@ -1,5 +1,6 @@
 package bot.mlgBot;
 
+import diceForge.Carte;
 import diceForge.DiceForgeException;
 
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.util.*;
 public class SourceLines {
     private List<Byte> lignes;
     private byte[] choixAction;
-    private byte[] choixSecondeAction;
     private List<List<List<Byte>>> ordreBassin = new ArrayList<>();//Manche(Or(numBassin))
     private List<List<List<List<Byte>>>> ordreCarte = new ArrayList<>();//Manche(Soleil/Lune(Quantite(Cartes)))
 
@@ -43,7 +43,6 @@ public class SourceLines {
         }
         Random notLuckButSkill = new Random();
         choixAction = new byte[nbrJoueur == 3 ? 10 : 9];
-        choixSecondeAction = new byte[nbrJoueur == 3 ? 10 : 9];
         ordreBassin = new ArrayList<>();
         ordreCarte = new ArrayList<>();
         ordreBassin.add(new ArrayList<>());
@@ -66,9 +65,6 @@ public class SourceLines {
                         throw new DiceForgeException("SourceLigne", "Choixaction pas bon");
                     break;
                 case 2:
-                    choixSecondeAction[j] = (notLuckButSkill.nextInt(pourcentRandom) == 0 ? (byte) (notLuckButSkill.nextInt(2) + 1) : lignes.get(i));
-                    break;
-                case 3:
                     if (lignes.get(i + 1) == ":".getBytes()[0])
                         ordreBassin.get(ordreBassin.size() - 1).add(new ArrayList<>());
                     else if (lignes.get(i) == ",".getBytes()[0])
@@ -76,7 +72,7 @@ public class SourceLines {
                     else if (lignes.get(i) != ":".getBytes()[0] && notLuckButSkill.nextInt(pourcentRandom) != 0)
                         ordreBassin.get(ordreBassin.size() - 1).get(ordreBassin.get(ordreBassin.size() - 1).size() - 1).add(lignes.get(i));
                     break;
-                case 4:
+                case 3:
                     if (lignes.get(i) == "?".getBytes()[0])
                         soleil = 1;
                     else if (i + 1 < lignes.size() && lignes.get(i + 1) == ":".getBytes()[0])
@@ -97,23 +93,14 @@ public class SourceLines {
 
     private List<Byte> combinerStatLines(List<StatLine> statLines){
         List<Byte> ligne = new ArrayList<>();
-        for(int i = 0; i != statLines.get(0).getChoixAction().length*2+1; ++i){
-            if (i != statLines.get(0).getChoixAction().length){
-                float somme = 0;
-                for (int j = 0; j != statLines.size(); ++j) {
-                    if (i < statLines.get(0).getChoixAction().length)
-                        somme += statLines.get(j).getChoixAction()[i];
-                    else {
-                        somme += statLines.get(j).getChoixSecondeAction()[i - statLines.get(0).getChoixAction().length - 1];
-                        if (statLines.get(j).getChoixSecondeAction()[i - statLines.get(0).getChoixAction().length - 1] == 0)
-                            somme += 1.5;
-                    }
-                }
-                ligne.add((byte) Math.round(somme / (float) statLines.size()));
-                if (ligne.get(ligne.size() - 1) < 0 || ligne.get(ligne.size() - 1) > 3)
-                    throw new DiceForgeException("SourceLines", "Erreur lors de la création des actions. Min: 0, max: 3, actuel: " + ligne.get(ligne.size() - 1));
-            } else
-                ligne.add(";".getBytes()[0]);
+        for(int i = 0; i != statLines.get(0).getChoixAction().length; ++i) {
+            float somme = 0;
+            for (int j = 0; j != statLines.size(); ++j) {
+                somme += statLines.get(j).getChoixAction()[i];
+            }
+            ligne.add((byte) Math.round(somme / (float) statLines.size()));
+            if (ligne.get(ligne.size() - 1) < 0 || ligne.get(ligne.size() - 1) > 3)
+                throw new DiceForgeException("SourceLines", "Erreur lors de la création des actions. Min: 0, max: 3, actuel: " + ligne.get(ligne.size() - 1));
         }
         ligne.add(";".getBytes()[0]);//---------------------------------------BASSIN------------------------------------
         List<List<List<Byte>>> bassins = new ArrayList<>();//Manche(Or(numBassin))
@@ -136,7 +123,7 @@ public class SourceLines {
             for (int j = 0; j != plusGrand; ++j){
                 ligne.add((byte)(j*approxOr));
                 ligne.add(":".getBytes()[0]);
-                Set<Byte> antiDoublon = new HashSet<>();
+                Set<Byte> antiDoublon = new LinkedHashSet<>();
                 if (bassins.get(i).size() > j)
                     antiDoublon.addAll(bassins.get(i).get(j));
                 if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > j)
@@ -174,7 +161,7 @@ public class SourceLines {
                 for (int j = 0; j != plusGrand; ++j) {
                     ligne.add((byte) (j * approxRessource));
                     ligne.add(":".getBytes()[0]);
-                    Set<Byte> antiDoublon = new HashSet<>();
+                    Set<Byte> antiDoublon = new LinkedHashSet<>();
                     if (cartes.get(i).get(k).size() > j)
                         antiDoublon.addAll(cartes.get(i).get(k).get(j));
                     if (ordreCarte.size() > 0 && ordreCarte.get(k).get(i).size() > j)
@@ -192,10 +179,6 @@ public class SourceLines {
 
     public byte[] getChoixAction(){
         return choixAction;
-    }
-
-    public byte[] getChoixSecondeAction(){
-        return choixSecondeAction;
     }
 
     public List<List<List<Byte>>> getOrdreBassin(){
