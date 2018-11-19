@@ -179,6 +179,7 @@ public abstract class Joueur {
     }
 
     void appliquerJetonCerbere(){
+        retirerJeton(Jeton.CERBERE);
         switch (getDernierLanceDes()){
                 case 0:
                     gagnerRessourceFace(getDesFaceCourante()[0]);
@@ -191,7 +192,6 @@ public abstract class Joueur {
                     gagnerRessourceFace(getDesFaceCourante()[1]);
                     break;
             }
-            retirerJeton(Jeton.CERBERE);
     }
 
     public List<Jeton> getJetons(){return this.jetons;}
@@ -468,7 +468,7 @@ public abstract class Joueur {
     @Override
     public String toString(){
         String s = affichage;
-        affichage = "";
+        affichage = identifiant + "";
         return s;
     }
 
