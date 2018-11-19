@@ -106,11 +106,9 @@ public class AubotV2 extends Joueur{
         int l = 0;
         try {
             String ligne = br.readLine();
-            char[] tabL1 = ligne.toCharArray();
-            //for (char c: tabL1)
-            //  System.out.println(c);
+            char[] tabL1 = ligne.toCharArray();//On décompose la ligne string en tableau d'array
             while (ligne != null) {
-                if (l == 0) {
+                if (l == 0) {//première ligne, voir commentaire de la classe
                     for (int i = 0; i <= 9; i++) {//conversion de héxa à décimal
                         if (tabL1[i] == 'a')
                             tabL1[i] = 58;
@@ -133,6 +131,11 @@ public class AubotV2 extends Joueur{
                         else if (i > 3)
                             orPourForgerManche[i - 4] = (int) tabL1[i] - 48;
                     }
+                }
+                else{
+                    l--;
+                    ordrePrioManche[l].put("one", 1);
+                    l++;
                 }
                 l++;
                 ligne = br.readLine();
