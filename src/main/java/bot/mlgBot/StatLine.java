@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatLine {
-    private byte[] choixAction;
+    private byte[][] choixAction;
     private byte[][] choixBassin;
     private byte[][] choixCarte;
     private int pdg = 0;
@@ -29,13 +29,13 @@ public class StatLine {
         for (++curseur; bytes[curseur] != ";".getBytes()[0]; ++curseur)
             carteLigne.add(bytes[curseur]);
 
-        if (actionLigne.size() < 9 || actionLigne.size() > 10)
+        if (actionLigne.size() < 27 || actionLigne.size() > 30)
             throw new DiceForgeException("StatLine","Le nombre de choix d'action est invalide. Min : 9, max : 10, actuel : "+actionLigne.size());
-        choixAction = new byte[actionLigne.size()];
-        for (int i = 0; i != actionLigne.size(); ++i) {
-            choixAction[i] = actionLigne.get(i);
-            if (choixAction[i] < 0 || choixAction[i] > 3)
-                throw new DiceForgeException("StatLine","Le numéro d'action est invalide. Min: 0, max: 3, actuel: "+choixAction[i]+", pos: "+i);
+        choixAction = new byte[actionLigne.size()/3][3];
+        for (int i = 0; i != choixAction.length; ++i) {
+            for (int j = 0; j != 3; ++j) {
+                choixAction[i][j] = actionLigne.get(i * 3 + j);
+            }
         }
         choixBassin = new byte[bassinLigne.size()/3][3];
         for (int i = 0; i != choixBassin.length; ++i)
@@ -57,7 +57,7 @@ public class StatLine {
         }
     }
 
-    public byte[] getChoixAction(){
+    public byte[][] getChoixAction(){
         return choixAction;
     }
 

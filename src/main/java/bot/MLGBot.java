@@ -19,7 +19,9 @@ public class MLGBot extends Joueur {
     private int getOnMyLevel = -1;
     private boolean MOVEMENT = true;
     private byte[] choixActionNext;//0 = forger, 1 = exploit, 2 = passer
-    private byte[] choixAction;
+    private List<List<List<List<Byte>>>> choixAction;//Manche(Soleil+Lune(Or(Action))
+    private byte[] choixActionOr;
+    private byte[] choixActionRes;
     private byte[] choixCarteNext;
     private List<Byte> puissanceSoleil = new ArrayList<>();
     private List<Byte> puissanceLune = new ArrayList<>();
@@ -106,6 +108,8 @@ public class MLGBot extends Joueur {
             ordreCarte = ligneSource.getOrdreCarte();
         }
         choixActionNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
+        choixActionRes = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
+        choixActionOr = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         choixCarteNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
     }
 
@@ -198,8 +202,8 @@ public class MLGBot extends Joueur {
             //Partie update des fichiers
             ++gen;
             cible = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen;
-            if (gen > 1) {
-                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 2);
+            if (gen > 2) {
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 3);
                 File delFile = new File(cibleSuppr);
                 delFile.delete();
             }
@@ -251,8 +255,11 @@ public class MLGBot extends Joueur {
             buffer.clear();
             if (choixActionNext.length < 9 || choixActionNext.length > 10)
                 throw new DiceForgeException("MLGBot","Le nombre de manche est incorrect. Min: 9, max: 10, actuel: "+choixActionNext.length);
-            for (int i = 0; i != choixActionNext.length; ++i)
+            for (int i = 0; i != choixActionNext.length; ++i) {
                 buffer.put(choixActionNext[i]);
+                buffer.put(choixActionRes[i]);
+                buffer.put(choixActionOr[i]);
+            }
             buffer.put(";".getBytes());
             for (int i = 0; i != choixBassinNext.size(); ++i) {
                 buffer.put(choixBassinNext.get(i));
@@ -362,13 +369,23 @@ public class MLGBot extends Joueur {
     public Action choisirAction(int numManche){
         if (numManche == 1)
             gettingGood();
+        boolean secondeAction = false;
+        if (numeroManche == numManche -1)
+            secondeAction = true;
         numeroManche = numManche-1;
         Action actionChoisi = null;
-        int numChoixAction = 0;
-        if (gen < 1 || (estRandom && intensiveTraining))
-            numChoixAction = notLuckButSkill.nextInt(2) + 1;
-        else
-            numChoixAction = choixAction[numeroManche];
+        int numChoixAction = notLuckButSkill.nextInt(2)+1;
+        if (gen > 0 && (!estRandom || !intensiveTraining)) {
+            if (choixAction.get(numeroManche).size() > (getSoleil()+getLune())/approxRessource){
+                for (int i = (getSoleil()+getLune())/approxRessource; i != 0; --i) {
+                    if (choixAction.get(numeroManche).get(i).size() > getOr()/approxOr){
+                        for (int j = getOr()/approxOr; j != 0; --j){
+                            numChoixAction = choixAction.get(numeroManche).get(i).get(j).get(0);
+                        }
+                    }
+                }
+            }
+        }
         if (numChoixAction == 0)
             throw new DiceForgeException("MLGBot","choixAction toujours pas bon");
         switch (numChoixAction) {
@@ -382,7 +399,11 @@ public class MLGBot extends Joueur {
                 actionChoisi = Action.PASSER;
                 break;
         }
-        choixActionNext[numeroManche] = (byte) numChoixAction;
+        if (!secondeAction) {
+            choixActionNext[numeroManche] = (byte) numChoixAction;
+            choixActionRes[numeroManche] = (byte) ((getSoleil() + getLune()) / approxRessource);
+            choixActionOr[numeroManche] = (byte)(getOr()/approxOr);
+        }
         MOVEMENT = true;
         if (numeroManche == choixActionNext.length-1)
             Xx360xX_NoScope();
