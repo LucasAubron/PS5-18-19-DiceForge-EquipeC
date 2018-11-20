@@ -14,11 +14,11 @@ import static diceForge.Joueur.Jeton.TRITON;
  * il envoit toutes les possibilités aux joueurs,il s'assure lui même de les trier pour les joueurs, par exemple si
  * le joueur veut forger mais n'a que 5 or, le coordinateur ne va lui proposer que les bassins dont le coût est <=5.
  */
-class Coordinateur {
+public class Coordinateur {
     private Plateau plateau;
     private Afficheur afficheur;
 
-    Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){//typeJoueurs = [Joueur.BOT.EasyBot, Joueur.BOT.RandomBot]
+    public Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){//typeJoueurs = [Joueur.BOT.EasyBot, Joueur.BOT.RandomBot]
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
@@ -28,6 +28,9 @@ class Coordinateur {
             int nbrParties = 1000; // comme demandé dans le kata
             lancePlusieursPartiesAvecStats(typeJoueurs, nbrManche, nbrParties);
         }
+    }
+
+    public Coordinateur() {//Pour les bots ayant besoin d'un coordinateur différent
     }
 
     /**
@@ -61,6 +64,8 @@ class Coordinateur {
             nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
             ptsGloireCumules[i] = 0;
         }
+        //toDO: refactor cette partie ci dessous, elle devrait être facilement mofifiable et compréhensible (lisibilité + ouvert à l'extension --> que se passerait-il si l'on on voulait ajouter des stats ?)
+        //Ne pas oublier de dire le jour de la soutenance que la position des joueurs est aléatoire, car les positions donnent des avantages non négligeables (en 1V1 le J1 est très avantagé)
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
             this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
             plateau = new Plateau(typeJoueurs, afficheur);
@@ -92,7 +97,7 @@ class Coordinateur {
         }
         afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, nbrParties);
     }
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
      */
@@ -130,8 +135,8 @@ class Coordinateur {
      * @param numeroManche
      */
     private void phaseLanceDe(Joueur joueur, int numeroManche){
-        afficheur.presentationLancerDes(); //toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peut facilement être ignoré lors de la lecture du code
-        for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés
+        afficheur.presentationLancerDes(); //toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peuvent facilement être ignorées lors de la lecture du code
+        for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés, on stocke les résultats dans un attribut du joueur (chaque joueur a un tableau de Face qui représente ses dernier résultat)
             x.lancerLesDes();
         }
         for (Joueur x:plateau.getJoueurs()) {//et gagne les ressources correspondantes

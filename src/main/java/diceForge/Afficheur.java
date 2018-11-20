@@ -10,7 +10,7 @@ public class Afficheur {
     private boolean modeVerbeux;
     private Plateau plateau;
 
-    Afficheur(boolean modeVerbeux) {
+    public Afficheur(boolean modeVerbeux) {
         this.modeVerbeux = modeVerbeux;
     }
 

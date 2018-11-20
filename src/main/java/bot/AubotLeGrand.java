@@ -230,8 +230,6 @@ public class AubotLeGrand extends Joueur{
                 break;
             }
         }
-
-
     }
 
 
@@ -280,7 +278,7 @@ public class AubotLeGrand extends Joueur{
     /**
      * Extrêmement utile pour connaitre la force des dés du bot, lui permet de savoir quelles stratégies
      * il devra adopter.
-     * @return un tableau des ressources moyennes gagnées par lancé par le dé dans l'ordre suivant: or/soleil/lune/pdg
+     * actualise le booléen deComplet (false si on est pas arrivé au niveau de dé suffisant, true sinon)
      */
     private void statsDe() {
         int or = 0;
@@ -350,6 +348,28 @@ public class AubotLeGrand extends Joueur{
             if (carte.getNom() == nom)
                 compte++;
         return compte;
+    }
+
+    private int trouveFaceRessourceBassin(Bassin bassin, String typeRessource){
+        if (typeRessource.equals("Or"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Or)
+                            return i;
+        if (typeRessource.equals("Soleil"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil)
+                            return i;
+        if (typeRessource.equals("Lune"))
+            for (int i=0; i < bassin.getFaces().size(); i++)
+                for (Ressource[] ressources: bassin.getFace(i).getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Lune)
+                            return i;
+        return -1;
     }
 
     private void ressourceManquante(){

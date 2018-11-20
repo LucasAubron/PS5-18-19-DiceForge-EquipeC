@@ -468,7 +468,7 @@ public abstract class Joueur {
     @Override
     public String toString(){
         String s = affichage;
-        affichage = "";
+        affichage = identifiant + "";
         return s;
     }
 

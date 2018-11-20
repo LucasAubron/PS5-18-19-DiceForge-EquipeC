@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class CarteBouclier extends Carte {
     private Joueur joueurMaitre;
     private Plateau plateau;
-    CarteBouclier(Plateau plateau){
+    public CarteBouclier(Plateau plateau){
         super(new Ressource[]{new Soleil(3)}, 6, Noms.Bouclier);
         this.plateau = plateau;
     }
