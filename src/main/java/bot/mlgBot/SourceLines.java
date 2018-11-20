@@ -152,8 +152,17 @@ public class SourceLines {
                 Set<Byte> antiDoublon = new LinkedHashSet<>();
                 if (bassins.get(i).size() > j)
                     antiDoublon.addAll(bassins.get(i).get(j));
-                if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > j)
+                if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > j) {
+                    for (int k = ordreBassin.get(i).get(j).size() - 1; k > 0; --k) {
+                        if (pourcentRandom == 0) {
+                            byte bInf = ordreBassin.get(i).get(j).get(k-1);
+                            byte bSup = ordreBassin.get(i).get(j).get(k);
+                            ordreBassin.get(i).get(j).set(k-1, bSup);
+                            ordreBassin.get(i).get(j).set(k, bInf);
+                        }
+                    }
                     antiDoublon.addAll(ordreBassin.get(i).get(j));
+                }
                 ligne.addAll(antiDoublon);
             }
         }
@@ -188,8 +197,17 @@ public class SourceLines {
                     Set<Byte> antiDoublon = new LinkedHashSet<>();
                     if (cartes.get(i).get(k).size() > j)
                         antiDoublon.addAll(cartes.get(i).get(k).get(j));
-                    if (ordreCarte.size() > 0 && ordreCarte.get(k).get(i).size() > j)
+                    if (ordreCarte.size() > 0 && ordreCarte.get(k).get(i).size() > j) {
+                        for (int l = ordreCarte.get(k).get(i).get(j).size() - 1; l > 0; --l) {
+                            if (pourcentRandom == 0) {
+                                byte bInf = ordreCarte.get(k).get(i).get(j).get(l - 1);
+                                byte bSup = ordreCarte.get(k).get(i).get(j).get(l);
+                                ordreCarte.get(k).get(i).get(j).set(l - 1, bSup);
+                                ordreCarte.get(k).get(i).get(j).set(l, bInf);
+                            }
+                        }
                         antiDoublon.addAll(ordreCarte.get(k).get(i).get(j));
+                    }
                     ligne.addAll(antiDoublon);
                 }
             }
