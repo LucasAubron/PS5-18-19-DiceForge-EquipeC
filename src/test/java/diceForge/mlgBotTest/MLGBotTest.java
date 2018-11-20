@@ -1,6 +1,7 @@
 package diceForge.mlgBotTest;
 
 import bot.mlgBot.SourceLines;
+import bot.mlgBot.StatLine;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -16,7 +18,7 @@ import static org.junit.Assert.*;
 public class MLGBotTest {
     @Test
     public void lectureDeFichier() {
-        String cible = "src\\test\\java\\diceForge\\mlgBotTest\\fichierTest";
+        String cible = "src\\test\\java\\diceForge\\mlgBotTest\\fichierTestEcriture";
         File creerFichierTest = new File(cible);
         if (!creerFichierTest.exists()) {
             try {
@@ -45,7 +47,7 @@ public class MLGBotTest {
             ex.printStackTrace();
             System.exit(1);
         }
-        SourceLines sl = new SourceLines(cible, 11);
+        SourceLines sl = new SourceLines(cible, 11, true);
 
         List<List<List<Byte>>> actions = new ArrayList<>();
         List<List<List<Byte>>> bassins = new ArrayList<>();
@@ -100,5 +102,56 @@ public class MLGBotTest {
         assertEquals(cartes, sl.getOrdreCarte());
 
         creerFichierTest.delete();
+    }
+
+    @Test
+    public void ecritureDeFichier() {
+
+        // ; = 59 || , = 44 || : = 58 || 0 = 48 || ? = 63
+
+        byte[] bytes = new byte[]{1, 4, 1, 7, 2, 6, 2, 11, 2, 3, 1, 1, 2, 14, 2, 2, 2, 16, 59,
+                3, 0, 7, 2, 0, 4, 1, 0, 1, 7, 7, 7, 10, 7, 0, 5, 8, 12, 4, 8, 7, 1, 8, 1, 59,
+                44, 44, 23, 4, 5, 44, 12, 6, 6, 44, 11, 9, 9, 44, 44, 22, 1, 5, 44, 44, 59};
+
+        StatLine statLine = new StatLine(bytes, 101);
+
+        byte[][] choixAction = new byte[][]{{1, 4}, {1, 7}, {2, 6}, {2, 11}, {2, 3}, {1, 1}, {2, 14}, {2, 2}, {2, 16}};
+        assertArrayEquals(choixAction, statLine.getChoixAction());
+
+        byte[][] choixBassin = new byte[][]{{3, 0, 7}, {2, 0, 4}, {1, 0, 1}, {7, 7, 7}, {10, 7, 0}, {5, 8, 12}, {4, 8, 7}, {1, 8, 1}};
+        assertArrayEquals(choixBassin, statLine.getChoixBassin());
+
+        byte[][] choixCarte = new byte[9][3];
+        choixCarte[2][0] = 23;
+        choixCarte[2][1] = 4;
+        choixCarte[2][2] = 5;
+        choixCarte[3][0] = 12;
+        choixCarte[3][1] = 6;
+        choixCarte[3][2] = 6;
+        choixCarte[4][0] = 11;
+        choixCarte[4][1] = 9;
+        choixCarte[4][2] = 9;
+        choixCarte[6][0] = 22;
+        choixCarte[6][1] = 1;
+        choixCarte[6][2] = 5;
+        assertArrayEquals(choixCarte, statLine.getChoixCarte());
+
+        SourceLines sourceLines = new SourceLines(new ArrayList<>(Arrays.asList(statLine)));
+
+        List<Byte> b = new ArrayList<Byte>();
+        byte[] bb = new byte[]{58, 58, 58, 58, 58, 49, 44, 58, 58, 58, 58, 58, 58, 58, 58, 49, 44,
+                58, 58, 58, 58, 58, 58, 58, 50, 44, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 50, 44, 58, 58, 58, 58, 50, 44,
+                58, 58, 49, 44, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 50, 44, 58, 58, 58, 50, 44,
+                58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 50, 59,
+                58, 58, 1, 58, 58, 58, 2, 58, 58, 58, 3, 44, 44, 44, 44, 44, 44, 44, 58, 10, 58, 58, 58, 58, 58, 58, 58, 7, 44,
+                58, 58, 1, 58, 58, 58, 58, 58, 58, 4, 58, 58, 58, 58, 58, 5, 59,
+                63, 44, 63, 44, 63, 58, 58, 58, 58, 58, 58, 23, 44, 58, 58, 58, 58, 58, 58, 58, 12, 63, 44,
+                58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 11, 63, 44, 63, 44, 63, 58, 58, 58, 58, 58, 58, 22, 44, 63, 44, 63};
+
+        for (int i = 0; i != bb.length; ++i)
+            b.add(bb[i]);
+
+        assertEquals(b, sourceLines.getLigne());
+
     }
 }

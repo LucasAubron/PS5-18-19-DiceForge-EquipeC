@@ -2,7 +2,7 @@ package bot.mlgBot;
 
 import diceForge.Main;
 
-public class Test {
+public class Run {
     public static void main(String[] args) {
         long temps = System.currentTimeMillis();
         for (int i = 0; i != 5000; ++i) {

@@ -14,7 +14,7 @@ public class SourceLines {
     private List<List<List<Byte>>> ordreBassin = new ArrayList<>();//Manche(Or(numBassin))
     private List<List<List<List<Byte>>>> ordreCarte = new ArrayList<>();//Manche(Soleil/Lune(Quantite(Cartes)))
 
-    private int pourcentRandom = 30;
+    private int pourcentRandom = 15;
 
     private boolean desactiverMutation = false;
 
@@ -23,11 +23,12 @@ public class SourceLines {
     }
 
     public SourceLines(List<StatLine> statLines, String nomFichier, int nbrJoueur) {
-        this(nomFichier, nbrJoueur);
+        this(nomFichier, nbrJoueur, true);
         lignes = combinerStatLines(statLines);
     }
 
-    public SourceLines(String nomFichier, int nbrJoueur){
+    public SourceLines(String nomFichier, int nbrJoueur, boolean desactiverMutation){
+        this.desactiverMutation = desactiverMutation;
         if (nbrJoueur == 11) desactiverMutation = true;
         try{
             RandomAccessFile file = new RandomAccessFile(nomFichier, "rw");
