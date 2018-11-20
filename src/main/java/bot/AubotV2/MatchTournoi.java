@@ -38,13 +38,13 @@ public class MatchTournoi extends Coordinateur {
             for (int i = 0; i < nombreDeJoueur; i++) //on cherche le ou les gagnants
                 if (plateau.getJoueurs().get(i).getPointDeGloire() > maxPoint) {
                     maxPoint = plateau.getJoueurs().get(i).getPointDeGloire();
-                    idGagnant.set(0, i);
+                    idGagnant = new ArrayList<>(Arrays.asList(i));
                 }
                 else if (plateau.getJoueurs().get(i).getPointDeGloire() == maxPoint){
                     idGagnant.add(i);
                 }
-            for (int j=0; j < idGagnant.size(); j++)
-                resultatMatch[idGagnant.get(j)]++;
+            if (idGagnant.size() == 1)
+                resultatMatch[idGagnant.get(0)]++;
             maxPoint = 0;
             idGagnant = new ArrayList(Arrays.asList(-1));
         }
