@@ -3,9 +3,9 @@ package diceForge;
 import java.util.ArrayList;
 import java.util.List;
 
-class Minautore extends Carte {
+public class Minautore extends Carte {
     private List<Joueur> joueurs = new ArrayList<>();
-    Minautore(List<Joueur> joueurs){
+    public Minautore(List<Joueur> joueurs){
         super(new Ressource[]{new Soleil(3)}, 8, Noms.Minautore);
         this.joueurs.addAll(joueurs);
     }

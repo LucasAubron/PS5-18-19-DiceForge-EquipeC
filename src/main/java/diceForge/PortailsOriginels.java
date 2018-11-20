@@ -11,10 +11,10 @@ import java.util.List;
  * Les portails originels sont la ou les joueurs commence et la
  * ou ils viennent lorsqu'il sont chassés
  */
-class PortailsOriginels {
+public class PortailsOriginels {
     private List<Joueur> joueurs;
 
-    PortailsOriginels(Joueur.Bot[] typeJoueurs, Afficheur afficheur, Plateau plateau){
+    public PortailsOriginels(Joueur.Bot[] typeJoueurs, Afficheur afficheur, Plateau plateau){
         if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
@@ -40,6 +40,9 @@ class PortailsOriginels {
                     this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1V1/BestBot"));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
+    }
+
+    public PortailsOriginels() {
     }
 
     /**

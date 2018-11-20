@@ -30,6 +30,9 @@ public class Coordinateur {
         }
     }
 
+    public Coordinateur() {//Pour les bots ayant besoin d'un coordinateur différent
+    }
+
     /**
      * mode verbeux
      * @param typeJoueurs

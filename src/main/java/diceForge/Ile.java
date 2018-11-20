@@ -12,7 +12,7 @@ public class Ile {
     private List<List<Carte>> cartes;
     private Joueur joueur = null;
 
-    Ile(Carte[][] cartes){
+    public Ile(Carte[][] cartes){
         if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale
             throw new DiceForgeException("Ile","Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
         for (int i = 0; i != cartes.length; ++i)
@@ -28,7 +28,7 @@ public class Ile {
     /**
      * Constructeur à utiliser dans le cas principal ou il y a 2 paquets de nbrCarteParPaquet chaqu'un
      */
-    Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
+    public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
         if (nbrCarteParPaquet < 2 || nbrCarteParPaquet > 4)
             throw new DiceForgeException("Ile","Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new ArrayList<>();

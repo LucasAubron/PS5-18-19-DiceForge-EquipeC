@@ -13,7 +13,7 @@ public class Temple {
     private Bassin[] sanctuaire = new Bassin[10];//10 bassins dans la version finale du jeu
     private Bassin[] jardin = new Bassin[1];//Pour l'instant qu'1 bassin dans le jardin
 
-    Temple(int nbrJoueur){
+    public Temple(int nbrJoueur){
         int nbrFaceParBassin = (nbrJoueur == 2 ? 2 : 4);//S'il n'y a que 2 joueurs, il y a 2 faces par bassin, sinon 4
         Random random = new Random();
 
