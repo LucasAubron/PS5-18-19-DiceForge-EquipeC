@@ -278,7 +278,7 @@ public class AubotLeGrand extends Joueur{
     /**
      * Extrêmement utile pour connaitre la force des dés du bot, lui permet de savoir quelles stratégies
      * il devra adopter.
-     * @return un tableau des ressources moyennes gagnées par lancé par le dé dans l'ordre suivant: or/soleil/lune/pdg
+     * actualise le booléen deComplet (false si on est pas arrivé au niveau de dé suffisant, true sinon)
      */
     private void statsDe() {
         int or = 0;
