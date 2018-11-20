@@ -3,6 +3,7 @@ package bot.AubotV2;
 import diceForge.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static diceForge.Joueur.Jeton.CERBERE;
@@ -26,15 +27,32 @@ public class MatchTournoi extends Coordinateur {
     }
 
     private void initMatch(){
+        int maxPoint = -1; //permet de déterminer le ou les gagnants
+        List<Integer> idGagnant = new ArrayList(Arrays.asList(-1)); //idem
         for (int partie = 0; partie < nombreDePartieParMatch; partie++){
             PlateauTournoi plateau = new PlateauTournoi(filePath);
             this.plateau = plateau;
             for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
                 jouerManche(numManche);
             }
-            for (int i = 0; i < nombreDeJoueur; i++)
-                resultatMatch[i] += plateau.getJoueurs().get(i).getPointDeGloire();
+            for (int i = 0; i < nombreDeJoueur; i++) //on cherche le ou les gagnants
+                if (plateau.getJoueurs().get(i).getPointDeGloire() > maxPoint) {
+                    maxPoint = plateau.getJoueurs().get(i).getPointDeGloire();
+                    idGagnant.set(0, i);
+                }
+                else if (plateau.getJoueurs().get(i).getPointDeGloire() == maxPoint){
+                    idGagnant.add(i);
+                }
+            for (int j=0; j < idGagnant.size(); j++)
+                resultatMatch[idGagnant.get(j)]++;
+            maxPoint = 0;
+            idGagnant = new ArrayList(Arrays.asList(-1));
         }
+    }
+
+
+    int[] getResultatMatch(){
+        return resultatMatch;
     }
 
 
@@ -51,7 +69,7 @@ public class MatchTournoi extends Coordinateur {
 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//Recopiage de coordinateur (besoin d'enlever les appels de méthode d'afficheur)
+//Recopiage de coordinateur (car on a besoin d'enlever les appels de méthode d'afficheur)
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
@@ -274,8 +292,4 @@ public class MatchTournoi extends Coordinateur {
     }
 
     Plateau getPlateau(){return plateau;}
-
-    int[] getResultatMatch(){
-        return resultatMatch;
-    }
 }

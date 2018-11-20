@@ -20,12 +20,9 @@ public class Tournoi {
                 for (int j1 = 0; j1<10; j1++)
                     for (int j2 = 0; j2 <10; j2++)
                         if (j1 != j2){
-                            match = new MatchTournoi(new String[]{pathFiles1V1[j1], pathFiles1V1[j2]}, nombreDeMatchParConfrontation);
+                            match = new MatchTournoi(new String[]{pathFiles1V1[j1], pathFiles1V1[j2]}, nombreDeMatchParConfrontation/nombreDeJoueurParPartie);
                             victoireCumulesParJoueurs[j1] += match.getResultatMatch()[0];
                             victoireCumulesParJoueurs[j2] += match.getResultatMatch()[1];
-                            match = new MatchTournoi(new String[]{pathFiles1V1[j1], pathFiles1V1[j2]}, nombreDeMatchParConfrontation);
-                            victoireCumulesParJoueurs[j2] += match.getResultatMatch()[0];
-                            victoireCumulesParJoueurs[j1] += match.getResultatMatch()[1];
                         }
                 break;
             case 3:
