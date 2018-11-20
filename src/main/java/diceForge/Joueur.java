@@ -75,7 +75,7 @@ public abstract class Joueur {
 
     public int getMaxOr(){return maxOr;} //sert uniquement à l'affichage
 
-    void ajouterOr (int quantite){
+    public void ajouterOr (int quantite){
         int ajoutOr = quantite;
         if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
             ajoutOr = choisirRepartitionOrMarteau(quantite);
@@ -113,7 +113,7 @@ public abstract class Joueur {
         this.dernierLanceDes = code;
     }
 
-    void ajouterSoleil(int quantite) {
+    public void ajouterSoleil(int quantite) {
         soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
         if (soleil < 0) soleil = 0;
     }
@@ -161,7 +161,7 @@ public abstract class Joueur {
         }
     }
 
-    void appliquerJetonTriton(choixJetonTriton choix) {
+    public void appliquerJetonTriton(choixJetonTriton choix) {
         if (choix != choixJetonTriton.Rien) {
             retirerJeton(Jeton.TRITON);
             switch (choix) {
@@ -178,7 +178,7 @@ public abstract class Joueur {
         }
     }
 
-    void appliquerJetonCerbere(){
+    public void appliquerJetonCerbere(){
         retirerJeton(Jeton.CERBERE);
         switch (getDernierLanceDes()){
                 case 0:
@@ -209,7 +209,7 @@ public abstract class Joueur {
      * On lance ses dés, le résulat est stocké dans desFaceCourante, desFacesCourante est ensuite utilisé plus tard
      * pour réaliser ce pourquoi on a lancé les dés (pas toujours pour un gain ! --> minotaure, satyres)
      */
-    void lancerLesDes(){
+    public void lancerLesDes(){
         afficheur.lancerDes(this);
         for (De de:des)
             de.lancerLeDe();
@@ -220,7 +220,7 @@ public abstract class Joueur {
     /**
      * Méthode à appeler après avoir lancé les dés
      */
-    void gagnerRessource(){
+    public void gagnerRessource(){
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
         for (int i = 0; i != des.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
             int autreFace = i==0?1:0;//autreFace est 1 si i est 0, et 0 sinon
@@ -349,7 +349,7 @@ public abstract class Joueur {
         return position;
     }
 
-    void appelerRenforts(List<Renfort> renfortsUtilisables){
+    public void appelerRenforts(List<Renfort> renfortsUtilisables){
         int choix;
         for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
@@ -397,7 +397,7 @@ public abstract class Joueur {
      * Sert à additionner les points donné par les cartes.
      * Est appelé une fois à la fin de la partie
      */
-    void additionnerPointsCartes() {
+    public void additionnerPointsCartes() {
         for (Carte carte:cartes){
             pointDeGloire += carte.getNbrPointGloire();
             if (carte.getNom() == Carte.Noms.Typhon)

@@ -2,6 +2,8 @@ package bot.AubotV2;
 
 import diceForge.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PlateauTournoi extends Plateau{
@@ -62,4 +64,33 @@ public class PlateauTournoi extends Plateau{
                         filePath.length),
                 new Ile(ileFond)};
     }
+
+    @Override
+    public List<Joueur> getJoueurs() {
+        List<Joueur> tempJoueur = new ArrayList<>();
+        //On ajoute tous les joueurs des portails originels
+        tempJoueur.addAll(portail.getJoueurs());
+        for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
+            if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
+                tempJoueur.add(x.getJoueur());
+        List<Joueur> joueurs = new ArrayList<>();//Pour la liste triée
+        for (int i = 1; i != tempJoueur.size()+1; ++i){
+            for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
+                if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
+                    joueurs.add(j);
+                    break;
+                }
+        }
+        return joueurs;
+    }
+
+    @Override
+    public Temple getTemple(){ return temple;}
+
+    @Override
+    public Ile[] getIles() {return iles;}
+
+    @Override
+    public PortailsOriginels getPortail(){return portail;}
+
 }

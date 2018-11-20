@@ -101,4 +101,5 @@ public class Plateau {
     public Temple getTemple() {
         return temple;
     }
+
 }

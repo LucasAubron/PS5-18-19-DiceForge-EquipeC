@@ -338,7 +338,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public String toString(){
-        return "AubotLeGrand (bot de Lucas)";
+        return "AubotLeGrandV2 (bot de Lucas)";
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------

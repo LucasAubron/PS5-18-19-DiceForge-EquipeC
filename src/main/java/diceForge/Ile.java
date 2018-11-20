@@ -45,7 +45,7 @@ public class Ile {
     /**
      * Sert dans le cas ou le joueur part sur une autre ile
      */
-    Joueur retirerJoueur(){
+    public Joueur retirerJoueur(){
         Joueur joueurExpulse = this.joueur;
         this.joueur=null;
 
@@ -58,7 +58,7 @@ public class Ile {
      * Elle gére aussi la prise de carte par le joueur
      * @return le joueur expulsé s'il existe sinon null
      */
-    Joueur prendreCarte(Joueur joueur, Carte carte){
+    public Joueur prendreCarte(Joueur joueur, Carte carte){
         Joueur x = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
             if (!paquet.isEmpty() && paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché

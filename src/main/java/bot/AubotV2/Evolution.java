@@ -16,6 +16,7 @@ public class Evolution {
 
     private void initEvolution(){
         for (int population = 1; population <= nombreDePopulationMax; population++){
+            System.out.println("Population n°" + population +":");
             selection();
             croisement();
             mutation();
@@ -24,6 +25,9 @@ public class Evolution {
 
     private void selection(){
         Tournoi tournoi = new Tournoi(nombreDeJoueurs, nombreDePartieParMatch);
+        int[] res = tournoi.getResultats();
+        for (int i=0; i <10; i++)
+            System.out.println("Joueur n°" + (i+1) + ": " + res[i] + "Points de gloire");
     }
 
     private void croisement(){
@@ -31,4 +35,5 @@ public class Evolution {
 
     private void mutation(){
     }
+
 }

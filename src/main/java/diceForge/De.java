@@ -32,7 +32,7 @@ public class De {
         this.faces = faces;
     }
 
-    Face lancerLeDe(){
+    public Face lancerLeDe(){
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
         derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
         afficheur.resultatDe(proprietaire, id);
