@@ -25,7 +25,7 @@ class Coordinateur {
             lanceUnePartieAvecDetail(typeJoueurs, nbrManche);
         }
         else{
-            int nbrParties = 1000*100; // comme demandé dans le kata
+            int nbrParties = 1000; // comme demandé dans le kata
             lancePlusieursPartiesAvecStats(typeJoueurs, nbrManche, nbrParties);
         }
     }

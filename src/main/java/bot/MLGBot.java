@@ -31,12 +31,12 @@ public class MLGBot extends Joueur {
     private List<Byte> puissanceOr = new ArrayList<>();
     private List<List<List<Byte>>> ordreBassin;//Manche(QuantiteOr(Bassin))
     private int approxOr = 1;
-    private boolean intensiveTraining = true;//METTRE A TRUE POUR ACTIVER L ALGORITHME GENETIQUE-----------------SUPPRIMER LES FICHIERS GENERES AVANT DE COMMIT
+    private boolean intensiveTraining = false;//METTRE A TRUE POUR ACTIVER L ALGORITHME GENETIQUE-----------------SUPPRIMER LES FICHIERS GENERES AVANT DE COMMIT
     private String cible = "";
     private int gen = -2;
     private boolean estRandom = false;//notLuckButSkill.nextInt(4) != 0;
     private long positionCHEF = -1;
-    private int scoreMin = 120;
+    private int scoreMin = 100;
     public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
     }
