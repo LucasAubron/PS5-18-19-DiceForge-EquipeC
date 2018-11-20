@@ -354,7 +354,7 @@ public abstract class Joueur {
         for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
-                    or -= 3;
+                    ajouterOr(-3);
                     pointDeGloire += 4;
                     afficheur.ancien(this);
                     break;

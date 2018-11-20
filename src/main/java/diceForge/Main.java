@@ -9,6 +9,7 @@ public class Main {
         catch (DiceForgeException e){
             System.out.println("Une erreur est apparue dans "+e.getLocalisation()+".java, message d'erreur : ");
             System.out.println(e.getMessage());
+            System.exit(1);
         }
     }
 }
