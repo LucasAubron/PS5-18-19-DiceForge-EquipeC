@@ -7,11 +7,12 @@ import java.util.Random;
 
 public class LataBotch extends Joueur{
     public LataBotch(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
+    boolean estTourSupp=false;
 
     @Override
     public Joueur.Action choisirAction(int numManche)
     {
-        if (numManche <=3 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if (numManche <=3 && getOr() > 5 && estTourSupp==false)//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -66,6 +67,8 @@ public class LataBotch extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
+        if(estTourSupp)
+            estTourSupp=false;
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
             if (carte.getNom().equals(Carte.Noms.Marteau) )//Au moins 1 marteau
@@ -82,7 +85,8 @@ public class LataBotch extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        return ((getOr() > 10 && numManche < 6) || getSoleil() > 3 || getLune() > 1);//Si on a assez de ressource pour refaire un tour
+        estTourSupp=true;
+        return ((getOr() > 10 && numManche < 6) || getSoleil() > 1 || getLune() > 0);//Si on a assez de ressource pour refaire un tour
     }
 
     //On choisit l'or à garder ici 0
