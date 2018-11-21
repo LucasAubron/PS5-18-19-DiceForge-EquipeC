@@ -3,6 +3,7 @@ package diceForge;
 import bot.*;
 import bot.AubotV2.AubotV2;
 import bot.NidoBot.NidoBot;
+import bot.NidoBot.NidoBotV2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class PortailsOriginels {
                 this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBot)
                 this.joueurs.add(new NidoBot(identifiant, afficheur, plateau));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
+                this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
                 if (typeJoueurs.length == 2)
                     this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/BestBot"));

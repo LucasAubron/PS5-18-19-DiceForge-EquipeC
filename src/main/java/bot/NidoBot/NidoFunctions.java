@@ -66,11 +66,13 @@ class NidoFunctions {
         boolean have = false;
         int i = 0;
         while (!have && i < unDe.getFaces().length){
+            System.out.println("i == " + i);
             if (uneRess.getClass().getName().equals("diceForge.Lune") &&
                     unDe.getFace(i).getRessource()[0][0] instanceof Lune)
                 have = true;
             else if(uneRess.getClass().getName().equals("diceForge.Soleil") &&
-                    unDe.getFace(i).getRessource()[0][0] instanceof Soleil)
+                    unDe.getFace(i)
+                            .getRessource()[0][0] instanceof Soleil)
                 have = true;
             i++;
         }
