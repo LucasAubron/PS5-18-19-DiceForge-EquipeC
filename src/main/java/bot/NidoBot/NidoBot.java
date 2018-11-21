@@ -261,6 +261,22 @@ public class NidoBot extends Joueur {
         return random.nextInt(2) == 1;
     }
 
+    /**
+     * utile pour les bots autre que random
+     * permet de chercher une face de base 1 or et de renvoyer sa position
+     * @return un tableau = [numéro du dé, numéro de la face sur le dé en question]
+     */
+    public int[] getPosFace1Or(){
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
+    }
+
     @Override
     public boolean choisirRessourceOuPdg(Ressource ressource) {
         return true;
