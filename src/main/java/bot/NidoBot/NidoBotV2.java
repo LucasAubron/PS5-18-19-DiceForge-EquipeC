@@ -82,7 +82,7 @@ public class NidoBotV2 extends Joueur {
         * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
         * manche 2 forger 2soleil sur le dé ou y a deja un soleil
         */
-        } else if (numManche == 2) {
+        } else if (numManche <= 3) {
             BassinType[] listBassins = {
                     new BassinType(8, "Soleil"),
                     new BassinType(3, "Soleil"),
@@ -123,7 +123,7 @@ public class NidoBotV2 extends Joueur {
             if (posFaceInt != -1)
                 return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
             /*
-             * manche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 =>
+             * manche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 => MANCHE 3 ressemble bcp a manche 2.
              * 2 lune sur le dé ou il y a lune+ 1 soleil sur dé ou il y a un soleil
              *
              * 1 dé ou : 1 lune, 1lune, 2lune, 2pdg, 1 or, 3/4or
@@ -131,12 +131,7 @@ public class NidoBotV2 extends Joueur {
              *
              * acheter marteau eventuellement
              */
-        } else if (numManche == 3) {
-            ;
         }
-
-
-
 
 
         afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
