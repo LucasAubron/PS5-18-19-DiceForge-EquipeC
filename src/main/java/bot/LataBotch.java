@@ -86,8 +86,8 @@ public class LataBotch extends Joueur{
     @Override
     public boolean choisirActionSupplementaire(int numManche){
         for(int i=0;i<getPlateau().getIles().length;i++){
-            for(int j=0; j!=getPlateau().getIles()[i].getCartes().size();i++)
-                for(int k=0;k!=getPlateau().getIles()[i].getCartes().get(k).size();k++){
+            for(int j=0; j!=getPlateau().getIles()[i].getCartes().size();j++)
+                for(int k=0;k!=getPlateau().getIles()[i].getCartes().get(j).size();k++){
                     if(getPlateau().getIles()[i].getCartes().get(j).get(k).getNom().equals(Carte.Noms.Marteau)&&(getSoleil() > 1 && getLune() > 0))
                         rushMarteau=true;
                 }
