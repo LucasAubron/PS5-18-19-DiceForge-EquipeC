@@ -9,12 +9,13 @@ import java.nio.channels.FileChannel;
 import java.util.*;
 
 public class SourceLines {
+    Random random = new Random();
     private List<Byte> lignes;
     private List<List<List<Byte>>> choixAction = new ArrayList<>();//Manche(Or(Action))
     private List<List<List<Byte>>> ordreBassin = new ArrayList<>();//Manche(Or(numBassin))
     private List<List<List<List<Byte>>>> ordreCarte = new ArrayList<>();//Manche(Soleil/Lune(Quantite(Cartes)))
 
-    private int pourcentRandom = 15;
+    private int pourcentRandom = 30;
 
     private boolean desactiverMutation = false;
 
@@ -46,7 +47,6 @@ public class SourceLines {
             ex.printStackTrace();
             System.exit(1);
         }
-        Random notLuckButSkill = new Random();
         choixAction = new ArrayList<>();
         choixAction.add(new ArrayList<>());
         ordreBassin = new ArrayList<>();
@@ -69,7 +69,9 @@ public class SourceLines {
                         choixAction.add(new ArrayList<>());
                     else if (lignes.get(i) == ":".getBytes()[0])
                         choixAction.get(choixAction.size()-1).add(new ArrayList<>());
-                    else if (notLuckButSkill.nextInt(pourcentRandom) != 0 || desactiverMutation)
+                    else if(random.nextInt(pourcentRandom) == 0 && !desactiverMutation)
+                        choixAction.get(choixAction.size() - 1).get(choixAction.get(choixAction.size() - 1).size() - 1).add((byte)(random.nextInt(2)+1));
+                    else
                         choixAction.get(choixAction.size() - 1).get(choixAction.get(choixAction.size() - 1).size() - 1).add((byte)(lignes.get(i)-"0".getBytes()[0]));
                     break;
                 case 2:
@@ -77,7 +79,7 @@ public class SourceLines {
                         ordreBassin.get(ordreBassin.size() - 1).add(new ArrayList<>());
                     else if (lignes.get(i) == ",".getBytes()[0])
                         ordreBassin.add(new ArrayList<>());
-                    else if (lignes.get(i) != ":".getBytes()[0] && (notLuckButSkill.nextInt(pourcentRandom) != 0 || desactiverMutation))
+                    else if (lignes.get(i) != ":".getBytes()[0] && (random.nextInt(pourcentRandom) != 0 || desactiverMutation))
                         ordreBassin.get(ordreBassin.size() - 1).get(ordreBassin.get(ordreBassin.size() - 1).size() - 1).add(lignes.get(i));
                     break;
                 case 3:
@@ -90,7 +92,7 @@ public class SourceLines {
                         for (int k = 0; k != 2; ++k)
                             ordreCarte.get(ordreCarte.size() - 1).add(new ArrayList<>());
                         soleil = 0;
-                    } else if (lignes.get(i) != ":".getBytes()[0] && (notLuckButSkill.nextInt(pourcentRandom) != 0 || desactiverMutation))
+                    } else if (lignes.get(i) != ":".getBytes()[0] && (random.nextInt(pourcentRandom) != 0 || desactiverMutation))
                         ordreCarte.get(ordreCarte.size() - 1).get(soleil).get(ordreCarte.get(ordreCarte.size() - 1).get(soleil).size() - 1).add(lignes.get(i));
                     break;
 
@@ -147,22 +149,23 @@ public class SourceLines {
             int plusGrand = bassins.get(i).size();
             if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > plusGrand)
                 plusGrand = ordreBassin.get(i).size();
-            for (int j = 0; j != plusGrand; ++j){
+            for (int j = 0; j != plusGrand; ++j) {
                 ligne.add(":".getBytes()[0]);
                 Set<Byte> antiDoublon = new LinkedHashSet<>();
                 if (bassins.get(i).size() > j)
                     antiDoublon.addAll(bassins.get(i).get(j));
-                if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > j) {
-                    for (int k = ordreBassin.get(i).get(j).size() - 1; k > 0; --k) {
-                        if (pourcentRandom == 0) {
-                            byte bInf = ordreBassin.get(i).get(j).get(k-1);
-                            byte bSup = ordreBassin.get(i).get(j).get(k);
-                            ordreBassin.get(i).get(j).set(k-1, bSup);
-                            ordreBassin.get(i).get(j).set(k, bInf);
-                        }
+                List<Byte> temp = new ArrayList<>();
+                if (ordreBassin.size() > 0 && ordreBassin.get(i).size() > j)
+                    temp.addAll(ordreBassin.get(i).get(j));
+                /*for (int l = 0; l < temp.size() - 1; ++l) {
+                    if (random.nextInt(pourcentRandom * 4) == 0) {
+                        byte bInf = temp.get(l);
+                        byte bSup = temp.get(l + 1);
+                        temp.set(l, bSup);
+                        temp.set(l + 1, bInf);
                     }
-                    antiDoublon.addAll(ordreBassin.get(i).get(j));
-                }
+                }*/
+                antiDoublon.addAll(temp);
                 ligne.addAll(antiDoublon);
             }
         }
@@ -197,17 +200,18 @@ public class SourceLines {
                     Set<Byte> antiDoublon = new LinkedHashSet<>();
                     if (cartes.get(i).get(k).size() > j)
                         antiDoublon.addAll(cartes.get(i).get(k).get(j));
-                    if (ordreCarte.size() > 0 && ordreCarte.get(k).get(i).size() > j) {
-                        for (int l = ordreCarte.get(k).get(i).get(j).size() - 1; l > 0; --l) {
-                            if (pourcentRandom == 0) {
-                                byte bInf = ordreCarte.get(k).get(i).get(j).get(l - 1);
-                                byte bSup = ordreCarte.get(k).get(i).get(j).get(l);
-                                ordreCarte.get(k).get(i).get(j).set(l - 1, bSup);
-                                ordreCarte.get(k).get(i).get(j).set(l, bInf);
-                            }
+                    List<Byte> temp = new ArrayList<>();
+                    if (ordreCarte.size() > 0 && ordreCarte.get(k).get(i).size() > j)
+                        temp.addAll(ordreCarte.get(k).get(i).get(j));
+                    /*for (int l = 0; l < temp.size()-1; ++l){
+                        if (random.nextInt(pourcentRandom * 4) == 0) {
+                            byte bInf = temp.get(l);
+                            byte bSup = temp.get(l+1);
+                            temp.set(l, bSup);
+                            temp.set(l+1, bInf);
                         }
-                        antiDoublon.addAll(ordreCarte.get(k).get(i).get(j));
-                    }
+                    }*/
+                    antiDoublon.addAll(temp);
                     ligne.addAll(antiDoublon);
                 }
             }

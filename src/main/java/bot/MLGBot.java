@@ -97,7 +97,7 @@ public class MLGBot extends Joueur {
         } else {
             positionCHEF = genFile.length();
             if (intensiveTraining) {
-                if (positionCHEF > 70 * 100 * (gen <= 1 ? 10 : 1)/(gen > 600 ? 10 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
+                if (positionCHEF > 70 * 100 * (gen <= 1 ? 20 : 1) / (gen > 600 ? 10 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
                     remuerLaSoupe(nbrJoueur);
             }
         }
@@ -146,7 +146,7 @@ public class MLGBot extends Joueur {
             buf.clear();
             int x = channel.read(buf);
             String s = new String(buf.array());
-            moyennePrecedente = Integer.parseInt(s.split(";")[nbrJoueur - 2].split(":")[1]) - 2;
+            moyennePrecedente = Integer.parseInt(s.split(";")[nbrJoueur - 2].split(":")[1]) - 20;
             file.close();
 
 
@@ -188,7 +188,7 @@ public class MLGBot extends Joueur {
                         curseur = i;
                     }
                 }
-                System.out.println("Nombre de parties retenues: "+byteList.size()+", points de gloire max: "+maxPdg);
+                //System.out.println("Nombre de parties retenues: "+byteList.size()+", points de gloire max: "+maxPdg);
                 SourceLines lignesSource;
                 Collections.sort(byteList, new TrierStatLine());
                 if (gen > 1)
@@ -214,8 +214,8 @@ public class MLGBot extends Joueur {
             //Partie update des fichiers
             ++gen;
             cible = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen;
-            if (gen > 29) {
-                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 30);
+            if (gen > 2) {
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 3);
                 File delFile = new File(cibleSuppr);
                 delFile.delete();
             }
@@ -380,15 +380,22 @@ public class MLGBot extends Joueur {
                     if (faces.get(i).getRessource()[0][j] instanceof Or)
                         puissanceFace[i] += faces.get(i).getRessource()[0][j].getQuantite();
                     else if (faces.get(i).getRessource()[0][j] instanceof Soleil || faces.get(i).getRessource()[0][j] instanceof Lune)
-                        puissanceFace[i] += faces.get(i).getRessource()[0][j].getQuantite();
+                        puissanceFace[i] += faces.get(i).getRessource()[0][j].getQuantite() * 4;
+                    else if (faces.get(i) instanceof FaceX3)
+                        puissanceFace[i] -= 6;
+                    else if (faces.get(i) instanceof FaceMiroirAbyssal)
+                        puissanceFace[i] += 5;
                 }
             }
         }
         int puissanceMax = 0;
+        int id = 0;
         for (int i = 0; i != puissanceFace.length; ++i)
-            if (puissanceFace[i] > puissanceMax)
-                puissanceMax = i;
-        return puissanceMax;
+            if (puissanceFace[i] > puissanceMax) {
+                puissanceMax = puissanceFace[i];
+                id = i;
+            }
+        return id;
     }
 
     private int[] pirePremiereFace(De[] des) {
@@ -397,7 +404,7 @@ public class MLGBot extends Joueur {
         for (int i = 0; i != des.length && !stop; ++i) {
             for (int j = 0; j != des[i].getFaces().length; ++j) {
                 if (des[i].getFaces()[j].getRessource().length != 0 && ((des[i].getFaces()[j].getRessource()[0][0] instanceof Or && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1)
-                || (des[i].getFaces()[j].getRessource()[0][0] instanceof PointDeGloire && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 2))) {
+                        || (des[i].getFaces()[j].getRessource()[0][0] instanceof PointDeGloire && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 2))) {
                     numDe = i;
                     posFace = j;
                     stop = true;
@@ -422,15 +429,9 @@ public class MLGBot extends Joueur {
         numeroManche = numManche - 1;
         Action actionChoisi = null;
         int numChoixAction = notLuckButSkill.nextInt(2) + 1;
-        if (gen > 0 && (!estRandom || !intensiveTraining) && !secondeAction) {
-            int max = (choixAction.get(numeroManche).size() > getOr() / approxOr ? getOr() / approxOr : choixAction.get(numeroManche).size() - 1);
-            if (max != -1) {
-                for (int i = max; i != 0; --i) {
-                    if (!choixAction.get(numeroManche).get(i).isEmpty()) {
-                        numChoixAction = choixAction.get(numeroManche).get(i).get(0);
-                        break;
-                    }
-                }
+        if (gen > 0 && (!estRandom || !intensiveTraining)) {
+            if (choixAction.get(numeroManche).size() > getOr() / approxOr && !choixAction.get(numeroManche).get(getOr() / approxOr).isEmpty()) {
+                numChoixAction = choixAction.get(numeroManche).get(getOr() / approxOr).get(0);
             }
         }
         if (numChoixAction == 0)
@@ -544,7 +545,7 @@ public class MLGBot extends Joueur {
     @Override
     public boolean choisirActionSupplementaire(int numManche) {
         gettingGood();
-        return (getOr() > 5 && numeroManche < 5) || getSoleil() > 3 || getLune() > 1;
+        return (getOr() > 10 && numeroManche < 5) || getSoleil() > 3 || getLune() > 1;
     }
 
     @Override
@@ -565,8 +566,8 @@ public class MLGBot extends Joueur {
     @Override
     public int choisirRessource(Face face) {
         int choix = notLuckButSkill.nextInt(face.getRessource().length);
-        for (int i = 0; i != face.getRessource().length; ++i){
-            for (int j = 0; j != face.getRessource()[i].length; ++j){
+        for (int i = 0; i != face.getRessource().length; ++i) {
+            for (int j = 0; j != face.getRessource()[i].length; ++j) {
                 if (face.getRessource()[i][j] instanceof Soleil || face.getRessource()[i][j] instanceof Lune)
                     choix = i;
             }
@@ -578,8 +579,8 @@ public class MLGBot extends Joueur {
     @Override
     public int choisirRessourceAPerdre(Face face) {
         int choix = notLuckButSkill.nextInt(face.getRessource().length);
-        for (int i = 0; i != face.getRessource().length; ++i){
-            for (int j = 0; j != face.getRessource()[i].length; ++j){
+        for (int i = 0; i != face.getRessource().length; ++i) {
+            for (int j = 0; j != face.getRessource()[i].length; ++j) {
                 if (face.getRessource()[i][j] instanceof Or)
                     choix = i;
             }
@@ -604,7 +605,7 @@ public class MLGBot extends Joueur {
     public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs) {
         int id = (getIdentifiant() == 1 ? 2 : 1);
         int minPdg = 500;
-        for (int i = 0; i != getPlateau().getJoueurs().size(); ++i){
+        for (int i = 0; i != getPlateau().getJoueurs().size(); ++i) {
             if (getPlateau().getJoueurs().get(i).getIdentifiant() != getIdentifiant() && getPlateau().getJoueurs().get(i).getPointDeGloire() < minPdg) {
                 minPdg = getPlateau().getJoueurs().get(i).getPointDeGloire();
                 id = getPlateau().getJoueurs().get(i).getIdentifiant();
@@ -656,7 +657,8 @@ public class MLGBot extends Joueur {
         return (ressource instanceof Or || numeroManche >= 8);
     }
 
-    @Override public String toString(){
+    @Override
+    public String toString() {
         return "PlanteBot";
     }
 }
