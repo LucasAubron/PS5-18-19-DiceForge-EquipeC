@@ -62,5 +62,65 @@ class NidoFunctions {
         }
         return have;
     }
+    public static boolean haveFaceType(De unDe, Ressource uneRess){
+        boolean have = false;
+        int i = 0;
+        while (!have && i < unDe.getFaces().length){
+            if (uneRess.getClass().getName().equals("diceForge.Lune") &&
+                    unDe.getFace(i).getRessource()[0][0] instanceof Lune)
+                have = true;
+            else if(uneRess.getClass().getName().equals("diceForge.Soleil") &&
+                    unDe.getFace(i).getRessource()[0][0] instanceof Soleil)
+                have = true;
+            i++;
+        }
+        return have;
+    }
+
+    public static Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
+        if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Or)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Soleil")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Soleil)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Lune")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Lune)
+                                    return bassin;
+        }
+        return null;
+    }
+
+    public static int getPosFaceOrDuDe(Joueur joueur, int numDe, int qte){
+        for (int i = 0; i != 6; i++) {
+            if (joueur.getDe(numDe).getFace(i).getRessource().length == 1)
+                if (joueur.getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or &&
+                        joueur.getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == qte)
+                    return i;
+        }
+        return -1;
+    }
+
+//    public static boolean haveFace34Or(Joueur jouer, int numDe){
+//        for (int i = 0; i != 6; i++)
+//
+//    }
 
 }
