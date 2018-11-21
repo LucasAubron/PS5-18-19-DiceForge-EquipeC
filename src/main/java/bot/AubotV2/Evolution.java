@@ -1,7 +1,5 @@
 package bot.AubotV2;
 
-import java.util.Arrays;
-
 public class Evolution {
     int nombreDeJoueurs;
     int nombreDePartieParMatch;
