@@ -20,54 +20,10 @@ public class NidoBot extends Joueur {
     }
     public NidoBot(int identifiant, Afficheur afficheur, Plateau plateau){
         super(identifiant, afficheur, plateau);
-//        choixAction = new int[plateau.getJoueurs().size() == 3 ? 10 : 9];
-    }
-    public Stats getNbFaces(int numDe, De[] jeuDes, Ressource uneRess){
-        Stats count = new Stats();
-        for (Face face : jeuDes[numDe].getFaces())
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof  Soleil &&
-            uneRess.getClass().getName().equals("diceForge.Soleil"))
-                count.incrementNbSoleils();
-            else if(face.getRessource().length == 1 && face.getRessource()[0][0] instanceof Lune &&
-            uneRess.getClass().getName().equals("diceForge.Lune"))
-                count.incrementNbLunes();
-        return count;
     }
 
-    public int getPosFaceQteMin(int numDe, De[] jeuDes, Ressource uneRess){ //recherche de min classique
-        int min = 10000;
-        int res = -1;
-        Face[] faces = jeuDes[numDe].getFaces();
-        for (int i = 0; i < faces.length; i++)
-            if (faces[i].getRessource().length == 1)
-                if (faces[i].getRessource()[0][0] instanceof Or
-                    && uneRess.getClass().getName().equals("diceForge.Or")
-                    && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
-                    res = i;
-                }
-                else if (faces[i].getRessource()[0][0] instanceof Lune
-                        && uneRess.getClass().getName().equals("diceForge.Lune")
-                        && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
-                    res = i;
-                }
-                else if (faces[i].getRessource()[0][0] instanceof Soleil
-                        && uneRess.getClass().getName().equals("diceForge.Soleil")
-                        && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
-                    res = i;
-                }
-        return res;
-    }
 
-    public int getNbCarteType(List<Carte> cartes, Carte.Noms nom){
-        return (int) cartes.stream()
-                .filter(carte -> carte.getNom() == nom)
-                .count();
-    }
-
-    private List<Bassin> getBassinsAbordable() {
+    public List<Bassin> getBassinsAbordable() {
         List<Bassin> bassinAbordable = new ArrayList<>();//On créé la liste des bassins abordables
         for (Bassin bassin : getPlateau().getTemple().getSanctuaire())
             if (!bassin.getFaces().isEmpty() && bassin.getCout() <= getOr())//Si on peut ajouter ce bassin
@@ -75,20 +31,7 @@ public class NidoBot extends Joueur {
         return bassinAbordable;
     }
 
-    public boolean haveSoleilsOuLunesBassins(Bassin[] sanctuaire){
-        boolean have = false;
-        int i = 0;
-//        Bassin[] sanctuaire = getPlateau().getTemple().getSanctuaire();
-        while (!have && i < sanctuaire.length){
-            if (!sanctuaire[i].getFaces().isEmpty() && (
-                    sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Soleil ||
-                    sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Lune
-            ))
-                have = true;
-            i++;
-        }
-        return have;
-    }
+
 
     @Override
     public Action choisirAction(int numManche){
@@ -96,7 +39,7 @@ public class NidoBot extends Joueur {
         if ( numManche < 3 && getOr() > 5 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
         else if (numManche < 6 && getOr() > 5 && !getBassinsAbordable().isEmpty() &&
-                haveSoleilsOuLunesBassins(getPlateau().getTemple().getSanctuaire()))
+                NidoFunctions.haveSoleilsOuLunesBassins(getPlateau().getTemple().getSanctuaire()))
             return Action.FORGER;
 
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
@@ -139,27 +82,27 @@ public class NidoBot extends Joueur {
                 for (int indexDe = 0; indexDe < getDes().length; indexDe++)
                     if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil)
                         // on replace la face Or la moins valuable si elle existe par la face Soleil du bassin
-                        if (getNbFaces(indexDe, getDes(), new Soleil(1)).getNbSoleils() <= 2) {
-                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Or(1));
+                        if (NidoFunctions.getNbFaces(indexDe, getDes(), new Soleil(1)).getNbSoleils() <= 2) {
+                            int posFace = NidoFunctions.getPosFaceQteMin(indexDe, getDes(), new Or(1));
                             if (posFace != -1)
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         } else {
                             //on a deja au moins 3 faces Soleil alors on remplace la face Soleil la moins valuable
                             //par une face Soleil plus chère
-                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Soleil(1));
+                            int posFace = NidoFunctions.getPosFaceQteMin(indexDe, getDes(), new Soleil(1));
                             if (bassin.getFaces().get(0).getRessource()[0][0].getQuantite() >
                                     getDes()[indexDe].getFaces()[posFace].getRessource()[0][0].getQuantite() )
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         }
                     else if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune)
-                        if (getNbFaces(indexDe, getDes(), new Lune(1)).getNbLunes() <= 2) {
-                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Or(1));
+                        if (NidoFunctions.getNbFaces(indexDe, getDes(), new Lune(1)).getNbLunes() <= 2) {
+                            int posFace = NidoFunctions.getPosFaceQteMin(indexDe, getDes(), new Or(1));
                             if (posFace != -1)
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         } else {
                             //on a deja au moins 3 faces Lune alors on remplace la face Lune la moins valuable
                             //par une face Lune plus chère
-                            int posFace = getPosFaceQteMin(indexDe, getDes(), new Lune(1));
+                            int posFace = NidoFunctions.getPosFaceQteMin(indexDe, getDes(), new Lune(1));
                             if (bassin.getFaces().get(0).getRessource()[0][0].getQuantite() >
                                     getDes()[indexDe].getFaces()[posFace].getRessource()[0][0].getQuantite() )
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
@@ -175,7 +118,7 @@ public class NidoBot extends Joueur {
     public Carte choisirCarte(List<Carte> cartes, int numManche){
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
-            if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
+            if (carte.getNom().equals(Carte.Noms.Coffre) && NidoFunctions.getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
                 // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
                 return carte;
             if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
@@ -254,9 +197,9 @@ public class NidoBot extends Joueur {
             aForge = true;
         }
 
-        posFaceQteMin = getPosFaceQteMin(0, getDes(), new Lune(1));
+        posFaceQteMin = NidoFunctions.getPosFaceQteMin(0, getDes(), new Lune(1));
         if (posFaceQteMin == -1)
-            posFaceQteMin = getPosFaceQteMin(0, getDes(), new Soleil(1));
+            posFaceQteMin = NidoFunctions.getPosFaceQteMin(0, getDes(), new Soleil(1));
         //else
             //posFaceQteMin = getPosFaceQteMin(0, getDes(), new Random().nextInt(6));
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
