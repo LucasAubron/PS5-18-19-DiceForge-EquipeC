@@ -44,11 +44,8 @@ public class AubotV2 extends Joueur{
     private boolean montrerInfo = false;
     private int nombreDeLancerParManche;
     private Random random;
-    private boolean secondeAction = false;
-    private boolean desComplet;
     private int nombreDeJoueurs;
     private int manche = 0;
-    private int compteurForge = 0;
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
@@ -57,10 +54,12 @@ public class AubotV2 extends Joueur{
     private BufferedReader br;
 
     //--------------------------------------------
-    private int desOpti[] = new int[3]; //orDe, soleilDe, luneDe
-    private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < mancheExploit)
     private int mancheExploit;//Manche à partir de laquelle on ne fait plus que acheter des exploits
-    private Enum[][] ordrePrioManche = new Enum[10][6];//Quelles cartes a acheter en priorité et a quelle manche (lorsqu'on choisit de forger)
+    private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < mancheExploit)
+    private int soleilPourExploitManche[] = new int[10];
+    private int lunePourExploitManche[] = new int[10];
+    private int [][][] ordrePrioForgeManche = new int[6][5][3];//Quelle face forger en prio sur quel dé et pendant quelle manche
+    private Enum[][] ordrePrioCarteManche = new Enum[10][8];//Quelles cartes a acheter en priorité et a quelle manche (lorsqu'on choisit de forger)
     private int[] nombreCarteMax = new int[16];//Nombre de carte de même type max que le joueur peut acheter (pour les cartes coutant 2 et moins)
     //--------------------------------------------
     /**
@@ -85,109 +84,64 @@ public class AubotV2 extends Joueur{
     @Override
     public Joueur.Action choisirAction(int numManche) {
         if (manche == 0) {//on fait ici ce qu'on n'a pas pu faire dans le constructeur (du fait que le plateau n'est pas encore complètement initialisé à ce moment là)
-            int indice = 0;
             nombreDeJoueurs = getPlateau().getJoueurs().size();
-            nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3:4;
+            nombreDeLancerParManche = nombreDeJoueurs ==3  ? 3 : 4;
             printInfo();
         }
         manche++;
-        statsDe();
-        if (secondeAction) {
-            secondeAction = false;
-            return Action.EXPLOIT;
+        if (manche < mancheExploit) {
+            for (int i = 0; i < mancheExploit; i++) {
+                if (i + 1 == manche && getOr() >= orPourForgerManche[i])
+                    return Action.FORGER;
+            }
         }
-        if (desComplet ||
-            manche == 1 && getOr() < orPourForgerManche[0] ||
-            manche == 2 && getOr() < orPourForgerManche[1] ||
-            manche == 3 && getOr() < orPourForgerManche[2] ||
-            manche == 4 && getOr() < orPourForgerManche[3] ||
-            manche == 5 && getOr() < orPourForgerManche[4] ||
-            manche == 6 && getOr() < orPourForgerManche[5] ||
-            manche >= mancheExploit)
-            return Action.EXPLOIT;
-        else
-            return Action.FORGER;
+        for (int i = 0; i < 10; i++)
+            if (i+1 == manche && (getSoleil() >=  soleilPourExploitManche[i] || getLune() >= lunePourExploitManche[i]))
+                return Action.EXPLOIT;
+        return Action.PASSER;
     }
 
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        Bassin bassin;
-        int numFace = 0;
-        int numDe;
-        int posFace;
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
-        switch(compteurForge) {
-            case 0:
-                bassin = trouveBassinCout(bassins, 2, "Or");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 1:
-                bassin = trouveBassinCout(bassins, 3, "Or");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 2:
-                bassin = trouveBassinCout(bassins, 2, "Lune");
-                numDe = 0;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 3:
-                bassin = trouveBassinCout(bassins, 8, "Soleil");
-                numDe = 1;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            case 5:
-                bassin = trouveBassinCout(bassins, 3, "Soleil");
-                numDe = 1;
-                posFace = getPosFace1Or(numDe);
-                if (posFace == -1)
-                    posFace = random.nextInt(6);
-                break;
-            default:
-                bassin = bassins.get(0);
-                for (Bassin bassinAcheter: bassins){
-                    if (bassinAcheter.getCout()>bassin.getCout()){
-                        bassin = bassinAcheter;
-                    }
-                }
-                numFace = 0;
-                int posFaceTest;
-                posFace = -1;
-                numDe = -1;
-                for (int i=1; i>0; i--) {
-                    posFaceTest = getPosFace1Or(i);
-                    if (numFace != -1) {
-                        posFace = posFaceTest;
-                        numDe = i;
-                        break;
-                    }
-                }
-                if (posFace == -1){
-                    posFace = random.nextInt(6);
-                }
-                if (numDe == -1){
-                    numDe = 0;
-                }
+        int[][] choixForgePrio = new int[5][3];
+        if (manche >= mancheExploit)//obligé de vérifier à cause de la face bouclier
+            choixForgePrio = ordrePrioForgeManche[5];
+        else
+            choixForgePrio = ordrePrioForgeManche[manche-1];
+        String ressource = "";
+        Bassin bassin = null;
+        int numDe = -1;
+        int numFaceBassin = -1;
+        int numFaceDe = -1;
+        for (int forgePrio = 0; forgePrio < 5; forgePrio++) {
+            switch (choixForgePrio[forgePrio][2]) {
+                case 1:
+                    ressource = "Or";
+                    break;
+                case 2:
+                    ressource = "Soleil";
+                    break;
+                case 3:
+                    ressource = "Lune";
+                    break;
+            }
+            bassin = trouveBassinCout(bassins, choixForgePrio[forgePrio][0], ressource);
+            numDe = choixForgePrio[forgePrio][1];
+            numFaceDe = getPosFace1Or(numDe);
+            if (bassin != null)
+                numFaceBassin = trouveFaceRessourceBassin(bassin, ressource);
+            if (numFaceBassin != -1)
+                return new ChoixJoueurForge(bassin, numFaceBassin, numDe ,numFaceDe);
         }
-        if (bassin != null)
-            compteurForge++;
-        return new ChoixJoueurForge(bassin, numFace, numDe, posFace);
+        return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        Enum[] ordrePrio = ordrePrioManche[manche-1];
+        Enum[] ordrePrio = ordrePrioCarteManche[manche-1];
         Carte carteLaPlusChere = cartes.get(0);
         for (Carte carte: cartes) {
             if ((carte.getNom() == Carte.Noms.Marteau && nombreCartePossedee(Carte.Noms.Marteau) >= nombreCarteMax[0]||
@@ -228,7 +182,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr){
-        if ((!desComplet && manche < mancheExploit|| getOr() < 3* nombreCartePossedee(Ancien)) && getOr() + quantiteOr <= getMaxOr())
+        if (manche < mancheExploit || getOr() < 3* nombreCartePossedee(Ancien) && getOr() + quantiteOr <= getMaxOr())
             return quantiteOr;
         return 0;
     }
@@ -244,13 +198,10 @@ public class AubotV2 extends Joueur{
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        if (!desComplet) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
-            try{
+        if (manche < mancheExploit) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
+            int nombreAncien = nombreCartePossedee(Carte.Noms.Ancien);
+            for (int i=0; i<nombreAncien; i++)
                 renfortsUtilisables.remove(Ancien);
-            }
-            finally {
-                return renfortsUtilisables;
-            }
         }
         return renfortsUtilisables;
     }
@@ -300,13 +251,18 @@ public class AubotV2 extends Joueur{
 
     @Override
     public void forgerFace(Face face){
+        boolean aForge = false;
         int numFace;
         for (int i=1; i>0; i--){
             numFace = getPosFace1Or(i);
             if (numFace !=-1) {
                 forgerDe(i, face, numFace);
+                aForge = true;
                 break;
             }
+        }
+        if (!aForge){
+            forgerDe(0, face, random.nextInt(6));
         }
     }
 
@@ -324,9 +280,7 @@ public class AubotV2 extends Joueur{
     @Override
     public boolean utiliserJetonCerbere(){
         ressourceManquante();
-        if (soleilManquant >= 3 &&
-                (getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil ||
-                getDesFaceCourante()[0].getRessource()[0][0] instanceof PointDeGloire))
+        if (soleilManquant >= 3)
             return true;
         return false;
     }
@@ -342,33 +296,6 @@ public class AubotV2 extends Joueur{
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Extrêmement utile pour connaitre la force des dés du bot, lui permet de savoir quelles stratégies
-     * il devra adopter.
-     * @return un tableau des ressources moyennes gagnées par lancé par le dé dans l'ordre suivant: or/soleil/lune/pdg
-     */
-    private void statsDe() {
-        int or = 0;
-        int lune = 0;
-        int soleil = 0;
-        if (!desComplet)
-            for (De de : getDes())
-                for (Face face : de.getFaces())
-                    for (Ressource[] ressources : face.getRessource())
-                        for (Ressource ressource : ressources) {
-                            if (ressource instanceof Or)
-                                or += ressource.getQuantite();
-                            if (ressource instanceof Soleil)
-                                soleil += ressource.getQuantite();
-                            if (ressource instanceof Lune)
-                                lune += ressource.getQuantite();
-                        }
-        //System.out.println("or: " + or + "\nsoleil:" + soleil + "\nlune: " + lune);
-        //System.out.println("\n\n\n");
-        if (or >= desOpti[0] && soleil >= desOpti[1] && lune >= desOpti[2])
-            desComplet = true;
-    }
 
     private int getPosFace1Or(int numDe){
         for (int i = 0; i != 6; i++) {
@@ -447,15 +374,18 @@ public class AubotV2 extends Joueur{
     }
 //---------------------------------------------------------------------------------------------------------------------------
     private void initValeur() {
-        int l = 0;
+        int l = 1;
         try {
             String ligne = br.readLine();
             char[] tabL1 = ligne.toCharArray();//On décompose la première ligne string en tableau d'array
-            char[] tabLx = new char[6];//Le reste des lignes
-            Enum[] tabOrMx = new Enum[6];
+            char[] tabLTaille8; //Le reste des lignes
+            char[] tabLTaille10; //Le reste des lignes
+            char[] tabLTaille15; //Le reste des lignes
+            char[] tabLTaille16; //Le reste des lignes
+            Enum[] tabPrioCarte = new Enum[8];
             while (ligne != null) {
-                if (l == 0) {//première ligne, voir commentaire de la classe
-                    for (int i = 0; i <= 9; i++) {//conversion de héxa à décimal
+                if (l == 1) {//première ligne, voir commentaire de la classe
+                    for (int i = 0; i < 7; i++) {//conversion de héxa à décimal
                         if (tabL1[i] == 'a')
                             tabL1[i] = 58;
                         else if (tabL1[i] == 'b')
@@ -472,75 +402,112 @@ public class AubotV2 extends Joueur{
                             tabL1[i] = 64;
                         if (i == 0)
                             mancheExploit = (int) tabL1[i] - 48;
-                        else if (i > 0 && i < 4)
-                            desOpti[i - 1] = (int) tabL1[i] - 48;
-                        else if (i > 3)
-                            orPourForgerManche[i - 4] = (int) tabL1[i] - 48;
+                        else if (i > 0)
+                            orPourForgerManche[i - 1] = (int) tabL1[i] - 48;
                     }
                 }
-                else if(l>0 && l<11){
-                    l--;
-                    tabLx = ligne.toCharArray();
-                    for (int indice=0; indice <6; indice++){
-                        if (tabLx[indice] == 'A')
-                            tabOrMx[indice] = Carte.Noms.Marteau;
-                        else if (tabLx[indice] == 'B')
-                            tabOrMx[indice] = Carte.Noms.Coffre;
-                        else if (tabLx[indice] == 'C')
-                            tabOrMx[indice] = Carte.Noms.Biche;
-                        else if (tabLx[indice] == 'D')
-                            tabOrMx[indice] = Carte.Noms.Ours;
-                        else if (tabLx[indice] == 'E')
-                            tabOrMx[indice] = Carte.Noms.Satyres;
-                        else if (tabLx[indice] == 'F')
-                            tabOrMx[indice] = Carte.Noms.Sanglier;
-                        else if (tabLx[indice] == 'G')
-                            tabOrMx[indice] = Carte.Noms.Passeur;
-                        else if (tabLx[indice] == 'H')
-                            tabOrMx[indice] = Carte.Noms.Cerbere;
-                        else if (tabLx[indice] == 'I')
-                            tabOrMx[indice] = Carte.Noms.CasqueDinvisibilite;
-                        else if (tabLx[indice] == 'J')
-                            tabOrMx[indice] = Carte.Noms.Cancer;
-                        else if (tabLx[indice] == 'K')
-                            tabOrMx[indice] = Carte.Noms.Sentinelle;
-                        else if (tabLx[indice] == 'L')
-                            tabOrMx[indice] = Carte.Noms.Hydre;
-                        else if (tabLx[indice] == 'M')
-                            tabOrMx[indice] = Carte.Noms.Typhon;
-                        else if (tabLx[indice] == 'N')
-                            tabOrMx[indice] = Carte.Noms.Sphinx;
-                        else if (tabLx[indice] == 'O')
-                            tabOrMx[indice] = Carte.Noms.Cyclope;
-                        else if (tabLx[indice] == 'P')
-                            tabOrMx[indice] = Carte.Noms.MiroirAbyssal;
-                        else if (tabLx[indice] == 'Q')
-                            tabOrMx[indice] = Carte.Noms.Meduse;
-                        else if (tabLx[indice] == 'R')
-                            tabOrMx[indice] = Carte.Noms.Triton;
-                        else if (tabLx[indice] == 'S')
-                            tabOrMx[indice] = Carte.Noms.Minautore;
-                        else if (tabLx[indice] == 'T')
-                            tabOrMx[indice] = Carte.Noms.Bouclier;
-                        else if (tabLx[indice] == 'U')
-                            tabOrMx[indice] = Carte.Noms.Hibou;
-                        else if (tabLx[indice] == 'V')
-                            tabOrMx[indice] = Carte.Noms.BateauCeleste;
-                        else if (tabLx[indice] == 'W')
-                            tabOrMx[indice] = Carte.Noms.HerbesFolles;
-                        else if (tabLx[indice] == 'X')
-                            tabOrMx[indice] = Carte.Noms.Ancien;
-                    }
-                    for (int i=0; i<6; i++){
-                        ordrePrioManche[l][i] = tabOrMx[i];
-                    }
-                    l++;
+                else if(l==2){
+                    tabLTaille10 = ligne.toCharArray();
+                    for (int i=0; i<10; i++)
+                        soleilPourExploitManche[i] = tabLTaille10[i] - 48;
                 }
-                else if(l==11){
-                    char[] tabCarteMax;
-                    tabCarteMax = ligne.toCharArray();
+                else if(l==3){
+                    tabLTaille10 = ligne.toCharArray();
+                    for (int i=0; i<10; i++)
+                        lunePourExploitManche[i] = tabLTaille10[i] - 48;
+                }
+                else if(l>=4 && l<=9){
+                    l = l - 4;
+                    tabLTaille15 = ligne.toCharArray();
+                    int[] tabTaille15 = new int[15];
+                    for (int i = 0; i < 15; i++) {//conversion de héxa à décimal
+                        if (tabLTaille15[i] == 'a')
+                            tabTaille15[i] = 10;
+                        else if (tabLTaille15[i] == 'b')
+                            tabLTaille15[i] = 11;
+                        else if (tabLTaille15[i] == 'c')
+                            tabLTaille15[i] = 12;
+                        else if (tabLTaille15[i] == 'd')
+                            tabLTaille15[i] = 13;
+                        else if (tabLTaille15[i] == 'e')
+                            tabLTaille15[i] = 14;
+                        else if (tabLTaille15[i] == 'f')
+                            tabLTaille15[i] = 15;
+                        else if (tabLTaille15[i] == 'g')
+                            tabLTaille15[i] = 16;
+                        else
+                            tabTaille15[i] = (int) tabLTaille15[i] - 48;
+                    }
+                    int[] tab1 = new int[]{tabTaille15[0], tabTaille15[1], tabTaille15[2]};
+                    int[] tab2 = new int[]{tabTaille15[3], tabTaille15[4], tabTaille15[5]};
+                    int[] tab3 = new int[]{tabTaille15[6], tabTaille15[7], tabTaille15[8]};
+                    int[] tab4 = new int[]{tabTaille15[9], tabTaille15[10], tabTaille15[11]};
+                    int[] tab5 = new int[]{tabTaille15[12], tabTaille15[13], tabTaille15[14]};
+                    ordrePrioForgeManche[l] = new int[][]{tab1, tab2, tab3, tab4, tab5};
+                    l = l +4;
+                }
+                else if(l>=10 && l<=19){
+                    l = l -10;
+                    tabLTaille8 = ligne.toCharArray();
+                    for (int indice=0; indice <8; indice++){
+                        if (tabLTaille8[indice] == 'A')
+                            tabPrioCarte[indice] = Carte.Noms.Marteau;
+                        else if (tabLTaille8[indice] == 'B')
+                            tabPrioCarte[indice] = Carte.Noms.Coffre;
+                        else if (tabLTaille8[indice] == 'C')
+                            tabPrioCarte[indice] = Carte.Noms.Biche;
+                        else if (tabLTaille8[indice] == 'D')
+                            tabPrioCarte[indice] = Carte.Noms.Ours;
+                        else if (tabLTaille8[indice] == 'E')
+                            tabPrioCarte[indice] = Carte.Noms.Satyres;
+                        else if (tabLTaille8[indice] == 'F')
+                            tabPrioCarte[indice] = Carte.Noms.Sanglier;
+                        else if (tabLTaille8[indice] == 'G')
+                            tabPrioCarte[indice] = Carte.Noms.Passeur;
+                        else if (tabLTaille8[indice] == 'H')
+                            tabPrioCarte[indice] = Carte.Noms.Cerbere;
+                        else if (tabLTaille8[indice] == 'I')
+                            tabPrioCarte[indice] = Carte.Noms.CasqueDinvisibilite;
+                        else if (tabLTaille8[indice] == 'J')
+                            tabPrioCarte[indice] = Carte.Noms.Cancer;
+                        else if (tabLTaille8[indice] == 'K')
+                            tabPrioCarte[indice] = Carte.Noms.Sentinelle;
+                        else if (tabLTaille8[indice] == 'L')
+                            tabPrioCarte[indice] = Carte.Noms.Hydre;
+                        else if (tabLTaille8[indice] == 'M')
+                            tabPrioCarte[indice] = Carte.Noms.Typhon;
+                        else if (tabLTaille8[indice] == 'N')
+                            tabPrioCarte[indice] = Carte.Noms.Sphinx;
+                        else if (tabLTaille8[indice] == 'O')
+                            tabPrioCarte[indice] = Carte.Noms.Cyclope;
+                        else if (tabLTaille8[indice] == 'P')
+                            tabPrioCarte[indice] = Carte.Noms.MiroirAbyssal;
+                        else if (tabLTaille8[indice] == 'Q')
+                            tabPrioCarte[indice] = Carte.Noms.Meduse;
+                        else if (tabLTaille8[indice] == 'R')
+                            tabPrioCarte[indice] = Carte.Noms.Triton;
+                        else if (tabLTaille8[indice] == 'S')
+                            tabPrioCarte[indice] = Carte.Noms.Minautore;
+                        else if (tabLTaille8[indice] == 'T')
+                            tabPrioCarte[indice] = Carte.Noms.Bouclier;
+                        else if (tabLTaille8[indice] == 'U')
+                            tabPrioCarte[indice] = Carte.Noms.Hibou;
+                        else if (tabLTaille8[indice] == 'V')
+                            tabPrioCarte[indice] = Carte.Noms.BateauCeleste;
+                        else if (tabLTaille8[indice] == 'W')
+                            tabPrioCarte[indice] = Carte.Noms.HerbesFolles;
+                        else if (tabLTaille8[indice] == 'X')
+                            tabPrioCarte[indice] = Carte.Noms.Ancien;
+                    }
+                    for (int i=0; i<8; i++){
+                        ordrePrioCarteManche[l][i] = tabPrioCarte[i];
+                    }
+                    l = l + 10;
+                }
+                else if(l==20){
+                    tabLTaille16 = ligne.toCharArray();
                     for (int k=0; k<16; k++)
-                        nombreCarteMax[k] = (int) tabCarteMax[k] - 48;
+                        nombreCarteMax[k] = (int) tabLTaille16[k] - 48;
                 }
                 l++;
                 ligne = br.readLine();
@@ -567,36 +534,48 @@ public class AubotV2 extends Joueur{
             System.out.println("Or pour forger 4: " + orPourForgerManche[3]);
             System.out.println("Or pour forger 5: " + orPourForgerManche[4]);
             System.out.println("Or pour forger 6: " + orPourForgerManche[5]);
-            System.out.println("Or a avoir sur le dé: " + desOpti[0]);
-            System.out.println("Soleil a avoir sur le dé: " + desOpti[1]);
-            System.out.println("Lune a avoir sur le dé: " + desOpti[2]);
-            for (Enum e: ordrePrioManche[0])
+            System.out.println("--------------------------------------------");
+            System.out.println("SoleilPourExploitManche:");
+            for (int n:soleilPourExploitManche)
+                System.out.println(n);
+            System.out.println("--------------------------------------------");
+            System.out.println("LunePourExploitManche:");
+            for (int n:lunePourExploitManche)
+                System.out.println(n);
+            for (int[][] nnn: ordrePrioForgeManche) {
+                System.out.println("--------------------------------------------");
+                for (int[] nn : nnn)
+                    for (int n: nn)
+                        System.out.println(n);
+            }
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioCarteManche[0])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[1])
+            for (Enum e: ordrePrioCarteManche[1])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[2])
+            for (Enum e: ordrePrioCarteManche[2])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[3])
+            for (Enum e: ordrePrioCarteManche[3])
                 System.out.println(e);
-            for (Enum e: ordrePrioManche[4])
-                System.out.println(e);
-            System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[5])
+            for (Enum e: ordrePrioCarteManche[4])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[6])
+            for (Enum e: ordrePrioCarteManche[5])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[7])
+            for (Enum e: ordrePrioCarteManche[6])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[8])
+            for (Enum e: ordrePrioCarteManche[7])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
-            for (Enum e: ordrePrioManche[9])
+            for (Enum e: ordrePrioCarteManche[8])
+                System.out.println(e);
+            System.out.println("--------------------------------------------");
+            for (Enum e: ordrePrioCarteManche[9])
                 System.out.println(e);
             System.out.println("--------------------------------------------");
             for (int i: nombreCarteMax)
