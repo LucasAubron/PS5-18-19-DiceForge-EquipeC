@@ -7,12 +7,14 @@ import java.util.Random;
 
 public class LataBotch extends Joueur{
     public LataBotch(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
-    boolean estTourSupp=false;
+    boolean rushMarteau=false;
 
     @Override
     public Joueur.Action choisirAction(int numManche)
     {
-        if (numManche <=3 && getOr() > 5 && estTourSupp==false)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if(rushMarteau==true)
+            return Action.EXPLOIT;
+        if (numManche <=3 && getOr() > 5 && rushMarteau==false)//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -44,7 +46,7 @@ public class LataBotch extends Joueur{
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
-            if (numManche == 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil){//Les 2 premières manches
+            if (numManche <=3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil){//Les 2 premières manches
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
@@ -67,8 +69,6 @@ public class LataBotch extends Joueur{
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
-        if(estTourSupp)
-            estTourSupp=false;
         Carte carteAChoisir = null;
         for (Carte carte:cartes){
             if (carte.getNom().equals(Carte.Noms.Marteau) )//Au moins 1 marteau
@@ -85,8 +85,15 @@ public class LataBotch extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        estTourSupp=true;
-        return ((getOr() > 10 && numManche < 6) || getSoleil() > 1 || getLune() > 0);//Si on a assez de ressource pour refaire un tour
+        for(int i=0;i<getPlateau().getIles().length;i++){
+            for(int j=0; j!=getPlateau().getIles()[i].getCartes().size();i++)
+                for(int k=0;k!=getPlateau().getIles()[i].getCartes().get(k).size();k++){
+                    if(getPlateau().getIles()[i].getCartes().get(j).get(k).getNom().equals(Carte.Noms.Marteau)&&(getSoleil() > 1 && getLune() > 0))
+                        rushMarteau=true;
+                }
+
+        }
+        return ((getOr() > 10 && numManche <=3) || (getSoleil() > 1 && getLune() > 0) || getSoleil()>2 || getLune()>1);//Si on a assez de ressource pour refaire un tour
     }
 
     //On choisit l'or à garder ici 0
