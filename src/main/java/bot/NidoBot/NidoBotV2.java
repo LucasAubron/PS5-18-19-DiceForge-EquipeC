@@ -60,17 +60,18 @@ public class NidoBotV2 extends Joueur {
                     new BassinType(2, "Or"),
                     new BassinType(2, "Lune")};
             int i = 0;
-            while ((bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
+            while ((bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null &&
+            i + 1 < listBassins.length)
                 i++;
             if (i == 3)
                 bassin = getPlateau().getTemple().getSanctuaire()[0];
 
-            if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
+            if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Lune(1)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
+            } else if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
                 for (j = 0; j < getDes().length; j++)
                     if (getPosFaceOrDuDe(this, j, 3) != -1 || getPosFaceOrDuDe(this, j, 4) != -1)
                         posFaceInt = j == 0 ? 1 : 0;
@@ -91,20 +92,21 @@ public class NidoBotV2 extends Joueur {
                     new BassinType(3, "Or"),
                     new BassinType(2, "Or")};
             int i = 0;
-            while ((bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
+            while ((bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null &&
+            i + 1 < listBassins.length)
                 i++;
 
-            if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
+            if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Soleil(1)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
+            } else if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Lune(1)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
+            } else if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
                 if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
                         (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)
                 )
@@ -142,7 +144,20 @@ public class NidoBotV2 extends Joueur {
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche) {
         Carte carteAChoisir = null;
+
         for (Carte carte : cartes) {
+            switch (numManche){
+                case 1:
+                case 2:
+                case 3:
+                    if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
+                        return carte;
+                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
+                        return carte;
+                    if (!possedeCarte(Carte.Noms.Ancien) && carte.getNom().equals(Carte.Noms.Ancien))
+                        return carte;
+                        break;
+            }
             if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
                 // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
                 return carte;
