@@ -11,7 +11,7 @@ public class LataBotch extends Joueur{
     @Override
     public Joueur.Action choisirAction(int numManche)
     {
-        if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if (numManche <=3 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -23,12 +23,33 @@ public class LataBotch extends Joueur{
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
         Bassin bassinAChoisir = null;
-        for (Bassin bassin:bassins){
+        if(trouveBassinCout(bassins,4,"Or")!=null){
+            Bassin bassin=trouveBassinCout(bassins,4,"Or");
+            for(int i=0;i<bassin.getFaces().size();i++){
+                if(bassin.getFaces().get(i).getRessource()[0][0].getQuantite()==6){
+                    int[] posFace = getPosFace1Or();
+                    if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
+                        return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
+                }
+
+            }
+        }
+        for(int i=bassins.size()-1;i>=0;i--){
+            Bassin bassin=bassins.get(i);
+
+
             if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
+            if (numManche == 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil){//Les 2 premières manches
+                int[] posFace = getPosFace1Or();
+                if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
+                    return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
+            }
+
+
             else if (bassinAChoisir != null && bassinAChoisir.getCout() < bassin.getCout())//Sinon, on cherche la face la plus chere
                 bassinAChoisir = bassin;
             else if (bassinAChoisir == null)
@@ -40,6 +61,8 @@ public class LataBotch extends Joueur{
 
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
+
+
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
@@ -173,6 +196,36 @@ public class LataBotch extends Joueur{
     @Override
     public boolean choisirRessourceOuPdg(Ressource ressource) {
         return true;
+    }
+    private Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
+        if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Or)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Soleil")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Soleil)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Lune")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Lune)
+                                    return bassin;
+        }
+        return null;
     }
     @Override
     public String toString(){return "LaaaaaataBotch";}
