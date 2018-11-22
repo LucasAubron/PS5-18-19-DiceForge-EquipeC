@@ -459,11 +459,10 @@ public class MLGBot extends Joueur {
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche) {
         int numBassin = notLuckButSkill.nextInt(bassins.size());
-        boolean pasMiroir = true;
-        for (De de : getDes()) {
-            if (de.derniereFace() instanceof FaceMiroirAbyssal) {
-                pasMiroir = false;
-                break;
+        boolean pasBateau = true;
+        for (Bassin bassin:bassins) {
+            if (bassin.getCout() > getOr()) {
+                pasBateau = false;
             }
         }
         if (gen > 0 && (!estRandom || !intensiveTraining)) {
@@ -481,7 +480,7 @@ public class MLGBot extends Joueur {
                 }
             }
         }
-        if (bassins.get(numBassin).getCout() != 0 && pasMiroir) {
+        if (bassins.get(numBassin).getCout() != 0 && pasBateau) {
             for (int i = 0; i != getPlateau().getTemple().getSanctuaire().length; ++i)
                 if (getPlateau().getTemple().getSanctuaire()[i].toString().equals(bassins.get(numBassin).toString()))
                     choixBassinNext.add((byte) (i + 1));
