@@ -288,11 +288,6 @@ public class AubotV2 extends Joueur{
         }
         for (int i = 0; i != 6; i++) {
             if (getDe(numDe).getFace(i).getRessource().length == 1)
-                if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof PointDeGloire && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 2)
-                    return i;
-        }
-        for (int i = 0; i != 6; i++) {
-            if (getDe(numDe).getFace(i).getRessource().length == 1)
                 if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Lune && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 1)
                     return i;
         }
@@ -311,6 +306,11 @@ public class AubotV2 extends Joueur{
                 if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Lune && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 1)
                     return i;
         }
+        for (int i = 0; i != 6; i++) {
+            if (getDe(numDe).getFace(i).getRessource().length == 1)
+                if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof PointDeGloire && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 2)
+                    return i;
+        }
         return random.nextInt(6);
     }
 
@@ -318,13 +318,6 @@ public class AubotV2 extends Joueur{
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
-                    return new int[]{i,j};
-                }
-            }
-        }
-        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
-            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
-                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof PointDeGloire && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 2){
                     return new int[]{i,j};
                 }
             }
@@ -346,6 +339,13 @@ public class AubotV2 extends Joueur{
         for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
             for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
                 if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Lune && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof PointDeGloire && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 2){
                     return new int[]{i,j};
                 }
             }
@@ -525,53 +525,53 @@ public class AubotV2 extends Joueur{
                     l = l -10;
                     tabLTaille8 = ligne.toCharArray();
                     for (int indice=0; indice <8; indice++){
-                        if (tabLTaille8[indice] == 'A')
+                        if (tabLTaille8[indice] == 'a')
                             tabPrioCarte[indice] = Carte.Noms.Marteau;
-                        else if (tabLTaille8[indice] == 'B')
+                        else if (tabLTaille8[indice] == 'b')
                             tabPrioCarte[indice] = Carte.Noms.Coffre;
-                        else if (tabLTaille8[indice] == 'C')
+                        else if (tabLTaille8[indice] == 'c')
                             tabPrioCarte[indice] = Carte.Noms.Biche;
-                        else if (tabLTaille8[indice] == 'D')
+                        else if (tabLTaille8[indice] == 'd')
                             tabPrioCarte[indice] = Carte.Noms.Ours;
-                        else if (tabLTaille8[indice] == 'E')
+                        else if (tabLTaille8[indice] == 'e')
                             tabPrioCarte[indice] = Carte.Noms.Satyres;
-                        else if (tabLTaille8[indice] == 'F')
+                        else if (tabLTaille8[indice] == 'f')
                             tabPrioCarte[indice] = Carte.Noms.Sanglier;
-                        else if (tabLTaille8[indice] == 'G')
+                        else if (tabLTaille8[indice] == 'g')
                             tabPrioCarte[indice] = Carte.Noms.Passeur;
-                        else if (tabLTaille8[indice] == 'H')
+                        else if (tabLTaille8[indice] == 'h')
                             tabPrioCarte[indice] = Carte.Noms.Cerbere;
-                        else if (tabLTaille8[indice] == 'I')
+                        else if (tabLTaille8[indice] == 'i')
                             tabPrioCarte[indice] = Carte.Noms.CasqueDinvisibilite;
-                        else if (tabLTaille8[indice] == 'J')
+                        else if (tabLTaille8[indice] == 'j')
                             tabPrioCarte[indice] = Carte.Noms.Cancer;
-                        else if (tabLTaille8[indice] == 'K')
+                        else if (tabLTaille8[indice] == 'k')
                             tabPrioCarte[indice] = Carte.Noms.Sentinelle;
-                        else if (tabLTaille8[indice] == 'L')
+                        else if (tabLTaille8[indice] == 'l')
                             tabPrioCarte[indice] = Carte.Noms.Hydre;
-                        else if (tabLTaille8[indice] == 'M')
+                        else if (tabLTaille8[indice] == 'm')
                             tabPrioCarte[indice] = Carte.Noms.Typhon;
-                        else if (tabLTaille8[indice] == 'N')
+                        else if (tabLTaille8[indice] == 'n')
                             tabPrioCarte[indice] = Carte.Noms.Sphinx;
-                        else if (tabLTaille8[indice] == 'O')
+                        else if (tabLTaille8[indice] == 'o')
                             tabPrioCarte[indice] = Carte.Noms.Cyclope;
-                        else if (tabLTaille8[indice] == 'P')
+                        else if (tabLTaille8[indice] == 'p')
                             tabPrioCarte[indice] = Carte.Noms.MiroirAbyssal;
-                        else if (tabLTaille8[indice] == 'Q')
+                        else if (tabLTaille8[indice] == 'q')
                             tabPrioCarte[indice] = Carte.Noms.Meduse;
-                        else if (tabLTaille8[indice] == 'R')
+                        else if (tabLTaille8[indice] == 'r')
                             tabPrioCarte[indice] = Carte.Noms.Triton;
-                        else if (tabLTaille8[indice] == 'S')
+                        else if (tabLTaille8[indice] == 's')
                             tabPrioCarte[indice] = Carte.Noms.Minautore;
-                        else if (tabLTaille8[indice] == 'T')
+                        else if (tabLTaille8[indice] == 't')
                             tabPrioCarte[indice] = Carte.Noms.Bouclier;
-                        else if (tabLTaille8[indice] == 'U')
+                        else if (tabLTaille8[indice] == 'u')
                             tabPrioCarte[indice] = Carte.Noms.Hibou;
-                        else if (tabLTaille8[indice] == 'V')
+                        else if (tabLTaille8[indice] == 'v')
                             tabPrioCarte[indice] = Carte.Noms.BateauCeleste;
-                        else if (tabLTaille8[indice] == 'W')
+                        else if (tabLTaille8[indice] == 'w')
                             tabPrioCarte[indice] = Carte.Noms.HerbesFolles;
-                        else if (tabLTaille8[indice] == 'X')
+                        else if (tabLTaille8[indice] == 'x')
                             tabPrioCarte[indice] = Carte.Noms.Ancien;
                     }
                     for (int i=0; i<8; i++){
