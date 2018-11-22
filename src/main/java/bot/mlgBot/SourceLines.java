@@ -235,7 +235,7 @@ public class SourceLines {
         for (int i = 0; i != ordreBassin.size(); ++i){
             for (int j = 0; j < ordreBassin.get(i).size(); ++j){
                 if (random.nextInt(pourcentRandom) == 0)
-                    ordreBassin.get(i).remove(j);
+                    ordreBassin.get(i).get(j).clear();
             }
         }
         return ordreBassin;
@@ -250,7 +250,7 @@ public class SourceLines {
             for (int j = 0; j != ordreCarte.get(i).size(); ++j)
                 for (int k = 0; k < ordreCarte.get(i).get(j).size(); ++k)
                     if (random.nextInt(pourcentRandom) == 0)
-                        ordreCarte.get(i).get(j).remove(k);
+                        ordreCarte.get(i).get(j).get(k).clear();
         return ordreCarte;
     }
 }

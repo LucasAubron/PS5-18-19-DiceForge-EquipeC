@@ -16,7 +16,7 @@ import java.util.Random;
 public class MLGBot extends Joueur {
 
     private enum Strategies{Randomized, Hard, Copy}
-    private Strategies strat = Strategies.Hard;
+    private Strategies strat = Strategies.Randomized;
 
     private Random notLuckButSkill = new Random();
     private int numeroManche = -1;//On est jamais mieux servi que par soi même
@@ -105,7 +105,7 @@ public class MLGBot extends Joueur {
         } else {
             positionCHEF = genFile.length();
             if (intensiveTraining) {
-                if (positionCHEF > 70 * 1000 * (gen == 0 ? 2 : 1) / (gen > 600 ? 10 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
+                if (positionCHEF > 70 * 100 * (gen == 0 ? 2 : 1) / (gen > 100 ? 5 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
                     remuerLaSoupe(nbrJoueur);
             }
         }
@@ -126,15 +126,15 @@ public class MLGBot extends Joueur {
         choixCarteNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         puissanceSoleil = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         puissanceLune = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
-        if (gen > 700)
+        if (gen > 200)
             scoreMin = 145;
-        else if (gen > 600)
+        else if (gen > 100)
             scoreMin = 140;
-        else if (gen > 500)
+        else if (gen > 50)
             scoreMin = 130;
-        else if (gen > 350)
+        else if (gen > 20)
             scoreMin = 120;
-        else if (gen > 250)
+        else if (gen > 5)
             scoreMin = 110;
         else
             scoreMin = 100;
@@ -228,8 +228,8 @@ public class MLGBot extends Joueur {
             //Partie update des fichiers
             ++gen;
             cible = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen;
-            if (gen > 29) {
-                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 30);
+            if (gen > 2) {
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 3);
                 File delFile = new File(cibleSuppr);
                 delFile.delete();
             }
@@ -484,9 +484,10 @@ public class MLGBot extends Joueur {
                 pasBateau = false;
             }
         }
+        int nbrOr = (pasBateau ? getOr() : getOr() + 2)/approxOr;
         if (gen > 0 && (!estRandom || !intensiveTraining)) {
-            if (ordreBassin.get(numeroManche).size() * approxOr > getOr()) {
-                for (byte b : ordreBassin.get(numeroManche).get(getOr() / approxOr)) {
+            if (ordreBassin.get(numeroManche).size() > nbrOr) {
+                for (byte b : ordreBassin.get(numeroManche).get(nbrOr)) {
                     boolean continuer = true;
                     for (int i = 0; i != bassins.size(); ++i) {
                         if (getPlateau().getTemple().getSanctuaire()[b - 1].toString().equals(bassins.get(i).toString())) {
@@ -499,7 +500,6 @@ public class MLGBot extends Joueur {
                 }
             }
         }
-        if (bassins.get(numBassin).getCout() != 0 && pasBateau) {
         else if (gen == 0 && strat == Strategies.Hard) {
             boolean aChoisi = false;
             if (bassins.isEmpty())
@@ -517,7 +517,7 @@ public class MLGBot extends Joueur {
             }
         }
 
-        if (bassins.get(numBassin).getCout() != 0 && pasMiroir) {
+        if (bassins.get(numBassin).getCout() != 0 && pasBateau) {
             for (int i = 0; i != getPlateau().getTemple().getSanctuaire().length; ++i)
                 if (getPlateau().getTemple().getSanctuaire()[i].toString().equals(bassins.get(numBassin).toString()))
                     choixBassinNext.add((byte) (i + 1));
@@ -548,7 +548,7 @@ public class MLGBot extends Joueur {
                 boolean continuer = true;
                 for (byte b : ordreCarte.get(numeroManche).get(soleilOuLune).get(max)) {
                     for (int i = 0; i != cartes.size(); ++i) {
-                        if (NomCarteOverride.values()[b - 1].toString().equals(cartes.get(i).toString())) {
+                        if (NomCarteOverride.values()[b - 1].toString().equals(cartes.get(i).getNom().toString())) {
                             numCarte = i;
                             choixCarteNext[numeroManche] = b;
                             puissanceSoleil[numeroManche] = (byte) getSoleil();
