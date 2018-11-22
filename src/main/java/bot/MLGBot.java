@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Random;
 
 public class MLGBot extends Joueur {
+
+    private enum Strategies{Randomized, Hard, Copy}
+    private Strategies strat = Strategies.Hard;
+
     private Random notLuckButSkill = new Random();
     private int numeroManche = -1;//On est jamais mieux servi que par soi même
     private int getOnMyLevel = -1;
@@ -37,6 +41,10 @@ public class MLGBot extends Joueur {
     private boolean estRandom = false;//notLuckButSkill.nextInt(4) != 0;
     private long positionCHEF = -1;
     private int scoreMin = 100;
+
+    private Joueur joueurCible;
+    private Face[] facesJoueurCible;
+    private List<Carte> cartesJoueurCible;
 
     public MLGBot(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);
@@ -97,15 +105,21 @@ public class MLGBot extends Joueur {
         } else {
             positionCHEF = genFile.length();
             if (intensiveTraining) {
-                if (positionCHEF > 70 * 100 * (gen <= 1 ? 20 : 1) / (gen > 600 ? 10 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
+                if (positionCHEF > 70 * 1000 * (gen == 0 ? 2 : 1) / (gen > 600 ? 10 : 1))//Nbr de charactere avant de passer à la génération suivante(Environ 70 characteres/partie)
                     remuerLaSoupe(nbrJoueur);
             }
         }
         if (gen > 0 && (!estRandom || !intensiveTraining)) {
-            SourceLines ligneSource = new SourceLines("src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 1), nbrJoueur, false);
+            SourceLines ligneSource = new SourceLines("src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 1), nbrJoueur, !intensiveTraining);
             choixAction = ligneSource.getChoixAction();
-            ordreBassin = ligneSource.getOrdreBassin();
-            ordreCarte = ligneSource.getOrdreCarte();
+            if (intensiveTraining) {
+                ordreBassin = ligneSource.getOrdreBassinAvecMutation();
+                ordreCarte = ligneSource.getOrdreCarteAvecMutation();
+            }
+            else{
+                ordreBassin = ligneSource.getOrdreBassin();
+                ordreCarte = ligneSource.getOrdreCarte();
+            }
         }
         choixActionNext = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
         choixActionOr = new byte[getPlateau().getJoueurs().size() == 3 ? 10 : 9];
@@ -179,7 +193,7 @@ public class MLGBot extends Joueur {
                 for (int i = 0; i != x; ++i) {
                     if (bytes[i] == "@".getBytes()[0]) {
                         int pdg = trouverPDG(bytes, i);
-                        if (pdg >= (maxPdg - 10)) {//Critere de selection des lignes pour la génération suivante
+                        if (pdg >= (maxPdg - (gen == 0 ? 100 : 10))) {//Critere de selection des lignes pour la génération suivante
                             byte[] byteLigne = new byte[i - curseur];
                             for (++curseur; curseur != i; ++curseur)
                                 byteLigne[curseur - (i - byteLigne.length) - 1] = bytes[curseur];
@@ -191,7 +205,7 @@ public class MLGBot extends Joueur {
                 //System.out.println("Nombre de parties retenues: "+byteList.size()+", points de gloire max: "+maxPdg);
                 SourceLines lignesSource;
                 Collections.sort(byteList, new TrierStatLine());
-                if (gen > 1)
+                if (gen >= 1)
                     lignesSource = new SourceLines(byteList, "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 1), nbrJoueur);
                 else
                     lignesSource = new SourceLines(byteList);
@@ -214,8 +228,8 @@ public class MLGBot extends Joueur {
             //Partie update des fichiers
             ++gen;
             cible = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen;
-            if (gen > 2) {
-                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 3);
+            if (gen > 29) {
+                String cibleSuppr = "src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + (gen - 30);
                 File delFile = new File(cibleSuppr);
                 delFile.delete();
             }
@@ -299,7 +313,7 @@ public class MLGBot extends Joueur {
     }
 
     private void Xx360xX_NoScope() {
-        if (intensiveTraining && (pwned() > scoreMin || gen <= 1)) {
+        if (intensiveTraining && pwned() > scoreMin) {
             ByteBuffer buffer = ByteBuffer.allocate(128);
             buffer.clear();
             if (choixActionNext.length < 9 || choixActionNext.length > 10)
@@ -403,8 +417,7 @@ public class MLGBot extends Joueur {
         boolean stop = false;
         for (int i = 0; i != des.length && !stop; ++i) {
             for (int j = 0; j != des[i].getFaces().length; ++j) {
-                if (des[i].getFaces()[j].getRessource().length != 0 && ((des[i].getFaces()[j].getRessource()[0][0] instanceof Or && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1)
-                        || (des[i].getFaces()[j].getRessource()[0][0] instanceof PointDeGloire && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 2))) {
+                if (des[i].getFaces()[j].getRessource().length != 0 && des[i].getFaces()[j].getRessource()[0][0] instanceof Or && des[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1) {
                     numDe = i;
                     posFace = j;
                     stop = true;
@@ -433,6 +446,12 @@ public class MLGBot extends Joueur {
             if (choixAction.get(numeroManche).size() > getOr() / approxOr && !choixAction.get(numeroManche).get(getOr() / approxOr).isEmpty()) {
                 numChoixAction = choixAction.get(numeroManche).get(getOr() / approxOr).get(0);
             }
+        }
+        else if (gen == 0 && strat == Strategies.Hard){
+            if (numManche < 6 && getOr() > 5)
+                numChoixAction = 1;
+            else if (getSoleil() > 0 || getLune() > 0)
+                numChoixAction = 2;
         }
         if (numChoixAction == 0)
             throw new DiceForgeException("MLGBot", "choixAction toujours pas bon");
@@ -481,6 +500,24 @@ public class MLGBot extends Joueur {
             }
         }
         if (bassins.get(numBassin).getCout() != 0 && pasBateau) {
+        else if (gen == 0 && strat == Strategies.Hard) {
+            boolean aChoisi = false;
+            if (bassins.isEmpty())
+                return new ChoixJoueurForge(null, 0, 0, 0);
+            for (int i = 0; i != bassins.size(); ++i) {
+                if (numManche < 3 && bassins.get(i).getFaces().get(0).getRessource()[0][0] instanceof Or) {
+                    numBassin = i;
+                    break;
+                } else if (aChoisi && bassins.get(numBassin).getCout() < bassins.get(i).getCout())
+                    numBassin = i;
+                else if (!aChoisi) {
+                    numBassin = i;
+                    aChoisi = true;
+                }
+            }
+        }
+
+        if (bassins.get(numBassin).getCout() != 0 && pasMiroir) {
             for (int i = 0; i != getPlateau().getTemple().getSanctuaire().length; ++i)
                 if (getPlateau().getTemple().getSanctuaire()[i].toString().equals(bassins.get(numBassin).toString()))
                     choixBassinNext.add((byte) (i + 1));
@@ -521,6 +558,25 @@ public class MLGBot extends Joueur {
                         }
                     }
                     if (!continuer) break;
+                }
+            }
+        }
+        else if (gen == 0 && strat == Strategies.Hard) {
+            boolean aChoisi = false;
+            for (int i = 0; i != cartes.size(); ++i) {
+                if (cartes.get(i).getNom().equals(Carte.Noms.Marteau) && !possedeCarte(Carte.Noms.Marteau)) {
+                    numCarte = i;
+                    break;
+                }
+                if (cartes.get(i).getNom().equals(Carte.Noms.Coffre) && !possedeCarte(Carte.Noms.Coffre)) {
+                    numCarte = i;
+                    break;
+                }
+                if (aChoisi && cartes.get(numCarte).getCout()[0].getQuantite() < cartes.get(i).getCout()[0].getQuantite())
+                    numCarte = i;
+                else if (!aChoisi) {
+                    numCarte = i;
+                    aChoisi = true;
                 }
             }
         }

@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 public class Debug {
     public static void main(String[] args) {
         try{
-            int gen = 277;
+            int gen = 44;
             int nbrJoueur = 2;
             RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen, "rw");
             FileChannel channel = file.getChannel();

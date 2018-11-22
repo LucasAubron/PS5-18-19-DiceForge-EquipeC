@@ -231,7 +231,26 @@ public class SourceLines {
         return ordreBassin;
     }
 
+    public List<List<List<Byte>>> getOrdreBassinAvecMutation(){
+        for (int i = 0; i != ordreBassin.size(); ++i){
+            for (int j = 0; j < ordreBassin.get(i).size(); ++j){
+                if (random.nextInt(pourcentRandom) == 0)
+                    ordreBassin.get(i).remove(j);
+            }
+        }
+        return ordreBassin;
+    }
+
     public List<List<List<List<Byte>>>> getOrdreCarte(){
+        return ordreCarte;
+    }
+
+    public List<List<List<List<Byte>>>> getOrdreCarteAvecMutation(){
+        for (int i = 0; i != ordreCarte.size(); ++i)
+            for (int j = 0; j != ordreCarte.get(i).size(); ++j)
+                for (int k = 0; k < ordreCarte.get(i).get(j).size(); ++k)
+                    if (random.nextInt(pourcentRandom) == 0)
+                        ordreCarte.get(i).get(j).remove(k);
         return ordreCarte;
     }
 }
