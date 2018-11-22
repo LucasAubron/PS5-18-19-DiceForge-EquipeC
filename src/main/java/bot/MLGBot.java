@@ -549,12 +549,14 @@ public class MLGBot extends Joueur {
                 for (byte b : ordreCarte.get(numeroManche).get(soleilOuLune).get(max)) {
                     for (int i = 0; i != cartes.size(); ++i) {
                         if (NomCarteOverride.values()[b - 1].toString().equals(cartes.get(i).getNom().toString())) {
-                            numCarte = i;
-                            choixCarteNext[numeroManche] = b;
-                            puissanceSoleil[numeroManche] = (byte) getSoleil();
-                            puissanceLune[numeroManche] = (byte) getLune();
-                            continuer = false;
-                            break;
+                            if (!(cartes.get(i).getNom() == Carte.Noms.Marteau && possedeCarte(Carte.Noms.Marteau)) && !(cartes.get(i).getNom() == Carte.Noms.Coffre && possedeCarte(Carte.Noms.Coffre))) {
+                                numCarte = i;
+                                choixCarteNext[numeroManche] = b;
+                                puissanceSoleil[numeroManche] = (byte) getSoleil();
+                                puissanceLune[numeroManche] = (byte) getLune();
+                                continuer = false;
+                                break;
+                            }
                         }
                     }
                     if (!continuer) break;
@@ -605,11 +607,12 @@ public class MLGBot extends Joueur {
 
     @Override
     public int choisirRepartitionOrMarteau(int quantiteOr) {
-        int orGarde = 0;
-        if (getOr() < 3 && possedeCarte(Carte.Noms.Ancien))
-            orGarde = 3 - getOr();
+        int nbrAncien = 0;
+        for (Carte carte:getCartes())
+            if (carte.getNom().equals(Carte.Noms.Ancien))
+                ++nbrAncien;
         gettingGood();
-        return orGarde;
+        return (getOr() < 3*nbrAncien ? 3*nbrAncien - getOr() : 0);
     }
 
     @Override
