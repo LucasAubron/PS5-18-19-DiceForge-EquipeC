@@ -2,6 +2,7 @@ package bot.NidoBot;
 
 import diceForge.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class NidoFunctions {
@@ -113,19 +114,37 @@ class NidoFunctions {
         return null;
     }
 
-    public static int getPosFaceOrDuDe(Joueur joueur, int numDe, int qte){
-        for (int i = 0; i != 6; i++) {
-            if (joueur.getDe(numDe).getFace(i).getRessource().length == 1)
-                if (joueur.getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or &&
-                        joueur.getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == qte)
-                    return i;
+    static List cartesAbordables(Joueur joueur, Plateau plateau) {
+        List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes abordables par le joueur
+        for (Ile ile : plateau.getIles()) {//On parcours les iles
+            for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
+                for (Carte carte : paquet) {//Et les cartes
+                    int prixSoleil = 0, prixLune = 0;
+                    for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
+                        if (prix instanceof Soleil)
+                            prixSoleil += prix.getQuantite();
+                        else if (prix instanceof Lune)
+                            prixLune += prix.getQuantite();
+                        else//Cela ne devrait jamais arriver
+                            throw new DiceForgeException("Coordinateur", "Une carte doit couter soit des lunes soit des soleils !");
+                    }
+                    if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
+                        cartesAbordables.add(carte);
+                }
+            }
         }
-        return -1;
+        return cartesAbordables;
     }
 
-//    public static boolean haveFace34Or(Joueur jouer, int numDe){
-//        for (int i = 0; i != 6; i++)
+//    public static int getPosFaceOrDuDe(Joueur joueur, int numDe, int qte){
+//        for (int i = 0; i != 6; i++) {
+//            if (joueur.getDe(numDe).getFace(i).getRessource().length == 1) {
 //
+//                if (joueur.getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or &&
+//                        joueur.getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == qte)
+//                    return i;
+//            }
+//        }
+//        return -1;
 //    }
-
 }
