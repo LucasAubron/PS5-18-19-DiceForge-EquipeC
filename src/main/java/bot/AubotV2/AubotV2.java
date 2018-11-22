@@ -288,17 +288,17 @@ public class AubotV2 extends Joueur{
         }
         for (int i = 0; i != 6; i++) {
             if (getDe(numDe).getFace(i).getRessource().length == 1)
-                if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Lune && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 1)
-                    return i;
-        }
-        for (int i = 0; i != 6; i++) {
-            if (getDe(numDe).getFace(i).getRessource().length == 1)
                 if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 3)
                     return i;
         }
         for (int i = 0; i != 6; i++) {
             if (getDe(numDe).getFace(i).getRessource().length == 1)
                 if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 4)
+                    return i;
+        }
+        for (int i = 0; i != 6; i++) {
+            if (getDe(numDe).getFace(i).getRessource().length == 1)
+                if (getDe(numDe).getFace(i).getRessource()[0][0] instanceof Lune && getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == 1)
                     return i;
         }
         for (int i = 0; i != 6; i++) {
@@ -350,7 +350,7 @@ public class AubotV2 extends Joueur{
                 }
             }
         }
-        return new int[]{-1,-1};
+        return new int[]{random.nextInt(2),random.nextInt(6)};
     }
 
     private int getDeMoinsFort(){

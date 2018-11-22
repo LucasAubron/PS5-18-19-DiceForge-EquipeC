@@ -7,6 +7,7 @@ public class Tournoi {
     private String[] pathFiles1V1 = new String[]{"src/main/java/bot/AubotV2/1V1/Bot1", "src/main/java/bot/AubotV2/1V1/Bot2",  "src/main/java/bot/AubotV2/1V1/Bot3",  "src/main/java/bot/AubotV2/1V1/Bot4",  "src/main/java/bot/AubotV2/1V1/Bot5",  "src/main/java/bot/AubotV2/1V1/Bot6",  "src/main/java/bot/AubotV2/1V1/Bot7",  "src/main/java/bot/AubotV2/1V1/Bot8",  "src/main/java/bot/AubotV2/1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
     private String[] pathFiles1V1V1 = new String[]{"src/main/java/bot/AubotV2/1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
     private String[] pathFiles1V1V1V1 = new String[]{"src/main/java/bot/AubotV2/1V1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
+
     Tournoi(int n, int m){
         this.nombreDeJoueurParPartie = n;
         this.nombreDeMatchParConfrontation = m;
