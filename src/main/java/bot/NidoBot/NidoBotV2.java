@@ -146,17 +146,26 @@ public class NidoBotV2 extends Joueur {
         Carte carteAChoisir = null;
 
         for (Carte carte : cartes) {
+            /*
+            * 3 1ere si pas forge exploit
+            *
+            * */
             switch (numManche){
                 case 1:
                 case 2:
                 case 3:
+                case 4:
                     if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
-                        return carte;
-                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
                         return carte;
                     if (!possedeCarte(Carte.Noms.Ancien) && carte.getNom().equals(Carte.Noms.Ancien))
                         return carte;
-                        break;
+                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
+                        return carte;
+                    break;
+                case 5:
+                    if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
+                        return carte;
+                    break;
             }
             if (carte.getNom().equals(Carte.Noms.Coffre) && getNbCarteType(cartes, Carte.Noms.Coffre) == 0)//Et un coffre
                 // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
