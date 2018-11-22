@@ -103,7 +103,7 @@ public class Coordinateur {
     /**
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
      */
-    private void jouerManche(int numeroManche){
+    public void jouerManche(int numeroManche){
         afficheur.manche(numeroManche);
         for (Joueur joueur:plateau.getJoueurs()){
             tour(joueur, numeroManche);
