@@ -1,15 +1,12 @@
 package bot.NidoBot;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import diceForge.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static bot.NidoBot.NidoFunctions.*;
 import static diceForge.Carte.Noms.*;
-import static diceForge.Carte.Noms.BateauCeleste;
 
 public class NidoBotV2 extends Joueur {
     private int manche;
@@ -24,7 +21,6 @@ public class NidoBotV2 extends Joueur {
         super(identifiant, afficheur, plateau);
         mancheExploit = 4;
         manche = 0;
-//        choixAction = new int[plateau.getJoueurs().size() == 3 ? 10 : 9];
     }
 
     private int nombreCartePossedee(Carte.Noms nom) {
@@ -180,7 +176,6 @@ public class NidoBotV2 extends Joueur {
                 bassin = getPlateau().getTemple().getSanctuaire()[0];
 
 //            System.out.println("bassin is size == " + bassin.getFaces().size());
-            //&& !bassin.getFaces().isEmpty()
             if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Soleil(1)))
@@ -239,7 +234,7 @@ public class NidoBotV2 extends Joueur {
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche) {
-        Carte carteAChoisir = null;
+        Carte carteAChoisir = cartes.get(0);
         for (Carte carte : cartes) {
 //            switch (numManche) {
 //                case 1:
@@ -323,27 +318,42 @@ public class NidoBotV2 extends Joueur {
                 return carte;
             if (carte.getNom() == Ancien && nombreCartePossedee(Ancien) < 1 && manche <= 5)
                 return carte;
-            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
+            if (carte.getNom() == CasqueDinvisibilite && !possedeCarte(CasqueDinvisibilite) && manche <= 4)
                 return carte;
+//            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
+//                return carte;
             if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0 && manche <= 5)
                 return carte;
+            if (manche >= 5 && (carte.getNom() == Hydre || carte.getNom() == Typhon))
+                return carte;
+            if (manche >= 5 && (carte.getNom() == Meduse))
+                return carte;
+            if (manche >= 5 && (carte.getNom() == Passeur))
+                return carte;
+//            if (manche >= 5 && (carte.getNom() == MiroirAbyssal))
+//                return carte;
+            if (manche >= 5 && (carte.getNom() == Sphinx))
+                return carte;
+//            if (manche >= 5 && (carte.getNom() == Cancer))
+//                return carte;
+//            if (manche >=5 && carte.getNom() == Ancien)
+//                return carte;
+
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere
-            else if (carteAChoisir == null)
-                carteAChoisir = carte;
         }
         return carteAChoisir;
     }
 
     @Override
     public boolean choisirActionSupplementaire(int numManche) {
-        if (
-                (getOr() > 10 && numManche < mancheExploit && !getBassinsAbordable().isEmpty()) ||
-                        (numManche >= mancheExploit && (getSoleil() > 3 || getLune() > 1) && !cartesAbordables(this, getPlateau()).isEmpty())) {
+        if ((getOr() > 10 && numManche < mancheExploit && !getBassinsAbordable().isEmpty()) ||
+        (numManche >= mancheExploit && (getSoleil() > 3 || getLune() > 1) && !cartesAbordables(this, getPlateau()).isEmpty())) {
             this.manche--;
             return true;
         }
-        return false;//Si on a assez de ressource pour refaire un tour
+        //Si on a assez de ressource pour refaire un tour
+        return false;
     }
 
     @Override
@@ -496,18 +506,27 @@ public class NidoBotV2 extends Joueur {
     @Override
     public choixJetonTriton utiliserJetonTriton() {
         Random random = new Random();
-        int choix = random.nextInt(choixJetonTriton.values().length);
-        switch (choix) {
-            case 0:
-                return choixJetonTriton.Rien;
-            case 1:
-                return choixJetonTriton.Or;
-            case 2:
-                return choixJetonTriton.Soleil;
-            case 3:
-                return choixJetonTriton.Lune;
-        }
-        throw new DiceForgeException("Bot", "Impossible, utiliserJetonTriton ne renvoit rien !!");
+//        int choix = random.nextInt(choixJetonTriton.values().length);
+//        choix = 2;
+//        switch (choix) {
+//            case 0:
+//                return choixJetonTriton.Rien;
+//            case 1:
+//                return choixJetonTriton.Or;
+//            case 2:
+//                return choixJetonTriton.Soleil;
+//            case 3:
+//                return choixJetonTriton.Lune;
+//        }
+        if (getSoleil() <= 4)
+            return choixJetonTriton.Soleil;
+        else if (getLune() == 0)
+            return choixJetonTriton.Lune;
+        else if (getOr() == 0)
+            return choixJetonTriton.Or;
+        else
+            return choixJetonTriton.Rien;
+        //throw new DiceForgeException("Bot", "Impossible, utiliserJetonTriton ne renvoit rien !!");
     }
 
     @Override
