@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Random;
 
 import static bot.NidoBot.NidoFunctions.*;
-import static diceForge.Carte.Noms.Ancien;
+import static diceForge.Carte.Noms.*;
+import static diceForge.Carte.Noms.BateauCeleste;
 
 public class NidoBotV2 extends Joueur {
     private int manche;
     private int mancheExploit;
+    private int nombreDeJoueurs;
 
     public NidoBotV2() {
         super(1, null, null);
@@ -61,7 +63,13 @@ public class NidoBotV2 extends Joueur {
     public Action choisirAction(int numManche) {
         //Si on est au début du jeu et que l'on a assez d'or, on forge
         this.manche++;
-        if (numManche <= 3 && getOr() > 5 && !getBassinsAbordable().isEmpty())
+        if (this.manche == 0)
+            nombreDeJoueurs = getPlateau().getJoueurs().size();
+        if (numManche == 1 && getOr() >= 3 && !getBassinsAbordable().isEmpty())
+            return Action.FORGER;
+        if (numManche == 2 && getOr() >= 6 && !getBassinsAbordable().isEmpty())
+            return Action.FORGER;
+        if (numManche == 3 && getOr() >= 8 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -105,30 +113,59 @@ public class NidoBotV2 extends Joueur {
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
             } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
-                for (j = 0; j < getDes().length; j++)
-                    if ((getPosFaceOrDuDe(this, j, 3) != -1 || getPosFaceOrDuDe(this, j, 4) != -1)
-                            && getPosFaceOrDuDe(this, j == 0 ? 1 : 0, 3) == -1
-                            && getPosFaceOrDuDe(this, j == 0 ? 1 : 0, 4) == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, j == 0 ? 1 : 0, 1);
-                        break;
-                    } else if ((getPosFaceOrDuDe(this, j, 3) != -1 || getPosFaceOrDuDe(this, j, 4) != -1) &&
-                            (getPosFaceOrDuDe(this, j == 0 ? 1 : 0, 3) != -1 || getPosFaceOrDuDe(this, j == 0 ? 1 : 0, 4) != -1)) {
-                        posFaceInt = getPosFaceOrDuDe(this, new Random().nextInt(2) == 0 ? 1 : 0, 1);
-                        break;
-                    } else {    //les 2 dés ne contiennent pas de face 3/4Or, donc on remplace une face 1Or sur le 1er
-                        posFaceInt = getPosFaceOrDuDe(this, j, 1);
-                        break;
+                if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1)
+                        && getPosFaceOrDuDe(this, 1, 3) == -1
+                        && getPosFaceOrDuDe(this, 1, 4) == -1) {
+                    posFaceInt = getPosFaceOrDuDe(this, 1, 1);
+                    j = 1;
+                } else if ((getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)
+                        && getPosFaceOrDuDe(this, 0, 3) == -1
+                        && getPosFaceOrDuDe(this, 0, 4) == -1) {
+                    posFaceInt = getPosFaceOrDuDe(this, 0, 1);
+                    j = 0;
+                } else if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
+                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)) {
+                    j = new Random().nextInt(2) == 0 ? 1 : 0;
+                    posFaceInt = getPosFaceOrDuDe(this, j, 1);
+                } else {
+                    //les 2 dés ne contiennent pas de face 3/4Or, donc on remplace une face 1Or sur le 1er
+                    posFaceInt = getPosFaceOrDuDe(this, 0, 1);
+                    j = 0;
+                    if (posFaceInt == -1) {
+                        posFaceInt = getPosFaceOrDuDe(this, 1, 1);
+                        j = 1;
                     }
+                    if (posFaceInt == -1) {
+                        posFaceInt = getPosFaceOrDuDe(this, 0, 3);
+                        j = 0;
+                    }
+                    if (posFaceInt == -1) {
+                        posFaceInt = getPosFaceOrDuDe(this, 1, 3);
+                        j = 1;
+                    }
+                    if (posFaceInt == -1) {
+                        posFaceInt = getPosFaceOrDuDe(this, 0, 4);
+                        j = 0;
+                    }
+                    if (posFaceInt == -1) {
+                        posFaceInt = getPosFaceOrDuDe(this, 1, 4);
+                        j = 1;
+                    }
+                }
                 afficheur.NidoBotAfficheur("posFaceInt == " + posFaceInt);
             }
-            if (posFaceInt != -1)
+            if (posFaceInt != -1) {
+//                System.out.println("yo first manche return!.");
+//                System.out.println("posfaceInt == " + posFaceInt + " j == " + j);
                 return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
+            }
             /* on a 13 or sur le dé maintenant
              * 13/12 un peu plus d'un or par lancé
              * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
              * manche 2 forger 2soleil sur le dé ou y a deja un soleil
              */
         } else if (numManche <= 3) {
+//            System.out.println("enteres in manche 2 or 3");
             BassinType[] listBassins = {
                     new BassinType(8, "Soleil"),
                     new BassinType(3, "Soleil"),
@@ -137,38 +174,51 @@ public class NidoBotV2 extends Joueur {
                     new BassinType(3, "Or"),
                     new BassinType(2, "Or")};
             int i = 0;
-            while ((bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null &&
-                    i + 1 < listBassins.length)
+            while (i < listBassins.length && (bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
                 i++;
+            if (i == 6)
+                bassin = getPlateau().getTemple().getSanctuaire()[0];
 
-            if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
+//            System.out.println("bassin is size == " + bassin.getFaces().size());
+            //&& !bassin.getFaces().isEmpty()
+            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Soleil(1)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
+            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
                 for (j = 0; j < getDes().length; j++)
                     if (haveFaceType(getDe(j), new Lune(1)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
+            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
                 if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)
-                )
+                (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
                     j = new Random().nextInt(2) == 1 ? 1 : 0;
                 else if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) == -1 || getPosFaceOrDuDe(this, 1, 4) == -1))
+                (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
                     j = 1;
-                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 || getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
+                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
+                (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
                     j = 0;
-                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 || getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) == -1 || getPosFaceOrDuDe(this, 1, 4) == -1))
+                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
+                (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
                     j = new Random().nextInt(2) == 1 ? 1 : 0;
+
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
+//                System.out.println("yo BP 2: nummanche == " + numManche + " j == " + j + " posfaceInt == " + posFaceInt);
+                if (posFaceInt == -1) {
+                    posFaceInt = getPosFaceOrDuDe(this, j, 3);
+                }
+                if (posFaceInt == -1) {
+                    posFaceInt = getPosFaceOrDuDe(this, j, 4);
+                }
             }
-            if (posFaceInt != -1)
+
+            if (posFaceInt != -1) {
+//                System.out.println("yo return nummanche == " + numManche + " j == " + j);
                 return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
+            }
             /*
              * manche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 => MANCHE 3 ressemble bcp a manche 2.
              * 2 lune sur le dé ou il y a lune+ 1 soleil sur dé ou il y a un soleil
@@ -182,6 +232,7 @@ public class NidoBotV2 extends Joueur {
 
 
         afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
+//        System.out.println("end of function");
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
@@ -190,69 +241,92 @@ public class NidoBotV2 extends Joueur {
     public Carte choisirCarte(List<Carte> cartes, int numManche) {
         Carte carteAChoisir = null;
         for (Carte carte : cartes) {
-            switch (numManche) {
-                case 1:
-                case 2:
-                case 3:
-                    // 3 1ere manches si pas forge alors exploit
-                case 4:
-                    // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
-                case 5:
-                    if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
-                        return carte;
-                    if (!possedeCarte(Carte.Noms.Ancien) && carte.getNom().equals(Carte.Noms.Ancien))
-                        return carte;
-                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
-                        return carte;
-                    if (!possedeCarte(Carte.Noms.CasqueDinvisibilite) && carte.getNom().equals(Carte.Noms.CasqueDinvisibilite))
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Meduse))
-                        return carte;
+//            switch (numManche) {
+//                case 1:
+//                case 2:
+//                case 3:
+//                    // 3 1ere manches si pas forge alors exploit
+//                case 4:
+//                    // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
+//                case 5:
+//                    if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
+//                        return carte;
+//                    if (!possedeCarte(Carte.Noms.Ancien) && carte.getNom().equals(Carte.Noms.Ancien))
+//                        return carte;
+//                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
+//                        return carte;
+//                    if (!possedeCarte(Carte.Noms.CasqueDinvisibilite) && carte.getNom().equals(Carte.Noms.CasqueDinvisibilite))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Meduse))
+//                        return carte;
 //                    if (carte.getNom().equals(Carte.Noms.Passeur))
 //                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
+////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
+////                        return carte;
+////                    if (carte.getNom().equals(Carte.Noms.Coffre))
+////                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Hibou))
 //                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Hibou))
-                        return carte;
-                case 6:
-                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Meduse))
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Passeur)) //miroir abyssal
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
-                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Ours))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Biche))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Marteau))
+//                        return carte;
+//
+//                case 6:
+//                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Meduse))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Passeur)) //miroir abyssal
+//                        return carte;
+////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
+////                        return carte;
+////                    if (carte.getNom().equals(Carte.Noms.HerbesFolles))
+////                        return carte;
+////                    if (carte.getNom().equals(Carte.Noms.))
+//                    break;
+//                case 7:
+//                case 8:
+//                case 9:
+//                case 10:
+//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Meduse))
+//                        return carte;
+//                    if (carte.getNom().equals(Carte.Noms.Passeur))
+//                        return carte;
+////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
+////                        return carte;
 //                    if (carte.getNom().equals(Carte.Noms.HerbesFolles))
 //                        return carte;
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Meduse))
-                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.Passeur))
-                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
-//                        return carte;
-                    if (carte.getNom().equals(Carte.Noms.HerbesFolles))
-                        return carte;
-                    break;
-
-            }
+//                    break;
+//
+//            }
+            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 1)
+                return carte;
+            //on prend tous les marteau si 2 joueurs
+            if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 2 && nombreDeJoueurs == 2)
+                return carte;
+            if (carte.getNom() == Ours && nombreDeJoueurs == 4)
+                return carte;
+            if (carte.getNom() == Ancien && nombreCartePossedee(Ancien) < 1 && manche <= 5)
+                return carte;
+            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
+                return carte;
+            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0 && manche <= 5)
+                return carte;
             if (carteAChoisir != null && carteAChoisir.getCout()[0].getQuantite() < carte.getCout()[0].getQuantite())
                 carteAChoisir = carte;//Sinon on cherche la carte la plus chere
             else if (carteAChoisir == null)
@@ -326,7 +400,7 @@ public class NidoBotV2 extends Joueur {
     @Override
     public void forgerFace(Face face) { //BateauCeleste, X3, tous spéciales sauf bouclier.
         boolean aForge = false;
-        int posFaceQteMin;
+        int posFaceQteMin = -1;
         int numDeLune = -1;
 
         if (face instanceof FaceX3) {
@@ -364,15 +438,25 @@ public class NidoBotV2 extends Joueur {
             aForge = true;
         } else {
             int[] posFace = getPosFace1Or();
-            if (posFace[0] != -1) { //si on a trouvé une face 1 or sur un des dés)
+            //si on a trouvé une face 1 or sur un des dés)
+            if (posFace[0] != -1) {
                 forgerDe(posFace[0], face, posFace[1]);
                 aForge = true;
             }
 
-
-            posFaceQteMin = getPosFaceQteMin(0, getDes(), new Lune(1));
+            //pas de face 1Or sur les 2 Des
+            if (posFace[0] == -1)
+                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Or(1));
+            if (posFaceQteMin == -1)
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Or(1));
+            if (posFaceQteMin == -1)
+                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Lune(1));
+            if (posFaceQteMin == -1)
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Lune(1));
             if (posFaceQteMin == -1)
                 posFaceQteMin = getPosFaceQteMin(0, getDes(), new Soleil(1));
+            if (posFaceQteMin == -1)
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Soleil(1));
         }
 
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
