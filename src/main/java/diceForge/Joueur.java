@@ -39,7 +39,7 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, AubronBotV2, RomanetBot, NidoBot, NidoBotV2}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, AubronBotV2, RomanetBot, NidoBot, NidoBotV2, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère

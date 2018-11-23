@@ -12,25 +12,29 @@ import static diceForge.Joueur.Jeton.TRITON;
 public class MatchTournoi{
     private int nombreDePartieParMatch;
     private int nombreDeJoueur;
-    private String[] filePath;
+    private Joueur.Bot[] enumBot;
     private int[] resultatMatch;
-    private int nbrManche;
-    private Afficheur afficheur;
 
-    MatchTournoi(String[] filePath, int n) {
-        this.afficheur = new Afficheur(false);
-        this.nombreDePartieParMatch = n;
-        this.nombreDeJoueur = filePath.length;
-        this.filePath = filePath;
-        this.resultatMatch = new int[nombreDeJoueur];
-        this.nbrManche = (nombreDeJoueur == 3) ? 10 : 9;
+    MatchTournoi(Joueur.Bot[] enumBot, int n) {
+        this.nombreDePartieParMatch = n/1000;
+        this.nombreDeJoueur = enumBot.length;
+        this.enumBot = enumBot;
         initMatch();
     }
 
     private void initMatch() {
-        int maxPoint = -1; //permet de déterminer le ou les gagnants
-        List<Integer> idGagnant = new ArrayList(Arrays.asList(-1)); //idem
-        for (int partie = 0; partie < nombreDePartieParMatch; partie++) {
+        switch (nombreDeJoueur) {
+            case 2:
+                resultatMatch = new int[]{0,0};
+                for (int partie = 0; partie < nombreDePartieParMatch/nombreDeJoueur; partie++) {
+                    Coordinateur coordinateur = new Coordinateur(false, new Joueur.Bot[]{enumBot[0],enumBot[1]});
+                    coordinateur.infoJoueurGagnant();
+                }
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
         }
     }
 

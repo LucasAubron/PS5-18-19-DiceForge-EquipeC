@@ -1,5 +1,7 @@
 package bot.AubotV2;
 
+import diceForge.Joueur;
+
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,9 +22,9 @@ public class Evolution {
     private int[] betaId = new int[5];
     private String[] alphaFile = new String[5];
     private String[] betaFile = new String[5];
-    private String[] pathFiles1V1 = new String[]{"src/main/java/bot/AubotV2/1V1/Bot1", "src/main/java/bot/AubotV2/1V1/Bot2",  "src/main/java/bot/AubotV2/1V1/Bot3",  "src/main/java/bot/AubotV2/1V1/Bot4",  "src/main/java/bot/AubotV2/1V1/Bot5",  "src/main/java/bot/AubotV2/1V1/Bot6",  "src/main/java/bot/AubotV2/1V1/Bot7",  "src/main/java/bot/AubotV2/1V1/Bot8",  "src/main/java/bot/AubotV2/1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
-    private String[] pathFiles1V1V1 = new String[]{"src/main/java/bot/AubotV2/1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
-    private String[] pathFiles1V1V1V1 = new String[]{"src/main/java/bot/AubotV2/1V1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
+    private String[] path2J = new String[]{"src/main/java/bot/AubotV2/1V1/Bot1", "src/main/java/bot/AubotV2/1V1/Bot2",  "src/main/java/bot/AubotV2/1V1/Bot3",  "src/main/java/bot/AubotV2/1V1/Bot4",  "src/main/java/bot/AubotV2/1V1/Bot5",  "src/main/java/bot/AubotV2/1V1/Bot6",  "src/main/java/bot/AubotV2/1V1/Bot7",  "src/main/java/bot/AubotV2/1V1/Bot8",  "src/main/java/bot/AubotV2/1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
+    private String[] path3J = new String[]{"src/main/java/bot/AubotV2/1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
+    private String[] path4J = new String[]{"src/main/java/bot/AubotV2/1V1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1V1/Bot2",  "src/main/java/bot/AubotV2/1V1V1V1/Bot3",  "src/main/java/bot/AubotV2/1V1V1V1/Bot4",  "src/main/java/bot/AubotV2/1V1V1V1/Bot5",  "src/main/java/bot/AubotV2/1V1V1V1/Bot6",  "src/main/java/bot/AubotV2/1V1V1V1/Bot7",  "src/main/java/bot/AubotV2/1V1V1V1/Bot8",  "src/main/java/bot/AubotV2/1V1V1V1/Bot9",   "src/main/java/bot/AubotV2/1V1/Bot10"};
 
     Evolution(int n, int m, int p, int mu){
         this.nombreDeJoueurs = n;
@@ -81,20 +83,20 @@ public class Evolution {
         switch (nombreDeJoueurs) {//on récupère les fichiers des joueurs survivants et vaincus
             case 2:
                 for (int i = 0; i < 5; i++) {
-                    alphaFile[i] = pathFiles1V1[alphaId[i]];
-                    betaFile[i] = pathFiles1V1[betaId[i]];
+                    alphaFile[i] = path2J[alphaId[i]];
+                    betaFile[i] = path2J[betaId[i]];
                 }
                 break;
             case 3:
                 for (int i = 0; i < 5; i++) {
-                    alphaFile[i] = pathFiles1V1V1[alphaId[i]];
-                    betaFile[i] = pathFiles1V1V1[betaId[i]];
+                    alphaFile[i] = path3J[alphaId[i]];
+                    betaFile[i] = path3J[betaId[i]];
                 }
                 break;
             case 4:
                 for (int i = 0; i < 5; i++) {
-                    alphaFile[i] = pathFiles1V1V1V1[alphaId[i]];
-                    betaFile[i] = pathFiles1V1V1V1[betaId[i]];
+                    alphaFile[i] = path4J[alphaId[i]];
+                    betaFile[i] = path4J[betaId[i]];
                 }
                 break;
         }

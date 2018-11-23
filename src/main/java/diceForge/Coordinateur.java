@@ -19,10 +19,16 @@ import static diceForge.Joueur.Jeton.TRITON;
 public class Coordinateur {
     private Plateau plateau;
     private Afficheur afficheur;
+    private int nbrJoueur;
+    private int nbrManche;
+    private int[] nbrVictoire;
+    private int[] ptsGloireCumules;
+    private int[] nbrEgalite;
 
     public Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){//typeJoueurs = [Joueur.BOT.EasyBot, Joueur.BOT.RandomBot]
         //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
-        int nbrManche = typeJoueurs.length == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
+        this.nbrJoueur = typeJoueurs.length;
+        this.nbrManche = nbrJoueur == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             lanceUnePartieAvecDetail(typeJoueurs, nbrManche);
         }
@@ -30,9 +36,6 @@ public class Coordinateur {
             int nbrParties = 1000; // comme demandé dans le kata
             lancePlusieursPartiesAvecStats(typeJoueurs, nbrManche, nbrParties);
         }
-    }
-
-    public Coordinateur() {//Pour les bots ayant besoin d'un coordinateur différent
     }
 
     /**
@@ -59,18 +62,20 @@ public class Coordinateur {
      * @param nbrParties
      */
     private void lancePlusieursPartiesAvecStats(Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties){
-        int[] nbrVictoire = new int[typeJoueurs.length];
-        int[] nbrEgalite = new int[typeJoueurs.length];
-        int[] ptsGloireCumules = new int[typeJoueurs.length];
-        for (int i = 0; i != typeJoueurs.length; ++i){
-            nbrVictoire[i] = 0;//Initialisation des tableaux, a voir si on peut faire plus simple
+        nbrVictoire = new int[nbrJoueur];
+        ptsGloireCumules = new int[nbrJoueur];
+        nbrEgalite = new int[nbrJoueur];
+        this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        for (int i = 0; i < nbrJoueur; i++){
+            nbrVictoire[i] = 0;
             ptsGloireCumules[i] = 0;
+            nbrEgalite[i] = 0;
         }
+        List<Integer> joueurGagnant;
+        //On va lancer 1000 parties, mais on veut s'assurer que chaque joueur joue en premier de manière strictement équiprobable !
         //toDO: refactor cette partie ci dessous, elle devrait être facilement mofifiable et compréhensible (lisibilité + ouvert à l'extension --> que se passerait-il si l'on on voulait ajouter des stats ?)
         //Ne pas oublier de dire le jour de la soutenance que la position des joueurs est aléatoire, car les positions donnent des avantages non négligeables (en 1V1 le J1 est très avantagé)
         for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
-            plateau = new Plateau(typeJoueurs, afficheur);
             int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
             List<Integer> id = new ArrayList<>();//La liste des positions possible
             for (int j = 0; j != typeJoueurs.length; ++j)
@@ -338,7 +343,7 @@ public class Coordinateur {
      * Cette fonction additionne le nombre de point de gloire des cartes des joueurs, il faut donc ne l'appeler qu'une fois
      * @return une List, le premier élement est le nombre de point de gloire maximum, l'/les autre(s) est/sont le(s) numéro(s) du/des joueur(s) gagnant(s)
      */
-    List<Integer> infoJoueurGagnant(){
+    public List<Integer> infoJoueurGagnant(){
         List<Integer> infoJoueurGagnant = new ArrayList<>();
         infoJoueurGagnant.add(0);
         infoJoueurGagnant.add(-1);

@@ -34,6 +34,27 @@ public class PortailsOriginels {
                 this.joueurs.add(new NidoBot(identifiant, afficheur, plateau));
             else if(typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
                 this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A1)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot1"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A2)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot2"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A3)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot3"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A4)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot4"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A5)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot5"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A6)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot6"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A7)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot7"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A8)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot8"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A9)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot9"));
+            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A10)
+                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot10"));
+
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
                 if (typeJoueurs.length == 2)
                     this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/BestBot"));
