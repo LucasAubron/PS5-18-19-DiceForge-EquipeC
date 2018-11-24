@@ -1,4 +1,4 @@
-package bot.AubotV2;
+package bot.AubotV2.src;
 
 import diceForge.*;
 

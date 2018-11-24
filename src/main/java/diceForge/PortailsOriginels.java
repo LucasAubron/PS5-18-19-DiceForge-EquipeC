@@ -1,7 +1,8 @@
 package diceForge;
 
 import bot.*;
-import bot.AubotV2.AubotV2;
+
+import bot.AubotV2.src.AubotV2;
 import bot.NidoBot.NidoBot;
 import bot.NidoBot.NidoBotV2;
 

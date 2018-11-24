@@ -1,7 +1,5 @@
 package diceForge;
 
-import bot.AubotV2.MatchTournoi;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -61,49 +59,60 @@ public class Coordinateur {
      * @param nbrManche
      * @param nbrParties
      */
-    private void lancePlusieursPartiesAvecStats(Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties){
+    private void lancePlusieursPartiesAvecStats(Joueur.Bot[] typeJoueurs, int nbrManche, int nbrParties) {
         nbrVictoire = new int[nbrJoueur];
         ptsGloireCumules = new int[nbrJoueur];
         nbrEgalite = new int[nbrJoueur];
-        this.afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
-        for (int i = 0; i < nbrJoueur; i++){
+        afficheur = new Afficheur(false);// l'afficheur qui s'occupe de print les informations en fonction du mode (verbeux ou non)
+        for (int i = 0; i < nbrJoueur; i++) {
             nbrVictoire[i] = 0;
             ptsGloireCumules[i] = 0;
             nbrEgalite[i] = 0;
         }
-        List<Integer> joueurGagnant;
         //On va lancer 1000 parties, mais on veut s'assurer que chaque joueur joue en premier de manière strictement équiprobable !
-        //toDO: refactor cette partie ci dessous, elle devrait être facilement mofifiable et compréhensible (lisibilité + ouvert à l'extension --> que se passerait-il si l'on on voulait ajouter des stats ?)
         //Ne pas oublier de dire le jour de la soutenance que la position des joueurs est aléatoire, car les positions donnent des avantages non négligeables (en 1V1 le J1 est très avantagé)
-        for (int i = 0; i != nbrParties; ++i){//On fait autant de partie que l'on veut
-            int[] posRandom = new int[typeJoueurs.length];//La liste des positions des joueurs pendant cette partie
-            List<Integer> id = new ArrayList<>();//La liste des positions possible
-            for (int j = 0; j != typeJoueurs.length; ++j)
-                id.add(j);//Que l'on remplis
-            for (int j = 0; j != posRandom.length; ++j){
-                Random random = new Random();//On random la position des joueurs
-                posRandom[j] = id.remove(random.nextInt(id.size()));
+        //Le but ici est que sur le total des parties, chaque joueur ait joué sur une position de autant de fois que les autres, car dans certaines configurations jouer en 1er peut s'avérer être un avantage non négligeable
+        List<Integer> joueurGagnant;
+        Joueur.Bot stockJoueur;
+        int stockPdg;
+        int stockVictoire;
+        int stockEgalite;
+        for (int k = 0; k < nbrJoueur; k++) {             // d'ici au prochain commentaire
+            stockJoueur = typeJoueurs[nbrJoueur - 1];     // on s'assure que les posiiton des stats
+            stockPdg = ptsGloireCumules[nbrJoueur - 1];   // d'un bot dans chaque tableau est la même
+            stockVictoire = nbrVictoire[nbrJoueur - 1];   // que sa position de jeu, tout en faisant
+            stockEgalite = nbrEgalite[nbrJoueur - 1];     // tourner les positions de jeu de façon
+            for (int l = nbrJoueur - 1; l > 0; l--) {     // équitable
+                typeJoueurs[l] = typeJoueurs[l - 1];
+                ptsGloireCumules[l] = ptsGloireCumules[l - 1];
+                nbrVictoire[l] = nbrVictoire[l - 1];
+                nbrEgalite[l] = nbrEgalite[l - 1];
             }
-            Joueur.Bot[] listeJoueurRandom = new Joueur.Bot[typeJoueurs.length];
-            for (int j = 0; j != listeJoueurRandom.length; ++j)
-                listeJoueurRandom[j] = typeJoueurs[posRandom[j]];//On assigne les joueurs à la position aléatoire
-            plateau = new Plateau(listeJoueurRandom, afficheur);
-
-            for (int numManche = 1; numManche <= nbrManche; ++numManche) {//C'est ici que tout le jeu se déroule
-                jouerManche(numManche);
-            }
-            List<Integer> infoJoueurGagnant = infoJoueurGagnant();
-            if (infoJoueurGagnant.size() > 2)
-                for (int j = 1; j != infoJoueurGagnant.size(); ++j) {
-                    nbrEgalite[posRandom[infoJoueurGagnant.get(j) - 1]]++;//Puis on stocke les infos des parties
+            typeJoueurs[0] = stockJoueur;
+            ptsGloireCumules[0] = stockPdg;
+            nbrVictoire[0] = stockVictoire;
+            nbrEgalite[0] = stockEgalite;                 // fin de l'alternance des tableaux
+            for (int j = 0; j < nbrParties / nbrJoueur; j++) {                  //début de (nbrParties/nbrJoueur) parties
+                plateau = new Plateau(typeJoueurs, afficheur);
+                for (int numManche = 1; numManche <= nbrManche; ++numManche) {
+                    jouerManche(numManche);
                 }
-            else
-                nbrVictoire[posRandom[infoJoueurGagnant.get(1)-1]]++;
-            for (int j = 0; j != typeJoueurs.length; ++j)
-                ptsGloireCumules[posRandom[j]] += plateau.getJoueurs().get(j).getPointDeGloire();
+                List<Integer> infoJoueurGagnant = infoJoueurGagnant();          // fin d'une partie, analyse des gagnants
+                if (infoJoueurGagnant.size() > 2)                               // et mise a jour de leur stats
+                    for (int m = 1; m != infoJoueurGagnant.size(); ++m) {
+                        nbrEgalite[infoJoueurGagnant.get(m) - 1]++;
+                    }
+                else
+                    nbrVictoire[infoJoueurGagnant.get(1)-1]++;
+                for (int n = 0; n != typeJoueurs.length; ++n)
+                    ptsGloireCumules[n] += plateau.getJoueurs().get(n).getPointDeGloire();
+            }
         }
-        afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, nbrParties);
+        afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, (nbrParties/nbrJoueur) * nbrJoueur); // le calcul étrange du dernier paramètre s'explique:
+                                                                                                                                // 1000 n'étant pas divisible par 3, lorsqu'on joue a
+                                                                                                                                // 3joueurs on ne fait en réalité que 999 parties
     }
+
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * Cette méthode permet de jouer une manche, elle est a appeler autant de fois qu'il y a de manche
