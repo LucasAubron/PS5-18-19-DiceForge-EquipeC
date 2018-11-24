@@ -365,4 +365,9 @@ public class Coordinateur {
     Afficheur getAffichage(){return afficheur;}
 
     Plateau getPlateau(){return plateau;}
+
+    public int[] getNbrVictoire(){ return nbrVictoire;}
+
+    public int[] getPtsGloireCumules(){ return ptsGloireCumules;}
+
 }

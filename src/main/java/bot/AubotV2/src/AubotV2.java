@@ -8,11 +8,12 @@ import java.util.Random;
 import static diceForge.Carte.Noms.*;
 
 /**
- * toDo: ce commentaire
+ * Commentaire à faire
  */
 
 public class AubotV2 extends Joueur{
     private boolean montrerInfo = false;
+    private boolean rejouer = false;
     private int nombreDeLancerParManche;
     private Random random;
     private int nombreDeJoueurs;
@@ -60,6 +61,10 @@ public class AubotV2 extends Joueur{
             printInfo();
         }
         manche++;
+        if (rejouer){
+            rejouer = false;
+            return Action.EXPLOIT;
+        }
         if (manche < mancheExploit) {
             for (int i = 0; i < mancheExploit; i++) {
                 if (i + 1 == manche && getOr() >= orPourForgerManche[i])
@@ -83,6 +88,33 @@ public class AubotV2 extends Joueur{
         int numDe = -1;
         int numFaceBassin = -1;
         int numFaceDe = -1;
+        if (bassins.get(0).getFace(0) instanceof FaceBouclier){//on gère spécifiquement le cas de la face bouclier qui est une face extrêmement puissante quand elle utilisé a bon escient
+            for (int i=0; i<bassins.get(0).getFaces().size(); i++)
+                if (bassins.get(0).getFace(i).getRessource()[0][0] instanceof Soleil){
+                    numDe = getDeMoinsFort();
+                    numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
+                    return new ChoixJoueurForge(bassins.get(0), i, numDe, numFaceDe);
+                }
+            for (int i=0; i<4; i++)
+                if (bassins.get(0).getFace(i).getRessource()[0][0] instanceof Or){
+                    numDe = (getDeOr() == 0) ? 1 : 0; //on pose la face bouclier sur la face ayant le moins d'or
+                    numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
+                    return new ChoixJoueurForge(bassins.get(0), i, numDe, numFaceDe);
+                }
+            for (int i=0; i<4; i++)
+                if (bassins.get(0).getFace(i).getRessource()[0][0] instanceof Lune){
+                    numDe = getDeMoinsFort();
+                    numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
+                    return new ChoixJoueurForge(bassins.get(0), i, numDe, numFaceDe);
+                }
+            for (int i=0; i<4; i++)
+                if (bassins.get(0).getFace(i).getRessource()[0][0] instanceof PointDeGloire){
+                    numDe = (getDeMoinsFort() == 0) ? 1 : 0;
+                    numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
+                    return new ChoixJoueurForge(bassins.get(0), i, numDe, numFaceDe);
+                }
+
+        }
         if (manche >= mancheExploit) {//obligé de vérifier à cause des faces spéciales achetables par des cartes
             numDe = getDeMoinsFort();
             numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
@@ -167,9 +199,12 @@ public class AubotV2 extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        if (manche < mancheExploit && (getSoleil() >= 6 || getLune() >= 4))
+        int luneNecessaire = lunePourExploitManche[manche-1];
+        int soleilNecessaire = soleilPourExploitManche[manche-1];
+        if ((getSoleil() < soleilNecessaire + 2 || getLune() < luneNecessaire))
             return false;
         manche--;
+        rejouer = true;
         return true;
 
     }
@@ -221,7 +256,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public int choisirDeCyclope(){
-        return 0;
+        return getDeOr();
     }
 
     @Override
@@ -263,8 +298,9 @@ public class AubotV2 extends Joueur{
     @Override
     public boolean utiliserJetonCerbere(){
         ressourceManquante();
-        if (soleilManquant >= 3)
-            return true;
+        if (getDesFaceCourante()[0].getRessource().length != 0 && getDesFaceCourante()[1].getRessource().length != 0)
+            if ((soleilManquant >= 4 && getDesFaceCourante()[0].getRessource()[0][0] instanceof Soleil || getDesFaceCourante()[1].getRessource()[0][0] instanceof Soleil) || getDesFaceCourante()[0].getRessource()[0][0] instanceof PointDeGloire || getDesFaceCourante()[1].getRessource()[0][0] instanceof PointDeGloire)
+                return true;
         return false;
     }
 
@@ -360,27 +396,47 @@ public class AubotV2 extends Joueur{
             if (face.getRessource().length != 0) {
                 if (face.getRessource()[0][0] instanceof Soleil)
                     forceDe1 += face.getRessource()[0][0].getQuantite() * 2;
-                if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
+                else if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
                     forceDe1 += face.getRessource()[0][0].getQuantite();
-            }
-            else{
-                forceDe1 += 3;
+                else if (!(face.getRessource()[0][0] instanceof Or)) {
+                    forceDe1 += 3;
+                }
             }
         }
         for (Face face: getDe(1).getFaces()) {
             if (face.getRessource().length != 0) {
                 if (face.getRessource()[0][0] instanceof Soleil)
                     forceDe2 += face.getRessource()[0][0].getQuantite() * 2;
-                if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
+                else if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
                     forceDe2 += face.getRessource()[0][0].getQuantite();
-            }
-            else{
-                forceDe2 += 3;
+                else if (!(face.getRessource()[0][0] instanceof Or)) {
+                    forceDe2 += 3;
+                }
             }
         }
         int numDe = (forceDe1 > forceDe2) ? 0 : 1;
         return numDe;
     }
+
+    int getDeOr(){
+        int forceDe1 = 0;
+        int forceDe2 = 0;
+        for (Face face: getDe(0).getFaces()) {
+            if (face.getRessource().length != 0) {
+                if (face.getRessource()[0][0] instanceof Or)
+                    forceDe1 += face.getRessource()[0][0].getQuantite();
+            }
+        }
+        for (Face face: getDe(0).getFaces()) {
+            if (face.getRessource().length != 0) {
+                if (face.getRessource()[0][0] instanceof Or)
+                    forceDe2 += face.getRessource()[0][0].getQuantite();
+            }
+        }
+        int numDe = (forceDe1 > forceDe2) ? 0 : 1;
+        return numDe;
+    }
+
     private Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
         if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
             for (Bassin bassin : bassins)

@@ -50,9 +50,9 @@ public class Temple {
         sanctuaire[9] = new Bassin(12, faceBassin9);
 
         List<Face> faceJardin0 = new ArrayList<>();
-        faceJardin0.add(new FaceBouclier(new Ressource[]{new Or(3)}));
         faceJardin0.add(new FaceBouclier(new Ressource[]{new Soleil(2)}));
         faceJardin0.add(new FaceBouclier(new Ressource[]{new Lune(2)}));
+        faceJardin0.add(new FaceBouclier(new Ressource[]{new Or(3)}));
         faceJardin0.add(new FaceBouclier(new Ressource[]{new PointDeGloire(3)}));
         jardin[0] = new Bassin(0, faceJardin0);
     }
