@@ -14,6 +14,7 @@ public class Evolution {
     private int nombreDePartieParMatch;
     private int nombreDePopulationMax;
     private int uneChanceSurDeMuter;
+    private int uneChanceSurDeMuterLigne;
     String[] stringFichierNouveauJoueurs = new String[5];
     private FileReader[][] fr = new FileReader[5][5];
     private BufferedReader[][] br = new BufferedReader[5][5];
@@ -26,11 +27,12 @@ public class Evolution {
     private String[] path3J = new String[]{"src/main/java/bot/AubotV2/1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1/Bot2", "src/main/java/bot/AubotV2/1V1V1/Bot3", "src/main/java/bot/AubotV2/1V1V1/Bot4", "src/main/java/bot/AubotV2/1V1V1/Bot5", "src/main/java/bot/AubotV2/1V1V1/Bot6", "src/main/java/bot/AubotV2/1V1V1/Bot7", "src/main/java/bot/AubotV2/1V1V1/Bot8", "src/main/java/bot/AubotV2/1V1V1/Bot9", "src/main/java/bot/AubotV2/1V1/Bot10"};
     private String[] path4J = new String[]{"src/main/java/bot/AubotV2/1V1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1V1/Bot2", "src/main/java/bot/AubotV2/1V1V1V1/Bot3", "src/main/java/bot/AubotV2/1V1V1V1/Bot4", "src/main/java/bot/AubotV2/1V1V1V1/Bot5", "src/main/java/bot/AubotV2/1V1V1V1/Bot6", "src/main/java/bot/AubotV2/1V1V1V1/Bot7", "src/main/java/bot/AubotV2/1V1V1V1/Bot8", "src/main/java/bot/AubotV2/1V1V1V1/Bot9", "src/main/java/bot/AubotV2/1V1/Bot10"};
 
-    Evolution(int n, int m, int p, int mu) {
+    Evolution(int n, int m, int p, int mu, int mul) {
         this.nombreDeJoueurs = n;
         this.nombreDePartieParMatch = m;
         this.nombreDePopulationMax = p;
         this.uneChanceSurDeMuter = mu;
+        this.uneChanceSurDeMuterLigne = mul;
         initEvolution();
     }
 
@@ -47,10 +49,15 @@ public class Evolution {
         int[] res = tournoi.getResultats();
         int[] point = tournoi.getPoints();
         int[] resId = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        if (nombreDeJoueurs == 2) {
-            for (int i = 0; i < 10; i++) {
-                System.out.println("Joueur n°" + (i + 1) + ": " + (float) res[i] / (9 * nombreDePartieParMatch) * 100 + "% de victoire avec " + point[i] / (9 * nombreDePartieParMatch) + " points de gloire");
-            }
+        switch (nombreDeJoueurs){
+            case 2:
+                for (int i = 0; i < 10; i++) {
+                    System.out.println("Joueur n°" + (i + 1) + ": " +  ((res[i] * 100)/9)/(float)(nombreDePartieParMatch)  + "% de victoire avec en moyenne " + point[i] / (9 * nombreDePartieParMatch) + " points de gloire");
+                }
+            case 3:
+                break;
+            case 4:
+                break;
         }
         int minId;
         int stockScore;
@@ -77,7 +84,6 @@ public class Evolution {
         for (int i = 5; i < 10; i++) {
             this.alphaId[i - 5] = resId[i];
         }
-        Arrays.sort(alphaId);
         System.out.println("\n\nLes joueurs n°" + (alphaId[0] + 1) + ", " + (alphaId[1] + 1) + ", " + (alphaId[2] + 1) + ", " + (alphaId[3] + 1) + " et " + (alphaId[4] + 1) + " survivent\n\n-----------------------------------------------------------------------\n");
     }
 
@@ -130,7 +136,7 @@ public class Evolution {
                 if (mutation != 0)
                     stringFichierNouveauJoueurs[i] += ligne + "\n";
                 else {
-                    stringFichierNouveauJoueurs[i] += (random.nextInt(2) == 0) ? mutationChar(ligne, compteLigne) + "\n" : mutationLigne(ligne, compteLigne) + "\n"; //deux types de mutation, une grossière qui créé de gros changements, et une moins impactante
+                    stringFichierNouveauJoueurs[i] += (random.nextInt(uneChanceSurDeMuterLigne) == 0) ? mutationLigne(ligne, compteLigne) + "\n" : mutationChar(ligne, compteLigne) + "\n"; //deux types de mutation, une grossière qui créé de gros changements, et une moins impactante
                 }
                 for (int k = 0; k < 5; k++)
                     if (k != r)
@@ -182,7 +188,7 @@ public class Evolution {
                 }
                 break;
             case 10: {
-                int r = random.nextInt(5) + 1;
+                int r = random.nextInt(3) + 1;
                 char a = (char) (r + 48);
                 tabLigne[randomPos] = a;
                 break;
@@ -227,16 +233,16 @@ public class Evolution {
                 tabLigne[randomPos + 2] = c;
                 break;
             }
-            case 8: {
+            case 18: {
                 String alphabet = "abcdefghijklmnopqrstuvwx";
                 char[] alphabetChar = alphabet.toCharArray();
                 int r = random.nextInt(24);
-                char a = (char) alphabetChar[r];
+                char a = alphabetChar[r];
                 tabLigne[randomPos] = a;
                 break;
             }
             case 16:
-                int r = random.nextInt(5);
+                int r = random.nextInt(nombreDeJoueurs+1);
                 char a = (char) (r + 48);
                 tabLigne[randomPos] = a;
         }
@@ -252,48 +258,51 @@ public class Evolution {
             return "" + (random.nextInt(6) + 1) + (random.nextInt(6) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2);
         }
         if (compteLigne == 2 || compteLigne == 3) {
-            return "" + (random.nextInt(2) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1) + (random.nextInt(6) + 1);
+            return "" + "1" + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + "0";
         }
         if (compteLigne >= 4 && compteLigne <= 9) {
             String res = "";
             int[] coutBassins = new int[]{2, 3, 4, 5, 6, 8};
-            int[] unTableauParmiCinq = new int[3];
-            for (int i = 0; i < 5; i++) {
-                unTableauParmiCinq[0] = coutBassins[random.nextInt(6)];
-                unTableauParmiCinq[1] = random.nextInt(2);
+            int[] unTableauParmiDix = new int[3];
+            for (int i = 0; i < 10; i++) {
+                unTableauParmiDix[0] = coutBassins[random.nextInt(6)];
+                unTableauParmiDix[1] = random.nextInt(2);
                 int r = random.nextInt(2);
-                switch (unTableauParmiCinq[0]) {
+                switch (unTableauParmiDix[0]) {
                     case 2:
-                        unTableauParmiCinq[2] = (r == 0) ? 0 : 2;
+                        unTableauParmiDix[2] = (r == 0) ? 0 : 2;
                         break;
                     case 3:
-                        unTableauParmiCinq[2] = (r == 0) ? 0 : 1;
+                        unTableauParmiDix[2] = (r == 0) ? 0 : 1;
                         break;
                     case 4:
-                        unTableauParmiCinq[2] = random.nextInt(3);
+                        unTableauParmiDix[2] = random.nextInt(3);
                         break;
                     case 5:
-                        unTableauParmiCinq[2] = 0;
+                        unTableauParmiDix[2] = 0;
                         break;
                     case 6:
-                        unTableauParmiCinq[2] = 2;
+                        unTableauParmiDix[2] = 2;
                         break;
                     case 8:
-                        unTableauParmiCinq[2] = 1;
+                        unTableauParmiDix[2] = 1;
                         break;
                 }
-                res += "" + unTableauParmiCinq[0] + unTableauParmiCinq[1] + unTableauParmiCinq[2];
+                res += "" + unTableauParmiDix[0] + unTableauParmiDix[1] + unTableauParmiDix[2];
             }
             return res;
         }
         if (compteLigne >= 10 && compteLigne <= 19) {
             String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x"};
-            return "" + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]) + (alphabet[random.nextInt(24)]);
+            String res = "";
+            for (int i = 0; i<18; i++)
+                res += (alphabet[random.nextInt(24)]);
+            return res;
         }
         if (compteLigne == 20) {
             String res = "";
             for (int i = 0; i < 16; i++)
-                res += random.nextInt(5);
+                res += random.nextInt(nombreDeJoueurs+1);
             return res;
         }
         return "| PROBLEME |";
