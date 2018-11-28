@@ -5,7 +5,7 @@ import diceForge.*;
 import java.util.ArrayList;
 import java.util.List;
 
-class NidoFunctions {
+public class NidoFunctions {
     public static Stats getNbFaces(int numDe, De[] jeuDes, Ressource uneRess){
         Stats count = new Stats();
         for (Face face : jeuDes[numDe].getFaces())
