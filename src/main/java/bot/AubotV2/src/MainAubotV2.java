@@ -5,8 +5,8 @@ class MainAubotV2{
         int nombreDeJoueur = 2;
         int nombreDePartieParMatch = 1000; //par tranche de 1000 uniquement
         int nombreDePopulationMax = 50000;
-        int uneChanceSurDeMuter = 10;
-        int uneChanceSurDeMuterLigne = 4;
+        int uneChanceSurDeMuter = 50;
+        int uneChanceSurDeMuterLigne = 1;
         new Evolution(nombreDeJoueur, nombreDePartieParMatch, nombreDePopulationMax, uneChanceSurDeMuter, uneChanceSurDeMuterLigne);
         System.out.println("Programme terminé");
         }
