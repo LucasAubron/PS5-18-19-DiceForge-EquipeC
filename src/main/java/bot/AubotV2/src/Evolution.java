@@ -175,8 +175,7 @@ public class Evolution {
         int longueur = ligne.length();
         char[] tabLigne = ligne.toCharArray();
         int randomPos = random.nextInt(longueur);
-        switch (longueur) {
-            case 7:
+        if (compteLigne == 1)
                 if (randomPos == 0) {
                     int r = random.nextInt(6) + 1;
                     char a = (char) (r + 48);
@@ -186,14 +185,12 @@ public class Evolution {
                     char a = (char) (r + 48);
                     tabLigne[randomPos] = a;
                 }
-                break;
-            case 10: {
+        else if (compteLigne == 2 || compteLigne == 3){
                 int r = random.nextInt(3) + 1;
                 char a = (char) (r + 48);
                 tabLigne[randomPos] = a;
-                break;
-            }
-            case 15: {
+        }
+        else if (compteLigne >= 4 && compteLigne <= 9){
                 int[] coutBassins = new int[]{2, 3, 4, 5, 6, 8};
                 if (randomPos % 3 == 1) {
                     randomPos--;
@@ -231,20 +228,18 @@ public class Evolution {
                 tabLigne[randomPos] = a;
                 tabLigne[randomPos + 1] = b;
                 tabLigne[randomPos + 2] = c;
-                break;
-            }
-            case 18: {
-                String alphabet = "abcdefghijklmnopqrstuvwx";
-                char[] alphabetChar = alphabet.toCharArray();
-                int r = random.nextInt(24);
-                char a = alphabetChar[r];
-                tabLigne[randomPos] = a;
-                break;
-            }
-            case 16:
-                int r = random.nextInt(nombreDeJoueurs+1);
-                char a = (char) (r + 48);
-                tabLigne[randomPos] = a;
+        }
+        else if (compteLigne >= 10 && compteLigne <=19){
+            String alphabet = "abcdefghijklmnopqrstuvwx";
+            char[] alphabetChar = alphabet.toCharArray();
+            int r = random.nextInt(24);
+            char a = alphabetChar[r];
+            tabLigne[randomPos] = a;
+        }
+        else if (compteLigne == 20){
+            int r = random.nextInt(nombreDeJoueurs+1);
+            char a = (char) (r + 48);
+            tabLigne[randomPos] = a;
         }
         String res = "";
         for (int i = 0; i < longueur; i++) {
@@ -263,32 +258,32 @@ public class Evolution {
         if (compteLigne >= 4 && compteLigne <= 9) {
             String res = "";
             int[] coutBassins = new int[]{2, 3, 4, 5, 6, 8};
-            int[] unTableauParmiDix = new int[3];
-            for (int i = 0; i < 10; i++) {
-                unTableauParmiDix[0] = coutBassins[random.nextInt(6)];
-                unTableauParmiDix[1] = random.nextInt(2);
+            int[] unTableauParmiSept = new int[3];
+            for (int i = 0; i < 7; i++) {
+                unTableauParmiSept[0] = coutBassins[random.nextInt(6)];
+                unTableauParmiSept[1] = random.nextInt(2);
                 int r = random.nextInt(2);
-                switch (unTableauParmiDix[0]) {
+                switch (unTableauParmiSept[0]) {
                     case 2:
-                        unTableauParmiDix[2] = (r == 0) ? 0 : 2;
+                        unTableauParmiSept[2] = (r == 0) ? 0 : 2;
                         break;
                     case 3:
-                        unTableauParmiDix[2] = (r == 0) ? 0 : 1;
+                        unTableauParmiSept[2] = (r == 0) ? 0 : 1;
                         break;
                     case 4:
-                        unTableauParmiDix[2] = random.nextInt(3);
+                        unTableauParmiSept[2] = random.nextInt(3);
                         break;
                     case 5:
-                        unTableauParmiDix[2] = 0;
+                        unTableauParmiSept[2] = 0;
                         break;
                     case 6:
-                        unTableauParmiDix[2] = 2;
+                        unTableauParmiSept[2] = 2;
                         break;
                     case 8:
-                        unTableauParmiDix[2] = 1;
+                        unTableauParmiSept[2] = 1;
                         break;
                 }
-                res += "" + unTableauParmiDix[0] + unTableauParmiDix[1] + unTableauParmiDix[2];
+                res += "" + unTableauParmiSept[0] + unTableauParmiSept[1] + unTableauParmiSept[2];
             }
             return res;
         }
