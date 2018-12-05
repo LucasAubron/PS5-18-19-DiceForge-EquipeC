@@ -2,6 +2,7 @@ package diceForge;
 
 import java.util.List;
 
+
 /**
  * Cette classe représente une face d'un dé, qu'elle soit dans un bassin ou sur un dé
  * On utilise un tableau à 2 dimensions pour stocker les ressources. Pourquoi :
