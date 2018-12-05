@@ -26,7 +26,7 @@ public class RandomBot extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        return ChoixJoueurForge()
+        return ChoixJoueurForge(),
     }
 
     @Override
