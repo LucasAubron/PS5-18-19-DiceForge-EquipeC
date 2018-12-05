@@ -7,13 +7,12 @@ import java.util.List;
 import static diceForge.Joueur.Jeton.CERBERE;
 
 public class FaceMiroirAbyssal extends Face {
-    private List<Joueur> listeJoueurs;
-    private int choix = -1;
+    private List<Joueur> listeJoueursEnnemis;
 
     FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
         super(typeFace.MIROIR);
         listeJoueurs.removeIf(x -> x.getIdentifiant() == joueurMaitre.getIdentifiant());
-        this.listeJoueurs = listeJoueurs;
+        this.listeJoueursEnnemis = listeJoueurs;
     }
 
     /**
@@ -22,26 +21,22 @@ public class FaceMiroirAbyssal extends Face {
      */
     List<Face> obtenirFacesAdversaires() {
         List<Face> faces = new ArrayList<>();
-        for (Joueur joueur:listeJoueurs)
+        for (Joueur joueur:listeJoueursEnnemis)
             for(Face face:joueur.getDesFaceCourante())
                 if(!(face instanceof FaceMiroirAbyssal))
                     faces.add(face);
         return faces;
     }
 
-    void setChoix(int choix){
-        this.choix = choix;
+    Face copierFaceSelonChoixDuJoueur(Joueur joueur){
+        List<Face> faceAdversaires = obtenirFacesAdversaires();
+        return joueur.choisirFaceACopier(faceAdversaires);
     }
 
     @Override
     void effetActif(Joueur joueur){
-        List<Face> faceAdversaires = obtenirFacesAdversaires();
-        if (choix == -1)
-            choix = joueur.choisirFacePourGagnerRessource(faceAdversaires);
-        joueur.gagnerRessourceFace(faceAdversaires.get(choix));
-        for (int j = 0; j < joueur.getJetons().size() && joueur.getJetons().get(j) == CERBERE && joueur.utiliserJetonCerbere(); ++j)
-            joueur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
-        choix = -1;
+        Face faceACopier = copierFaceSelonChoixDuJoueur(joueur);
+        joueur.gagnerRessourceFace(faceACopier);
     }
 
     @Override

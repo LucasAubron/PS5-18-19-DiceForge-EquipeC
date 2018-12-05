@@ -68,7 +68,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public int choisirRessourceAPerdre(Face faceAChoix){
+    public int choisirRessourceAPerdre(Ressource[] ressources){
         return random.nextInt(faceAChoix.getRessource().length);
     }
 
@@ -88,7 +88,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public void forgerFace(Face face){
+    public void forgerFaceSpeciale(Face face){
         forgerDe(random.nextInt(2), face, random.nextInt(6));
     }
 

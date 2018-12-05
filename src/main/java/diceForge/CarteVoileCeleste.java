@@ -1,19 +1,19 @@
 package diceForge;
 
-public class CarteBateauCeleste extends Carte {
+public class CarteVoileCeleste extends Carte {
     private Plateau plateau;
-    public CarteBateauCeleste(Plateau plateau){
+    public CarteVoileCeleste(Plateau plateau){
         super(new Ressource[]{new Ressource(2, Ressource.type.SOLEIL)}, 4, Noms.BateauCeleste);
         this.plateau = plateau;
     }
 
     @Override
     void effetDirect(Joueur acheteur){
-        acheteur.forgerFace(new FaceBateauCeleste(plateau.getTemple()));
+        acheteur.forgerFaceSpeciale(new FaceVoileCeleste(plateau.getTemple()));
     }
 
     @Override
     public Carte clone(){
-        return new CarteBateauCeleste(plateau);
+        return new CarteVoileCeleste(plateau);
     }
 }

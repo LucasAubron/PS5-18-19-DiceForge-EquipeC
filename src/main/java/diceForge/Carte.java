@@ -16,7 +16,7 @@ public class Carte {
     private Noms nom;
 
     public enum Noms {Coffre, HerbesFolles, Ancien, Marteau, Ours, Sanglier, Biche, Satyres,
-    Hibou, Minautore, BateauCeleste, Bouclier, Cerbere, Passeur, CasqueDinvisibilite,
+    Hibou, Minautore, VoileCeleste, Bouclier, Cerbere, Passeur, CasqueDinvisibilite,
     Meduse, Triton, Sentinelle, Cancer, Hydre, Typhon, Sphinx, Cyclope, MiroirAbyssal}
 
     public Carte(Ressource[] cout, int nbrPointGloire, Noms nom){
@@ -30,7 +30,8 @@ public class Carte {
     /**
      * Pour cloner
      * Il faut l'override dans chaque classe fille
-     * @return un clone de la carte en question
+     * @return un clone de la carte en question, utile pour éviter les répétitions lors
+     * de l'initialisation des iles
      */
     public Carte clone(){
         return new Carte(cout, nbrPointGloire, nom);
@@ -63,14 +64,14 @@ public class Carte {
                 acheteur.ajouterJeton(CERBERE);
                 break;
             case CasqueDinvisibilite:
-                acheteur.forgerFace(new FaceX3());
+                acheteur.forgerFaceSpeciale(new FaceX3());
                 break;
             case Cancer:
                 acheteur.setDernierLanceDes(2);
                 acheteur.lancerLesDes();
-                acheteur.gagnerRessource();
+                acheteur.gagnerRessourceDesDeuxDes();
                 acheteur.lancerLesDes();
-                acheteur.gagnerRessource();
+                acheteur.gagnerRessourceDesDeuxDes();
                 break;
             case Sphinx:
                 int choix = acheteur.choisirDeFaveurMineure();
@@ -86,7 +87,7 @@ public class Carte {
                 acheteur.setJetRessourceOuPdg(true);
                 for(int i = 0; i != 2; ++i){
                     acheteur.lancerLesDes();
-                    acheteur.gagnerRessource();
+                    acheteur.gagnerRessourceDesDeuxDes();
                 }
                 acheteur.setJetRessourceOuPdg(false);
                 break;

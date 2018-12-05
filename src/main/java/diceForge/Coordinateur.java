@@ -156,14 +156,14 @@ public class Coordinateur {
             x.lancerLesDes();
         }
         for (Joueur x:plateau.getJoueurs()) {//et gagne les ressources correspondantes
-            x.gagnerRessource();
+            x.gagnerRessourceDesDeuxDes();
         }
         if (plateau.getJoueurs().size() == 2) {
             for (Joueur x:plateau.getJoueurs()) {
                 x.lancerLesDes();//S'il n'y a que 2 joueurs, chaque joueur lance les dés une deuxième fois
             }
             for (Joueur x:plateau.getJoueurs()) {
-                x.gagnerRessource();
+                x.gagnerRessourceDesDeuxDes();
             }
         }
         afficheur.recapJoueur(joueur);
@@ -171,8 +171,7 @@ public class Coordinateur {
 
     /**
      * S'occupe d'envoyer la liste des renforts activable au bot, plus particulièrement retire
-     * les renforts ANCIEN qu'il ne peut pas activer faute d'or, le reste des choix liés aux autres renforts sera
-     * a ajouter par la suite. Les renforts sont activés après que le joueur ait fait son choix.
+     * les renforts ANCIEN qu'il ne peut pas activer faute d'or. Les renforts sont activés après que le joueur ait fait son choix.
      * @param joueur
      * @param numeroManche
      */

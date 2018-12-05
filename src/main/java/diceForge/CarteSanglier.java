@@ -21,7 +21,7 @@ public class CarteSanglier extends Carte {
      */
     @Override
     void effetDirect(Joueur acheteur){
-        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueurs)-1).forgerFace(new FaceSanglier(acheteur));
+        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueurs)-1).forgerFaceSpeciale(new FaceSanglier(acheteur));
     }
 
     @Override

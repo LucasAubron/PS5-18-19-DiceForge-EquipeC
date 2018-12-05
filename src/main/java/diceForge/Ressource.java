@@ -7,19 +7,19 @@ package diceForge;
  */
 public class Ressource {
     private int quantite;
-    private Enum typeRessource;
-    public enum type{OR, SOLEIL, LUNE, PDG}//PDG == point de gloire
+    public enum type{OR, SOLEIL, LUNE, PDG;}//PDG == point de gloire
+    private type typeRessource;
 
-    Ressource(int quantite, Enum type){//version a garder après refactor
+    Ressource(int quantite, type typeR){//version a garder après refactor
         if (quantite < 0)
             throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
         this.quantite = quantite;
-        this.typeRessource = type;
+        this.typeRessource = typeR;
     }
 
     public int getQuantite(){return quantite;}
 
-    public Enum getType(){return typeRessource;}
+    public type getType(){return typeRessource;}
 
     public boolean estDuType(Enum typeR){
         if (typeRessource == typeR)

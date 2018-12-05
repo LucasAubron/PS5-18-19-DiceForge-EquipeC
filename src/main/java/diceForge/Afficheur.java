@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Cette classe a été faite et finie avant d'avoir connaissance de la classe log, elle sere potentiellement refaite si
+ * et seulement si le temps le permet (le refactor des ressources prends du temps)
+ */
+
 public class Afficheur {
 
     private String info = "";
@@ -55,10 +60,6 @@ public class Afficheur {
         }
     }
 
-    public void NidoBotAfficheur(String str){
-        if (modeVerbeux)
-            info += "\n\n-----> " + str;
-    }
     void manche(int numManche) {
         if (modeVerbeux)
             info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
@@ -122,19 +123,12 @@ public class Afficheur {
         }
     }
 
-    void hibou(Joueur joueur, Face face){
+    void hibou(Joueur joueur, Ressource ressource){
         if (modeVerbeux){
-            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + face;
+            info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + ressource;
         }
     }
 
-    void choixFace(Joueur joueur, Face face, int choix){
-        if (modeVerbeux){
-            if (face.estFaceAChoix()) {
-                info += "Le joueur n°" + joueur.getIdentifiant() + " choisit: " + face.getRessource()[choix][0].getQuantite() + face.getRessource()[choix][0] + "\n";
-            }
-        }
-    }
     void presentationLancerDes(){
         if (modeVerbeux) {
             info += "\n\t--Phase de lancer de dés--\n";
@@ -258,6 +252,10 @@ public class Afficheur {
         grandTrait();
         info += "\t\t\t\t--FIN DE PARTIE--";
         additionPointCarte(plateau.getJoueurs());
+    }
+
+    void typhonPointBonus(int totalPdgGagne){
+        info += "\t|" + "Le typhon accorde " + totalPdgGagne + " grâce aux faces forgées\n";
     }
 
     void additionPointCarte(List<Joueur> joueurs) {

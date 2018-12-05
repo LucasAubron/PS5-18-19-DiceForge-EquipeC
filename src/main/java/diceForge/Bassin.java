@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bassin {
+
+    //Attributs ----------------------------------------------------------------------------------------------------------------------
     private int cout;
     private List<Face> faces;
 
+    //Constructeurs -------------------------------------------------------------------------------------------------------------------
     /**
      * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
      * et qu'il est plus simple de transmettre une liste
@@ -34,13 +37,14 @@ public class Bassin {
             faces.add(new Face(facesUnique.getRessource()));
     }
 
+    // Méthodes --------------------------------------------------------------------------------------------------------------------
     public int getCout() {
         return cout;
     }
 
    /**
-     * A utiliser pour savoir les faces présentent, PAS pour en prendre une
-     * @return la liste des faces. Aucune, certaines ou toutes peuvent être null
+     * A utiliser pour savoir les faces présentes, PAS pour en prendre une
+     * @return la liste des faces. Aucune, certaines ou toutes peuvent être nulles
      */
     public List<Face> getFaces() {
         return faces;

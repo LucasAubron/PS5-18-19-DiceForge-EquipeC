@@ -21,7 +21,7 @@ public class Minautore extends Carte {
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant()){//Si ce n'est pas le joueur actuel
                     for (De de:joueur.getDes()){//Pour tous les dés
                         Face face = de.lancerLeDe();//On le lance
-                        if (face.naPasDeffet()) {
+                        if (face.faitGagnerUneRessource()) {
                             if (face.estFaceAChoix() || face.getTypeFace() == Face.typeFace.MIROIR)
                                 joueur.choisirRessourceAPerdre(face);//On gere le cas du choix
                             else if (face.getTypeFace() == Face.typeFace.ADDITION){

@@ -15,7 +15,7 @@ public class CarteBouclier extends Carte {
     void effetDirect(Joueur acheteur){
         ChoixJoueurForge choix = acheteur.choisirFaceAForgerEtARemplacer(
                 new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])), 5);
-        acheteur.forgerFace(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
+        acheteur.forgerFaceSpeciale(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFace()));
     }
 
     @Override

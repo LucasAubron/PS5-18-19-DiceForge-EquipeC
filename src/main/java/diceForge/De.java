@@ -8,23 +8,20 @@ import java.util.Random;
  * La classe représentant un dé (oui De c'est pas très intuitif, si quelqu'un a mieux il le refactor)
  */
 public class De {
+
+    // Attributs ------------------------------------------------------------------------------------------------
+
     private Face[] faces;
-    private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé (pour la carte typhon)
-    private Face faceActuelle;
+    private int nbrFaceForge = 0;//Pour savoir combien de faces le joueur à forgé (pour la carte typhon)
+    private Face faceActive;
     private Afficheur afficheur;//sert uniquement pour l'afficheur
     private Joueur proprietaire;//idem
     private int id;//idem
 
-    public Face[] getFaces() {
-        return faces;
-    }
+    // Constructeur ------------------------------------------------------------------------------------------------
 
-    public Face getFace(int num) { return faces[num]; }
-
-    public Face faceActuelle(){return faceActuelle;}
-
-    De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){
-        this.proprietaire = joueur;
+    De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){//les 6 faces en tableau, l'afficheur, le joueur
+        this.proprietaire = joueur;                              //propriétaire du dé, et le numéro du dé (==son id)
         this.afficheur = afficheur;
         this.id = id;
         if (faces.length != 6)
@@ -32,11 +29,24 @@ public class De {
         this.faces = faces;
     }
 
+    // Méthodes ----------------------------------------------------------------------------------------------------
+
+
+    public Face[] getFaces() {
+        return faces;
+    }
+
+    public Face getFace(int num) { return faces[num]; }
+
+    public Face getFaceActive(){return faceActive;}
+
+    public void setFaceActive(Face faceCopiee){faceActive = faceCopiee;} // /!\ ATTENTION, sert uniquement pour la face miroir
+                                                                        // ne change pas réellement le dé mais sa dernière face active
     public Face lancerLeDe(){
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
-        faceActuelle = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
+        faceActive = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
         afficheur.resultatDe(proprietaire, id);
-        return faceActuelle;
+        return faceActive;
     }
 
     void forger(Face faceAForger, int numFace){

@@ -28,7 +28,7 @@ public class Plateau {
         Carte passeur = new Carte(new Ressource[]{new Ressource(4, Ressource.type.LUNE)}, 12, Carte.Noms.Passeur);
 
         Carte hibou = new Carte(new Ressource[]{new Ressource(2, Ressource.type.SOLEIL)}, 4, Carte.Noms.Hibou);
-        Carte bateauCeleste = new CarteBateauCeleste(this);
+        Carte voileCeleste = new CarteVoileCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
 
@@ -58,7 +58,7 @@ public class Plateau {
                         new Carte(new Ressource[]{new Ressource(1, Ressource.type.SOLEIL)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? ours : biche,
                         random.nextInt(2) == 1 ? sanglier : satyres, typeJoueurs.length),
-                new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
+                new Ile(random.nextInt(2) == 1 ? hibou : voileCeleste,
                         random.nextInt(2) == 1 ? minautore : bouclier, typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
                         new Carte(new Ressource[]{new Ressource(5, Ressource.type.LUNE)}, 4, Carte.Noms.CasqueDinvisibilite),
