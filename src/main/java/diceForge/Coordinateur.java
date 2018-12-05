@@ -254,14 +254,17 @@ public class Coordinateur {
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable, numeroManche);//Le joueur choisi
-        if (choixDuJoueur.getBassin() != null) {
-            afficheur.forger(joueur, choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFace()), joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFace()), choixDuJoueur.getBassin()); //atroce mais bon ça fait partie de l'afficheur qui n'était pas demandé dans les specs c:
-            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFace()), choixDuJoueur.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
-            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
+        if (choixDuJoueur != null) {
+           Bassin bassinChoisi = choixDuJoueur.getBassin();
+           int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
+           int idDeChoisi = choixDuJoueur.getNumDe();
+           int numPosDeChoisi = choixDuJoueur.getPosFaceSurDe();
+           joueur.getDe(idDeChoisi).forger(bassinChoisi.getFace(numFaceBassinChoisi), numPosDeChoisi);
+           bassinsUtilises.add(bassinChoisi);
         }
-        bassinsUtilises.add(choixDuJoueur.getBassin());//on indique quel bassin a été utilisé, null si n'il y pas eu de craft (signifiant pour le joueur la volonté de s'arrêter)
-        if (bassinsUtilises.get(bassinsUtilises.size()-1) == null) //Si le joueur n'a pas crafté alors cela signifie qu'il veut s'arrêter
-            return null;
+        else {
+            return null; //Pour exprimer son envie d'arrêter de forger, le joueur renvoie null
+        }
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
     }
 
@@ -377,5 +380,12 @@ public class Coordinateur {
     public int[] getNbrVictoire(){ return nbrVictoire;}
 
     public int[] getPtsGloireCumules(){ return ptsGloireCumules;}
+
+
+    /*
+     afficheur.forger(joueur, choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFaceDansBassin()), joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFaceDansDes()), choixDuJoueur.getBassin()); //atroce mais bon ça fait partie de l'afficheur qui n'était pas demandé dans les specs c:
+            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFaceDansBassin()), choixDuJoueur.getPosFaceDansDes()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
+            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
+     */
 
 }

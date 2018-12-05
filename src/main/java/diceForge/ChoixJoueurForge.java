@@ -15,24 +15,24 @@ package diceForge;
 public class ChoixJoueurForge {
     private Bassin bassin;
     private int numDe;
-    private int numFace;
-    private int posFace;
-    public ChoixJoueurForge(Bassin bassin, int numFace, int numDe, int posFace){
+    private int numFaceDansBassin;
+    private int posFaceSurDe;
+    public ChoixJoueurForge(Bassin bassin, int numFaceDansBassin, int numDe, int posFaceSurDe){
         this.bassin = bassin;
         this.numDe = numDe;
-        this.numFace = numFace;
-        this.posFace = posFace;
+        this.numFaceDansBassin = numFaceDansBassin;
+        this.posFaceSurDe = posFaceSurDe;
     }
 
     public int getNumDe() { return numDe; }
 
     public Bassin getBassin() { return bassin; }
 
-    public int getNumFace() {
-        return numFace;
+    public int getNumFaceDansBassin() {
+        return numFaceDansBassin;
     }
 
-    public int getPosFace() {
-        return posFace;
+    public int getPosFaceSurDe() {
+        return posFaceSurDe;
     }
 }

@@ -12,116 +12,67 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public Action choisirAction(int numTour){
-        Random random = new Random();
-        int action = random.nextInt(3);
-        switch (action) {
+    public Action choisirAction(int numManche) {
+        switch (random.nextInt(3)) {
             case 0:
-                return Action.FORGER;
-            case 1:
                 return Action.EXPLOIT;
+            case 1:
+                return Action.FORGER;
             case 2:
                 return Action.PASSER;
         }
-        throw new DiceForgeException("RandomBot","?");
     }
+
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        int numBassin = random.nextInt(bassins.size()+1);//On génére tout les nombres random dont on a besoin, +1 correspond au cas où il décide de s'arrêter de forger
-        if (numBassin == bassins.size())
-            return new ChoixJoueurForge(null, 0, 0, 0);
-        int numFace = random.nextInt(bassins.get(numBassin).getFaces().size());
-        int numDe = random.nextInt(getDes().length);
-        int posFace = random.nextInt(getDes()[0].getFaces().length);
-        return new ChoixJoueurForge(bassins.get(numBassin), numFace, numDe, posFace);
+        return ChoixJoueurForge()
     }
 
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche){
-        return cartes.get(random.nextInt(cartes.size()));
-    }
+    public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){}
 
     @Override
-    public boolean choisirActionSupplementaire(int numManche){
-        int pileFace = random.nextInt(2);
-        return pileFace == 1;
-    }
+    public Carte choisirCarte(List<Carte> cartes, int numManche){}
 
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){
-        return random.nextInt(nbrOr+1);
-    }
+    public Carte choisirCarte(List<Carte> cartes, int numManche){}
 
     @Override
-    public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        List<Renfort> renforts = new ArrayList<>();
-        for (Object renfort: renfortsUtilisables)
-            if (random.nextInt(2) == 1)//1 chance sur 2 d'ajouter chaque renfort
-                renforts.add((Renfort) renfort);
-        return renforts;
-    }
+    public boolean choisirActionSupplementaire(int numManche){}
 
     @Override
-    public int choisirRessource(Face faceAChoix){
-        return random.nextInt(faceAChoix.getRessource().length);
-    }
+    public int choisirRessourceFaceAchoix(Ressource[] ressources){}
 
     @Override
-    public int choisirRessourceAPerdre(Ressource[] ressources){
-        return random.nextInt(faceAChoix.getRessource().length);
-    }
+    public int choisirRepartitionOrMarteau(int nbrOr){}
 
     @Override
-    public int choisirDeFaveurMineure(){
-        return random.nextInt(2);
-    }
+    public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
 
     @Override
-    public int choisirDeCyclope(){
-        return random.nextInt(2);
-    }
+    public Face choisirFaceACopier(List<Face> faces){}
 
     @Override
-    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
-        return (getIdentifiant() == 1 ? 2 : 1);
-    }
+    public int choisirRessourceAPerdre(Ressource[] ressources){}
 
     @Override
-    public void forgerFaceSpeciale(Face face){
-        forgerDe(random.nextInt(2), face, random.nextInt(6));
-    }
+    public int choisirDeFaveurMineure(){}
 
     @Override
-    public int choisirFacePourGagnerRessource(List<Face> faces){
-        return random.nextInt(faces.size());
-    }
+    public int choisirDeCyclope(){}
 
     @Override
-    public choixJetonTriton utiliserJetonTriton(){
-        int choix = random.nextInt(choixJetonTriton.values().length);
-        switch (choix){
-            case 0:
-                return choixJetonTriton.Rien;
-            case 1:
-                return choixJetonTriton.Or;
-            case 2:
-                return choixJetonTriton.Soleil;
-            case 3:
-                return choixJetonTriton.Lune;
-        }
-        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoi rien !!");
-    }
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
 
     @Override
-    public boolean utiliserJetonCerbere(){
-        return random.nextInt(2) == 1;
-    }
+    public choixJetonTriton utiliserJetonTriton(){}
 
     @Override
-    public boolean choisirRessourceOuPdg(Ressource ressource){
-        return random.nextInt(2) == 1;
-    }
+    public boolean utiliserJetonCerbere(){}
+
+    @Override
+    public boolean choisirRessourceOuPdg(Ressource ressource){}
 
     @Override
     public String toString(){return "RandomBot";}
