@@ -393,6 +393,14 @@ public class NidoBotV2 extends Joueur {
     @Override
     public int choisirDeFaveurMineure() {
         Random random = new Random();
+        if (haveFaceType(getDe(0), new Soleil(1)))
+            return 0;
+        if (haveFaceType(getDe(1), new Soleil(1)))
+            return 1;
+        if (haveFaceType(getDe(0), new Lune(1)))
+            return 0;
+        if (haveFaceType(getDe(1), new Lune(1)))
+            return 1;
         return random.nextInt(2);
     }
 
@@ -520,7 +528,7 @@ public class NidoBotV2 extends Joueur {
 //        }
         if (getSoleil() <= 4)
             return choixJetonTriton.Soleil;
-        else if (getLune() == 0)
+        else if (getLune() <=4)
             return choixJetonTriton.Lune;
         else if (getOr() == 0)
             return choixJetonTriton.Or;
