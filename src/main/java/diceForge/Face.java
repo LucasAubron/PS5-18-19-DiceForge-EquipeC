@@ -1,5 +1,7 @@
 package diceForge;
 
+import java.util.List;
+
 /**
  * Cette classe représente une face d'un dé, qu'elle soit dans un bassin ou sur un dé
  * On utilise un tableau à 2 dimensions pour stocker les ressources. Pourquoi :
@@ -26,6 +28,15 @@ public class Face {
      * @param joueur
      */
     void effetActif(Joueur joueur){
+    }
+
+    public Face creerFaceSimple(int quantite, Ressource.type type){
+    }
+
+    public Face creerFaceChoix(int[] quantite, Ressource.type ... type){
+    }
+
+    public Face creerFace(int[], Ressource.type ... type){
     }
 
     public boolean estAChoixMultiple(){
