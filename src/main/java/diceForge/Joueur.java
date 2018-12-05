@@ -54,18 +54,20 @@ public abstract class Joueur {
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = identifiant;
         or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
-        des = new De[]{new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Lune(1)}}),
-                new Face(new Ressource[][]{{new PointDeGloire(2)}}),
-                new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 0),
-        new De(new Face[]{new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Soleil(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}}),
-                new Face(new Ressource[][]{{new Or(1)}})}, afficheur, this, 1)};
+        des = new De[]{
+                new De(new Face[]{new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.LUNE) {}}}),
+                new Face(new Ressource[][]{{new Ressource(2, Ressource.type.PDG) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})}, afficheur, this, 0),
+            new De(
+                new Face[]{new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.SOLEIL) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
+                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})}, afficheur, this, 1)};
         this.plateau = plateau;
     }
 
@@ -315,9 +317,9 @@ public abstract class Joueur {
     void acheterExploit(Carte carte){
         afficheur.achatCarte(carte, this);
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
-            if (ressource instanceof Soleil)
+            if (ressource.getType()== Ressource.type.SOLEIL)
                 ajouterSoleil(-ressource.getQuantite());
-            if (ressource instanceof Lune)
+            if (ressource.getType()== Ressource.type.LUNE)
                 ajouterLune(-ressource.getQuantite());
         }
         carte.effetDirect(this);
@@ -369,9 +371,9 @@ public abstract class Joueur {
                     break;
                 case HIBOU:
                     List<Face> proposition = Arrays.asList(
-                            new Face(new Ressource[][]{{new Soleil(1)}}),
-                            new Face(new Ressource[][]{{new Lune(1)}}),
-                            new Face(new Ressource[][]{{new Or(1)}})
+                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.SOLEIL) {}}}),
+                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.LUNE) {}}}),
+                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})
                     );
                     choix = choisirFacePourGagnerRessource(proposition);
                     gagnerRessourceFace(proposition.get(choix));
@@ -413,22 +415,22 @@ public abstract class Joueur {
     void gagnerRessourceFace(Face face, int choix){
         if (face.getRessource().length > 0) {
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
-                if (ressource instanceof Or) {
+                if (ressource.getType()== Ressource.type.OR) {
                     if(jetOrOuPdg && choisirRessourceOuPdg(ressource))
                         pointDeGloire += ressource.getQuantite();
                     else
                         ajouterOr(ressource.getQuantite());
-                } else if (ressource instanceof Soleil) {
+                } else if (ressource.getType()== Ressource.type.SOLEIL) {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
                         pointDeGloire += 2*ressource.getQuantite();
                     else
                         ajouterSoleil(ressource.getQuantite());
-                } else if (ressource instanceof Lune) {
+                } else if (ressource.getType()== Ressource.type.LUNE) {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
                         pointDeGloire += 2*ressource.getQuantite();
                     else
                         ajouterLune(ressource.getQuantite());
-                } else if (ressource instanceof PointDeGloire) {
+                } else if (ressource.getType()== Ressource.type.PDG) {
                     pointDeGloire += ressource.getQuantite();
                 }
             }
