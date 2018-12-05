@@ -39,7 +39,7 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, AubronBotV2, RomanetBot, NidoBot}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, AubronBotV2, RomanetBot, NidoBot, NidoBotV2, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 1 en dernier, 1 si c'est le cas du dé 2, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
@@ -446,23 +446,6 @@ public abstract class Joueur {
             choix = choisirRessource(face);
         afficheur.choixFace(this, face, choix);
         gagnerRessourceFace(face, choix);
-    }
-
-
-    /**
-     * utile pour les bots autre que random
-     * permet de chercher une face de base 1 or et de renvoyer sa position
-     * @return un tableau = [numéro du dé, numéro de la face sur le dé en question]
-     */
-    public int[] getPosFace1Or(){
-        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
-            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
-                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
-                    return new int[]{i,j};
-                }
-            }
-        }
-        return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
     }
 
     @Override

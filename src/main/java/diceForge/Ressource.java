@@ -7,10 +7,35 @@ package diceForge;
  */
 public abstract class Ressource {
     private int quantite;
-    public int getQuantite(){return quantite;}
-    Ressource(int quantite){
+    private Enum typeRessource;
+    public enum type{OR, SOLEIL, LUNE, PDG}//PDG == point de gloire
+
+    Ressource(int quantite){//pour pouvoir compiler le temps du refactor
         if (quantite < 0)
             throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
         this.quantite = quantite;
+    }
+
+    Ressource(int quantite, Enum type){//version a garder après refactor
+        if (quantite < 0)
+            throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
+        this.quantite = quantite;
+        this.typeRessource = type;
+    }
+
+    public int getQuantite(){return quantite;}
+    public Enum getType(){return typeRessource;}
+
+    @Override
+    public String toString(){
+        if (typeRessource == type.OR)
+            return " Or";
+        if (typeRessource == type.SOLEIL)
+            return " Soleil";
+        if (typeRessource == type.LUNE)
+            return " Lune";
+        if (typeRessource == type.PDG)
+            return " Point de gloire";
+        throw new DiceForgeException("Ressource", "Le type de ressource n'est pas reconnu: " + typeRessource);
     }
 }

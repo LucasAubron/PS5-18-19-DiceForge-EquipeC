@@ -8,6 +8,7 @@ package diceForge;
  * Si il y a plusieurs choix, alors chaque choix est représenté par une liste.
  * Le premier choix est dans ressource[0], le deuxième dans ressource[1]...
  * N'hésitez pas à refaire ce pavé si vous avez compris et pouvez l'expliquer plus clairement.
+ * Non je trouve que c'est plutot bien expliqué bien joué à toi Gabi.
  */
 public class Face {
     private Ressource[][] ressource;
@@ -20,11 +21,23 @@ public class Face {
     }
 
     /**
-     * Méthode appeler à chaque fois que l'on tombe sur cette face,
-     * a Override si il se passe quelque chose dans ce cas la
+     * Méthode appeler à chaque fois que l'on tombe sur une face,
+     * a Override si la face est une face a effet spécial (X3, miroir, bouclier, sanglier)
      * @param joueur
      */
     void effetActif(Joueur joueur){
+    }
+
+    public boolean estAChoixMultiple(){
+        if (ressource.length >1)
+            return true;
+        return false;
+    }
+
+    public boolean estFaceAddition(){
+        if (ressource[0].length >1)
+            return true;
+        return false;
     }
 
     @Override
@@ -32,7 +45,7 @@ public class Face {
         String affichage = "";
         for (Ressource[] ressources:ressource){
             if (!affichage.isEmpty()) {
-                affichage = affichage.substring(0, affichage.length()-2);//On supprime le dernier +
+                affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
                 affichage += "ou ";
             }
             for (Ressource x:ressources){
@@ -43,7 +56,7 @@ public class Face {
             }
         }
         if (!affichage.isEmpty())
-            affichage = affichage.substring(0, affichage.length()-2);//On supprime le dernier +
+            affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
         return affichage;
     }
 }

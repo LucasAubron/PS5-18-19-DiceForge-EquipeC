@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static bot.NidoBot.NidoFunctions.*;
 import static org.junit.Assert.*;
 
 public class NidoBotTest {
@@ -38,10 +39,10 @@ public class NidoBotTest {
                         new Face(new Ressource[][]{{new Lune(1)}}),
                         new Face(new Ressource[][]{{new Lune(1)}}),
                         new Face(new Ressource[][]{{new Lune(1)}})}, null, nb, 1)};
-        assertEquals(nb.getNbFaces(0, des, new Soleil(1)).getNbSoleils(), 3);
-        assertEquals(nb.getNbFaces(0, des, new Lune(1)).getNbLunes(), 1);
-        assertEquals(nb.getNbFaces(1, des, new Soleil(1)).getNbSoleils(), 1);
-        assertEquals(nb.getNbFaces(1, des, new Lune(1)).getNbLunes(), 3);
+        assertEquals(getNbFaces(0, des, new Soleil(1)).getNbSoleils(), 3);
+        assertEquals(getNbFaces(0, des, new Lune(1)).getNbLunes(), 1);
+        assertEquals(getNbFaces(1, des, new Soleil(1)).getNbSoleils(), 1);
+        assertEquals(getNbFaces(1, des, new Lune(1)).getNbLunes(), 3);
     }
 
     @Test
@@ -64,8 +65,8 @@ public class NidoBotTest {
                                 new Face(new Ressource[][]{{new Or(4)}}),
                                 new Face(new Ressource[][]{{new Or(3)}})},
                         null, nb, 1)};
-        assertEquals(nb.getPosFaceQteMin(0, des, new Or(1)), 0); //!\
-        assertEquals(nb.getPosFaceQteMin(1, des, new Or(1)), 5);
+        assertEquals(getPosFaceQteMin(0, des, new Or(1)), 0); //!\
+        assertEquals(getPosFaceQteMin(1, des, new Or(1)), 5);
     }
 
     @Test
@@ -79,9 +80,9 @@ public class NidoBotTest {
                 new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre),
                 new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien)
         };
-        assertEquals(nb.getNbCarteType(Arrays.asList(cartes), Carte.Noms.Coffre),3);
-        assertEquals(nb.getNbCarteType(Arrays.asList(cartes), Carte.Noms.Ancien),2);
-        assertEquals(nb.getNbCarteType(Arrays.asList(cartes),  Carte.Noms.Cyclope), 0);
+        assertEquals(getNbCarteType(Arrays.asList(cartes), Carte.Noms.Coffre),3);
+        assertEquals(getNbCarteType(Arrays.asList(cartes), Carte.Noms.Ancien),2);
+        assertEquals(getNbCarteType(Arrays.asList(cartes),  Carte.Noms.Cyclope), 0);
     }
 
     @Test
@@ -101,8 +102,8 @@ public class NidoBotTest {
                 new Bassin(2, new Face(new Ressource[][]{{new Or(3)}}), nbrFaceParBassin),
                 new Bassin(2, new Face(new Ressource[][]{{new PointDeGloire(1)}}), nbrFaceParBassin),
                 new Bassin(3, new Face(new Ressource[][]{{new Or(4)}}), nbrFaceParBassin)};
-        assertTrue(nb.haveSoleilsOuLunesBassins(sanctuaire1));
-        assertTrue(nb.haveSoleilsOuLunesBassins(sanctuaire2));
-        assertFalse(nb.haveSoleilsOuLunesBassins(sanctuaire3));
+        assertTrue(haveSoleilsOuLunesBassins(sanctuaire1));
+        assertTrue(haveSoleilsOuLunesBassins(sanctuaire2));
+        assertFalse(haveSoleilsOuLunesBassins(sanctuaire3));
     }
 }

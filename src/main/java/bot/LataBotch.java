@@ -7,11 +7,14 @@ import java.util.Random;
 
 public class LataBotch extends Joueur{
     public LataBotch(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
+    boolean rushMarteau=false;
 
     @Override
     public Joueur.Action choisirAction(int numManche)
     {
-        if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if(rushMarteau==true)
+            return Action.EXPLOIT;
+        if (numManche <=3 && getOr() > 5 && rushMarteau==false)//Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;
@@ -23,12 +26,33 @@ public class LataBotch extends Joueur{
         if (bassins.isEmpty())
             return new ChoixJoueurForge(null, 0, 0, 0);
         Bassin bassinAChoisir = null;
-        for (Bassin bassin:bassins){
+        if(trouveBassinCout(bassins,4,"Or")!=null){
+            Bassin bassin=trouveBassinCout(bassins,4,"Or");
+            for(int i=0;i<bassin.getFaces().size();i++){
+                if(bassin.getFaces().get(i).getRessource()[0][0].getQuantite()==6){
+                    int[] posFace = getPosFace1Or();
+                    if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
+                        return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
+                }
+
+            }
+        }
+        for(int i=bassins.size()-1;i>=0;i--){
+            Bassin bassin=bassins.get(i);
+
+
             if (numManche < 3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or){//Les 2 premières manches
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
             }
+            if (numManche <=3 && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil){//Les 2 premières manches
+                int[] posFace = getPosFace1Or();
+                if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
+                    return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
+            }
+
+
             else if (bassinAChoisir != null && bassinAChoisir.getCout() < bassin.getCout())//Sinon, on cherche la face la plus chere
                 bassinAChoisir = bassin;
             else if (bassinAChoisir == null)
@@ -40,6 +64,8 @@ public class LataBotch extends Joueur{
 
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
+
+
 
     @Override
     public Carte choisirCarte(List<Carte> cartes, int numManche){
@@ -59,7 +85,15 @@ public class LataBotch extends Joueur{
 
     @Override
     public boolean choisirActionSupplementaire(int numManche){
-        return ((getOr() > 10 && numManche < 6) || getSoleil() > 3 || getLune() > 1);//Si on a assez de ressource pour refaire un tour
+        for(int i=0;i<getPlateau().getIles().length;i++){
+            for(int j=0; j!=getPlateau().getIles()[i].getCartes().size();j++)
+                for(int k=0;k!=getPlateau().getIles()[i].getCartes().get(j).size();k++){
+                    if(getPlateau().getIles()[i].getCartes().get(j).get(k).getNom().equals(Carte.Noms.Marteau)&&(getSoleil() > 1 && getLune() > 0))
+                        rushMarteau=true;
+                }
+
+        }
+        return ((getOr() > 10 && numManche <=3) || (getSoleil() > 1 && getLune() > 0) || getSoleil()>2 || getLune()>1);//Si on a assez de ressource pour refaire un tour
     }
 
     //On choisit l'or à garder ici 0
@@ -174,6 +208,53 @@ public class LataBotch extends Joueur{
     public boolean choisirRessourceOuPdg(Ressource ressource) {
         return true;
     }
+    private Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
+        if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Or)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Soleil")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Soleil)
+                                    return bassin;
+        }
+        if (typeRessource.equals("Lune")||typeRessource.equals("Tout")) {
+            for (Bassin bassin : bassins)
+                if (bassin.getCout() == cout)
+                    for (Face face : bassin.getFaces())
+                        for (Ressource[] ressources : face.getRessource())
+                            for (Ressource ressource : ressources)
+                                if (ressource instanceof Lune)
+                                    return bassin;
+        }
+        return null;
+    }
+
+    /**
+     * utile pour les bots autre que random
+     * permet de chercher une face de base 1 or et de renvoyer sa position
+     * @return un tableau = [numéro du dé, numéro de la face sur le dé en question]
+     */
+    private int[] getPosFace1Or(){
+        for (int i = 0; i != getDes().length; ++i){//On parcours tous les dés
+            for (int j = 0; j != getDes()[i].getFaces().length; ++j){//Toutes les faces
+                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
+    }
+
     @Override
     public String toString(){return "LaaaaaataBotch";}
 }

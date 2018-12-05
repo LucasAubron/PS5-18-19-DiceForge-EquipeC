@@ -105,24 +105,6 @@ public class JoueurTest {
     }
 
     @Test
-    public void getPosFace1Or(){
-        assertEquals(0, j1.getPosFace1Or()[0]);
-        assertEquals(0, j1.getPosFace1Or()[1]);
-        j1.forgerDe(0, new FaceX3(), 0);
-        assertEquals(0, j1.getPosFace1Or()[0]);
-        assertEquals(3, j1.getPosFace1Or()[1]);
-        j1.forgerDe(0, new FaceX3(), 3);
-        assertEquals(0, j1.getPosFace1Or()[0]);
-        assertEquals(4, j1.getPosFace1Or()[1]);
-        j1.forgerDe(0, new FaceX3(), 4);
-        assertEquals(0, j1.getPosFace1Or()[0]);
-        assertEquals(5, j1.getPosFace1Or()[1]);
-        j1.forgerDe(0, new FaceX3(), 5);
-        assertEquals(1, j1.getPosFace1Or()[0]);
-        assertEquals(0, j1.getPosFace1Or()[1]);
-    }
-
-    @Test
     public void gagnerRessourceFace(){
         j1.gagnerRessourceFace(new Face(new Ressource[][]{{new Lune(5)}}));
         assertEquals(5, j1.getLune());
