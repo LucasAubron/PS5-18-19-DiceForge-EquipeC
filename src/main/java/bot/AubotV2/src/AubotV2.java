@@ -18,6 +18,7 @@ public class AubotV2 extends Joueur{
     private Random random;
     private int nombreDeJoueurs;
     private int manche = 0;
+    int compteurMancheForge = 0;
     private int orManquant;
     private int luneManquant;
     private int soleilManquant;
@@ -26,8 +27,8 @@ public class AubotV2 extends Joueur{
     private BufferedReader br;
 
     //--------------------------------------------
-    private int mancheExploit;//Manche à partir de laquelle on ne fait plus que acheter des exploits
-    private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < mancheExploit)
+    private int forgeMancheMax;//Manche à partir de laquelle on ne fait plus que acheter des exploits
+    private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche < forgeMancheMax)
     private int soleilPourExploitManche[] = new int[10];
     private int lunePourExploitManche[] = new int[10];
     private int [][][] ordrePrioForgeManche = new int[6][7][3];//Quelle face forger en prio sur quel dé et pendant quelle manche
@@ -65,8 +66,8 @@ public class AubotV2 extends Joueur{
             rejouer = false;
             return Action.EXPLOIT;
         }
-        if (manche < mancheExploit) {
-            for (int i = 0; i < mancheExploit; i++) {
+        if (compteurMancheForge < forgeMancheMax && manche < 7) {
+            for (int i = 0; i < forgeMancheMax; i++) {
                 if (i + 1 == manche && getOr() >= orPourForgerManche[i])
                     return Action.FORGER;
             }
@@ -80,8 +81,10 @@ public class AubotV2 extends Joueur{
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        if (bassins.isEmpty())
+        if (bassins.isEmpty()) {
+            compteurMancheForge++;
             return new ChoixJoueurForge(null, 0, 0, 0);
+        }
         int[][] choixForgePrio;
         String ressource = "";
         Bassin bassin;
@@ -113,9 +116,8 @@ public class AubotV2 extends Joueur{
                     numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
                     return new ChoixJoueurForge(bassins.get(0), i, numDe, numFaceDe);
                 }
-
         }
-        if (manche >= mancheExploit) {//obligé de vérifier à cause des faces spéciales achetables par des cartes
+        if (manche >= 7) {//obligé de vérifier à cause des faces spéciales achetables par des cartes
             numDe = getDeMoinsFort();
             numFaceDe = getFaceLaPlusFaibleSurDe(numDe);
             return new ChoixJoueurForge(bassins.get(0), 0, numDe, numFaceDe);
@@ -136,6 +138,7 @@ public class AubotV2 extends Joueur{
             if (numFaceBassin != -1)
                 return new ChoixJoueurForge(bassin, numFaceBassin, numDe, numFaceDe);
         }
+        compteurMancheForge++;
         return new ChoixJoueurForge(null, 0, 0, 0);
     }
 
@@ -180,7 +183,7 @@ public class AubotV2 extends Joueur{
         boolean marteauxRemplis = (nombreDeMarteauIncomplet>0) ? false : true;
         if (manche > 7 && !marteauxRemplis)
             return 0;
-        if (manche < mancheExploit || getOr() < 3* nombreCartePossedee(Ancien) && getOr() + quantiteOr <= getMaxOr())
+        if (manche < forgeMancheMax || getOr() < 3* nombreCartePossedee(Ancien) && getOr() + quantiteOr <= getMaxOr())
             return quantiteOr;
         return 0;
     }
@@ -199,7 +202,7 @@ public class AubotV2 extends Joueur{
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
-        if (manche < mancheExploit) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
+        if (manche < forgeMancheMax) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
             int nombreAncien = nombreCartePossedee(Carte.Noms.Ancien);
             for (int i=0; i<nombreAncien; i++)
                 renfortsUtilisables.remove(Ancien);
@@ -211,7 +214,7 @@ public class AubotV2 extends Joueur{
     public int choisirRessource(Face faceAChoix){
         ressourceManquante();
         int i;
-        if (manche < mancheExploit)
+        if (manche < forgeMancheMax)
             for (i=0; i<faceAChoix.getRessource().length; i++)
                 if (faceAChoix.getRessource()[i][0] instanceof Or && faceAChoix.getRessource()[i][0].getQuantite()>1)
                     return i;
@@ -265,14 +268,14 @@ public class AubotV2 extends Joueur{
         indice = -1;
         for (Ressource[] ressources: faceAChoix.getRessource()) {
             indice++;
-            if (manche == mancheExploit)
+            if (manche == forgeMancheMax)
                 if (ressources[0] instanceof Lune)
                     return indice;
         }
         indice = -1;
         for (Ressource[] ressources: faceAChoix.getRessource()) {
             indice++;
-            if (manche >= mancheExploit)
+            if (manche >= forgeMancheMax)
                 if (ressources[0] instanceof Or)
                     return indice;
         }
@@ -320,7 +323,7 @@ public class AubotV2 extends Joueur{
         for (int i=0; i<faces.size(); i++)
             for (Ressource[] ressources: faces.get(i).getRessource())
                 for (Ressource ressource: ressources)
-                    if (manche < mancheExploit && ressource.getQuantite()>1 && ressource instanceof Or)
+                    if (manche < forgeMancheMax && ressource.getQuantite()>1 && ressource instanceof Or)
                         return i;
         for (int i=0; i<faces.size(); i++)
             for (Ressource[] ressources: faces.get(i).getRessource())
@@ -467,24 +470,28 @@ public class AubotV2 extends Joueur{
         int forceDe2 = 0;
         for (Face face: getDe(0).getFaces()) {
             if (face.getRessource().length != 0) {
-                if (face.getRessource()[0][0] instanceof Soleil)
-                    forceDe1 += face.getRessource()[0][0].getQuantite() * 2;
-                else if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
-                    forceDe1 += face.getRessource()[0][0].getQuantite();
-                else if (!(face.getRessource()[0][0] instanceof Or)) {
-                    forceDe1 += 3;
-                }
+                for (Ressource[] ressources: face.getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil)
+                            forceDe1 += ressource.getQuantite() * 2;
+                        else if (ressource instanceof Lune || ressource instanceof PointDeGloire)
+                            forceDe1 += ressource.getQuantite();
+                        else if (!(ressource instanceof Or)) {
+                            forceDe1 += 3;
+                        }
             }
         }
         for (Face face: getDe(1).getFaces()) {
             if (face.getRessource().length != 0) {
-                if (face.getRessource()[0][0] instanceof Soleil)
-                    forceDe2 += face.getRessource()[0][0].getQuantite() * 2;
-                else if (face.getRessource()[0][0] instanceof Lune || face.getRessource()[0][0] instanceof PointDeGloire)
-                    forceDe2 += face.getRessource()[0][0].getQuantite();
-                else if (!(face.getRessource()[0][0] instanceof Or)) {
-                    forceDe2 += 3;
-                }
+                for (Ressource[] ressources: face.getRessource())
+                    for (Ressource ressource: ressources)
+                        if (ressource instanceof Soleil)
+                            forceDe2 += ressource.getQuantite() * 2;
+                        else if (ressource instanceof Lune || ressource instanceof PointDeGloire)
+                            forceDe2 += ressource.getQuantite();
+                        else if (!(ressource instanceof Or)) {
+                            forceDe2 += 3;
+                        }
             }
         }
         int numDe = (forceDe1 > forceDe2) ? 0 : 1;
@@ -591,7 +598,7 @@ public class AubotV2 extends Joueur{
                 if (l == 1) {//première ligne, voir commentaire de la classe
                     for (int i = 0; i < 7; i++) {
                         if (i == 0)
-                            mancheExploit = (int) tabL1[i] - 48;
+                            forgeMancheMax = (int) tabL1[i] - 48;
                         else if (i > 0)
                             orPourForgerManche[i - 1] = (int) tabL1[i] - 48;
                     }
@@ -702,7 +709,7 @@ public class AubotV2 extends Joueur{
 
     private void printInfo(){
         if (montrerInfo){
-            System.out.println("MancheExploit: "+ mancheExploit);
+            System.out.println("MancheExploit: "+ forgeMancheMax);
             System.out.println("Or pour forger 1: " + orPourForgerManche[0]);
             System.out.println("Or pour forger 2: " + orPourForgerManche[1]);
             System.out.println("Or pour forger 3: " + orPourForgerManche[2]);

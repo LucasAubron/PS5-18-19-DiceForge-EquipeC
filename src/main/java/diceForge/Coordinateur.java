@@ -227,7 +227,7 @@ public class Coordinateur {
                     bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
                     compteurForge++;
                 }
-                while(bassinsAEnlever != null);
+                while(bassinsAEnlever != null); // //Si le bot est suffisament "stupide" pour décider de forger sans avoir les moyens d'acheter le moindre bassin
                 afficheur.actionDebile(compteurForge, joueur, this);
                 break;
             case EXPLOIT:

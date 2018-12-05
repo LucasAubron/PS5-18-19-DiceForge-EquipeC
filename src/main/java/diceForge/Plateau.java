@@ -102,4 +102,25 @@ public class Plateau {
         return temple;
     }
 
+    public List getCartesPresentes(){
+        List res = new ArrayList();
+        for (Ile ile: iles)
+            for (List<Carte> cartes: ile.getCartes())
+                for (Carte carte: cartes)
+                    res.add(carte);
+        return res;
+    }
+
+    public Carte getUneCarteSiPresente(Carte.Noms nom){
+        for (Ile ile: iles)
+            for (List<Carte> cartes: ile.getCartes())
+                for (Carte carte: cartes)
+                    if (carte.getNom() == nom)
+                        return carte;
+        return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
+    }
+
+    public Bassin getBassin(int cout, Enum typeRessource){
+        return null;
+    }
 }
