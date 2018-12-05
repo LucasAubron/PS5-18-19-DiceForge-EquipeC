@@ -11,7 +11,7 @@ public class FaceMiroirAbyssal extends Face {
     private int choix = -1;
 
     FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
-        super(new Ressource[][]{});
+        super(typeFace.MIROIR);
         listeJoueurs.removeIf(x -> x.getIdentifiant() == joueurMaitre.getIdentifiant());
         this.listeJoueurs = listeJoueurs;
     }

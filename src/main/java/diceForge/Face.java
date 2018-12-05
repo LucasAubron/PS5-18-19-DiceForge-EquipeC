@@ -13,13 +13,38 @@ import java.util.List;
  * Non je trouve que c'est plutot bien expliqué bien joué à toi Gabi.
  */
 public class Face {
-    private Ressource[][] ressource;
-    Face(Ressource[][] ressource) {
+
+    private Ressource ressource; // pour les faces simples
+    private Ressource[] ressources; // pour les faces a choix et addition
+    private typeFace type;
+    public enum typeFace{SIMPLE, CHOIX, ADDITION, BOUCLIER, X3, MIROIR, SANGLIER, VOILECELESTE};
+
+    Face(Ressource ressource) {//face simple
         this.ressource = ressource;
+        this.type = typeFace.SIMPLE;
     }
 
-    public Ressource[][] getRessource() {
-        return ressource;
+    Face(typeFace typeF,Ressource[] ressources) {//faces a choix ou face addition
+        this.ressources = ressources;
+        this.type = typeF;
+    }
+
+    Face(typeFace typeF) { // faces a effet (sanglier, bouclier, X3, miroir, voiles celeste)
+        this.type = typeF;
+    }
+
+    public Ressource[] getRessources() { return ressources; }//face a choix et face addition
+    public Ressource getRessource() { return ressource; }//face simple
+    public typeFace getTypeFace() { return type; }
+    public boolean naPasDeffet(){
+        if (type == typeFace.SIMPLE || type == typeFace.CHOIX || type == typeFace.ADDITION)
+            return true;
+        return false;
+    }
+    public boolean estFaceAChoix(){
+        if (type == typeFace.CHOIX || type == typeFace.SANGLIER)
+            return true;
+        return false;
     }
 
     /**
@@ -30,30 +55,10 @@ public class Face {
     void effetActif(Joueur joueur){
     }
 
-    public Face creerFaceSimple(int quantite, Ressource.type type){
-    }
-
-    public Face creerFaceChoix(int[] quantite, Ressource.type ... type){
-    }
-
-    public Face creerFace(int[], Ressource.type ... type){
-    }
-
-    public boolean estAChoixMultiple(){
-        if (ressource.length >1)
-            return true;
-        return false;
-    }
-
-    public boolean estFaceAddition(){
-        if (ressource[0].length >1)
-            return true;
-        return false;
-    }
-
     @Override
     public String toString() {
         String affichage = "";
+        /*
         for (Ressource[] ressources:ressource){
             if (!affichage.isEmpty()) {
                 affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
@@ -68,6 +73,7 @@ public class Face {
         }
         if (!affichage.isEmpty())
             affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
+        */
         return affichage;
     }
 }

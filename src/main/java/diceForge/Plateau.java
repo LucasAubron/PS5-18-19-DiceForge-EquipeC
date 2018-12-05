@@ -20,48 +20,48 @@ public class Plateau {
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         Random random = new Random();
 
-        Carte ours = new Carte(new Ressource[]{new Lune(2)}, 2, Carte.Noms.Ours);
-        Carte biche = new Carte(new Ressource[]{new Lune(2)}, 2, Carte.Noms.Biche);
+        Carte ours = new Carte(new Ressource[]{new Ressource(2, Ressource.type.LUNE)}, 2, Carte.Noms.Ours);
+        Carte biche = new Carte(new Ressource[]{new Ressource(2, Ressource.type.LUNE)}, 2, Carte.Noms.Biche);
         Carte sanglier = new CarteSanglier(portail.getJoueurs());
         Carte satyres = new Satyres(portail.getJoueurs());
-        Carte cerbere = new Carte(new Ressource[]{new Lune(4)}, 6, Carte.Noms.Cerbere);
-        Carte passeur = new Carte(new Ressource[]{new Lune(4)}, 12, Carte.Noms.Passeur);
+        Carte cerbere = new Carte(new Ressource[]{new Ressource(4, Ressource.type.LUNE)}, 6, Carte.Noms.Cerbere);
+        Carte passeur = new Carte(new Ressource[]{new Ressource(4, Ressource.type.LUNE)}, 12, Carte.Noms.Passeur);
 
-        Carte hibou = new Carte(new Ressource[]{new Soleil(2)}, 4, Carte.Noms.Hibou);
+        Carte hibou = new Carte(new Ressource[]{new Ressource(2, Ressource.type.SOLEIL)}, 4, Carte.Noms.Hibou);
         Carte bateauCeleste = new CarteBateauCeleste(this);
         Carte minautore = new Minautore(portail.getJoueurs());
         Carte bouclier = new CarteBouclier(this);
 
-        Carte meduse = new Carte(new Ressource[]{new Soleil(4)}, 14, Carte.Noms.Meduse);
-        Carte triton = new Carte(new Ressource[]{new Soleil(4)}, 8, Carte.Noms.Triton);
+        Carte meduse = new Carte(new Ressource[]{new Ressource(4, Ressource.type.SOLEIL)}, 14, Carte.Noms.Meduse);
+        Carte triton = new Carte(new Ressource[]{new Ressource(4, Ressource.type.SOLEIL)}, 8, Carte.Noms.Triton);
 
         Carte[][] ileFond = new Carte[3][typeJoueurs.length];
         int[] ra = new int[]{random.nextInt(2), random.nextInt(2), random.nextInt(2)};
         for (int i = 0; i != typeJoueurs.length; ++i){
             if (ra[0] == 0)
-                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 16, Carte.Noms.Typhon);
+                ileFond[0][i] = new Carte(new Ressource[]{new Ressource(5, Ressource.type.SOLEIL), new Ressource(5, Ressource.type.LUNE)}, 16, Carte.Noms.Typhon);
             else
-                ileFond[0][i] = new Carte(new Ressource[]{new Soleil(5), new Lune(5)}, 26, Carte.Noms.Hydre);
+                ileFond[0][i] = new Carte(new Ressource[]{new Ressource(5, Ressource.type.SOLEIL), new Ressource(5, Ressource.type.LUNE)}, 26, Carte.Noms.Hydre);
             if (ra[1] == 0)
-                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 6, Carte.Noms.Sentinelle);
+                ileFond[1][i] = new Carte(new Ressource[]{new Ressource(6, Ressource.type.LUNE)}, 6, Carte.Noms.Sentinelle);
             else
-                ileFond[1][i] = new Carte(new Ressource[]{new Lune(6)}, 8, Carte.Noms.Cancer);
+                ileFond[1][i] = new Carte(new Ressource[]{new Ressource(6, Ressource.type.LUNE)}, 8, Carte.Noms.Cancer);
             if (ra[2] == 0)
-                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 10, Carte.Noms.Sphinx);
+                ileFond[2][i] = new Carte(new Ressource[]{new Ressource(6, Ressource.type.SOLEIL)}, 10, Carte.Noms.Sphinx);
             else
-                ileFond[2][i] = new Carte(new Ressource[]{new Soleil(6)}, 8, Carte.Noms.Cyclope);
+                ileFond[2][i] = new Carte(new Ressource[]{new Ressource(6, Ressource.type.SOLEIL)}, 8, Carte.Noms.Cyclope);
         }
 
         iles = new Ile[]{new Ile(new Marteau(),
-                new Carte(new Ressource[]{new Lune(1)}, 2, Carte.Noms.Coffre), typeJoueurs.length),
-                new Ile(new Carte(new Ressource[]{new Soleil(1)}, 0, Carte.Noms.Ancien),
-                        new Carte(new Ressource[]{new Soleil(1)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),
+                new Carte(new Ressource[]{new Ressource(1, Ressource.type.LUNE)}, 2, Carte.Noms.Coffre), typeJoueurs.length),
+                new Ile(new Carte(new Ressource[]{new Ressource(1, Ressource.type.SOLEIL)}, 0, Carte.Noms.Ancien),
+                        new Carte(new Ressource[]{new Ressource(1, Ressource.type.SOLEIL)}, 2, Carte.Noms.HerbesFolles), typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? ours : biche,
                         random.nextInt(2) == 1 ? sanglier : satyres, typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? hibou : bateauCeleste,
                         random.nextInt(2) == 1 ? minautore : bouclier, typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? cerbere : passeur,
-                        new Carte(new Ressource[]{new Lune(5)}, 4, Carte.Noms.CasqueDinvisibilite),
+                        new Carte(new Ressource[]{new Ressource(5, Ressource.type.LUNE)}, 4, Carte.Noms.CasqueDinvisibilite),
                         typeJoueurs.length),
                 new Ile(random.nextInt(2) == 1 ? meduse : triton,
                         new CarteMiroirAbyssal(portail.getJoueurs()),
@@ -120,7 +120,7 @@ public class Plateau {
         return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
     }
 
-    public Bassin getBassin(int cout, Enum typeRessource){
+    public Bassin getBassin(int cout, Enum typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
         return null;
     }
 }

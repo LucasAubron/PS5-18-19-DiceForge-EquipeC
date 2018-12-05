@@ -3,7 +3,7 @@ package diceForge;
 public class CarteBateauCeleste extends Carte {
     private Plateau plateau;
     public CarteBateauCeleste(Plateau plateau){
-        super(new Ressource[]{new Soleil(2)}, 4, Noms.BateauCeleste);
+        super(new Ressource[]{new Ressource(2, Ressource.type.SOLEIL)}, 4, Noms.BateauCeleste);
         this.plateau = plateau;
     }
 

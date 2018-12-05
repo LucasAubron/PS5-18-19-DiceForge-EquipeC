@@ -5,16 +5,10 @@ package diceForge;
  * et aussi pour avoir un unique tableau dans Face,
  * on créé une classe Ressource que l'on dérive en chaque ressource de base
  */
-public abstract class Ressource {
+public class Ressource {
     private int quantite;
     private Enum typeRessource;
     public enum type{OR, SOLEIL, LUNE, PDG}//PDG == point de gloire
-
-    Ressource(int quantite){//pour pouvoir compiler le temps du refactor
-        if (quantite < 0)
-            throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
-        this.quantite = quantite;
-    }
 
     Ressource(int quantite, Enum type){//version a garder après refactor
         if (quantite < 0)
@@ -25,6 +19,11 @@ public abstract class Ressource {
 
     public int getQuantite(){return quantite;}
     public Enum getType(){return typeRessource;}
+    public boolean estDuType(Enum typeR){
+        if (typeRessource == typeR)
+            return true;
+        return false;
+    }
 
     @Override
     public String toString(){

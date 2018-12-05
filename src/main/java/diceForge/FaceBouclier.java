@@ -2,9 +2,9 @@ package diceForge;
 
 public class FaceBouclier extends Face {
     Ressource ressource;
-    FaceBouclier(Ressource[] ressources){
-        super(new Ressource[][]{ressources});
-        this.ressource= ressources[0];
+    FaceBouclier(Ressource ressource){
+        super(typeFace.BOUCLIER);
+        this.ressource = ressource;
     }
 
     @Override

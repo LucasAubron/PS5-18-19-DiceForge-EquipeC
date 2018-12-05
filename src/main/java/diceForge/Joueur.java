@@ -54,20 +54,16 @@ public abstract class Joueur {
             throw new DiceForgeException("Joueur","L'identifiant est invalide. Min : 1, max : 4, actuel : "+identifiant);
         this.identifiant = identifiant;
         or = 4-identifiant; // le premier joueur a 3 or, le deuxième 2 or, etc..
+
+        Face unOr = new Face(new Ressource(1, Ressource.type.OR));
+        Face unSoleil = new Face(new Ressource(1, Ressource.type.SOLEIL));
+        Face uneLune = new Face(new Ressource(1, Ressource.type.LUNE));
+        Face deuxPdg = new Face(new Ressource(1, Ressource.type.PDG));
+
+
         des = new De[]{
-                new De(new Face[]{new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.LUNE) {}}}),
-                new Face(new Ressource[][]{{new Ressource(2, Ressource.type.PDG) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})}, afficheur, this, 0),
-            new De(
-                new Face[]{new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.SOLEIL) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}}),
-                new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})}, afficheur, this, 1)};
+                new De(new Face[]{unOr, unOr, unOr, unOr, uneLune, deuxPdg }, afficheur, this, 0),
+                new De(new Face[]{unOr, unOr, unOr, unOr, unOr, unSoleil}, afficheur, this, 1)};
         this.plateau = plateau;
     }
 
@@ -226,9 +222,9 @@ public abstract class Joueur {
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
         for (int i = 0; i != des.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
             int autreFace = i==0?1:0;//autreFace est 1 si i est 0, et 0 sinon
-            if (des[i].derniereFace() instanceof FaceBouclier && des[autreFace].derniereFace().getRessource().length > 0){//On traite le cas faceBouclier
+            if (des[i].derniereFace() instanceof FaceBouclier && des[autreFace].derniereFace().naPasDeffet()){//On traite le cas faceBouclier
                 int x = 0;
-                if (des[autreFace].derniereFace().getRessource().length > 1) {//Si l'autre de est une face à choix
+                if (des[autreFace].derniereFace().getTypeFace() == Face.typeFace.CHOIX) {//Si l'autre de est une face à choix
                     x = choisirRessource(des[autreFace].derniereFace());//le autreFaceoueur choisis
                     gagnerRessourceFace(des[autreFace].derniereFace(), x);//Il gagne les ressources conformément à son choix
                     gagnerFace[autreFace] = false;
@@ -242,10 +238,10 @@ public abstract class Joueur {
                 }
             }
             else if (des[i].derniereFace() instanceof FaceX3){//Si c'est une faceX3
-                if (des[autreFace].derniereFace().getRessource().length > 0){//Si l'autre face est commune
+                if (des[autreFace].derniereFace().getRessources().length > 0){//Si l'autre face est commune
                     gagnerFace[autreFace] = false;
                     int x = 0;
-                    if (des[autreFace].derniereFace().getRessource().length > 1)
+                    if (des[autreFace].derniereFace().getTypeFace() == Face.typeFace.CHOIX)
                         x = choisirRessource(des[autreFace].derniereFace());
                     for (int j = 0; j != 3; ++j)//On applique la récompense 3x
                         gagnerRessourceFace(des[autreFace].derniereFace(), x);
@@ -371,9 +367,9 @@ public abstract class Joueur {
                     break;
                 case HIBOU:
                     List<Face> proposition = Arrays.asList(
-                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.SOLEIL) {}}}),
-                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.LUNE) {}}}),
-                            new Face(new Ressource[][]{{new Ressource(1, Ressource.type.OR) {}}})
+                            new Face(new Ressource(1, Ressource.type.SOLEIL)),
+                            new Face(new Ressource(1, Ressource.type.LUNE)),
+                            new Face(new Ressource(1, Ressource.type.OR))
                     );
                     choix = choisirFacePourGagnerRessource(proposition);
                     gagnerRessourceFace(proposition.get(choix));
@@ -413,7 +409,7 @@ public abstract class Joueur {
      * @param face
      */
     void gagnerRessourceFace(Face face, int choix){
-        if (face.getRessource().length > 0) {
+        if (face.naPasDeffet()) {
             for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
                 if (ressource.getType()== Ressource.type.OR) {
                     if(jetOrOuPdg && choisirRessourceOuPdg(ressource))
@@ -444,7 +440,7 @@ public abstract class Joueur {
      */
     void gagnerRessourceFace(Face face) {
         int choix = 0;
-        if (face.getRessource().length > 1)
+        if (face.estFaceAChoix())
             choix = choisirRessource(face);
         afficheur.choixFace(this, face, choix);
         gagnerRessourceFace(face, choix);
@@ -489,7 +485,7 @@ public abstract class Joueur {
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
-    public abstract int choisirRepartitionOrMarteau(int nbrOr);
+    public abstract int choisirRepartitionOrAGarderSiMarteau(int nbrOr);
 
     /**
      * Permet de choisir quel renfort appeler

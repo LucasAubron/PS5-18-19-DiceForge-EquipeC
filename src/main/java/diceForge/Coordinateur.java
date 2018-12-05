@@ -78,7 +78,7 @@ public class Coordinateur {
         int stockVictoire;
         int stockEgalite;
         for (int k = 0; k < nbrJoueur; k++) {             // d'ici au prochain commentaire
-            stockJoueur = typeJoueurs[nbrJoueur - 1];     // on s'assure que les posiiton des stats
+            stockJoueur = typeJoueurs[nbrJoueur - 1];     // on s'assure que les positon des stats
             stockPdg = ptsGloireCumules[nbrJoueur - 1];   // d'un bot dans chaque tableau est la même
             stockVictoire = nbrVictoire[nbrJoueur - 1];   // que sa position de jeu, tout en faisant
             stockEgalite = nbrEgalite[nbrJoueur - 1];     // tourner les positions de jeu de façon
@@ -110,7 +110,7 @@ public class Coordinateur {
         }
         afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, (nbrParties/nbrJoueur) * nbrJoueur); // le calcul étrange du dernier paramètre s'explique:
                                                                                                                                 // 1000 n'étant pas divisible par 3, lorsqu'on joue a
-                                                                                                                                // 3joueurs on ne fait en réalité que 999 parties
+                                                                                                                                // 3 joueurs on ne fait en réalité que 999 parties
     }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -313,9 +313,9 @@ public class Coordinateur {
                 for (Carte carte : paquet) {//Et les cartes
                     int prixSoleil = 0, prixLune = 0;
                     for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
-                        if (prix instanceof Soleil)
+                        if (prix.getType() == Ressource.type.SOLEIL)
                             prixSoleil += prix.getQuantite();
-                        else if (prix instanceof Lune)
+                        else if (prix.getType() == Ressource.type.LUNE)
                             prixLune += prix.getQuantite();
                         else//Cela ne devrait jamais arriver
                             throw new DiceForgeException("Coordinateur", "Une carte doit couter soit des lunes soit des soleils !");
