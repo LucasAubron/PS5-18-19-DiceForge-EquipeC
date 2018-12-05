@@ -18,7 +18,9 @@ public class Ressource {
     }
 
     public int getQuantite(){return quantite;}
+
     public Enum getType(){return typeRessource;}
+
     public boolean estDuType(Enum typeR){
         if (typeRessource == typeR)
             return true;

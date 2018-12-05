@@ -222,38 +222,39 @@ public abstract class Joueur {
         Boolean[] gagnerFace = new Boolean[]{true, true};//Pour savoir si on ajoute a la fin les ressources de la face
         for (int i = 0; i != des.length; ++i){//on parcours les desFaceCourante que l'on a obtenu
             int autreFace = i==0?1:0;//autreFace est 1 si i est 0, et 0 sinon
-            if (des[i].derniereFace() instanceof FaceBouclier && des[autreFace].derniereFace().naPasDeffet()){//On traite le cas faceBouclier
-                int x = 0;
-                if (des[autreFace].derniereFace().getTypeFace() == Face.typeFace.CHOIX) {//Si l'autre de est une face à choix
-                    x = choisirRessource(des[autreFace].derniereFace());//le autreFaceoueur choisis
-                    gagnerRessourceFace(des[autreFace].derniereFace(), x);//Il gagne les ressources conformément à son choix
+            if (des[i].faceActuelle().getTypeFace() == Face.typeFace.BOUCLIER && des[autreFace].faceActuelle().faitGagnerUneRessource()){//On traite le cas faceBouclier
+                if (des[autreFace].faceActuelle().getTypeFace() == Face.typeFace.SIMPLE)
+
+                if (des[autreFace].faceActuelle().estFaceAChoix()) {//Si l'autre de est une face à choix
+                    choisirRessource(des[autreFace].faceActuelle());//le autreFaceoueur choisis
+                    gagnerRessourceFace(des[autreFace].faceActuelle(), x);//Il gagne les ressources conformément à son choix
                     gagnerFace[autreFace] = false;
                 }
-                for (Ressource ressource:des[autreFace].derniereFace().getRessource()[x]){
-                    if (ressource.getClass().equals(des[i].derniereFace().getRessource()[0][0].getClass())){
+                for (Ressource ressource:des[autreFace].faceActuelle().getRessource()[x]){
+                    if (ressource.getClass().equals(des[i].faceActuelle().getRessource()[0][0].getClass())){
                         pointDeGloire += 5;
                         gagnerFace[i] = false;
                         break;
                     }
                 }
             }
-            else if (des[i].derniereFace() instanceof FaceX3){//Si c'est une faceX3
-                if (des[autreFace].derniereFace().getRessources().length > 0){//Si l'autre face est commune
+            else if (des[i].faceActuelle().getTypeFace() == Face.typeFace.X3){//Si c'est une faceX3
+                if (des[autreFace].faceActuelle().faitGagnerUneRessource()){//Si l'autre face est commune
                     gagnerFace[autreFace] = false;
                     int x = 0;
-                    if (des[autreFace].derniereFace().getTypeFace() == Face.typeFace.CHOIX)
-                        x = choisirRessource(des[autreFace].derniereFace());
+                    if (des[autreFace].faceActuelle().getTypeFace() == Face.typeFace.CHOIX)
+                        x = choisirRessource(des[autreFace].faceActuelle());
                     for (int j = 0; j != 3; ++j)//On applique la récompense 3x
-                        gagnerRessourceFace(des[autreFace].derniereFace(), x);
+                        gagnerRessourceFace(des[autreFace].faceActuelle(), x);
                 }
-                if (des[autreFace].derniereFace() instanceof FaceBateauCeleste){//Si c'est une face bateau celeste
+                if (des[autreFace].faceActuelle().getTypeFace() == Face.typeFace.VOILECELESTE){//Si c'est une face bateau celeste
                     gagnerFace[autreFace] = false;
-                    FaceBateauCeleste faceBateauCeleste = (FaceBateauCeleste) des[autreFace].derniereFace();
-                    faceBateauCeleste.multiplierX3Actif();//On l'active avec le bonus
-                    faceBateauCeleste.effetActif(this);
+                    FaceVoileCeleste faceVoileCeleste = (FaceVoileCeleste) des[autreFace].faceActuelle();
+                    faceVoileCeleste.multiplierX3Actif();//On l'active avec le bonus
+                    faceVoileCeleste.effetActif(this);
                 }
-                else if (des[autreFace].derniereFace() instanceof FaceMiroirAbyssal){
-                    FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) des[autreFace].derniereFace();
+                else if (des[autreFace].faceActuelle().getTypeFace() == Face.typeFace.MIROIR){
+                    FaceMiroirAbyssal faceMiroirAbyssal = (FaceMiroirAbyssal) des[autreFace].faceActuelle();
                     int choix = choisirFacePourGagnerRessource(faceMiroirAbyssal.obtenirFacesAdversaires());
                     for (int j = 0; j != 3; j++){//On l'active 3 fois avec la meme face
                         faceMiroirAbyssal.setChoix(choix);
@@ -265,14 +266,14 @@ public abstract class Joueur {
 
         for (int i = 0; i != gagnerFace.length; ++i)
             if (gagnerFace[i]) {
-                gagnerRessourceFace(des[i].derniereFace());
+                gagnerRessourceFace(des[i].faceActuelle());
                 for (int j = 0; j < getJetons().size() && getJetons().get(j) == Jeton.CERBERE && utiliserJetonCerbere(); ++j)
                     appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
             }
     }
 
     public Face[] getDesFaceCourante(){
-        return new Face[]{des[0].derniereFace(), des[1].derniereFace()};
+        return new Face[]{des[0].faceActuelle(), des[1].faceActuelle()};
     }
 
 
@@ -409,28 +410,26 @@ public abstract class Joueur {
      * @param face
      */
     void gagnerRessourceFace(Face face, int choix){
-        if (face.naPasDeffet()) {
-            for (Ressource ressource : face.getRessource()[choix]) {//On regarde de quelle ressource il s'agit
-                if (ressource.getType()== Ressource.type.OR) {
-                    if(jetOrOuPdg && choisirRessourceOuPdg(ressource))
-                        pointDeGloire += ressource.getQuantite();
-                    else
-                        ajouterOr(ressource.getQuantite());
-                } else if (ressource.getType()== Ressource.type.SOLEIL) {
-                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
-                        pointDeGloire += 2*ressource.getQuantite();
-                    else
-                        ajouterSoleil(ressource.getQuantite());
-                } else if (ressource.getType()== Ressource.type.LUNE) {
-                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource))
-                        pointDeGloire += 2*ressource.getQuantite();
-                    else
-                        ajouterLune(ressource.getQuantite());
-                } else if (ressource.getType()== Ressource.type.PDG) {
-                    pointDeGloire += ressource.getQuantite();
-                }
+        if (face.faitGagnerUneRessource) {
+            if (face.getRessource().estDuType(Ressource.type.OR)) {
+                if(jetOrOuPdg && choisirRessourceOuPdg(face.getRessource()))
+                    pointDeGloire += face.getRessource().getQuantite();
+                else
+                    ajouterOr(face.getRessource().getQuantite());
+            } else if (face.getRessource().estDuType(Ressource.type.SOLEIL)) {
+                if (jetRessourceOuPdg && choisirRessourceOuPdg(face.getRessource()))
+                    pointDeGloire += 2*face.getRessource().getQuantite();
+                else
+                    ajouterSoleil(face.getRessource().getQuantite());
+            } else if (face.getRessource().estDuType(Ressource.type.LUNE)) {
+                if (jetRessourceOuPdg && choisirRessourceOuPdg(face.getRessource()))
+                    pointDeGloire += 2*face.getRessource().getQuantite();
+                else
+                    ajouterLune(face.getRessource().getQuantite());
+            } else if (face.getRessource().estDuType(Ressource.type.PDG)) {
+                pointDeGloire += face.getRessource().getQuantite();
             }
-        }
+    }
         face.effetActif(this);
     }
 
@@ -485,7 +484,7 @@ public abstract class Joueur {
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
-    public abstract int choisirRepartitionOrAGarderSiMarteau(int nbrOr);
+    public abstract int choisirRepartitionOrMarteau(int nbrOr);
 
     /**
      * Permet de choisir quel renfort appeler

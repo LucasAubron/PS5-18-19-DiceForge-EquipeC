@@ -5,13 +5,10 @@ import java.util.List;
 
 /**
  * Cette classe représente une face d'un dé, qu'elle soit dans un bassin ou sur un dé
- * On utilise un tableau à 2 dimensions pour stocker les ressources. Pourquoi :
- * Si la case n'offre aucun choix (pas de ? sur la face), alors la liste principale est de taille 1,
- * les ressources contenues sont donc dans ressource[0]
- * Si il y a plusieurs choix, alors chaque choix est représenté par une liste.
- * Le premier choix est dans ressource[0], le deuxième dans ressource[1]...
- * N'hésitez pas à refaire ce pavé si vous avez compris et pouvez l'expliquer plus clairement.
- * Non je trouve que c'est plutot bien expliqué bien joué à toi Gabi.
+ * Une face si elle est simple ne prends en argument qu'une ressource/
+ * Si elle est a choix ou est une face addition elle prends en argument
+ * une enum qui indique son type et une liste de ressoruces.
+ * Sinon on a juste le type lorsqu'il s'agit d'une face spéciale achetable par exploit.
  */
 public class Face {
 
@@ -32,18 +29,23 @@ public class Face {
 
     Face(typeFace typeF) { // faces a effet (sanglier, bouclier, X3, miroir, voiles celeste)
         this.type = typeF;
+        if (type == typeFace.SANGLIER)
+            ressources = new Ressource[]{
+                    new Ressource(1, Ressource.type.SOLEIL),
+                    new Ressource(1, Ressource.type.LUNE)};
     }
 
     public Ressource[] getRessources() { return ressources; }//face a choix et face addition
     public Ressource getRessource() { return ressource; }//face simple
     public typeFace getTypeFace() { return type; }
-    public boolean naPasDeffet(){
-        if (type == typeFace.SIMPLE || type == typeFace.CHOIX || type == typeFace.ADDITION)
+
+    public boolean faitGagnerUneRessource(){
+        if (type != typeFace.VOILECELESTE && type != typeFace.X3)
             return true;
         return false;
     }
     public boolean estFaceAChoix(){
-        if (type == typeFace.CHOIX || type == typeFace.SANGLIER)
+        if (type == typeFace.CHOIX || type == typeFace.SANGLIER || type == typeFace.MIROIR)
             return true;
         return false;
     }

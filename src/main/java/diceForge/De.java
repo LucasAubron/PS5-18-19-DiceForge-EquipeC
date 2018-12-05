@@ -10,7 +10,7 @@ import java.util.Random;
 public class De {
     private Face[] faces;
     private int nbrFaceForge = 0;//Pour savoir combien de face le joueur à forgé (pour la carte typhon)
-    private Face derniereFace;
+    private Face faceActuelle;
     private Afficheur afficheur;//sert uniquement pour l'afficheur
     private Joueur proprietaire;//idem
     private int id;//idem
@@ -21,7 +21,7 @@ public class De {
 
     public Face getFace(int num) { return faces[num]; }
 
-    public Face derniereFace(){return derniereFace;}
+    public Face faceActuelle(){return faceActuelle;}
 
     De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){
         this.proprietaire = joueur;
@@ -34,9 +34,9 @@ public class De {
 
     public Face lancerLeDe(){
         Random aleatoire = new Random();//Permet d'acceder au fonction de Random
-        derniereFace = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
+        faceActuelle = faces[aleatoire.nextInt(faces.length)];//Nombre entre 0 et faces.length-1
         afficheur.resultatDe(proprietaire, id);
-        return derniereFace;
+        return faceActuelle;
     }
 
     void forger(Face faceAForger, int numFace){
