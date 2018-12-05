@@ -19,6 +19,6 @@ public class CarteMiroirAbyssal extends Carte {
 
     @Override
     void effetDirect(Joueur acheteur){
-        acheteur.forgerFace(new FaceMiroirAbyssal(acheteur, joueurs));
+        acheteur.choisirOuForgerFaceSpeciale(new FaceMiroirAbyssal(acheteur, joueurs));
     }
 }

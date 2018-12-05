@@ -12,7 +12,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public Action choisirAction(int numManche) {
+    public Action choisirAction() {
         switch (random.nextInt(3)) {
             case 0:
                 return Action.EXPLOIT;
@@ -21,58 +21,95 @@ public class RandomBot extends Joueur {
             case 2:
                 return Action.PASSER;
         }
+        return null;
     }
 
 
     @Override
-    public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){
-        return ChoixJoueurForge(),
+    public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){
+        return new ChoixJoueurForge(bassins.get(random.nextInt(bassins.size())), random.nextInt(4), random.nextInt(2), random.nextInt(6));
     }
 
     @Override
-    public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){}
+    public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){
+        return new int[]{random.nextInt(2), random.nextInt(6)};
+    }
 
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche){}
+    public Carte choisirCarte(List<Carte> cartes){
+        return cartes.get(random.nextInt(cartes.size()));
+    }
 
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche){}
+    public boolean choisirActionSupplementaire(){
+        return (random.nextInt(2)==0) ? true : false;
+    }
 
     @Override
-    public boolean choisirActionSupplementaire(int numManche){}
+    public Ressource choisirRessourceFaceAchoix(Ressource[] ressources){
+        return ressources[random.nextInt(ressources.length)];
+    }
 
     @Override
-    public int choisirRessourceFaceAchoix(Ressource[] ressources){}
+    public int choisirRepartitionOrMarteau(int nbrOr){
+        return random.nextInt(nbrOr+1);
+    }
 
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){}
+    public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){
+        return renfortsUtilisables;
+    }
 
     @Override
-    public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
+    public Face choisirFaceACopier(List<Face> faces){
+        return faces.get(random.nextInt(faces.size()));
+    }
 
     @Override
-    public Face choisirFaceACopier(List<Face> faces){}
+    public Ressource choisirRessourceAPerdre(Ressource[] ressources){
+        return ressources[random.nextInt(ressources.length)];
+    }
 
     @Override
-    public int choisirRessourceAPerdre(Ressource[] ressources){}
+    public int choisirDeFaveurMineure(){
+        return random.nextInt(2);
+    }
 
     @Override
-    public int choisirDeFaveurMineure(){}
+    public int choisirDeCyclope(){
+        return random.nextInt(2);
+    }
 
     @Override
-    public int choisirDeCyclope(){}
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){
+        return random.nextInt(joueurs.size());
+    }
 
     @Override
-    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
+    public choixJetonTriton utiliserJetonTriton(){
+        switch (random.nextInt(4)){
+            case 0:
+                return choixJetonTriton.Or;
+            case 1:
+                return choixJetonTriton.Soleil;
+            case 2:
+                return choixJetonTriton.Lune;
+            case 3:
+                return choixJetonTriton.Rien;
+            default:
+                return null;
+        }
+    }
 
     @Override
-    public choixJetonTriton utiliserJetonTriton(){}
+    public boolean utiliserJetonCerbere(){
+        return (random.nextInt()==0) ? true : false;
+    }
 
     @Override
-    public boolean utiliserJetonCerbere(){}
-
-    @Override
-    public boolean choisirRessourceOuPdg(Ressource ressource){}
+    public boolean choisirRessourceOuPdg(Ressource ressource){
+        return (random.nextInt()==0) ? true : false;
+    }
 
     @Override
     public String toString(){return "RandomBot";}

@@ -215,10 +215,8 @@ public abstract class Joueur {
         //A ce stade le joueur propriétaire de la carte sanglier a déjà reçu sa récompense, le
         //joueur qui a obtenu le face va pouvoir choisir et obtenir don dû ici
         if (face.estFaceAChoix()) {
-            int choix = choisirRessourceFaceAchoix(face.getRessources());
-            if (choix > face.getRessources().length - 1)
-                throw new DiceForgeException("Joueur", "Un joueur a choisi un indice de Ressource qui dépasse la taille de la face à choix");
-            ressourcesAGagner.add(face.getRessources()[choix]);
+            Ressource choix = choisirRessourceFaceAchoix(face.getRessources());
+            ressourcesAGagner.add(choix);
         }
         //face addition -------------------------------------------------------------
         if (face.getTypeFace() == Face.typeFace.ADDITION) {
@@ -422,7 +420,8 @@ public abstract class Joueur {
     }
 
     public void appelerRenforts(List<Renfort> renfortsUtilisables){
-        int choix;
+        Ressource choixRessource;
+        int choixDe;
         for (Renfort renfort:renfortsUtilisables){
             switch (renfort){
                 case ANCIEN:
@@ -431,13 +430,13 @@ public abstract class Joueur {
                     afficheur.ancien(this);
                     break;
                 case BICHE:
-                    choix = choisirDeFaveurMineure();
-                    Face face = des[choix].lancerLeDe();
-                    setDernierLanceDes(choix); //pour le jeton cerbère
+                    choixDe = choisirDeFaveurMineure();
+                    Face face = des[choixDe].lancerLeDe();
+                    setDernierLanceDes(choixDe); //pour le jeton cerbère
                     gagnerRessourceFace(face);
                     for (int j = 0; j < getJetons().size() && getJetons().get(j) == Joueur.Jeton.CERBERE && utiliserJetonCerbere(); ++j)
                         appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
-                    afficheur.biche(choix, face, this);
+                    afficheur.biche(choixDe, face, this);
                     break;
                 case HIBOU:
                     Ressource[] proposition = new Ressource[]{
@@ -445,9 +444,9 @@ public abstract class Joueur {
                             new Ressource(1, Ressource.type.LUNE),
                            new Ressource(1, Ressource.type.OR)
                     };
-                    choix = choisirRessourceFaceAchoix(proposition);
-                    gagnerRessourceFace(new Face(proposition[choix]));
-                    afficheur.hibou(this, proposition[choix]);
+                    choixRessource = choisirRessourceFaceAchoix(proposition);
+                    gagnerRessourceFace(new Face(choixRessource));
+                    afficheur.hibou(this, choixRessource);
                     break;
             }
         }
@@ -496,17 +495,16 @@ public abstract class Joueur {
 
     /*LISTE DES METHODES ABSTRACT: (pour créer un bot, copier coller et enlever les tirets  en selectionnant un tiret et en utilisant alt+maj+ctrl+j)
 
-    -public Action choisirAction(int numManche){}
-    -public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche){}
+    -public Action choisirAction(){}
+    -public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){}
     -public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){}
-    -public Carte choisirCarte(List<Carte> cartes, int numManche){}
-    -public abstract Carte choisirCarte(List<Carte> cartes, int numManche){}
-    -public boolean choisirActionSupplementaire(int numManche){}
-    -public int choisirRessourceFaceAchoix(Ressource[] ressources){}
+    -public Carte choisirCarte(List<Carte> cartes){}
+    -public boolean choisirActionSupplementaire(){}
+    -public Ressource choisirRessourceFaceAchoix(Ressource[] ressources){}
     -public int choisirRepartitionOrMarteau(int nbrOr){}
     -public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
     -public Face choisirFaceACopier(List<Face> faces){}
-    -public int choisirRessourceAPerdre(Ressource[] ressources){}
+    -public Ressource choisirRessourceAPerdre(Ressource[] ressources){}
     -public int choisirDeFaveurMineure(){}
     -public int choisirDeCyclope(){}
     -public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
@@ -514,37 +512,43 @@ public abstract class Joueur {
     -public boolean utiliserJetonCerbere(){}
     -public boolean choisirRessourceOuPdg(Ressource ressource){}
 
-    17 méthodes.
+    16 méthodes.
     */
 
     /**
      * C'est une classe abstraite, on est obligé de l'override dans une classe dérivée
      * Elle permet de choisir qu'elle action le bot choisi d'effectuer
-     * @param numManche
      * @return L'action que le bot à choisi de prendre
      */
-    public abstract Action choisirAction(int numManche);
+    public abstract Action choisirAction();
 
     /**
      * Permet de forger une face sur le dé à partir de la liste des bassins abordables.
      * Il faut donc choisir un bassin et une face à l'intérieur de se bassin
      * @param bassins la liste des bassins abordables
      */
-    public abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche);
+    public abstract ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins);
 
+    /**
+     * renvoie un tableau d'entier de taille 2, premier entier pour
+     * donner le numéro du dé, le deuxième pour donner le numéro
+     * de la face à remplacer
+     * @param faceSpeciale
+     * @return
+     */
     public abstract int[] choisirOuForgerFaceSpeciale(Face faceSpeciale);
 
     /**
      * Permet de choisir une carte parmis une liste de carte abordable
      * @return La carte choisie
      */
-    public abstract Carte choisirCarte(List<Carte> cartes, int numManche);
+    public abstract Carte choisirCarte(List<Carte> cartes);
 
     /**
      * Permet de choisir d'effectuer une action supplémentaire
      * @return true si le bot veut faire une action supplémentaire, false sinon
      */
-    public abstract boolean choisirActionSupplementaire(int numManche);
+    public abstract boolean choisirActionSupplementaire();
 
     /**
      * Lors d'un choix de ressource à faire
@@ -552,7 +556,7 @@ public abstract class Joueur {
      * @param ressources
      * @return
      */
-    public abstract int choisirRessourceFaceAchoix(Ressource[] ressources);
+    public abstract Ressource choisirRessourceFaceAchoix(Ressource[] ressources);
 
     /**
      * Permet de choisir la répartition en or/point de marteau que le bot souhaite effectuer
@@ -580,7 +584,7 @@ public abstract class Joueur {
      * @param ressources
      * @return
      */
-    public abstract int choisirRessourceAPerdre(Ressource[] ressources);
+    public abstract Ressource choisirRessourceAPerdre(Ressource[] ressources);
 
     /**
      * Permet de choisir le dé à lancer lorsque le joueur à le droit à une (ou plusieurs) faveur mineure

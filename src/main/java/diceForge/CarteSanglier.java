@@ -21,7 +21,11 @@ public class CarteSanglier extends Carte {
      */
     @Override
     void effetDirect(Joueur acheteur){
-        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueurs)-1).forgerFaceSpeciale(new FaceSanglier(acheteur));
+        List<Joueur> joueursEnnemis = new ArrayList<>(); // On s'assure que le joueur acheter ne puisse pas se donner
+        for (Joueur joueur: joueurs)                     // à lui même la face sanglier
+            if (joueur.getIdentifiant() != acheteur.getIdentifiant())
+                joueursEnnemis.add(joueur);
+        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueursEnnemis)).forgerFaceSpeciale(new FaceSanglier(acheteur));
     }
 
     @Override

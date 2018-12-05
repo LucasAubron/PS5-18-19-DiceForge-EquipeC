@@ -136,7 +136,7 @@ public class Coordinateur {
         phaseRenforts(joueur, numeroManche);
         phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
         phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
-        if (action(joueur, numeroManche) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
+        if (action(joueur) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
             phaseJetonTriton(joueur, numeroManche);//idem
             secondeAction(joueur, numeroManche);
         }
@@ -213,9 +213,9 @@ public class Coordinateur {
      * return true si le joueur effectue une action, false s'il passe son tour,
      * utile pour lui demander s'il souhaite réaliser une seconde action.
      */
-    private boolean action(Joueur joueur, int numeroManche){
+    private boolean action(Joueur joueur){
         afficheur.presentationAction();
-        Joueur.Action actionBot = joueur.choisirAction(numeroManche);//On regarde quelle est l'action du bot
+        Joueur.Action actionBot = joueur.choisirAction();//On regarde quelle est l'action du bot
         switch (actionBot){
             case FORGER:
                 afficheur.actionForger(joueur);
@@ -223,7 +223,7 @@ public class Coordinateur {
                 //Il faut que le joueur puisse s'arreter de forger
                 int compteurForge = -1; //compteur de faces forgées, si i == 0 alors l'afficheur prévient que le joueur ne veut ou ne peut finalement pas forger (sert uniquement à l'afficheur)
                 do {
-                    bassinsAEnlever = forger(joueur, numeroManche, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
+                    bassinsAEnlever = forger(joueur, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
                     compteurForge++;
                 }
                 while(bassinsAEnlever != null); // //Si le bot est suffisament "stupide" pour décider de forger sans avoir les moyens d'acheter le moindre bassin
@@ -235,7 +235,7 @@ public class Coordinateur {
                     afficheur.actionBete(joueur);
                     return false;
                 }
-                exploit(joueur, numeroManche);
+                exploit(joueur);
                 break;
             case PASSER:
                 afficheur.actionPasser(joueur);
@@ -249,11 +249,11 @@ public class Coordinateur {
      * et qui effectue l'action chosie par le joueur.
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
-    private List<Bassin> forger(Joueur joueur, int numeroManche, List<Bassin> bassinsUtilises) {
+    private List<Bassin> forger(Joueur joueur, List<Bassin> bassinsUtilises) {
         List<Bassin> bassinAbordable = bassinAbordable(joueur, bassinsUtilises);
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
-        ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable, numeroManche);//Le joueur choisi
+        ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable);//Le joueur choisi
         if (choixDuJoueur != null) {
            Bassin bassinChoisi = choixDuJoueur.getBassin();
            int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
@@ -291,9 +291,9 @@ public class Coordinateur {
      * Action exploit, on envoit la liste des cartes achetables par le joueur, celui ci choisit et l'achat est effectué dans la foulée.
      * Gère également la chasse.
      */
-    private void exploit(Joueur joueur, int numeroManche) {
+    private void exploit(Joueur joueur) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
-        Carte carteChoisie = joueur.choisirCarte(cartesAbordables, numeroManche); //On demande au joueur la carte qu'il veut acheter
+        Carte carteChoisie = joueur.choisirCarte(cartesAbordables); //On demande au joueur la carte qu'il veut acheter
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {
@@ -342,10 +342,10 @@ public class Coordinateur {
             }
     }
     private void secondeAction(Joueur joueur, int numeroManche) {
-        if (joueur.choisirActionSupplementaire(numeroManche)) {//S'il peut, et il veut, il re-agit
+        if (joueur.choisirActionSupplementaire()) {//S'il peut, et il veut, il re-agit
             afficheur.secondeAction(joueur);
             joueur.ajouterSoleil(-2);
-            action(joueur, numeroManche);
+            action(joueur);
         }
     }
 
