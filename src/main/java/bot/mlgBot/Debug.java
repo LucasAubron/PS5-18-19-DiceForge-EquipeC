@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 public class Debug {
     public static void main(String[] args) {
         try{
-            int gen = 236;
+            int gen = 48;
             int nbrJoueur = 2;
             RandomAccessFile file = new RandomAccessFile("src\\main\\java\\bot\\mlgBot\\MLGBot" + nbrJoueur + "JGen" + gen, "rw");
             FileChannel channel = file.getChannel();
@@ -24,9 +24,9 @@ public class Debug {
                     System.out.print(b-"0".getBytes()[0]);
                 else {
                     if (b == ",".getBytes()[0])
-                    System.out.print(",");
+                    System.out.println(",");
                     else if (b == ";".getBytes()[0])
-                        System.out.println("; || ;");
+                        System.out.println("\n;");
                     else if (b == "?".getBytes()[0])
                         System.out.print("?");
                     else if (b == ":".getBytes()[0])
