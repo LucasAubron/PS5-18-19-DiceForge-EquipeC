@@ -309,6 +309,7 @@ public class Coordinateur {
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
         }
+//        afficheur.NidoBotAfficheur("joueurChasse == " + joueurChasse);
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
         }

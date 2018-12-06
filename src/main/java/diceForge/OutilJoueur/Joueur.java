@@ -39,7 +39,7 @@ public abstract class Joueur {
     private List<Carte> cartes = new ArrayList<>();
     private List<Renfort> renforts = new ArrayList<>();
     private List<Jeton> jetons = new ArrayList<>();
-    public Afficheur afficheur; //was protected
+    protected Afficheur afficheur; //was protected
 
     private boolean jetRessourceOuPdg = false;
     private boolean jetOrOuPdg = false;
