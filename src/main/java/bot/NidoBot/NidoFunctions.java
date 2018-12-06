@@ -3,6 +3,7 @@ package bot.NidoBot;
 import diceForge.*;
 import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Ile;
 import diceForge.ElementPlateau.Plateau;
 import diceForge.Faces.Face;
 import diceForge.OutilJoueur.De;
@@ -93,37 +94,6 @@ public class NidoFunctions {
         return have;
     }
 
-    public static Bassin trouveBassinCout(List<Bassin> bassins, int cout, String typeRessource){
-        if (typeRessource.equals("Or")||typeRessource.equals("Tout")) {
-            for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout)
-                    for (Face face : bassin.getFaces())
-                        for (Ressource[] ressources : face.getRessource())
-                            for (Ressource ressource : ressources)
-                                if (ressource instanceof Or)
-                                    return bassin;
-        }
-        if (typeRessource.equals("Soleil")||typeRessource.equals("Tout")) {
-            for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout)
-                    for (Face face : bassin.getFaces())
-                        for (Ressource[] ressources : face.getRessource())
-                            for (Ressource ressource : ressources)
-                                if (ressource instanceof Soleil)
-                                    return bassin;
-        }
-        if (typeRessource.equals("Lune")||typeRessource.equals("Tout")) {
-            for (Bassin bassin : bassins)
-                if (bassin.getCout() == cout)
-                    for (Face face : bassin.getFaces())
-                        for (Ressource[] ressources : face.getRessource())
-                            for (Ressource ressource : ressources)
-                                if (ressource instanceof Lune)
-                                    return bassin;
-        }
-        return null;
-    }
-
     static List cartesAbordables(Joueur joueur, Plateau plateau) {
         List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes abordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
@@ -131,9 +101,9 @@ public class NidoFunctions {
                 for (Carte carte : paquet) {//Et les cartes
                     int prixSoleil = 0, prixLune = 0;
                     for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
-                        if (prix instanceof Soleil)
+                        if (prix.getType() == Ressource.type.SOLEIL)
                             prixSoleil += prix.getQuantite();
-                        else if (prix instanceof Lune)
+                        else if (prix.getType() == Ressource.type.LUNE)
                             prixLune += prix.getQuantite();
                         else//Cela ne devrait jamais arriver
                             throw new DiceForgeException("Coordinateur", "Une carte doit couter soit des lunes soit des soleils !");
