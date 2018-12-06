@@ -1,7 +1,7 @@
 package diceForge;
 
 
-import bot.RandomBot;
+//import bot.RandomBot;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -88,6 +88,7 @@ public class Plateau {
     public List<Joueur> getJoueurs() {
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
+//        afficheur.("portail.getJoueur is empty -> " + portail.getJoueurs().isEmpty());
         tempJoueur.addAll(portail.getJoueurs());
         for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur

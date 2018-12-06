@@ -22,6 +22,7 @@ public class EasyBot extends Joueur {
 
     public EasyBot(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);
+        this.random = new Random();
     }
 
     @Override

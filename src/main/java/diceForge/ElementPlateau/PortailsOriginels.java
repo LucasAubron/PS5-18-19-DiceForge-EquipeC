@@ -1,11 +1,12 @@
 package diceForge.ElementPlateau;
 
-import bot.*;
 /*
 import bot.AubotV2.src.AubotV2;
 import bot.NidoBot.NidoBot;
 import bot.NidoBot.NidoBotV2;
 */
+import bot.NidoBot.NidoBot;
+import bot.ResteDesBot.EasyBot;
 import bot.ResteDesBot.RandomBot;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.Structure.Afficheur;
@@ -31,48 +32,48 @@ public class PortailsOriginels {
         for (int identifiant = 1; identifiant <= typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder
             if (typeJoueurs[identifiant - 1] == Joueur.Bot.RandomBot)                // les mêmes joueurs sur des plateaux différents
                 this.joueurs.add(new RandomBot(identifiant, afficheur, plateau));  // dans le cas où on itère plusieurs parties
-            /*
+
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot)
                 this.joueurs.add(new EasyBot(identifiant, afficheur, plateau));
-            else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
-                this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
-            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBot)
-                this.joueurs.add(new AubotLeGrand(identifiant, afficheur, plateau));
-            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
-                this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
+//            else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
+//                this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
+//            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBot)
+//                this.joueurs.add(new AubotLeGrand(identifiant, afficheur, plateau));
+//            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
+//                this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBot)
                 this.joueurs.add(new NidoBot(identifiant, afficheur, plateau));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
-                this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A1)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot1"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A2)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot2"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A3)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot3"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A4)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot4"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A5)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot5"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A6)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot6"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A7)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot7"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A8)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot8"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A9)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot9"));
-            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A10)
-                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot10"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
+//                this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A1)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot1"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A2)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot2"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A3)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot3"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A4)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot4"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A5)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot5"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A6)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot6"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A7)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot7"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A8)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot8"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A9)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot9"));
+//            else if(typeJoueurs[identifiant-1] == Joueur.Bot.A10)
+//                this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/Bot10"));
 
-            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
-                if (typeJoueurs.length == 2)
-                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/BestBot"));
-                else if (typeJoueurs.length == 3)
-                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1/BestBot"));
-                else if (typeJoueurs.length == 3)
-                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1V1/BestBot"));
-        */
+//            else if (typeJoueurs[identifiant-1] == Joueur.Bot.AubronBotV2)
+//                if (typeJoueurs.length == 2)
+//                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1/BestBot"));
+//                else if (typeJoueurs.length == 3)
+//                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1/BestBot"));
+//                else if (typeJoueurs.length == 3)
+//                    this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1V1/BestBot"));
+//        */
             else
                 throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
 

@@ -1,6 +1,5 @@
 package bot.NidoBot;
 
-import diceForge.*;
 import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
@@ -57,11 +56,6 @@ public class NidoBot extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){
-        if (bassins.isEmpty()){
-            afficheur.NidoBotAfficheur("bassins empty in choisirFaceAForgerEtARemplacer");
-            return new ChoixJoueurForge(null, 0, 0, 0);
-        }
-        Bassin bassinAChoisir = null;
         for (Bassin bassin:bassins){
             if (this.numeroManche < 2 && bassin.getFace(0).getRessource().getType() == Ressource.type.OR){//Les 2 premières manches //forger de l'or au maximum.
                 int[] posFace = getPosFace1Or();
@@ -117,7 +111,7 @@ public class NidoBot extends Joueur {
                         }
             }
         afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
-        return new ChoixJoueurForge(null, 0, 0, 0);
+        return null;
     }
 
 
