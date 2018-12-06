@@ -90,9 +90,7 @@ public class Plateau {
      */
     public List<Joueur> getJoueurs() {
         List<Joueur> tempJoueur = new ArrayList<>();
-//        afficheur.NidoBotAfficheur("portail.getJoueur is empty -> " + portail.getJoueurs().isEmpty());
         tempJoueur.addAll(portail.getJoueurs()); //On ajoute tous les joueurs des portails originels
-//        afficheur.NidoBotAfficheur("tempJoueur avant tri => " + tempJoueur);
         for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
             if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
                 tempJoueur.add(x.getJoueur());
@@ -103,7 +101,6 @@ public class Plateau {
                     joueurs.add(joueur);
                     break;
                 }
-//        afficheur.NidoBotAfficheur("tempJoueur après tri => " + joueurs);
         return joueurs;
     }
 

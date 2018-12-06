@@ -267,11 +267,10 @@ public class Coordinateur {
            joueur.ajouterOr(-bassinChoisi.getCout());
            joueur.getDe(idDeChoisi).forger(bassinChoisi.retirerFace(numFaceBassinChoisi), numPosDeChoisi);
            bassinsUtilises.add(bassinChoisi);
+           return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
         }
-        else {
+        else
             return null;
-        }
-        return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
     }
 
     /**
@@ -336,6 +335,7 @@ public class Coordinateur {
         }
         return cartesAbordables;
     }
+
     private void retirerJoueurDeSonEmplacement(Joueur joueur){
         for (Joueur j : plateau.getPortail().getJoueurs())//En premier, on retire le joueur s'il est situé dans les portails originels
             if (joueur.getIdentifiant() == j.getIdentifiant()) {//On teste les identifiants, c'est le plus sur
@@ -343,7 +343,7 @@ public class Coordinateur {
                 break;
             }
         for (Ile ile:plateau.getIles())
-            if (ile.getJoueur() != null && joueur.getIdentifiant() == joueur.getIdentifiant()) {
+            if (ile.getJoueur() != null && ile.getJoueur().getIdentifiant() == joueur.getIdentifiant()) {
                 ile.retirerJoueur();
                 break;
             }
@@ -387,12 +387,4 @@ public class Coordinateur {
     public int[] getNbrVictoire(){ return nbrVictoire;}
 
     public int[] getPtsGloireCumules(){ return ptsGloireCumules;}
-
-
-    /*
-     afficheur.forger(joueur, choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().getFace(choixDuJoueur.getNumFaceDansBassin()), joueur.getDe(choixDuJoueur.getNumDe()).getFace(choixDuJoueur.getPosFaceDansDes()), choixDuJoueur.getBassin()); //atroce mais bon ça fait partie de l'afficheur qui n'était pas demandé dans les specs c:
-            joueur.forgerDe(choixDuJoueur.getNumDe(), choixDuJoueur.getBassin().retirerFace(choixDuJoueur.getNumFaceDansBassin()), choixDuJoueur.getPosFaceDansDes()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
-            joueur.ajouterOr(-choixDuJoueur.getBassin().getCout());//On oublie pas de faire payer le joueur
-     */
-
 }

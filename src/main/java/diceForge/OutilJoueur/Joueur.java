@@ -202,14 +202,16 @@ public abstract class Joueur {
      * @param face
      */
     public void gagnerRessourceFace(Face face, boolean minautore) {
-        List<Ressource> ressourcesAGagner = new ArrayList<>(); //On s'arme d'une liste, car dans le cas d'une face
+       List<Ressource> ressourcesAGagner = new ArrayList<>(); //On s'arme d'une liste, car dans le cas d'une face
                                                                //addition on aura plusieurs types de ressource à faire gagner
-
+        boolean faceSpeciale = false;
         //face spéciales ----------------------------------------------------------------------------------
         if (face.getTypeFace() == Face.typeFace.VOILECELESTE ||
                 face.getTypeFace() == Face.typeFace.SANGLIER ||
-                face.getTypeFace() == Face.typeFace.MIROIR){
-            face.effetActif(this); //l'effet est directement géré dans les classes dédiées
+                face.getTypeFace() == Face.typeFace.MIROIR ||
+                face.getTypeFace() == Face.typeFace.X3){//X3 n'a pas d'effet direct lors d'une faveur mineure, mais on a besoin de prévenir qu'on traite une face spéciale
+            face.effetActif(this); //l'effet est directement géré dans les classes dédiées, X3 ne fait rien
+            faceSpeciale = true;
         }
 
         //face simple et face bouclier----------------------------------------------------------------------
@@ -234,43 +236,49 @@ public abstract class Joueur {
             throw new DiceForgeException("Joueur", "un type de face n'est pas reconnu: " + face.getTypeFace());
 
         // c'est ici que le joueur gagne son dû
-        for (Ressource ressource : ressourcesAGagner){
-            switch (ressource.getType()) {
-                case OR: {
-                    if (jetOrOuPdg && choisirPdgPlutotQueRessource(ressource)) //Dans le cas du cyclope
-                        ajouterPointDeGloire(ressource.getQuantite());  //1 or peut valoir 1pdg,
-                    else {                                                //selon la décision du joueur
-                        ajouterOr(ressource.getQuantite());
-                        if (minautore)
-                            ajouterOr(-2*ressource.getQuantite());
+        if (!faceSpeciale) {
+            for (Ressource ressource : ressourcesAGagner) {
+                try {
+                    switch (ressource.getType()) {
+                        case OR: {
+                            if (jetOrOuPdg && choisirPdgPlutotQueRessource(ressource)) //Dans le cas du cyclope
+                                ajouterPointDeGloire(ressource.getQuantite());  //1 or peut valoir 1pdg,
+                            else {                                                //selon la décision du joueur
+                                ajouterOr(ressource.getQuantite());
+                                if (minautore)
+                                    ajouterOr(-2 * ressource.getQuantite());
+                            }
+                            break;
+                        }
+                        case LUNE: {
+                            if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //idem, pour le cas de la sentinelle
+                                ajouterPointDeGloire(ressource.getQuantite() * 2);//sauf qu'ici une lune peut valoir 2 pdg !
+                            else {
+                                ajouterLune(ressource.getQuantite());
+                                if (minautore)
+                                    ajouterLune(-2 * ressource.getQuantite());
+                            }
+                            break;
+                        }
+                        case SOLEIL: {
+                            if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //jamais deux sans trois
+                                ajouterPointDeGloire(ressource.getQuantite() * 2); //idem que la lune et la sentinelle
+                            else {
+                                ajouterSoleil(ressource.getQuantite());
+                                if (minautore)
+                                    ajouterSoleil(-2 * ressource.getQuantite());
+                            }
+                            break;
+                        }
+                        case PDG: {
+                            ajouterPointDeGloire(ressource.getQuantite());
+                            if (minautore)
+                                ajouterSoleil(-2 * ressource.getQuantite());
+                            break;
+                        }
                     }
-                    break;
-                }
-                case LUNE: {
-                    if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //idem, pour le cas de la sentinelle
-                        ajouterPointDeGloire(ressource.getQuantite()*2);//sauf qu'ici une lune peut valoir 2 pdg !
-                    else {
-                        ajouterLune(ressource.getQuantite());
-                        if (minautore)
-                            ajouterLune(-2*ressource.getQuantite());
-                    }
-                    break;
-                }
-                case SOLEIL: {
-                    if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //jamais deux sans trois
-                        ajouterPointDeGloire(ressource.getQuantite()*2); //idem que la lune et la sentinelle
-                    else {
-                        ajouterSoleil(ressource.getQuantite());
-                        if (minautore)
-                            ajouterSoleil(-2*ressource.getQuantite());
-                    }
-                    break;
-                }
-                case PDG: {
-                    ajouterPointDeGloire(ressource.getQuantite());
-                    if (minautore)
-                        ajouterSoleil(-2*ressource.getQuantite());
-                    break;
+                }catch (NullPointerException e){
+                    System.out.println(face);
                 }
             }
         }

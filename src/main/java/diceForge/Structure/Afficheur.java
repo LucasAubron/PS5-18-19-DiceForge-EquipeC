@@ -264,7 +264,8 @@ public class Afficheur {
     }
 
     public void typhonPointBonus(int totalPdgGagne){
-        info += "\t|" + "Le typhon accorde " + totalPdgGagne + " grâce aux faces forgées\n";
+        if (modeVerbeux)
+            info += "\t|" + "Le typhon accorde " + totalPdgGagne + " grâce aux faces forgées\n";
     }
 
     public void additionPointCarte(List<Joueur> joueurs) {
