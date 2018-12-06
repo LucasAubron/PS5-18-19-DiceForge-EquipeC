@@ -156,7 +156,7 @@ public class NidoBot extends Joueur {
     }
 
     @Override
-    public int choisirRepartitionOrMarteau(int quantiteOr){
+    public int choisirOrQueLeMarteauNePrendPas(int quantiteOr){
         Random random = new Random();
         return random.nextInt(2) == 1 ? 0 : 1;
     }

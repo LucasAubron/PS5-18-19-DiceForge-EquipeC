@@ -6,6 +6,7 @@ import bot.AubotV2.src.AubotV2;
 import bot.NidoBot.NidoBot;
 import bot.NidoBot.NidoBotV2;
 */
+import bot.ResteDesBot.RandomBot;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.Structure.Afficheur;
 import diceForge.Structure.DiceForgeException;

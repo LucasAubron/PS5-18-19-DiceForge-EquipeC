@@ -297,7 +297,7 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public int choisirRepartitionOrMarteau(int quantiteOr) {
+    public int choisirOrQueLeMarteauNePrendPas(int quantiteOr) {
         if (manche < mancheExploit || getOr() < 3 * nombreCartePossedee(Ancien) && getOr() + quantiteOr <= getMaxOr())
             return quantiteOr;
         return 0;
