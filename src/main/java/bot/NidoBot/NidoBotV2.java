@@ -314,32 +314,32 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public int choisirRessource(Face faceAChoix) {
-        for (int i = 0; i != faceAChoix.getRessource().length; ++i) {
-            for (Ressource ressource : faceAChoix.getRessource()[i]) {
-                if (ressource instanceof Lune || ressource instanceof Soleil) {
-                    return i;//On cherche un résultat sur la face qui donne des soleils ou des lunes
-                }
+    public Ressource choisirRessourceFaceAchoix(Ressource[] ressources) {
+        //intressant a modif pour avoir plus de stats de victoire
+        for (int i = 0; i != ressources.length; ++i) {
+            //On cherche un résultat sur la face qui donne des soleils ou des lunes
+            if (ressources[i].getType() == Ressource.type.LUNE || ressources[i].getType() == Ressource.type.SOLEIL) {
+                return ressources[i];
             }
         }
-        return 0;
+        return ressources[0];
     }
 
     @Override
-    public int choisirRessourceAPerdre(Face face) {
-        return 0;
+    public Ressource choisirRessourceAPerdre(Ressource[] ressources) {
+        return ressources[0];
     }
 
     @Override
     public int choisirDeFaveurMineure() {
         Random random = new Random();
-        if (haveFaceType(getDe(0), new Soleil(1)))
+        if (haveFaceType(getDe(0), new Ressource(1, Ressource.type.SOLEIL)))
             return 0;
-        if (haveFaceType(getDe(1), new Soleil(1)))
+        if (haveFaceType(getDe(1),  new Ressource(1, Ressource.type.SOLEIL)))
             return 1;
-        if (haveFaceType(getDe(0), new Lune(1)))
+        if (haveFaceType(getDe(0), new Ressource(1, Ressource.type.LUNE)))
             return 0;
-        if (haveFaceType(getDe(1), new Lune(1)))
+        if (haveFaceType(getDe(1), new Ressource(1, Ressource.type.LUNE)))
             return 1;
         return random.nextInt(2);
     }
