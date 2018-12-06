@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import static bot.NidoBot.NidoFunctions.*;
+import static diceForge.Cartes.Carte.Noms.*;
 
 public class NidoBotV2 extends Joueur {
     private int manche;
@@ -83,7 +84,6 @@ public class NidoBotV2 extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins) {
-        int numManche = this.manche;
         Bassin bassin = getPlateau().getTemple().getSanctuaire()[0];
         int[] posFace = new int[2];
         int posFaceInt = -1;
@@ -100,13 +100,14 @@ public class NidoBotV2 extends Joueur {
          * 1re manche 3Or + 4or + 1Lune
          */
         //afficheur.NidoBotAfficheur("attribut manche de NidoBot ==> " + manche);
-        if (numManche == 1) {
+        if (this.manche == 1) {
             BassinType[] listBassins = {
-                    new BassinType(3, "Or"),
-                    new BassinType(2, "Or"),
-                    new BassinType(2, "Lune")};
+                    new BassinType(3, Ressource.type.OR),
+                    new BassinType(2, Ressource.type.OR),
+                    new BassinType(2, Ressource.type.LUNE)};
             int i = 0;
-            while (i < listBassins.length && (bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
+            while (i < listBassins.length && (bassin = getPlateau().getBassinSpecifique(
+                    bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
                 i++;
             //afficheur.NidoBotAfficheur("Nidobot: i == " + i);
             //afficheur.NidoBotAfficheur("bassin == " + bassin.toString());
@@ -170,17 +171,18 @@ public class NidoBotV2 extends Joueur {
              * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
              * manche 2 forger 2soleil sur le dé ou y a deja un soleil
              */
-        } else if (numManche <= 3) {
+        } else if (this.manche <= 3) {
 //            System.out.println("enteres in manche 2 or 3");
             BassinType[] listBassins = {
-                    new BassinType(8, "Soleil"),
-                    new BassinType(3, "Soleil"),
-                    new BassinType(6, "Lune"),
-                    new BassinType(2, "Lune"),
-                    new BassinType(3, "Or"),
-                    new BassinType(2, "Or")};
+                    new BassinType(8, Ressource.type.SOLEIL),
+                    new BassinType(3, Ressource.type.SOLEIL),
+                    new BassinType(6, Ressource.type.LUNE),
+                    new BassinType(2, Ressource.type.LUNE),
+                    new BassinType(3, Ressource.type.OR),
+                    new BassinType(2, Ressource.type.OR)};
             int i = 0;
-            while (i < listBassins.length && (bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
+            while (i < listBassins.length && (
+                    bassin = getPlateau().getBassinSpecifique(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
                 i++;
 
             if (i == 6)
@@ -199,20 +201,20 @@ public class NidoBotV2 extends Joueur {
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
             } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.OR) {
                 if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
+                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
                     j = new Random().nextInt(2) == 1 ? 1 : 0;
                 else if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
+                        (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
                     j = 1;
                 else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
+                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
                     j = 0;
                 else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
+                        (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
                     j = new Random().nextInt(2) == 1 ? 1 : 0;
 
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-//                System.out.println("yo BP 2: nummanche == " + numManche + " j == " + j + " posfaceInt == " + posFaceInt);
+//                System.out.println("yo BP 2: nummanche == " + this.manche + " j == " + j + " posfaceInt == " + posFaceInt);
                 if (posFaceInt == -1) {
                     posFaceInt = getPosFaceOrDuDe(this, j, 3);
                 }
@@ -222,7 +224,7 @@ public class NidoBotV2 extends Joueur {
             }
 
             if (posFaceInt != -1) {
-//                System.out.println("yo return nummanche == " + numManche + " j == " + j);
+//                System.out.println("yo return nummanche == " + this.manche + " j == " + j);
                 return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
             }
             /*
@@ -244,82 +246,9 @@ public class NidoBotV2 extends Joueur {
 
 
     @Override
-    public Carte choisirCarte(List<Carte> cartes, int numManche) {
+    public Carte choisirCarte(List<Carte> cartes) {
         Carte carteAChoisir = cartes.get(0);
         for (Carte carte : cartes) {
-//            switch (numManche) {
-//                case 1:
-//                case 2:
-//                case 3:
-//                    // 3 1ere manches si pas forge alors exploit
-//                case 4:
-//                    // 4eme manche coffre + marteau faire action suppl qui coute 2soleils faire coffre + marteau, coffre + ancien, marteau, ancien
-//                case 5:
-//                    if (!possedeCarte(Carte.Noms.Coffre) && carte.getNom().equals(Carte.Noms.Coffre))
-//                        return carte;
-//                    if (!possedeCarte(Carte.Noms.Ancien) && carte.getNom().equals(Carte.Noms.Ancien))
-//                        return carte;
-//                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
-//                        return carte;
-//                    if (!possedeCarte(Carte.Noms.CasqueDinvisibilite) && carte.getNom().equals(Carte.Noms.CasqueDinvisibilite))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Meduse))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Passeur))
-//                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
-////                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.Coffre))
-////                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Hibou))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Ours))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Biche))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Marteau))
-//                        return carte;
-//
-//                case 6:
-//                    if (!possedeCarte(Carte.Noms.Marteau) && carte.getNom().equals(Carte.Noms.Marteau))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Meduse))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Passeur)) //miroir abyssal
-//                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
-////                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.HerbesFolles))
-////                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.))
-//                    break;
-//                case 7:
-//                case 8:
-//                case 9:
-//                case 10:
-//                    if (carte.getNom().equals(Carte.Noms.Hydre))    //Miroir Abyss. et gérer alternatives tirage au hasard sur les iles.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Typhon))   //gérer le choix de forgeage en amont.
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Meduse))
-//                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.Passeur))
-//                        return carte;
-////                    if (carte.getNom().equals(Carte.Noms.MiroirAbyssal))
-////                        return carte;
-//                    if (carte.getNom().equals(Carte.Noms.HerbesFolles))
-//                        return carte;
-//                    break;
-//
-//            }
             if (carte.getNom() == Marteau && nombreCartePossedee(Marteau) < 1)
                 return carte;
             //on prend tous les marteau si 2 joueurs
@@ -357,9 +286,9 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public boolean choisirActionSupplementaire(int numManche) {
-        if ((getOr() > 10 && numManche < mancheExploit && !getBassinsAbordable().isEmpty()) ||
-        (numManche >= mancheExploit && (getSoleil() > 3 || getLune() > 1) && !cartesAbordables(this, getPlateau()).isEmpty())) {
+    public boolean choisirActionSupplementaire() {
+        if ((getOr() > 10 && this.manche < mancheExploit && !getBassinsAbordable().isEmpty()) ||
+                (this.manche >= mancheExploit && (getSoleil() > 3 || getLune() > 1) && !cartesAbordables(this, getPlateau()).isEmpty())) {
             this.manche--;
             return true;
         }
@@ -377,7 +306,7 @@ public class NidoBotV2 extends Joueur {
     @Override
     public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables) {
         if (manche < mancheExploit) {//tant qu'on a pas fini de forger nos dés on préfère garder l'or
-            int nombreAncien = nombreCartePossedee(Carte.Noms.Ancien);
+            int nombreAncien = nombreCartePossedee(Ancien);
             for (int i = 0; i < nombreAncien; i++)
                 renfortsUtilisables.remove(Ancien);
         }
@@ -427,16 +356,17 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public void forgerFace(Face face) { //BateauCeleste, X3, tous spéciales sauf bouclier.
+    public int[] choisirOuForgerFaceSpeciale(Face face) { //BateauCeleste, X3, tous spéciales sauf bouclier.
         boolean aForge = false;
         int posFaceQteMin = -1;
         int numDeLune = -1;
+        int[] resultat = new int[2];
 
-        if (face instanceof FaceX3) {
+        if (face.getTypeFace() == Face.typeFace.X3) {
             for (int i = 0; i < getDes().length; i++)
                 for (int j = 0; j < 6; j++)
-                    if (getDe(i).getFace(j).getRessource().length == 1 &&
-                            getDe(i).getFace(j).getRessource()[0][0] instanceof Lune) {
+                    if (getDe(i).getFace(j).getTypeFace() == Face.typeFace.SIMPLE &&
+                            getDe(i).getFace(j).getRessource().getType() == Ressource.type.LUNE) {
                         numDeLune = i;
                         break;
                     }
@@ -453,73 +383,74 @@ public class NidoBotV2 extends Joueur {
             if (numDeLune == -1)
                 numDeLune = new Random().nextInt(2) == 0 ? 1 : 0;
 
-
-            for (int i = 0; i < getDes().length; i++) {
-
-
-            }
             afficheur.NidoBotAfficheur("numDeLune == " + numDeLune);
             posFaceQteMin = getPosFaceOrDuDe(this, numDeLune, 1);
             if (posFaceQteMin == -1) {
-                posFaceQteMin = getPosFaceQteMin(numDeLune, getDes(), new Lune(1));
+                posFaceQteMin = getPosFaceQteMin(numDeLune, getDes(), new Ressource(1, Ressource.type.LUNE));
             }
-            forgerDe(numDeLune, face, posFaceQteMin);
+//            forgerDe(numDeLune, face, posFaceQteMin);
+            resultat[0] = numDeLune;
+            resultat[1] = posFaceQteMin;
             aForge = true;
         } else {
-            int[] posFace = getPosFace1Or();
+            resultat = getPosFace1Or();
             //si on a trouvé une face 1 or sur un des dés)
-            if (posFace[0] != -1) {
-                forgerDe(posFace[0], face, posFace[1]);
+            if (resultat[0] != -1) {
+//                forgerDe(posFace[0], face, posFace[1]);
                 aForge = true;
             }
 
             //pas de face 1Or sur les 2 Des
-            if (posFace[0] == -1)
-                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Or(1));
+            if (resultat[0] == -1)
+                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Ressource(1, Ressource.type.OR));
             if (posFaceQteMin == -1)
-                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Or(1));
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Ressource(1, Ressource.type.OR));
             if (posFaceQteMin == -1)
-                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Lune(1));
+                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Ressource(1, Ressource.type.LUNE));
             if (posFaceQteMin == -1)
-                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Lune(1));
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Ressource(1, Ressource.type.LUNE));
             if (posFaceQteMin == -1)
-                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Soleil(1));
+                posFaceQteMin = getPosFaceQteMin(0, getDes(), new Ressource(1, Ressource.type.SOLEIL));
             if (posFaceQteMin == -1)
-                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Soleil(1));
+                posFaceQteMin = getPosFaceQteMin(1, getDes(), new Ressource(1, Ressource.type.SOLEIL));
         }
 
         if (!aForge)//S'il n'a pas trouvé d'endroit ou forger le dé, on le forge sur la première face, sur le premier de
-            if (posFaceQteMin != -1)
-                forgerDe(0, face, posFaceQteMin);
-            else
-                forgerDe(0, face, new Random().nextInt(6));
-
+            if (posFaceQteMin != -1) {
+                resultat[0] = 0;
+                resultat[1] = posFaceQteMin;
+//                forgerDe(0, face, posFaceQteMin);
+            } else {
+                resultat[0] = 0;
+                resultat[1] = new Random().nextInt(6);
+//                forgerDe(0, face, new Random().nextInt(6));
+            }
+        return resultat;
     }
 
     @Override
-    public int choisirFacePourGagnerRessource(List<Face> faces) {
+    public Face choisirFaceACopier(List<Face> faces) {
         int posMaxSoleil = -1, posMaxLune = -1, posMaxOr = -1;
         int maxSoleil = 0, maxLune = 0, maxOr = 0;
         for (int i = 0; i != faces.size(); ++i) {
-            for (Ressource[] ressources : faces.get(i).getRessource()) {
-                for (Ressource ressource : ressources) {
-                    if (ressource instanceof Soleil && ressource.getQuantite() > maxSoleil) {
-                        posMaxSoleil = i;
-                        maxSoleil = ressource.getQuantite();
-                    } else if (ressource instanceof Lune && ressource.getQuantite() > maxLune) {
-                        posMaxLune = i;
-                        maxLune = ressource.getQuantite();
-                    } else if (ressource instanceof Or && ressource.getQuantite() > maxOr) {
-                        posMaxOr = i;
-                        maxOr = ressource.getQuantite();
-                    }
+            for (Ressource ressource : faces.get(i).getRessources()) {
+                if (ressource.getType() == Ressource.type.SOLEIL && ressource.getQuantite() > maxSoleil) {
+                    posMaxSoleil = i;
+                    maxSoleil = ressource.getQuantite();
+                } else if (ressource.getType() == Ressource.type.LUNE && ressource.getQuantite() > maxLune) {
+                    posMaxLune = i;
+                    maxLune = ressource.getQuantite();
+                } else if (ressource.getType() == Ressource.type.OR && ressource.getQuantite() > maxOr) {
+                    posMaxOr = i;
+                    maxOr = ressource.getQuantite();
                 }
+
             }
         }
-        if (posMaxSoleil != -1) return posMaxSoleil;
-        if (posMaxLune != -1) return posMaxLune;
-        if (posMaxOr != -1) return posMaxOr;
-        return 0;
+        if (posMaxSoleil != -1) return faces.get(posMaxSoleil);
+        if (posMaxLune != -1) return faces.get(posMaxLune);
+        if (posMaxOr != -1) return faces.get(posMaxOr);
+        return faces.get(new Random().nextInt(faces.size()));
     }
 
     @Override
@@ -539,7 +470,7 @@ public class NidoBotV2 extends Joueur {
 //        }
         if (getSoleil() <= 4)
             return choixJetonTriton.Soleil;
-        else if (getLune() <=4)
+        else if (getLune() <= 4)
             return choixJetonTriton.Lune;
         else if (getOr() == 0)
             return choixJetonTriton.Or;
@@ -567,8 +498,10 @@ public class NidoBotV2 extends Joueur {
      */
     public int[] getPosFace1Or() {
         for (int i = 0; i != getDes().length; ++i) {//On parcours tous les dés
-            for (int j = 0; j != getDes()[i].getFaces().length; ++j) {//Toutes les faces
-                if (getDes()[i].getFaces()[j].getRessource().length != 0 && getDes()[i].getFaces()[j].getRessource()[0][0] instanceof Or && getDes()[i].getFaces()[j].getRessource()[0][0].getQuantite() == 1) {
+            for (int j = 0; j != getDe(i).getFaces().length; ++j) {//Toutes les faces
+                if (getDes()[i].getFace(j).getTypeFace() == Face.typeFace.SIMPLE
+                        && getDe(i).getFace(j).getRessource().getType() == Ressource.type.OR
+                        && getDe(i).getFace(j).getRessource().getQuantite() == 1) {
                     return new int[]{i, j};
                 }
             }

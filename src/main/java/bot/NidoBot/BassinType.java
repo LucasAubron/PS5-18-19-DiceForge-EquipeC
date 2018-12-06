@@ -1,14 +1,14 @@
 package bot.NidoBot;
 
-import diceForge.Bassin;
+import diceForge.OutilJoueur.Ressource;
 
 public class BassinType {
     private int num;
-    private String nom;
-    public BassinType(int num, String nom){
+    private Ressource.type nom;
+    public BassinType(int num, Ressource.type nom){
         this.num = num;
         this.nom = nom;
     }
     public int getNum(){return this.num;}
-    public String getNom(){return this.nom;}
+    public Ressource.type getNom(){return this.nom;}
 }
