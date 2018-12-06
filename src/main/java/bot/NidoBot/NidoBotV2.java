@@ -82,7 +82,8 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins, int numManche) {
+    public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins) {
+        int numManche = this.manche;
         Bassin bassin = getPlateau().getTemple().getSanctuaire()[0];
         int[] posFace = new int[2];
         int posFaceInt = -1;
@@ -112,12 +113,12 @@ public class NidoBotV2 extends Joueur {
             if (i == 3)
                 bassin = getPlateau().getTemple().getSanctuaire()[0];
 
-            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
+            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.LUNE) {
                 for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Lune(1)))
+                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.LUNE)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
+            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.OR) {
                 if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1)
                         && getPosFaceOrDuDe(this, 1, 3) == -1
                         && getPosFaceOrDuDe(this, 1, 4) == -1) {
@@ -181,21 +182,22 @@ public class NidoBotV2 extends Joueur {
             int i = 0;
             while (i < listBassins.length && (bassin = NidoFunctions.trouveBassinCout(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
                 i++;
+
             if (i == 6)
                 bassin = getPlateau().getTemple().getSanctuaire()[0];
 
 //            System.out.println("bassin is size == " + bassin.getFaces().size());
-            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Soleil) {
+            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.SOLEIL) {
                 for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Soleil(1)))
+                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.SOLEIL)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Lune) {
+            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.LUNE) {
                 for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Lune(1)))
+                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.LUNE)))
                         break;
                 posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFaces().get(0).getRessource()[0][0] instanceof Or) {
+            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.OR) {
                 if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
                 (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
                     j = new Random().nextInt(2) == 1 ? 1 : 0;
