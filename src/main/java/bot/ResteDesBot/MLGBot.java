@@ -1,4 +1,4 @@
-package bot;
+package bot.ResteDesBot;
 
 import bot.mlgBot.SourceLines;
 import bot.mlgBot.StatLine;

@@ -130,35 +130,15 @@ public class Plateau {
         return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
     }
 
-    public Bassin getBassinSpecifique(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
-        switch (cout){
-            case 2: {
-                if (typeRessource == Ressource.type.OR)
-                    return getTemple().getSanctuaire()[0];
-                if (typeRessource == Ressource.type.LUNE)
-                    return getTemple().getSanctuaire()[0];
-            }
-            case 3:
-                if (typeRessource == Ressource.type.OR)
-                    return getTemple().getSanctuaire()[2];
-                if (typeRessource == Ressource.type.SOLEIL)
-                    return getTemple().getSanctuaire()[3];
-            case 4:
-                return getTemple().getSanctuaire()[4];
-            case 5:
-                return getTemple().getSanctuaire()[5];
-            case 6:
-                return getTemple().getSanctuaire()[6];
-            case 8:
-                if (typeRessource == Ressource.type.SOLEIL)
-                    return getTemple().getSanctuaire()[7];
-                if (typeRessource == Ressource.type.PDG)
-                    return getTemple().getSanctuaire()[8];
-            case 12:
-                return getTemple().getSanctuaire()[9];
-            default:
-                throw new DiceForgeException("Plateau", "Un bassin n'a pas été trouvé, cout:" + cout);
+    public Bassin getBassinSpecifique(List<Bassin> bassins, int cout, Ressource.type typeRessource){
+        for (Bassin bassin:bassins){
+            if (bassin.getCout() == cout)
+                if (cout == 4 || cout == 12)
+                    return bassin;
+                else if(bassin.getFace(0).getRessource().getType() == typeRessource)
+                    return bassin;
         }
+        return null;
     }
 
     public int getPosFaceSpecifiqueDansBassin(Bassin bassinDansLequelChercher, Face.typeFace typeFace, Ressource.type typeRessource, int quantite){

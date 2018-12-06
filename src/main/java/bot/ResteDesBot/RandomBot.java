@@ -1,4 +1,4 @@
-package bot;
+package bot.ResteDesBot;
 
 import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;

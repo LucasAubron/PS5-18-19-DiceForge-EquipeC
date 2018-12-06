@@ -1,4 +1,4 @@
-package bot;
+package bot.ResteDesBot;
 
 import diceForge.*;
 import diceForge.Cartes.Carte;
