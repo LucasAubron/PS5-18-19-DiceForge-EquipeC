@@ -1,6 +1,7 @@
 package diceForge.ElementPlateau;
 
 import diceForge.Cartes.*;
+import diceForge.Faces.Face;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.Afficheur;
@@ -16,10 +17,12 @@ import java.util.Random;
  * En fait on va mettre les joueurs dans PortailsOriginels
  */
 public class Plateau {
+    //Attribut --------------------------------------------------------------------------------------------------------------------------------------
     private PortailsOriginels portail;
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
+    //Constructeur ---------------------------------------------------------------------------------------------------------------------------------
     public Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
         portail = new PortailsOriginels(typeJoueurs, afficheur, this);//La ou les joueurs sont de base
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
@@ -77,6 +80,7 @@ public class Plateau {
     public Plateau() {
     }
 
+    //Méthodes ------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * @return la liste des joueurs présents sur le plateau, c'est-à dire ceux présents
      * sur une ile ou sur le portail originel (il n'y a que ces deux choix)
@@ -107,6 +111,7 @@ public class Plateau {
         return temple;
     }
 
+    //Méthodes utiles aux bots, pour récupérer de façon simple des éléments sur le plateau -------------------------------
     public List getCartesPresentes(){
         List res = new ArrayList();
         for (Ile ile: iles)
@@ -125,7 +130,7 @@ public class Plateau {
         return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
     }
 
-    public Bassin getBassin(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
+    public Bassin getBassinSpecifique(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
         switch (cout){
             case 2: {
                 if (typeRessource == Ressource.type.OR)
@@ -154,5 +159,13 @@ public class Plateau {
             default:
                 throw new DiceForgeException("Plateau", "Un bassin n'a pas été trouvé, cout:" + cout);
         }
+    }
+
+    public int getPosFaceSpecifiqueDansBassin(Bassin bassinDansLequelChercher, Face.typeFace typeFace, Ressource.type typeRessource, int quantite){
+        for (int i = 0; i < bassinDansLequelChercher.getFaces().size(); i++)
+            for (Ressource ressource: bassinDansLequelChercher.getFace(i).getRessources())
+                if (ressource.getType() == typeRessource && ressource.getQuantite() == quantite)
+                    return i;
+        return -1; //indique une erreur
     }
 }

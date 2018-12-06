@@ -24,7 +24,8 @@ public class Face {
 
     public Face(Ressource ressource) {//face simple
         this.ressource = ressource;
-        this.type = typeFace.SIMPLE;
+        this.ressources = new Ressource[]{ressource}; //En soit ne sert à rien mais permet lors d'une recherche de
+        this.type = typeFace.SIMPLE;                  // parcourir ce tableau sans check si c'est une face simple ou non
     }
 
     public Face(typeFace typeF, Ressource[] ressources) {//faces a choix ou face addition
