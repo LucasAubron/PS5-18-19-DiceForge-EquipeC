@@ -1,9 +1,15 @@
-package diceForge;
+package diceForge.OutilJoueur;
 
+import diceForge.Cartes.Carte;
+import diceForge.Cartes.Marteau;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.Faces.FaceMiroirAbyssal;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import static diceForge.Ressource.type.*;
 
 /**
  * Classe joueur. Ici on utilise plus d'objet pour les ressources, mais des variables distinctes.
@@ -102,7 +108,7 @@ public abstract class Joueur {
         if (or < 0) or = 0;
     }
 
-    void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
+    public void augmenterMaxOr(int augmentation) {maxOr += augmentation;}
 
     public int getSoleil() {return soleil;}
 
@@ -115,20 +121,20 @@ public abstract class Joueur {
         if (soleil < 0) soleil = 0;
     }
 
-    void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
+    public void augmenterMaxSoleil(int augmentation) {maxSoleil += augmentation;}
 
     public int getLune() {return lune;}
 
     public int getMaxLune() {return maxLune;}
 
-    void ajouterLune(int quantite) {
+    public void ajouterLune(int quantite) {
         lune = (lune + quantite > maxLune) ? maxLune : lune + quantite;
         if (lune < 0) lune = 0;
     }
 
-    void augmenterMaxLune(int augmentation) {maxLune += augmentation;}
+    public void augmenterMaxLune(int augmentation) {maxLune += augmentation;}
 
-    void ajouterPointDeGloire(int quantite) {
+    public void ajouterPointDeGloire(int quantite) {
         pointDeGloire += quantite;
         if (pointDeGloire < 0) pointDeGloire = 0;//dans le cas où on perds plus de points de gloire qu'on ne possède à cause d'un minotaure ennemi (super rare)
     }
@@ -146,19 +152,19 @@ public abstract class Joueur {
 
     public List<Renfort> getRenforts() {return renforts;}
 
-    void ajouterRenfort(Renfort renfort){
+    public void ajouterRenfort(Renfort renfort){
         renforts.add(renfort);
     }
 
-    void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
+    public void ajouterJeton(Jeton jeton) {jetons.add(jeton);}
 
-    void setDernierLanceDes(int code){// Pour le jeton cerbère (savoir si on est en présence d'une faveur mineure
+    public void setDernierLanceDes(int code){// Pour le jeton cerbère (savoir si on est en présence d'une faveur mineure
         if (code < 0 || code > 2)     // ou d'une faveur des dieux, et dans le cas de la faveur mineur quel dé a été utilisé
             throw new DiceForgeException("Joueur", "Le denier lancé de dés doit être un entier entre 0 et 2");
         this.dernierLanceDes = code;
     }
 
-    void retirerJeton(Jeton jetonARetirer){
+    public void retirerJeton(Jeton jetonARetirer){
         for (Jeton jeton : jetons){
             if (jeton == jetonARetirer) {
                 jetons.remove(jeton);
@@ -195,7 +201,7 @@ public abstract class Joueur {
      * considérées comme des faces simples !
      * @param face
      */
-    void gagnerRessourceFace(Face face, boolean minautore) {
+    public void gagnerRessourceFace(Face face, boolean minautore) {
         List<Ressource> ressourcesAGagner = new ArrayList<>(); //On s'arme d'une liste, car dans le cas d'une face
                                                                //addition on aura plusieurs types de ressource à faire gagner
 
@@ -273,7 +279,7 @@ public abstract class Joueur {
     /**
      * Lorsqu'on veut gagner ce que l'on a obtenu lors d'une faveur des dieux
      */
-    void gagnerRessourceDesDeuxDes() {
+    public void gagnerRessourceDesDeuxDes() {
         boolean faceAyantBesoinDeLautreDe = false;
         for (De de : des)
             if (de.getFaceActive().estUneFaceAyantBesoinDuDeuxiemeDe()) {  // c'est compliqué à gérer :/
@@ -349,9 +355,9 @@ public abstract class Joueur {
      * lorsque on trouve une ressource, c'est-à dire sentinelle et cyclope
      * @param bo true lorsque on veut que le joueur puisse choisir, false sinon
      */
-    void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
+    public void setJetRessourceOuPdg(boolean bo){jetRessourceOuPdg = bo;}
 
-    void setJetOrOuPdg(boolean bo){jetOrOuPdg = bo;}
+    public void setJetOrOuPdg(boolean bo){jetOrOuPdg = bo;}
 
     public Face[] getDesFaceCourante(){
         return new Face[]{des[0].getFaceActive(), des[1].getFaceActive()};
@@ -361,7 +367,7 @@ public abstract class Joueur {
     /**
      * Méthode à appeler lorsque le joueur est chassé
      */
-    void estChasse(){
+    public void estChasse(){
         afficheur.estChasse(this);
         for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
@@ -378,7 +384,7 @@ public abstract class Joueur {
      * Uniquement utile pour l'ours, car sinon peu importe qui
      * est le joueur chasseur
      */
-    void chasse(){
+    public void chasse(){
         for (Carte carte:cartes) {
             if (carte.getNom() == Carte.Noms.Ours) {
                 pointDeGloire += 3;
@@ -393,7 +399,7 @@ public abstract class Joueur {
      * @param carte
      * @return true si la carte à pu être acheté, false sinon
      */
-    void acheterExploit(Carte carte){
+    public void acheterExploit(Carte carte){
         afficheur.achatCarte(carte, this);
         for (Ressource ressource:carte.getCout()){//En premier on retire les ressources au joueurs
             if (ressource.getType()== Ressource.type.SOLEIL)
@@ -420,7 +426,7 @@ public abstract class Joueur {
     /**
      * @return la liste des marteaux dans la liste des cartes. C'est une liste vide s'il n'y en a pas
      */
-    List<Marteau> getMarteau(){
+    public List<Marteau> getMarteau(){
         List<Marteau> position = new ArrayList<>();
         for (int i = 0; i != cartes.size(); ++i)
             if (cartes.get(i).getNom() == Carte.Noms.Marteau) {

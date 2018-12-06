@@ -1,4 +1,8 @@
-package diceForge;
+package diceForge.OutilJoueur;
+
+import diceForge.Faces.Face;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +53,7 @@ public class De {
         return faceActive;
     }
 
-    void forger(Face faceAForger, int numFace){
+    public void forger(Face faceAForger, int numFace){
         if (numFace < 0 || numFace > faces.length-1)
             throw new DiceForgeException("Dé","Le numéro de la face est invalide. Min : 0, max : "+(faces.length-1)+", actuel : "+numFace);
         faces[numFace] = faceAForger;

@@ -1,4 +1,12 @@
-package diceForge;
+package diceForge.Cartes;
+
+
+
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.De;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +31,7 @@ public class Satyres extends Carte {
     }
 
     @Override
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
             List<Face> facesEnnemies = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
             for (Joueur joueur:joueurs)
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant())

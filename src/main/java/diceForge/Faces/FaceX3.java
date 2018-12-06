@@ -1,7 +1,7 @@
-package diceForge;
+package diceForge.Faces;
 
 public class FaceX3 extends Face {
-    FaceX3(){super(typeFace.X3);}
+    public FaceX3(){super(typeFace.X3);}
 
     @Override
     public String toString(){

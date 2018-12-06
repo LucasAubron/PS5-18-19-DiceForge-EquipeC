@@ -1,17 +1,22 @@
 package bot.AubotV2.src;
 
 import diceForge.*;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
 
 import java.io.*;
 import java.util.List;
 import java.util.Random;
-import static diceForge.Carte.Noms.*;
+
 
 /**
  * Commentaire à faire
  */
 
-public class AubotV2 extends Joueur{
+public class AubotV2 extends Joueur {
     private boolean montrerInfo = false;
     private boolean rejouer = false;
     private int nombreDeLancerParManche;

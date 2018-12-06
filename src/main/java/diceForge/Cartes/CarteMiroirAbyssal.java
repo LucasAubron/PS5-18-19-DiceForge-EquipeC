@@ -1,4 +1,11 @@
-package diceForge;
+package diceForge.Cartes;
+
+
+
+import diceForge.Faces.FaceMiroirAbyssal;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,7 @@ public class CarteMiroirAbyssal extends Carte {
     }
 
     @Override
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
         acheteur.choisirOuForgerFaceSpeciale(new FaceMiroirAbyssal(acheteur, joueurs));
     }
 }

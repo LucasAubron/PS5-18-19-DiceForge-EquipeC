@@ -1,4 +1,7 @@
-package diceForge;
+package diceForge.Faces;
+
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 
 public class FaceSanglier extends Face {
     private Joueur joueurMaitre;
@@ -8,7 +11,7 @@ public class FaceSanglier extends Face {
     }
 
     @Override
-    void effetActif (Joueur joueur){
+    public void effetActif (Joueur joueur){
         joueurMaitre.gagnerRessourceFace(
                 new Face(typeFace.CHOIX, new Ressource[]{
                         new Ressource(1, Ressource.type.SOLEIL),

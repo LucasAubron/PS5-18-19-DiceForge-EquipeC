@@ -1,6 +1,13 @@
 package bot;
 
 import diceForge.*;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.Afficheur;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +93,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public choixJetonTriton utiliserJetonTriton(){
+    public Joueur.choixJetonTriton utiliserJetonTriton(){
         switch (random.nextInt(4)){
             case 0:
                 return choixJetonTriton.Or;

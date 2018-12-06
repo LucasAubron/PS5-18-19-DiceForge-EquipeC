@@ -1,15 +1,14 @@
-package diceForge;
+package diceForge.Faces;
 
-import java.lang.reflect.Array;
+import diceForge.OutilJoueur.Joueur;
 import java.util.ArrayList;
 import java.util.List;
 
-import static diceForge.Joueur.Jeton.CERBERE;
 
 public class FaceMiroirAbyssal extends Face {
     private List<Joueur> listeJoueursEnnemis;
 
-    FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
+    public FaceMiroirAbyssal(Joueur joueurMaitre, List<Joueur> listeJoueurs){
         super(typeFace.MIROIR);
         listeJoueurs.removeIf(x -> x.getIdentifiant() == joueurMaitre.getIdentifiant());
         this.listeJoueursEnnemis = listeJoueurs;
@@ -28,15 +27,15 @@ public class FaceMiroirAbyssal extends Face {
         return faces;
     }
 
-    Face copierFaceSelonChoixDuJoueur(Joueur joueur){
+    public Face copierFaceSelonChoixDuJoueur(Joueur joueur){
         List<Face> faceAdversaires = obtenirFacesAdversaires();
         return joueur.choisirFaceACopier(faceAdversaires);
     }
 
     @Override
-    void effetActif(Joueur joueur){
+    public void effetActif(Joueur joueur){
         Face faceACopier = copierFaceSelonChoixDuJoueur(joueur);
-        joueur.gagnerRessourceFace(faceACopier);
+        joueur.gagnerRessourceFace(faceACopier, false);
     }
 
     @Override

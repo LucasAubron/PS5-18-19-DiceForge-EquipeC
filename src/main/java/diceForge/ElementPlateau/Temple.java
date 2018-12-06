@@ -1,4 +1,8 @@
-package diceForge;
+package diceForge.ElementPlateau;
+
+import diceForge.Faces.Face;
+import diceForge.Faces.FaceBouclier;
+import diceForge.OutilJoueur.Ressource;
 
 import java.util.ArrayList;
 import java.util.List;

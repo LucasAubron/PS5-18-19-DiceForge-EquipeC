@@ -1,4 +1,6 @@
-package diceForge;
+package diceForge.OutilJoueur;
+
+import diceForge.ElementPlateau.Bassin;
 
 /**
  * Parce que le craft d'une face de dé demande une multitude d'informations aux joueurs, et de types

@@ -1,5 +1,10 @@
-package diceForge;
+package diceForge.Cartes;
 
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,9 +17,9 @@ public class CarteBouclier extends Carte {
     }
 
     @Override
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
         ChoixJoueurForge choix = acheteur.choisirFaceAForgerEtARemplacer(
-                new ArrayList<>(Arrays.asList(plateau.getTemple().getJardin()[0])));
+                new ArrayList(Arrays.asList(plateau.getTemple().getJardin()[0])));
         acheteur.forgerFaceSpeciale(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFaceDansBassin()));
     }
 

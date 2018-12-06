@@ -1,10 +1,13 @@
-package diceForge;
+package diceForge.ElementPlateau;
 
 import bot.*;
 
 import bot.AubotV2.src.AubotV2;
 import bot.NidoBot.NidoBot;
 import bot.NidoBot.NidoBotV2;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +17,18 @@ import java.util.List;
  * ou ils viennent lorsqu'il sont chassés
  */
 public class PortailsOriginels {
+    //Attribut ---------------------
     private List<Joueur> joueurs;
 
+    //Constructeur ----------------------------------------------------------------------------------
+    //Long car il faut identifier chaque type de bot, et aubotV2 utilise 10 bot pour ses tournois (qui ont un fichier source différents)
     public PortailsOriginels(Joueur.Bot[] typeJoueurs, Afficheur afficheur, Plateau plateau){
         if (typeJoueurs.length < 2 || typeJoueurs.length > 4)
             throw new DiceForgeException("PortailsOriginels","Le nombre de joueur est invalide. Min : 2, max : 4, actuel : "+typeJoueurs.length);
         this.joueurs = new ArrayList<>();
-        for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder les mêmes joueurs sur des plateaux différents (dans le cas où on itère plusieurs parties)
-            if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot)
-                this.joueurs.add(new RandomBot(identifiant, afficheur, plateau));
+        for (int identifiant = 1; identifiant<=typeJoueurs.length; identifiant++) {//On copie les joueurs, pour éviter de garder
+            if (typeJoueurs[identifiant-1] == Joueur.Bot.RandomBot)                // les mêmes joueurs sur des plateaux différents
+                this.joueurs.add(new RandomBot(identifiant, afficheur, plateau));  // dans le cas où on itère plusieurs parties
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.EasyBot)
                 this.joueurs.add(new EasyBot(identifiant, afficheur, plateau));
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
@@ -65,9 +71,6 @@ public class PortailsOriginels {
                     this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/1V1V1V1/BestBot"));
             else throw new DiceForgeException("PortailsOriginels", "Le type du bot n'est pas supporté");
         }
-    }
-
-    public PortailsOriginels() {
     }
 
     /**

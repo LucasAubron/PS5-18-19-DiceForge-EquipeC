@@ -1,11 +1,17 @@
-package diceForge;
+package diceForge.Structure;
 
+import diceForge.Cartes.Carte;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Ile;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static diceForge.Joueur.Jeton.CERBERE;
-import static diceForge.Joueur.Jeton.TRITON;
+import static diceForge.OutilJoueur.Joueur.Jeton.CERBERE;
+import static diceForge.OutilJoueur.Joueur.Jeton.TRITON;
 
 /**
  * Le coordinateur s'occupe de faire tourner le jeu.
@@ -336,7 +342,7 @@ public class Coordinateur {
                 break;
             }
         for (Ile ile:plateau.getIles())
-            if (ile.getJoueur() != null && joueur.getIdentifiant() == ile.getJoueur().getIdentifiant()) {
+            if (ile.getJoueur() != null && joueur.getIdentifiant() == joueur.getIdentifiant()) {
                 ile.retirerJoueur();//En premier, on retire le joueur de son ile
                 break;
             }

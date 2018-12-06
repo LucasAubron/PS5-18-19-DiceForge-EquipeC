@@ -1,13 +1,21 @@
 package bot;
 
 import diceForge.*;
+import diceForge.Cartes.Carte;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import static diceForge.Carte.Noms.*;
-import static diceForge.Carte.Noms.Bouclier;
 
-public class AubotLeGrand extends Joueur{
+
+public class AubotLeGrand extends Joueur {
     private int nombreDeLancerParManche;
     private Random random;
     private boolean secondeAction = false;
@@ -140,7 +148,7 @@ public class AubotLeGrand extends Joueur{
                 return carte;
             if (carte.getNom() == HerbesFolles && nombreCartePossedee(HerbesFolles) == 0 && manche <= 2)
                 return carte;
-            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
+            if (carte.getNom() == VoileCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
                 return carte;
             if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0)
                 return carte;

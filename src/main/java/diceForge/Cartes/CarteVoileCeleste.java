@@ -1,4 +1,10 @@
-package diceForge;
+package diceForge.Cartes;
+
+
+import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.FaceVoileCeleste;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 
 public class CarteVoileCeleste extends Carte {
     private Plateau plateau;
@@ -8,7 +14,7 @@ public class CarteVoileCeleste extends Carte {
     }
 
     @Override
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
         acheteur.forgerFaceSpeciale(new FaceVoileCeleste(plateau.getTemple()));
     }
 

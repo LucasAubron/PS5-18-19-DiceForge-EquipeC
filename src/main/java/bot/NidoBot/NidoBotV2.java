@@ -1,12 +1,16 @@
 package bot.NidoBot;
 
 import diceForge.*;
+import diceForge.Cartes.Carte;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static bot.NidoBot.NidoFunctions.*;
-import static diceForge.Carte.Noms.*;
 
 public class NidoBotV2 extends Joueur {
     private int manche;

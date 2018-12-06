@@ -1,4 +1,13 @@
-package diceForge;
+package diceForge.Structure;
+
+import diceForge.Cartes.Carte;
+import diceForge.Cartes.Marteau;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Ile;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +28,11 @@ public class Afficheur {
         this.modeVerbeux = modeVerbeux;
     }
 
-    void setPlateau(Plateau plateau){
+    public void setPlateau(Plateau plateau){
         this.plateau = plateau;
     }
 
-    void presentationModeVerbeux() {
+    public void presentationModeVerbeux() {
         if (modeVerbeux) {
             info += "\n\n\n\t\t| Cette partie oppose les bots (affichés dans l'odre de jeu): ";
             for (int i = 0; i < plateau.getJoueurs().size(); i++)
@@ -32,7 +41,7 @@ public class Afficheur {
         }
     }
 
-    void presentationCartesEtBassin(Plateau plateau){
+    public void presentationCartesEtBassin(Plateau plateau){
         if (modeVerbeux) {
             info += "\n\nCartes tirées et disponibles aux plateau.getJoueurs():\n";
             for (Ile ile: plateau.getIles()) {
@@ -60,12 +69,12 @@ public class Afficheur {
         }
     }
 
-    void manche(int numManche) {
+    public void manche(int numManche) {
         if (modeVerbeux)
             info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
     }
 
-    void tour(Joueur joueur) {
+    public void tour(Joueur joueur) {
         if (modeVerbeux) {
             info += "\n";
             petitTrait();
@@ -74,19 +83,19 @@ public class Afficheur {
         }
     }
 
-    void resultatDe(Joueur joueur, int idDe) {
+    public void resultatDe(Joueur joueur, int idDe) {
         if (modeVerbeux) {
             idDe++;
             info += "Le joueur n°" + joueur.getIdentifiant() + " lance le dé n°" + idDe + " et obtient " + joueur.getDesFaceCourante()[idDe-1] + "\n";
         }
     }
 
-    void desActuels(Joueur joueur) {
+    public void desActuels(Joueur joueur) {
         if (modeVerbeux)
             info += "\nDés du joueur n°" + joueur.getIdentifiant() + ":\nDé n°1: " + joueur.getDes()[0] + "\nDé n°2 : " + joueur.getDes()[1] + "\n";
     }
 
-    void ressourcesDisponibles(Joueur joueur) {
+    public void ressourcesDisponibles(Joueur joueur) {
         if (modeVerbeux)
             info +="\nLe joueur n°" + joueur.getIdentifiant() + " possède:\nOr: " + joueur.getOr() + "/" + joueur.getMaxOr() + "\nSoleil: " + joueur.getSoleil() + "/" + joueur.getMaxSoleil() + "\nLune: " + joueur.getLune() + "/" + joueur.getMaxLune() + "\nPoints de gloire: " + joueur.getPointDeGloire() + "\n";
             if (!joueur.getMarteau().isEmpty())
@@ -99,7 +108,7 @@ public class Afficheur {
             info += "\nCartes possédées: " + joueur.getCartes() + "\nRenforts disponibles: " + joueur.getRenforts() + "\nJetons Disponibles: " + joueur.getJetons() + "\n";
     }
 
-    void recapJoueur(Joueur joueur){
+    public void recapJoueur(Joueur joueur){
         if (modeVerbeux){
             grandTrait();
             info += "\n\t\t|Information joueur n°" + joueur.getIdentifiant() + "|\n";
@@ -110,61 +119,61 @@ public class Afficheur {
          }
     }
 
-    void biche(int deChoisi, Face faceObtenue,Joueur joueur){
+    public void biche(int deChoisi, Face faceObtenue, Joueur joueur){
         if (modeVerbeux){
             deChoisi++;
             info += "\nLe joueur n°" + joueur.getIdentifiant() +" active le renfort biche et lance le dé n°" + deChoisi + ", il gagne " + faceObtenue;
         }
     }
 
-    void ancien(Joueur joueur){
+    public void ancien(Joueur joueur){
         if (modeVerbeux){
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort ancien, il consomme 3 or pour gagner 4 points de gloire";
         }
     }
 
-    void hibou(Joueur joueur, Ressource ressource){
+    public void hibou(Joueur joueur, Ressource ressource){
         if (modeVerbeux){
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " active le renfort hibou, il choisit " + ressource;
         }
     }
 
-    void presentationLancerDes(){
+    public void presentationLancerDes(){
         if (modeVerbeux) {
             info += "\n\t--Phase de lancer de dés--\n";
         }
     }
 
-    void lancerDes(Joueur joueur){
+    public void lancerDes(Joueur joueur){
         if (modeVerbeux)
             info += "\n-Le joueur n°" + joueur.getIdentifiant() + " lance ses dés-\n";
     }
 
-    void presentationRenforts(Joueur joueur){
+    public void presentationRenforts(Joueur joueur){
         if (modeVerbeux && !joueur.getRenforts().isEmpty()) {
             grandTrait();
             info += "\n\t--Phase de renforts--\n";
         }
     }
 
-    void presentationAction(){
+    public void presentationAction(){
         if (modeVerbeux) {
             grandTrait();
             info += "\n\t\t--Action--\n";
         }
     }
 
-    void estChasse(Joueur chasse){
+    public void estChasse(Joueur chasse){
         if (modeVerbeux)
             info += "\nLe joueur n°" + chasse.getIdentifiant() + " est chassé\n";
     }
 
-    void ours(Joueur joueur){
+    public void ours(Joueur joueur){
         if (modeVerbeux)
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " gagne 3 points de gloire grace à sa carte ours\n";
     }
 
-    void remplissageMarteau(Joueur joueur, int or, int quantité){
+    public void remplissageMarteau(Joueur joueur, int or, int quantité){
         if (modeVerbeux){
             int pointMarteau = quantité - or;
             if (pointMarteau !=0)
@@ -172,46 +181,46 @@ public class Afficheur {
         }
     }
 
-    void actionForger(Joueur joueur){
+    public void actionForger(Joueur joueur){
         if (modeVerbeux)
             info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de forger-\n\n";
     }
 
-    void forger(Joueur joueur, int numDe, Face faceForgee, Face faceRetiree, Bassin bassin){
+    public void forger(Joueur joueur, int numDe, Face faceForgee, Face faceRetiree, Bassin bassin){
         if (modeVerbeux){
             numDe++;
             info += "Le joueur n°" + joueur.getIdentifiant() + " paye " + bassin.getCout() + " or et forge la face " + faceForgee + "sur la face " + faceRetiree + "de son dé n°" + numDe + "\n";
         }
     }
 
-    void actionExploit(Joueur joueur){
+    public void actionExploit(Joueur joueur){
         if (modeVerbeux)
             info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide d'accomplir un exploit-\n";
     }
 
-    void achatCarte(Carte carte, Joueur joueur){
+    public void achatCarte(Carte carte, Joueur joueur){
         if (modeVerbeux)
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " achète la carte " + carte + "\n\n";
     }
 
-    void actionPasser(Joueur joueur){
+    public void actionPasser(Joueur joueur){
         if (modeVerbeux)
             info += "\n-Le joueur n°" + joueur.getIdentifiant() + " décide de ne pas effectuer d'action-\n";
     }
 
-    void secondeAction(Joueur joueur){
+    public void secondeAction(Joueur joueur){
         if (modeVerbeux) {
             grandTrait();
             info += "\n\t\t--Le joueur n°" + joueur.getIdentifiant() + " paye 2 soleil et effectue une deuxième action--\n";
         }
     }
 
-    void actionBete(Joueur joueur){
+    public void actionBete(Joueur joueur){
         if (modeVerbeux)
             info += "\nLe joueur n°" + joueur.getIdentifiant() + " n'a pas assez de ressource pour acheter une carte, il passe son tour\n";
     }
 
-    void actionDebile(int compteur, Joueur joueur, Coordinateur coordinateur){
+    public void actionDebile(int compteur, Joueur joueur, Coordinateur coordinateur){
         if (modeVerbeux && compteur == 0) {
             int coutMin = 0;
             for (Bassin bassin : plateau.getTemple().getSanctuaire())//on regarde la raison qui a poussé le joueur a ne rien forger (sa décision ou forcé)
@@ -224,22 +233,22 @@ public class Afficheur {
         }
     }
 
-    void grandTrait(){
+    public void grandTrait(){
         if (modeVerbeux)
             info += "\n--------------------------------------------------\n"; //pas nécessaire mais bon faut bien s'amuser
     }
 
-    void petitTrait(){
+    public void petitTrait(){
         if (modeVerbeux)
             info += "\n-----------------------------------\n"; //idem
     }
 
-    void retourALaLigne(){
+    public void retourALaLigne(){
         if (modeVerbeux)
             info += "\n";
     }
 
-    void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
+    public void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
         for (int i = 0; i != nbrVictoire.length; ++i){
             info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire";
             if (i != nbrVictoire.length-1)
@@ -247,18 +256,18 @@ public class Afficheur {
         }
     }
 
-    void finDePartie() {
+    public void finDePartie() {
         info += "\n\n\n";
         grandTrait();
         info += "\t\t\t\t--FIN DE PARTIE--";
         additionPointCarte(plateau.getJoueurs());
     }
 
-    void typhonPointBonus(int totalPdgGagne){
+    public void typhonPointBonus(int totalPdgGagne){
         info += "\t|" + "Le typhon accorde " + totalPdgGagne + " grâce aux faces forgées\n";
     }
 
-    void additionPointCarte(List<Joueur> joueurs) {
+    public void additionPointCarte(List<Joueur> joueurs) {
         int total;
         int totalMax = -1;
         int id;

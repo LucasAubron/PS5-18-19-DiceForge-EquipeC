@@ -1,4 +1,10 @@
-package diceForge;
+package diceForge.Cartes;
+
+
+import diceForge.Faces.FaceSanglier;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +26,7 @@ public class CarteSanglier extends Carte {
      * @param acheteur
      */
     @Override
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
         List<Joueur> joueursEnnemis = new ArrayList<>(); // On s'assure que le joueur acheter ne puisse pas se donner
         for (Joueur joueur: joueurs)                     // à lui même la face sanglier
             if (joueur.getIdentifiant() != acheteur.getIdentifiant())

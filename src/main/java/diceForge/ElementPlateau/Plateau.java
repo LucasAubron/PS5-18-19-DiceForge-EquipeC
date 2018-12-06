@@ -1,4 +1,10 @@
-package diceForge;
+package diceForge.ElementPlateau;
+
+import diceForge.Cartes.*;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +20,7 @@ public class Plateau {
     private Temple temple;
     private Ile[] iles;//La ou il y a les cartes
 
-    Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
+    public Plateau(Joueur.Bot[] typeJoueurs, Afficheur afficheur) {
         portail = new PortailsOriginels(typeJoueurs, afficheur, this);//La ou les joueurs sont de base
         temple = new Temple(typeJoueurs.length);//La classe temple s'occupe de toute la partie forge de dé
         Random random = new Random();

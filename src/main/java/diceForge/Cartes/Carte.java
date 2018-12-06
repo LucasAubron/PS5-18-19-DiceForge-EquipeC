@@ -1,6 +1,11 @@
-package diceForge;
+package diceForge.Cartes;
 
-import static diceForge.Joueur.Jeton.CERBERE;
+
+import diceForge.Faces.FaceX3;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
+import static diceForge.OutilJoueur.Joueur.Jeton.CERBERE;
 
 /**
  * La classe carte peut être utilisé pour les cartes ne donnant que des points de gloire
@@ -37,7 +42,7 @@ public class Carte {
         return new Carte(cout, nbrPointGloire, nom);
     }
 
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
         switch (nom) {
             case Coffre:
                 acheteur.augmenterMaxOr(4);

@@ -1,5 +1,9 @@
-package diceForge;
+package diceForge.Cartes;
 
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.De;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +20,7 @@ public class Minautore extends Carte {
     }
 
     @Override // a refaire
-    void effetDirect(Joueur acheteur){
+    public void effetDirect(Joueur acheteur){
             for (Joueur joueur:joueurs){//Pour tous les joueurs
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant()){//Si ce n'est pas le joueur actuel
                     for (De de:joueur.getDes()){//Pour tous les dés

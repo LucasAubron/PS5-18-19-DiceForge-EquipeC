@@ -1,4 +1,8 @@
-package diceForge;
+package diceForge.ElementPlateau;
+
+import diceForge.Cartes.Carte;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,17 @@
-package diceForge;
+package diceForge.Faces;
+
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Temple;
+import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.Joueur;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class FaceVoileCeleste extends Face {
+public class FaceVoileCeleste extends Face {
     private Temple temple;
     private int multiplierX3 = 1;
-    FaceVoileCeleste(Temple temple){
+    public FaceVoileCeleste(Temple temple){
         super(typeFace.VOILECELESTE);
         this.temple = temple;
     }
@@ -16,7 +21,7 @@ class FaceVoileCeleste extends Face {
     }
 
     @Override
-    void effetActif(Joueur joueur){
+    public void effetActif(Joueur joueur){
         List<Bassin> bassinsAbordables = new ArrayList<>();
         for (Bassin bassin : temple.getSanctuaire())
             if (bassin.getCout() - 2*multiplierX3 <= joueur.getOr() && !bassin.getFaces().isEmpty())

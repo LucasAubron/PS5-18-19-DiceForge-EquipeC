@@ -1,7 +1,7 @@
 package bot.mlgBot;
 
-import diceForge.Carte;
-import diceForge.DiceForgeException;
+import diceForge.Cartes.Carte;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;

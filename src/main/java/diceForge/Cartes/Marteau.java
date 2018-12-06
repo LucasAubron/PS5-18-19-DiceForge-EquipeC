@@ -1,4 +1,8 @@
-package diceForge;
+package diceForge.Cartes;
+
+
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
 
 public class Marteau extends Carte {
     private int point = 0;
@@ -18,7 +22,7 @@ public class Marteau extends Carte {
      * @param nbrPoints le nombre de points à ajouter
      * @return Le nombre de point en trop si le marteau est complété, 0 sinon
      */
-    int ajouterPoints(int nbrPoints){
+    public int ajouterPoints(int nbrPoints){
         if (niveau > 1) return nbrPoints;
         point += nbrPoints;
         if (point >= 15){

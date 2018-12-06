@@ -1,6 +1,7 @@
-package diceForge;
+package diceForge.Faces;
 
-import java.util.List;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 
 
 /**
@@ -21,17 +22,17 @@ public class Face {
 
     //Constructeurs ---------------------------------------------------------------------------------------------
 
-    Face(Ressource ressource) {//face simple
+    public Face(Ressource ressource) {//face simple
         this.ressource = ressource;
         this.type = typeFace.SIMPLE;
     }
 
-    Face(typeFace typeF,Ressource[] ressources) {//faces a choix ou face addition
+    public Face(typeFace typeF, Ressource[] ressources) {//faces a choix ou face addition
         this.ressources = ressources;
         this.type = typeF;
     }
 
-    Face(typeFace typeF) { // faces a effet (sanglier, bouclier, X3, miroir, voiles celeste)
+    public Face(typeFace typeF) { // faces a effet (sanglier, bouclier, X3, miroir, voiles celeste)
         this.type = typeF;
         if (type == typeFace.SANGLIER)
             ressources = new Ressource[]{
@@ -68,7 +69,7 @@ public class Face {
     /**
      * A override pour les faces a effet
      */
-    void effetActif(Joueur joueur){}
+    public void effetActif(Joueur joueur){}
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package bot.mlgBot;
 
-import diceForge.Main;
+
+import diceForge.Structure.Main;
 
 public class Run {
     public static void main(String[] args) {

@@ -4,6 +4,9 @@ import bot.mlgBot.SourceLines;
 import bot.mlgBot.StatLine;
 import bot.mlgBot.TrierStatLine;
 import diceForge.*;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
 
 import java.io.*;
 import java.nio.ByteBuffer;

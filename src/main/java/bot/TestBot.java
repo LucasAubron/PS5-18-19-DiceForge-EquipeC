@@ -1,6 +1,9 @@
 package bot;
 
 import diceForge.*;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
 
 import java.util.ArrayList;
 import java.util.List;

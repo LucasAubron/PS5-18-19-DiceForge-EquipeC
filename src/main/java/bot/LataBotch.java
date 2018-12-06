@@ -1,11 +1,14 @@
 package bot;
 
 import diceForge.*;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
 
 import java.util.List;
 import java.util.Random;
 
-public class LataBotch extends Joueur{
+public class LataBotch extends Joueur {
     public LataBotch(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau); }
     boolean rushMarteau=false;
 

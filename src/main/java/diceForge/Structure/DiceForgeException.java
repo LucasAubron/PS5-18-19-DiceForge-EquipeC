@@ -1,4 +1,4 @@
-package diceForge;
+package diceForge.Structure;
 
 public class DiceForgeException extends RuntimeException {
     private String localisation;

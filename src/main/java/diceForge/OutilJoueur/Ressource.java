@@ -1,4 +1,6 @@
-package diceForge;
+package diceForge.OutilJoueur;
+
+import diceForge.Structure.DiceForgeException;
 
 /**
  * Parce qu'il va y avoir des faces de dé complexes,
@@ -12,7 +14,7 @@ public class Ressource {
     private type typeRessource;                         //Peu importe sert lors de la recherche
                                                         //d'une face ou d'un bassin dans plateau
     //Constructeur -----------------------------------------------------------------------------------
-    Ressource(int quantite, type typeR){//version a garder après refactor
+    public Ressource(int quantite, type typeR){//version a garder après refactor
         if (quantite < 0)
             throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
         this.quantite = quantite;

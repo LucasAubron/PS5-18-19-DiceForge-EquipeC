@@ -1,4 +1,7 @@
-package diceForge;
+package diceForge.ElementPlateau;
+
+import diceForge.Faces.Face;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,7 @@ public class Bassin {
      * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
      * et qu'il est plus simple de transmettre une liste
      */
-    Bassin(int cout, List<Face> faces) {
+    public Bassin(int cout, List<Face> faces) {
         if (cout < 0 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;
@@ -26,7 +29,7 @@ public class Bassin {
     /**
      * Constructeur qui sert lorsque le bassin ne comporte que la même faces
      */
-    Bassin(int cout, Face facesUnique, int nbrFace){
+    public Bassin(int cout, Face facesUnique, int nbrFace){
         if (cout < 0 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;

@@ -1,4 +1,6 @@
-package diceForge;
+package diceForge.Faces;
+
+import diceForge.OutilJoueur.Ressource;
 
 public class FaceBouclier extends Face {
     Ressource ressource;
