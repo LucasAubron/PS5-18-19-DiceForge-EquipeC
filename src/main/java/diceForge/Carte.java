@@ -77,7 +77,7 @@ public class Carte {
                 int choix = acheteur.choisirDeFaveurMineure();
                 acheteur.setDernierLanceDes(choix);
                 for (int i = 0; i != 4; ++i) {
-                    acheteur.gagnerRessourceFace(acheteur.getDes()[choix].lancerLeDe());
+                    acheteur.gagnerRessourceFace(acheteur.getDe(choix).lancerLeDe(), false);
                     for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
                         acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }
@@ -96,7 +96,7 @@ public class Carte {
                 acheteur.setDernierLanceDes(choixDe);
                 acheteur.setJetOrOuPdg(true);
                 for (int i = 0; i != 4; ++i){
-                    acheteur.gagnerRessourceFace(acheteur.getDes()[choixDe].lancerLeDe());
+                    acheteur.gagnerRessourceFace(acheteur.getDes()[choixDe].lancerLeDe(), false);
                     for (int j = 0; j < acheteur.getJetons().size() && acheteur.getJetons().get(j) == CERBERE && acheteur.utiliserJetonCerbere(); ++j)
                         acheteur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                 }

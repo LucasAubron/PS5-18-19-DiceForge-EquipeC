@@ -29,14 +29,6 @@ public class Ressource {
 
     @Override
     public String toString(){
-        if (typeRessource == type.OR)
-            return " Or";
-        if (typeRessource == type.SOLEIL)
-            return " Soleil";
-        if (typeRessource == type.LUNE)
-            return " Lune";
-        if (typeRessource == type.PDG)
-            return " Point de gloire";
-        throw new DiceForgeException("Ressource", "Le type de ressource n'est pas reconnu: " + typeRessource);
+        return quantite + " " + typeRessource;
     }
 }
