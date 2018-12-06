@@ -6,17 +6,19 @@ package diceForge;
  * on créé une classe Ressource que l'on dérive en chaque ressource de base
  */
 public class Ressource {
+    //Attributs -------------------------------------------------------------------------------------
     private int quantite;
-    public enum type{OR, SOLEIL, LUNE, PDG;}//PDG == point de gloire
-    private type typeRessource;
-
+    public enum type{OR, SOLEIL, LUNE, PDG, PEUIMPORTE;}//PDG == point de gloire
+    private type typeRessource;                         //Peu importe sert lors de la recherche
+                                                        //d'une face ou d'un bassin dans plateau
+    //Constructeur -----------------------------------------------------------------------------------
     Ressource(int quantite, type typeR){//version a garder après refactor
         if (quantite < 0)
             throw new DiceForgeException("Ressource","La quantité donnée est invalide. Min 0, actuelle : "+quantite);
         this.quantite = quantite;
         this.typeRessource = typeR;
     }
-
+    //Méthodes -------------------------------------------------------------------------------------
     public int getQuantite(){return quantite;}
 
     public type getType(){return typeRessource;}

@@ -1,7 +1,6 @@
 package diceForge;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -73,8 +72,8 @@ public class Plateau {
     }
 
     /**
-     * Si quelqu'un peut le faire plus clairement, qu'il le fasse
-     * @return la liste des joueurs présents sur le plateau
+     * @return la liste des joueurs présents sur le plateau, c'est-à dire ceux présents
+     * sur une ile ou sur le portail originel (il n'y a que ces deux choix)
      */
     public List<Joueur> getJoueurs() {
         List<Joueur> tempJoueur = new ArrayList<>();
@@ -120,7 +119,34 @@ public class Plateau {
         return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
     }
 
-    public Bassin getBassin(int cout, Enum typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
-        return null;
+    public Bassin getBassin(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
+        switch (cout){
+            case 2: {
+                if (typeRessource == Ressource.type.OR)
+                    return getTemple().getSanctuaire()[0];
+                if (typeRessource == Ressource.type.LUNE)
+                    return getTemple().getSanctuaire()[0];
+            }
+            case 3:
+                if (typeRessource == Ressource.type.OR)
+                    return getTemple().getSanctuaire()[2];
+                if (typeRessource == Ressource.type.SOLEIL)
+                    return getTemple().getSanctuaire()[3];
+            case 4:
+                return getTemple().getSanctuaire()[4];
+            case 5:
+                return getTemple().getSanctuaire()[5];
+            case 6:
+                return getTemple().getSanctuaire()[6];
+            case 8:
+                if (typeRessource == Ressource.type.SOLEIL)
+                    return getTemple().getSanctuaire()[7];
+                if (typeRessource == Ressource.type.PDG)
+                    return getTemple().getSanctuaire()[8];
+            case 12:
+                return getTemple().getSanctuaire()[9];
+            default:
+                throw new DiceForgeException("Plateau", "Un bassin n'a pas été trouvé, cout:" + cout);
+        }
     }
 }
