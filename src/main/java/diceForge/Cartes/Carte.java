@@ -16,8 +16,8 @@ import static diceForge.OutilJoueur.Joueur.Jeton.CERBERE;
  * Meduse ; Triton ; Abysse ; Sentinelle ; Cancer ; Hydre ; Typhon ; Sphinx ; Cyclope; Miroir Abyssal
  */
 public class Carte {
-    private Ressource[] cout;
-    private int nbrPointGloire;
+    private Ressource[] cout; //un tableau de ressource car l'hydre et le typhon
+    private int nbrPointGloire;// coutent des soleils ET des lunes
     private Noms nom;
 
     public enum Noms {Coffre, HerbesFolles, Ancien, Marteau, Ours, Sanglier, Biche, Satyres,

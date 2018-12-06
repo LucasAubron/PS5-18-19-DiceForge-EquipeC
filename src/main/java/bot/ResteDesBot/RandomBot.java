@@ -58,7 +58,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public int choisirRepartitionOrMarteau(int nbrOr){
+    public int choisirOrQueLeMarteauNePrendPas(int nbrOr){
         return random.nextInt(nbrOr+1);
     }
 
@@ -114,7 +114,7 @@ public class RandomBot extends Joueur {
     }
 
     @Override
-    public boolean choisirRessourceOuPdg(Ressource ressource){
+    public boolean choisirPdgPlutotQueRessource(Ressource ressource){
         return (random.nextInt()==0) ? true : false;
     }
 

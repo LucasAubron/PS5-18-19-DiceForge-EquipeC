@@ -87,24 +87,24 @@ public abstract class Joueur {
     public int getMaxOr(){return maxOr;} //sert uniquement à l'affichage
 
     public void ajouterOr (int quantite){
-        int ajoutOr = quantite;
+        int orAGarder = quantite;
         if (quantite > 0 && !getMarteau().isEmpty()){//C'est ici que l'on gere le marteau
-            ajoutOr = choisirRepartitionOrMarteau(quantite);
-            afficheur.remplissageMarteau(this, ajoutOr, quantite);
+            orAGarder = choisirOrQueLeMarteauNePrendPas(quantite);
+            afficheur.remplissageMarteau(this, orAGarder, quantite);
             List<Marteau> marteaux = getMarteau();
             int i = 0;
             int restant = 0;
-            while ((restant = marteaux.get(i).ajouterPoints(restant == 0 ? quantite-ajoutOr : restant)) != 0){//On ajoute la quantité de point
+            while ((restant = marteaux.get(i).ajouterPoints(restant == 0 ? quantite-orAGarder : restant)) != 0){//On ajoute la quantité de point
                 if (marteaux.get(i).getNbrPointGloire() == 25) {//Si le marteau est rempli                    //et on regarde si elle est != 0
                     ++i;//On passe au marteau suivant
                 }
                 if (i == marteaux.size()) {//S'il n'y a pas de marteau suivant
-                    ajoutOr += restant;//On ajoute l'or que le marteau n'a pas utilisé
+                    orAGarder += restant;//On ajoute l'or que le marteau n'a pas utilisé
                     break;//On arrête
                 }
             }
         }
-        or = (or + ajoutOr > maxOr) ? maxOr : or + ajoutOr;
+        or = (or + orAGarder > maxOr) ? maxOr : or + orAGarder;
         if (or < 0) or = 0;
     }
 
@@ -237,38 +237,38 @@ public abstract class Joueur {
         for (Ressource ressource : ressourcesAGagner){
             switch (ressource.getType()) {
                 case OR: {
-                    if (jetOrOuPdg && choisirRessourceOuPdg(ressource)) //Dans le cas du cyclope
+                    if (jetOrOuPdg && choisirPdgPlutotQueRessource(ressource)) //Dans le cas du cyclope
                         ajouterPointDeGloire(ressource.getQuantite());  //1 or peut valoir 1pdg,
                     else {                                                //selon la décision du joueur
                         ajouterOr(ressource.getQuantite());
-                        if (minautore == true)
+                        if (minautore)
                             ajouterOr(-2*ressource.getQuantite());
                     }
                     break;
                 }
                 case LUNE: {
-                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource)) //idem, pour le cas de la sentinelle
+                    if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //idem, pour le cas de la sentinelle
                         ajouterPointDeGloire(ressource.getQuantite()*2);//sauf qu'ici une lune peut valoir 2 pdg !
                     else {
                         ajouterLune(ressource.getQuantite());
-                        if (minautore == true)
+                        if (minautore)
                             ajouterLune(-2*ressource.getQuantite());
                     }
                     break;
                 }
                 case SOLEIL: {
-                    if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource)) //jamais deux sans trois
+                    if (jetRessourceOuPdg && choisirPdgPlutotQueRessource(ressource)) //jamais deux sans trois
                         ajouterPointDeGloire(ressource.getQuantite()*2); //idem que la lune et la sentinelle
                     else {
                         ajouterSoleil(ressource.getQuantite());
-                        if (minautore == true)
+                        if (minautore)
                             ajouterSoleil(-2*ressource.getQuantite());
                     }
                     break;
                 }
                 case PDG: {
                     ajouterPointDeGloire(ressource.getQuantite());
-                    if (minautore == true)
+                    if (minautore)
                         ajouterSoleil(-2*ressource.getQuantite());
                     break;
                 }
@@ -518,7 +518,7 @@ public abstract class Joueur {
     -public Carte choisirCarte(List<Carte> cartes){}
     -public boolean choisirActionSupplementaire(){}
     -public Ressource choisirRessourceFaceAchoix(Ressource[] ressources){}
-    -public int choisirRepartitionOrMarteau(int nbrOr){}
+    -public int choisirOrQueLeMarteauNePrendPas(int nbrOr){}
     -public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
     -public Face choisirFaceACopier(List<Face> faces){}
     -public Ressource choisirRessourceAPerdre(Ressource[] ressources){}
@@ -527,7 +527,7 @@ public abstract class Joueur {
     -public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
     -public choixJetonTriton utiliserJetonTriton(){}
     -public boolean utiliserJetonCerbere(){}
-    -public boolean choisirRessourceOuPdg(Ressource ressource){}
+    -public boolean choisirPdgPlutotQueRessource(Ressource ressource){}
 
     16 méthodes.
     */
@@ -580,7 +580,7 @@ public abstract class Joueur {
      * @param nbrOr l'or total disponnible
      * @return le nombre d'or que le bot souhaite garder en or.
      */
-    public abstract int choisirRepartitionOrMarteau(int nbrOr);
+    public abstract int choisirOrQueLeMarteauNePrendPas(int nbrOr);
 
     /**
      * Permet de choisir quel renfort appeler
@@ -646,5 +646,5 @@ public abstract class Joueur {
      * @param ressource
      * @return true s'il veut avoir des points de gloires, false sinon
      */
-    public abstract boolean choisirRessourceOuPdg(Ressource ressource);
+    public abstract boolean choisirPdgPlutotQueRessource(Ressource ressource);
 }

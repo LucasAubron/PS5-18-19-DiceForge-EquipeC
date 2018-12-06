@@ -56,6 +56,8 @@ public class Bassin {
     public Face getFace(int num) {
         return faces.get(num);
     }
+
+    public Face getUneFace(){ return faces.get(0); }
     /**
      * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
      * Il ne faut pas utiliser la méthode getFace() pour cela !

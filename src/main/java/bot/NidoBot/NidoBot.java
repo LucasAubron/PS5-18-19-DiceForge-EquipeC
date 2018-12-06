@@ -287,7 +287,7 @@ public class NidoBot extends Joueur {
     }
 
     @Override
-    public boolean choisirRessourceOuPdg(Ressource ressource) {
+    public boolean choisirPdgPlutotQueRessource(Ressource ressource) {
         return true;
     }
     @Override
