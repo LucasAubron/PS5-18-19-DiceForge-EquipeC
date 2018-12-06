@@ -1,9 +1,14 @@
 package bot.NidoBot;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import diceForge.*;
 import diceForge.Cartes.Carte;
+import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.ChoixJoueurForge;
 import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.Afficheur;
 
 import java.util.ArrayList;
@@ -47,9 +52,9 @@ public class NidoBotV2 extends Joueur {
 //        afficheur.NidoBotAfficheur("numDe ==> " + numDe);
         for (int i = 0; i != 6; i++) {
 //            afficheur.NidoBotAfficheur("getRessources.length == " + joueur.getDe(numDe).getFace(i).getRessource().length);
-            if (joueur.getDe(numDe).getFace(i).getRessource().length == 1) {
-                if (joueur.getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or &&
-                        joueur.getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == qte) {
+            if (joueur.getDe(numDe).getFace(i).getTypeFace() == Face.typeFace.SIMPLE) {
+                if (joueur.getDe(numDe).getFace(i).getRessource().getType() == Ressource.type.OR &&
+                        joueur.getDe(numDe).getFace(i).getRessource().getQuantite() == qte) {
 //                    afficheur.NidoBotAfficheur("gesPosFaceOrDuDe BP: 2");
                     return i;
                 }
@@ -60,16 +65,16 @@ public class NidoBotV2 extends Joueur {
     }
 
     @Override
-    public Action choisirAction(int numManche) {
+    public Action choisirAction() {
         //Si on est au début du jeu et que l'on a assez d'or, on forge
         this.manche++;
-        if (this.manche == 0)
+        if (this.manche == 1)
             nombreDeJoueurs = getPlateau().getJoueurs().size();
-        if (numManche == 1 && getOr() >= 3 && !getBassinsAbordable().isEmpty())
+        if (this.manche == 1 && getOr() >= 3 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
-        if (numManche == 2 && getOr() >= 6 && !getBassinsAbordable().isEmpty())
+        if (this.manche == 2 && getOr() >= 6 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
-        if (numManche == 3 && getOr() >= 8 && !getBassinsAbordable().isEmpty())
+        if (this.manche == 3 && getOr() >= 8 && !getBassinsAbordable().isEmpty())
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;

@@ -303,6 +303,10 @@ public class Afficheur {
             info += "Les 4 joueurs sont à égalité ! Incroyable !";
     }
 
+    public void NidoBotAfficheur(String str){
+        info += str + "\n";
+    }
+
     @Override
     public String toString(){
         String x = info;
