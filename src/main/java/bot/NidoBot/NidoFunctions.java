@@ -80,14 +80,13 @@ public class NidoFunctions {
         while (!have && i < unDe.getFaces().length){
 //            System.out.println("i == " + i);
 //            System.out.println(unDe.getFace(i).toString());
-            if (uneRess.getClass().getName().equals("diceForge.Lune") &&
-                    unDe.getFace(i).getRessource().length > 0 &&
-                    unDe.getFace(i).getRessource()[0][0] instanceof Lune)
+            if (uneRess.getType() == LUNE &&
+                     unDe.getFace(i).getTypeFace() ==Face.typeFace.SIMPLE &&
+                    unDe.getFace(i).getRessource().getType() == LUNE)
                 have = true;
-            else if(uneRess.getClass().getName().equals("diceForge.Soleil") &&
-                    unDe.getFace(i).getRessource().length > 0 &&
-                    unDe.getFace(i)
-                            .getRessource()[0][0] instanceof Soleil)
+            else if (uneRess.getType() == SOLEIL &&
+                    unDe.getFace(i).getTypeFace() ==Face.typeFace.SIMPLE &&
+                    unDe.getFace(i).getRessource().getType() == SOLEIL)
                 have = true;
             i++;
         }
