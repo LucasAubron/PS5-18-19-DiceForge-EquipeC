@@ -1,10 +1,15 @@
 package bot.NidoBot;
 
 import diceForge.*;
+import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.ChoixJoueurForge;
 import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
