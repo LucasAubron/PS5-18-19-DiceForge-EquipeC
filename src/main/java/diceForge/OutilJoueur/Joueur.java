@@ -69,7 +69,7 @@ public abstract class Joueur {
         Face unOr = new Face(new Ressource(1, Ressource.type.OR));
         Face unSoleil = new Face(new Ressource(1, Ressource.type.SOLEIL));
         Face uneLune = new Face(new Ressource(1, Ressource.type.LUNE));
-        Face deuxPdg = new Face(new Ressource(1, Ressource.type.PDG));
+        Face deuxPdg = new Face(new Ressource(2, Ressource.type.PDG));
 
 
         des = new De[]{

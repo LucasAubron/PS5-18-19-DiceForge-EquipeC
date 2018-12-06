@@ -126,25 +126,24 @@ public class Coordinateur {
     public void jouerManche(int numeroManche){
         afficheur.manche(numeroManche);
         for (Joueur joueur:plateau.getJoueurs()){
-            tour(joueur, numeroManche);
+            tour(joueur);
         }
     }
 
     /**
      * La méthode qui gére la gestion d'un tour, a appeler par manche autant de fois qu'il y a de joueur.
      * @param joueur c'est le joueur actif
-     * @param numeroManche pour plus tard, permet au bot de compter un paramètre en plus pour leur prise de décision
      */
-    private void tour(Joueur joueur, int numeroManche){
+    private void tour(Joueur joueur){
         afficheur.tour(joueur);
-        phaseLanceDe(joueur, numeroManche);
-        phaseJetonCerbere(joueur, numeroManche);
-        phaseRenforts(joueur, numeroManche);
-        phaseJetonCerbere(joueur, numeroManche);//on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
-        phaseJetonTriton(joueur, numeroManche);//le jeton triton ne peut être utilisé qu'avant une action
+        phaseLanceDe(joueur);
+        phaseJetonCerbere(joueur);
+        phaseRenforts(joueur);
+        phaseJetonCerbere(joueur);        //on redemande au joueur s'il veut utiliser son jeton cerbère car s'il a utilisé le renfort sabot d'argent il a un nouveau résultat de dé
+        phaseJetonTriton(joueur);         //le jeton triton ne peut être utilisé qu'avant une action
         if (action(joueur) && joueur.getSoleil()>= 2) { //si le joueur n'a pas passé son tour (== n'a pas effectué d'action) alors on lui propose de refaire une action
-            phaseJetonTriton(joueur, numeroManche);//idem
-            secondeAction(joueur, numeroManche);
+            phaseJetonTriton(joueur);//idem
+            secondeAction(joueur);
         }
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -154,9 +153,8 @@ public class Coordinateur {
      * Méthode qui parle d'elle même, première étape d'un tour de diceforge.
      * Si il n'y a que deux joueurs, alors les dés sont lancés deux fois.
      * @param joueur
-     * @param numeroManche
      */
-    private void phaseLanceDe(Joueur joueur, int numeroManche){
+    private void phaseLanceDe(Joueur joueur){
         afficheur.presentationLancerDes(); //toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peuvent facilement être ignorées lors de la lecture du code
         for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés, on stocke les résultats dans un attribut du joueur (chaque joueur a un tableau de Face qui représente ses dernier résultat)
             x.lancerLesDes();
@@ -179,9 +177,8 @@ public class Coordinateur {
      * S'occupe d'envoyer la liste des renforts activable au bot, plus particulièrement retire
      * les renforts ANCIEN qu'il ne peut pas activer faute d'or. Les renforts sont activés après que le joueur ait fait son choix.
      * @param joueur
-     * @param numeroManche
      */
-    private void phaseRenforts(Joueur joueur, int numeroManche){
+    private void phaseRenforts(Joueur joueur){
         //on créé une copie de liste des renforts du joueurs, on met les renforts ANCIEN au début de la liste
         afficheur.presentationRenforts(joueur);
         List renfortsUtilisables = new ArrayList();
@@ -201,7 +198,7 @@ public class Coordinateur {
         joueur.appelerRenforts(choixDuJoueur);
     }
 
-    private void phaseJetonTriton(Joueur joueur, int numeroManche) {
+    private void phaseJetonTriton(Joueur joueur) {
         for (int i = 0; i < joueur.getJetons().size() && joueur.getJetons().get(i) == TRITON; ++i) {//On parcours tout les tritons
             Joueur.choixJetonTriton choix = joueur.utiliserJetonTriton();//On stocke le choix
             if (choix != Joueur.choixJetonTriton.Rien)//Si il veut
@@ -209,7 +206,7 @@ public class Coordinateur {
         }
     }
 
-    private void phaseJetonCerbere(Joueur joueur, int numeroManche) {
+    private void phaseJetonCerbere(Joueur joueur) {
         for (int i = 0; i < joueur.getJetons().size() && joueur.getJetons().get(i) == CERBERE && joueur.utiliserJetonCerbere(); ++i)
             joueur.appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
     }
@@ -232,8 +229,8 @@ public class Coordinateur {
                     bassinsAEnlever = forger(joueur, bassinsAEnlever);//On stocke le bassin à enlever pour ne pas qu'il reforge dedans
                     compteurForge++;
                 }
-                while(bassinsAEnlever != null); // //Si le bot est suffisament "stupide" pour décider de forger sans avoir les moyens d'acheter le moindre bassin
-                afficheur.actionDebile(compteurForge, joueur, this);
+                while(bassinsAEnlever != null);
+                afficheur.actionDebile(compteurForge, joueur, this); //Si le bot est suffisament "stupide" pour décider de forger sans avoir les moyens d'acheter le moindre bassin
                 break;
             case EXPLOIT:
                 afficheur.actionExploit(joueur);
@@ -260,16 +257,18 @@ public class Coordinateur {
         if (bassinAbordable.isEmpty()) //Si le joueur n'a pas assez d'or pour acheter la moindre face, l'action s'arrête
             return null;
         ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinAbordable);//Le joueur choisi
-        if (choixDuJoueur != null) {
+        if (choixDuJoueur != null) { //Pour exprimer son envie d'arrêter de forger, le joueur renvoie null
            Bassin bassinChoisi = choixDuJoueur.getBassin();
            int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
            int idDeChoisi = choixDuJoueur.getNumDe();
            int numPosDeChoisi = choixDuJoueur.getPosFaceSurDe();
+           afficheur.forger(joueur, idDeChoisi, bassinChoisi.getFace(numFaceBassinChoisi), joueur.getDe(idDeChoisi).getFace(numPosDeChoisi), bassinChoisi);
+           joueur.ajouterOr(-bassinChoisi.getCout());
            joueur.getDe(idDeChoisi).forger(bassinChoisi.retirerFace(numFaceBassinChoisi), numPosDeChoisi);
            bassinsUtilises.add(bassinChoisi);
         }
         else {
-            return null; //Pour exprimer son envie d'arrêter de forger, le joueur renvoie null
+            return null;
         }
         return bassinsUtilises;//on retourne la liste des bassins utilisés qui grossi d'appel en appel pour restreindre les choix du joueur (uniquement durant le même tour)
     }
@@ -300,6 +299,7 @@ public class Coordinateur {
     private void exploit(Joueur joueur) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
         Carte carteChoisie = joueur.choisirCarte(cartesAbordables); //On demande au joueur la carte qu'il veut acheter
+        afficheur.achatCarte(carteChoisie, joueur);
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {
@@ -343,11 +343,11 @@ public class Coordinateur {
             }
         for (Ile ile:plateau.getIles())
             if (ile.getJoueur() != null && joueur.getIdentifiant() == joueur.getIdentifiant()) {
-                ile.retirerJoueur();//En premier, on retire le joueur de son ile
+                ile.retirerJoueur();
                 break;
             }
     }
-    private void secondeAction(Joueur joueur, int numeroManche) {
+    private void secondeAction(Joueur joueur) {
         if (joueur.choisirActionSupplementaire()) {//S'il peut, et il veut, il re-agit
             afficheur.secondeAction(joueur);
             joueur.ajouterSoleil(-2);

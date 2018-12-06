@@ -10,9 +10,8 @@ import diceForge.Structure.DiceForgeException;
 public class Ressource {
     //Attributs -------------------------------------------------------------------------------------
     private int quantite;
-    public enum type{OR, SOLEIL, LUNE, PDG, PEUIMPORTE;}//PDG == point de gloire
-    private type typeRessource;                         //Peu importe sert lors de la recherche
-                                                        //d'une face ou d'un bassin dans plateau
+    public enum type{OR, SOLEIL, LUNE, PDG}//PDG == point de gloire
+    private type typeRessource;                        //Peu importe sert lors de la recherche
     //Constructeur -----------------------------------------------------------------------------------
     public Ressource(int quantite, type typeR){//version a garder après refactor
         if (quantite < 0)

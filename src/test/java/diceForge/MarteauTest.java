@@ -1,5 +1,6 @@
 package diceForge;
 
+import diceForge.Cartes.Marteau;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -75,22 +75,17 @@ public class Face {
     @Override
     public String toString() {
         String affichage = "";
-        /*
-        for (Ressource[] ressources:ressource){
-            if (!affichage.isEmpty()) {
-                affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
-                affichage += "ou ";
-            }
-            for (Ressource x:ressources){
-                if (x != null) {
-                    affichage += x.getQuantite();
-                    affichage += x + " + ";
-                }
-            }
-        }
-        if (!affichage.isEmpty())
-            affichage = affichage.substring(0, affichage.length()-2);//On supprime " +"
-        */
-        return affichage;
+        String separateur = "";
+        if (type == typeFace.ADDITION)
+            separateur += " + ";
+        if (type == typeFace.CHOIX)
+            separateur += " ou ";
+        for (Ressource ressource: ressources)
+            affichage += ressource + separateur;
+        if (type == typeFace.ADDITION)
+            affichage = affichage.substring(0, affichage.length()-2);//On supprime "+ "
+        if (type == typeFace.CHOIX)
+            affichage = affichage.substring(0, affichage.length()-3);//On supprime "ou "
+        return affichage + " ";
     }
 }

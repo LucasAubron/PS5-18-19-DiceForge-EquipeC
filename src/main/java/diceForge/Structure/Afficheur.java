@@ -43,7 +43,7 @@ public class Afficheur {
 
     public void presentationCartesEtBassin(Plateau plateau){
         if (modeVerbeux) {
-            info += "\n\nCartes tirées et disponibles aux plateau.getJoueurs():\n";
+            info += "\n\nCartes tirées et disponibles aux joueurs():\n";
             for (Ile ile: plateau.getIles()) {
                 for (List<Carte> carte : ile.getCartes())
                     info += carte.get(0).getNom().toString() + "\t||\t";
@@ -71,7 +71,7 @@ public class Afficheur {
 
     public void manche(int numManche) {
         if (modeVerbeux)
-            info += "\n\n\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
+            info += "\n\n\n-----------------------------------------------------------------------------------------------\n\t\t\t\t\t\t\t\t\t\tMANCHE " + numManche + "\n-----------------------------------------------------------------------------------------------\n";
     }
 
     public void tour(Joueur joueur) {
@@ -294,7 +294,7 @@ public class Afficheur {
         }
         int nombreDeGagnants = idGagnant.size();
         if (nombreDeGagnants==1)
-            info += "Le joueur n°" + idGagnant.get(0) + " gagne ! Bravo à lui et à son créateur";
+            info += "Le joueur n°" + idGagnant.get(0) + " gagne !";
         else if (nombreDeGagnants == 2)
             info += "Les joueurs n°" + idGagnant.get(0) + " et n°" + idGagnant.get(1) + " se partagent la victoire";
         else if(nombreDeGagnants == 3)

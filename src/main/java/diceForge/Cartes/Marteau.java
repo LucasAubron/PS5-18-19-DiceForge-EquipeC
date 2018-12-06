@@ -34,9 +34,9 @@ public class Marteau extends Carte {
         return 0;
     }
 
-    int getNiveau(){return niveau;}
+    public int getNiveau(){return niveau;}
 
-    int getPoints(){return point;}
+    public int getPoints(){return point;}
 
     @Override
     public int getNbrPointGloire(){

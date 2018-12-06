@@ -1,6 +1,6 @@
 package diceForge;
 
-import bot.TestBot;
+//import bot.TestBot;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class CarteTest {
+    /*
     private Joueur j1 = new TestBot(1, new Afficheur(false), null);
     private Joueur j2 = new TestBot(2, new Afficheur(false), null);
 
@@ -25,5 +26,6 @@ public class CarteTest {
         j1.acheterExploit(sanglier);
         assertEquals(new FaceSanglier(j1).toString(), j2.getDes()[0].getFace(0).toString());
     }
+    */
 
 }

@@ -37,7 +37,7 @@ public class Bassin {
             throw new DiceForgeException("Bassin","Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+nbrFace);
         faces = new ArrayList<>();
         for (int i = 0; i != nbrFace; ++i)
-            faces.add(new Face(facesUnique.getRessource()));
+            faces.add(facesUnique);
     }
 
     // Méthodes --------------------------------------------------------------------------------------------------------------------

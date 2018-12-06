@@ -1,6 +1,6 @@
 package bot;
 
-import diceForge.*;
+import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
 import diceForge.Faces.Face;
@@ -20,7 +20,7 @@ public class RandomBot extends Joueur {
 
     @Override
     public Action choisirAction() {
-        switch (random.nextInt(3)) {
+        switch (random.nextInt(2)) {
             case 0:
                 return Action.EXPLOIT;
             case 1:
@@ -34,7 +34,7 @@ public class RandomBot extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){
-        return new ChoixJoueurForge(bassins.get(random.nextInt(bassins.size())), random.nextInt(4), random.nextInt(2), random.nextInt(6));
+        return new ChoixJoueurForge(bassins.get(random.nextInt(bassins.size())), random.nextInt(2), random.nextInt(2), random.nextInt(6));
     }
 
     @Override
