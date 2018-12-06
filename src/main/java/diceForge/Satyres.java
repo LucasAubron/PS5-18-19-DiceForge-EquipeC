@@ -24,15 +24,17 @@ public class Satyres extends Carte {
 
     @Override
     void effetDirect(Joueur acheteur){
-            List<Face> faces = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
+            List<Face> facesEnnemies = new ArrayList<>();//La liste qui va contenir tout les résultats des dé des autres joueurs
             for (Joueur joueur:joueurs)
                 if (joueur.getIdentifiant() != acheteur.getIdentifiant())
                     for (De de : joueur.getDes())//Pour tous les de des autres joueurs
-                        faces.add(de.lancerLeDe());//On prend le résultat d'un lancer de dé
-            int x = acheteur.choisirFacePourGagnerRessource(faces);//Ce joueur choisi une face
-            acheteur.gagnerRessourceFace(faces.get(x));//il gagne ce qu'il y a sur cette face
-            faces.remove(x);//Puis on l'enlève de la liste
-            acheteur.gagnerRessourceFace(faces.get(acheteur.choisirFacePourGagnerRessource(faces)));//Et on demande pour la deuxième face et on lui fait gagné
+                        facesEnnemies.add(de.lancerLeDe());//On prend le résultat d'un nouveau lancer de dé
+
+            acheteur.getDe(0).setFaceActive(acheteur.choisirFaceACopier(facesEnnemies)); //le joueur copie une face ennemie sur la face active de son dé
+            acheteur.gagnerRessourceFace(acheteur.getDe(0).getFaceActive(), false); //dans le but de la gagner juste après
+            facesEnnemies.remove(acheteur.getDe(0).getFaceActive());//L'acheteur ne peut choisir deux fois la même face, donc on la retire des choix
+            acheteur.getDe(1).setFaceActive(acheteur.choisirFaceACopier(facesEnnemies));
+            acheteur.gagnerRessourceFace(acheteur.getDe(1).getFaceActive(), false);
     }
 
     List<Joueur> getJoueurs() {

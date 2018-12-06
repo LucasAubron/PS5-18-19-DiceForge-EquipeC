@@ -259,7 +259,7 @@ public class Coordinateur {
            int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
            int idDeChoisi = choixDuJoueur.getNumDe();
            int numPosDeChoisi = choixDuJoueur.getPosFaceSurDe();
-           joueur.getDe(idDeChoisi).forger(bassinChoisi.getFace(numFaceBassinChoisi), numPosDeChoisi);
+           joueur.getDe(idDeChoisi).forger(bassinChoisi.retirerFace(numFaceBassinChoisi), numPosDeChoisi);
            bassinsUtilises.add(bassinChoisi);
         }
         else {

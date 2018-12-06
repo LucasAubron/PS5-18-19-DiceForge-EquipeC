@@ -195,7 +195,7 @@ public abstract class Joueur {
      * considérées comme des faces simples !
      * @param face
      */
-    void gagnerRessourceFace(Face face) {
+    void gagnerRessourceFace(Face face, boolean minautore) {
         List<Ressource> ressourcesAGagner = new ArrayList<>(); //On s'arme d'une liste, car dans le cas d'une face
                                                                //addition on aura plusieurs types de ressource à faire gagner
 
@@ -233,26 +233,37 @@ public abstract class Joueur {
                 case OR: {
                     if (jetOrOuPdg && choisirRessourceOuPdg(ressource)) //Dans le cas du cyclope
                         ajouterPointDeGloire(ressource.getQuantite());  //1 or peut valoir 1pdg,
-                    else                                                //selon la décision du joueur
+                    else {                                                //selon la décision du joueur
                         ajouterOr(ressource.getQuantite());
+                        if (minautore == true)
+                            ajouterOr(-2*ressource.getQuantite());
+                    }
                     break;
                 }
                 case LUNE: {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource)) //idem, pour le cas de la sentinelle
                         ajouterPointDeGloire(ressource.getQuantite()*2);//sauf qu'ici une lune peut valoir 2 pdg !
-                    else
+                    else {
                         ajouterLune(ressource.getQuantite());
+                        if (minautore == true)
+                            ajouterLune(-2*ressource.getQuantite());
+                    }
                     break;
                 }
                 case SOLEIL: {
                     if (jetRessourceOuPdg && choisirRessourceOuPdg(ressource)) //jamais deux sans trois
                         ajouterPointDeGloire(ressource.getQuantite()*2); //idem que la lune et la sentinelle
-                    else
+                    else {
                         ajouterSoleil(ressource.getQuantite());
+                        if (minautore == true)
+                            ajouterSoleil(-2*ressource.getQuantite());
+                    }
                     break;
                 }
                 case PDG: {
                     ajouterPointDeGloire(ressource.getQuantite());
+                    if (minautore == true)
+                        ajouterSoleil(-2*ressource.getQuantite());
                     break;
                 }
             }
@@ -273,7 +284,7 @@ public abstract class Joueur {
         //Si faceAyantBesoinDeLautreDe = true, alors on a déjà traité le résultat des dés
         if (!faceAyantBesoinDeLautreDe)      // Si on a des résultats simples à traiter
             for (De de : des)                 // --> face simple, a choix, ou addition
-                gagnerRessourceFace(de.getFaceActive());
+                gagnerRessourceFace(de.getFaceActive(), false);
     }
 
     /**
@@ -319,14 +330,14 @@ public abstract class Joueur {
         retirerJeton(Jeton.CERBERE);
         switch (getDernierLanceDes()){
                 case 0:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
+                    gagnerRessourceFace(getDesFaceCourante()[0], false);
                     break;
                 case 1:
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    gagnerRessourceFace(getDesFaceCourante()[1], false);
                     break;
                 case 2:
-                    gagnerRessourceFace(getDesFaceCourante()[0]);
-                    gagnerRessourceFace(getDesFaceCourante()[1]);
+                    gagnerRessourceFace(getDesFaceCourante()[0], false);
+                    gagnerRessourceFace(getDesFaceCourante()[1], false);
                     break;
             }
     }
@@ -433,7 +444,7 @@ public abstract class Joueur {
                     choixDe = choisirDeFaveurMineure();
                     Face face = des[choixDe].lancerLeDe();
                     setDernierLanceDes(choixDe); //pour le jeton cerbère
-                    gagnerRessourceFace(face);
+                    gagnerRessourceFace(face, false);
                     for (int j = 0; j < getJetons().size() && getJetons().get(j) == Joueur.Jeton.CERBERE && utiliserJetonCerbere(); ++j)
                         appliquerJetonCerbere();//On applique tout les jetons qui sont des cerberes et qu'il veut utiliser
                     afficheur.biche(choixDe, face, this);
@@ -445,7 +456,7 @@ public abstract class Joueur {
                            new Ressource(1, Ressource.type.OR)
                     };
                     choixRessource = choisirRessourceFaceAchoix(proposition);
-                    gagnerRessourceFace(new Face(choixRessource));
+                    gagnerRessourceFace(new Face(choixRessource), false);
                     afficheur.hibou(this, choixRessource);
                     break;
             }
@@ -573,7 +584,10 @@ public abstract class Joueur {
 
     /**
      * Lorsqu'on tombe sur une face miroir, le joueur reçoit toutes les faces actives de
-     * ses adversaires, il return la face qu'il veut copier
+     * ses adversaires, il return la face qu'il veut copier.
+     * Même fonctionnement pour Satyre (en fait Satyre revient à faire lancer les dés de
+     * ses adversaires et ne pas leur faire gagner de ressource, puis lancer ses deux dés et tomber
+     * à coup sur sur deux faces miroir !)
      * @param faces
      * @return
      */

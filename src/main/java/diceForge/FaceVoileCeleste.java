@@ -22,10 +22,14 @@ class FaceVoileCeleste extends Face {
             if (bassin.getCout() - 2*multiplierX3 <= joueur.getOr() && !bassin.getFaces().isEmpty())
                 bassinsAbordables.add(bassin);
         if (!bassinsAbordables.isEmpty()) {
-            ChoixJoueurForge choixJoueurForge = joueur.choisirFaceAForgerEtARemplacer(bassinsAbordables, 5);//numManche au pif, parce qu'on ne le connais pas
-            if (choixJoueurForge.getBassin() != null) {
-                joueur.forgerDe(choixJoueurForge.getNumDe(), choixJoueurForge.getBassin().retirerFace(choixJoueurForge.getNumFace()), choixJoueurForge.getPosFace()); //on forge un dé (= enlever une face d'un dé et la remplacer), et on retire la face du bassin
-                joueur.ajouterOr(-choixJoueurForge.getBassin().getCout()+2*multiplierX3);//On oublie pas de faire payer le joueur
+            ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinsAbordables);
+            if (choixDuJoueur.getBassin() != null) {
+                Bassin bassinChoisi = choixDuJoueur.getBassin();
+                int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
+                int idDeChoisi = choixDuJoueur.getNumDe();
+                int numPosDeChoisi = choixDuJoueur.getPosFaceSurDe();
+                joueur.getDe(idDeChoisi).forger(bassinChoisi.retirerFace(numFaceBassinChoisi), numPosDeChoisi);
+                joueur.ajouterOr(-choixDuJoueur.getBassin().getCout()+2*multiplierX3);//On oublie pas de faire payer le joueur
             }
         }
         multiplierX3 = 1;
