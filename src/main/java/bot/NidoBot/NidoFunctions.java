@@ -1,6 +1,5 @@
 package bot.NidoBot;
 
-import diceForge.*;
 import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Ile;

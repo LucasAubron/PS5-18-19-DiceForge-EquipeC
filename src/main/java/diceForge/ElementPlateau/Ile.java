@@ -2,6 +2,7 @@ package diceForge.ElementPlateau;
 
 import diceForge.Cartes.Carte;
 import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Afficheur;
 import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
@@ -15,8 +16,10 @@ import java.util.List;
 public class Ile {
     private List<List<Carte>> cartes;
     private Joueur joueur = null;
+    private Afficheur afficheur;
 
-    public Ile(Carte[][] cartes){
+    public Ile(Carte[][] cartes, Afficheur afficheur){
+        this.afficheur = afficheur;
         if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale
             throw new DiceForgeException("Ile","Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
         for (int i = 0; i != cartes.length; ++i)
@@ -32,7 +35,8 @@ public class Ile {
     /**
      * Constructeur à utiliser dans le cas principal ou il y a 2 paquets de nbrCarteParPaquet chaqu'un
      */
-    public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet){
+    public Ile(Carte carte1, Carte carte2, int nbrCarteParPaquet, Afficheur afficheur){
+        this.afficheur = afficheur;
         if (nbrCarteParPaquet < 2 || nbrCarteParPaquet > 4)
             throw new DiceForgeException("Ile","Le nombre de carte dans un paquet est invalide. Min 2, max 4, actuel : "+nbrCarteParPaquet);
         cartes = new ArrayList<>();
@@ -66,8 +70,10 @@ public class Ile {
         Joueur x = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
             if (!paquet.isEmpty() && paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
+//                afficheur.NidoBotAfficheur("Avant ajout\t\t\tile qui contient carte " + carte.getNom() + " héberge joueur " + this.joueur);
                 if (this.joueur == null || this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
                     x = ajouterJoueur(joueur);
+//                afficheur.NidoBotAfficheur("Avant ajout\t\t\tile qui contient carte " + carte.getNom() + " héberge joueur " + this.joueur);
                 joueur.acheterExploit(paquet.remove(paquet.size()-1));//Le joueur l'achete
                 return x;
             }
