@@ -1,19 +1,30 @@
 package bot.NidoBot;
 
 import diceForge.*;
+import diceForge.Cartes.Carte;
+import diceForge.ElementPlateau.Bassin;
+import diceForge.ElementPlateau.Plateau;
+import diceForge.Faces.Face;
+import diceForge.OutilJoueur.De;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static diceForge.OutilJoueur.Ressource.type.LUNE;
+import static diceForge.OutilJoueur.Ressource.type.SOLEIL;
 
 public class NidoFunctions {
     public static Stats getNbFaces(int numDe, De[] jeuDes, Ressource uneRess){
         Stats count = new Stats();
         for (Face face : jeuDes[numDe].getFaces())
-            if (face.getRessource().length == 1 && face.getRessource()[0][0] instanceof Soleil &&
-                    uneRess.getClass().getName().equals("diceForge.Soleil"))
+            if (face.getTypeFace() == Face.typeFace.SIMPLE && face.getRessource().getType() == SOLEIL &&
+                    uneRess.getType() == SOLEIL)
                 count.incrementNbSoleils();
-            else if(face.getRessource().length == 1 && face.getRessource()[0][0] instanceof Lune &&
-                    uneRess.getClass().getName().equals("diceForge.Lune"))
+            else if(face.getTypeFace() == Face.typeFace.SIMPLE && face.getRessource().getType() == Ressource.type.LUNE &&
+                    uneRess.getType() == Ressource.type.LUNE)
                 count.incrementNbLunes();
         return count;
     }
@@ -23,23 +34,23 @@ public class NidoFunctions {
         int res = -1;
         Face[] faces = jeuDes[numDe].getFaces();
         for (int i = 0; i < faces.length; i++)
-            if (faces[i].getRessource().length == 1)
-                if (faces[i].getRessource()[0][0] instanceof Or
-                        && uneRess.getClass().getName().equals("diceForge.Or")
-                        && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
+            if (faces[i].getTypeFace() == Face.typeFace.SIMPLE)
+                if (faces[i].getRessource().getType() == Ressource.type.OR
+                        && uneRess.getType() == Ressource.type.OR
+                        && faces[i].getRessource().getQuantite() < min) {
+                    min = faces[i].getRessource().getQuantite();
                     res = i;
                 }
-                else if (faces[i].getRessource()[0][0] instanceof Lune
-                        && uneRess.getClass().getName().equals("diceForge.Lune")
-                        && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
+                else if (faces[i].getRessource().getType() == Ressource.type.LUNE
+                        && uneRess.getType() == Ressource.type.LUNE
+                        && faces[i].getRessource().getQuantite() < min) {
+                    min = faces[i].getRessource().getQuantite();
                     res = i;
                 }
-                else if (faces[i].getRessource()[0][0] instanceof Soleil
-                        && uneRess.getClass().getName().equals("diceForge.Soleil")
-                        && faces[i].getRessource()[0][0].getQuantite() < min) {
-                    min = faces[i].getRessource()[0][0].getQuantite();
+                else if (faces[i].getRessource().getType() == SOLEIL
+                        && uneRess.getType() == SOLEIL
+                        && faces[i].getRessource().getQuantite() < min) {
+                    min = faces[i].getRessource().getQuantite();
                     res = i;
                 }
         return res;
@@ -55,8 +66,8 @@ public class NidoFunctions {
         int i = 0;
         while (!have && i < sanctuaire.length){
             if (!sanctuaire[i].getFaces().isEmpty() && (
-                    sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Soleil ||
-                            sanctuaire[i].getFaces().get(0).getRessource()[0][0] instanceof Lune
+                    sanctuaire[i].getFace(0).getRessource().getType() == SOLEIL ||
+                            sanctuaire[i].getFace(0).getRessource().getType() == LUNE
             ))
                 have = true;
             i++;

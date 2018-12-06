@@ -1,6 +1,7 @@
 package bot.NidoBot;
 
 import diceForge.*;
+import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.Structure.Afficheur;
