@@ -4,7 +4,7 @@ import diceForge.OutilJoueur.Ressource;
 
 public class FaceBouclier extends Face {
     Ressource ressource;
-    FaceBouclier(Ressource ressource){
+    public FaceBouclier(Ressource ressource){
         super(typeFace.BOUCLIER);
         this.ressource = ressource;
     }

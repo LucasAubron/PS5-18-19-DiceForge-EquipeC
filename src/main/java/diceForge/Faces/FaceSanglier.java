@@ -5,7 +5,7 @@ import diceForge.OutilJoueur.Ressource;
 
 public class FaceSanglier extends Face {
     private Joueur joueurMaitre;
-    FaceSanglier(Joueur joueurMaitre){
+    public FaceSanglier(Joueur joueurMaitre){
         super(typeFace.SANGLIER);
         this.joueurMaitre = joueurMaitre;
     }
