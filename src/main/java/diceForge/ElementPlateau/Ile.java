@@ -17,7 +17,7 @@ public class Ile {
     private Joueur joueur = null;
 
     public Ile(Carte[][] cartes){
-        if (cartes.length < 1 || cartes.length > 3)//A changé < 1 en < 2 après la version minimale
+        if (cartes.length < 1 || cartes.length > 3)
             throw new DiceForgeException("Ile","Le nombre de paquet de carte est invalide. Min 1, max 3, actuel : "+cartes.length);
         for (int i = 0; i != cartes.length; ++i)
             if (cartes[i].length < 2 || cartes[i].length > 4)
@@ -52,7 +52,6 @@ public class Ile {
     public Joueur retirerJoueur(){
         Joueur joueurExpulse = this.joueur;
         this.joueur=null;
-
         return joueurExpulse;
     }
 
@@ -94,7 +93,7 @@ public class Ile {
         return x;
     }
 
-    public Joueur getJoueur() {return joueur;}
+    public Joueur getJoueur() {return this.joueur;}
 
     /**
      * Ne PAS utiliser pour retirer une carte !!!!

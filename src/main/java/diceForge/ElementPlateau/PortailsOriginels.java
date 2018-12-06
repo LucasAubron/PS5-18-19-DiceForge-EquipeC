@@ -1,10 +1,5 @@
 package diceForge.ElementPlateau;
 
-/*
-import bot.AubotV2.src.AubotV2;
-import bot.NidoBot.NidoBot;
-import bot.NidoBot.NidoBotV2;
-*/
 import bot.NidoBot.NidoBot;
 import bot.ResteDesBot.EasyBot;
 import bot.ResteDesBot.RandomBot;

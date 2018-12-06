@@ -147,7 +147,8 @@ public class Coordinateur {
         }
     }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// Ici sont écrites les méthodes utilisées pour les étape d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes private uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise).
+// Ici sont écrites les méthodes utilisées pour les étapes d'un tour, dans l'ordre d'éxecution (certaines méthodes utilisent d'autres méthodes
+// uniquement dédiées a la méthode en question, dans ce cas les "sous méthodes" sont situés juste en dessous de celle qui les utilise).
 
     /**
      * Méthode qui parle d'elle même, première étape d'un tour de diceforge.
@@ -299,7 +300,6 @@ public class Coordinateur {
     private void exploit(Joueur joueur) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
         Carte carteChoisie = joueur.choisirCarte(cartesAbordables); //On demande au joueur la carte qu'il veut acheter
-        afficheur.achatCarte(carteChoisie, joueur);
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
         for (Ile ile : plateau.getIles()) {

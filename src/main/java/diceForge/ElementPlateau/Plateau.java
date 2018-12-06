@@ -86,21 +86,25 @@ public class Plateau {
      * sur une ile ou sur le portail originel (il n'y a que ces deux choix)
      */
     public List<Joueur> getJoueurs() {
+        System.out.println("-----------------------------------------------");
         List<Joueur> tempJoueur = new ArrayList<>();
         //On ajoute tous les joueurs des portails originels
-//        afficheur.("portail.getJoueur is empty -> " + portail.getJoueurs().isEmpty());
         tempJoueur.addAll(portail.getJoueurs());
-        for (Ile x:iles)//On ajoute tous les joueurs qui sont dans les iles
-            if (x.getJoueur() != null)//On fait attention parce qu'une ile ne contient pas forcement un joueur
-                tempJoueur.add(x.getJoueur());
+        System.out.println("JOUEUR DANS LE PORTAIL LOL !!!!!!! : "+portail.getJoueurs());
+        for (Ile ile:iles)//On ajoute tous les joueurs qui sont dans les iles
+            if (ile.getJoueur() != null) {//On fait attention parce qu'une ile ne contient pas forcement un joueur
+                tempJoueur.add(ile.getJoueur());
+                System.out.println(ile + " JOUEURDELILE LOLLL !!!! : " + ile.getJoueur());
+            }
+        System.out.println("joueur avant tri" + tempJoueur);
         List<Joueur> joueurs = new ArrayList<>();//Pour la liste triée
-        for (int i = 1; i != tempJoueur.size()+1; ++i){
-            for (Joueur j:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
-                if (j.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
-                    joueurs.add(j);
+        for (int i = 1; i != tempJoueur.size()+1; i++)
+            for (Joueur joueur:tempJoueur)//On tri la liste des joueurs en fonction de leur identifiant, pour que l'ordre des joueurs reste le même
+                if (joueur.getIdentifiant() == i) {//Si on trouve l'indice correspondant, on le met dans la liste
+                    joueurs.add(joueur);
                     break;
                 }
-        }
+        System.out.println("joueur après tri" + joueurs);
         return joueurs;
     }
 
@@ -113,7 +117,7 @@ public class Plateau {
     }
 
     //Méthodes utiles aux bots, pour récupérer de façon simple des éléments sur le plateau -------------------------------
-    public List getCartesPresentes(){
+    public List<Carte> getCartesPresentes(){
         List res = new ArrayList();
         for (Ile ile: iles)
             for (List<Carte> cartes: ile.getCartes())
