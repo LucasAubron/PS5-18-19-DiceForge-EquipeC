@@ -13,6 +13,7 @@ import diceForge.Structure.DiceForgeException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static diceForge.Faces.Face.typeFace.SIMPLE;
 import static diceForge.OutilJoueur.Ressource.type.LUNE;
 import static diceForge.OutilJoueur.Ressource.type.SOLEIL;
 
@@ -20,10 +21,10 @@ public class NidoFunctions {
     public static Stats getNbFaces(int numDe, De[] jeuDes, Ressource uneRess){
         Stats count = new Stats();
         for (Face face : jeuDes[numDe].getFaces())
-            if (face.getTypeFace() == Face.typeFace.SIMPLE && face.getRessource().getType() == SOLEIL &&
+            if (face.getTypeFace() == SIMPLE && face.getRessource().getType() == SOLEIL &&
                     uneRess.getType() == SOLEIL)
                 count.incrementNbSoleils();
-            else if(face.getTypeFace() == Face.typeFace.SIMPLE && face.getRessource().getType() == Ressource.type.LUNE &&
+            else if(face.getTypeFace() == SIMPLE && face.getRessource().getType() == Ressource.type.LUNE &&
                     uneRess.getType() == Ressource.type.LUNE)
                 count.incrementNbLunes();
         return count;
@@ -34,7 +35,7 @@ public class NidoFunctions {
         int res = -1;
         Face[] faces = jeuDes[numDe].getFaces();
         for (int i = 0; i < faces.length; i++)
-            if (faces[i].getTypeFace() == Face.typeFace.SIMPLE)
+            if (faces[i].getTypeFace() == SIMPLE)
                 if (faces[i].getRessource().getType() == Ressource.type.OR
                         && uneRess.getType() == Ressource.type.OR
                         && faces[i].getRessource().getQuantite() < min) {
@@ -65,7 +66,7 @@ public class NidoFunctions {
         boolean have = false;
         int i = 0;
         while (!have && i < sanctuaire.length){
-            if (!sanctuaire[i].getFaces().isEmpty() && (
+            if (!sanctuaire[i].getFaces().isEmpty() && sanctuaire[i].getFace(0).getTypeFace() == SIMPLE && (
                     sanctuaire[i].getFace(0).getRessource().getType() == SOLEIL ||
                             sanctuaire[i].getFace(0).getRessource().getType() == LUNE
             ))
@@ -81,11 +82,11 @@ public class NidoFunctions {
 //            System.out.println("i == " + i);
 //            System.out.println(unDe.getFace(i).toString());
             if (uneRess.getType() == LUNE &&
-                     unDe.getFace(i).getTypeFace() ==Face.typeFace.SIMPLE &&
+                     unDe.getFace(i).getTypeFace() == SIMPLE &&
                     unDe.getFace(i).getRessource().getType() == LUNE)
                 have = true;
             else if (uneRess.getType() == SOLEIL &&
-                    unDe.getFace(i).getTypeFace() ==Face.typeFace.SIMPLE &&
+                    unDe.getFace(i).getTypeFace() == SIMPLE &&
                     unDe.getFace(i).getRessource().getType() == SOLEIL)
                 have = true;
             i++;

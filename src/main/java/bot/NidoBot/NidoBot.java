@@ -57,7 +57,9 @@ public class NidoBot extends Joueur {
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){
         for (Bassin bassin:bassins){
-            if (this.numeroManche < 2 && bassin.getFace(0).getRessource().getType() == Ressource.type.OR){//Les 2 premières manches //forger de l'or au maximum.
+            if (this.numeroManche < 2 && !bassin.getFaces().isEmpty()
+                    && bassin.getFace(0).getTypeFace() == Face.typeFace.SIMPLE
+                    && bassin.getFace(0).getRessource().getType() == Ressource.type.OR){//Les 2 premières manches //forger de l'or au maximum.
                 int[] posFace = getPosFace1Or();
                 if (posFace[0] != -1)   //si on a bien trouvé une face 1Or sur les dés du joueur
                     return new ChoixJoueurForge(bassin, 0, posFace[0], posFace[1]);
@@ -226,20 +228,28 @@ public class NidoBot extends Joueur {
     public Face choisirFaceACopier(List<Face> faces) {
         int posMaxSoleil = -1, posMaxLune = -1, posMaxOr = -1;
         int maxSoleil = 0, maxLune = 0, maxOr = 0;
+        Ressource ressource;
         for (int i = 0; i != faces.size(); ++i) {
-            for (Ressource ressource : faces.get(i).getRessources()) {
-                if (ressource.getType() == Ressource.type.SOLEIL && ressource.getQuantite() > maxSoleil) {
+//            for (Ressource ressource : faces.get(i).getRessources()) {
+                ressource = faces.get(i).getRessource();
+                if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                        && ressource.getType() == Ressource.type.SOLEIL
+                        && ressource.getQuantite() > maxSoleil) {
                     posMaxSoleil = i;
                     maxSoleil = ressource.getQuantite();
-                } else if (ressource.getType() == Ressource.type.LUNE && ressource.getQuantite() > maxLune) {
+                } else if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                        && ressource.getType() == Ressource.type.LUNE
+                        && ressource.getQuantite() > maxLune) {
                     posMaxLune = i;
                     maxLune = ressource.getQuantite();
-                } else if (ressource.getType() == Ressource.type.OR && ressource.getQuantite() > maxOr) {
+                } else if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                        && ressource.getType() == Ressource.type.OR
+                        && ressource.getQuantite() > maxOr) {
                     posMaxOr = i;
                     maxOr = ressource.getQuantite();
                 }
 
-            }
+//            }
         }
         if (posMaxSoleil != -1) return faces.get(posMaxSoleil);
         if (posMaxLune != -1) return faces.get(posMaxLune);
