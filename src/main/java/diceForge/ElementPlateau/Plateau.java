@@ -80,9 +80,6 @@ public class Plateau {
                 new Ile(ileFond, afficheur)};
     }
 
-    public Plateau() {
-    }
-
     //Méthodes ------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**
      * @return la liste des joueurs présents sur le plateau, c'est-à dire ceux présents
@@ -110,25 +107,6 @@ public class Plateau {
 
     public Temple getTemple() {
         return temple;
-    }
-
-    //Méthodes utiles aux bots, pour récupérer de façon simple des éléments sur le plateau -------------------------------
-    public List<Carte> getCartesPresentes(){
-        List res = new ArrayList();
-        for (Ile ile: iles)
-            for (List<Carte> cartes: ile.getCartes())
-                for (Carte carte: cartes)
-                    res.add(carte);
-        return res;
-    }
-
-    public Carte getUneCarteSiPresente(Carte.Noms nom){
-        for (Ile ile: iles)
-            for (List<Carte> cartes: ile.getCartes())
-                for (Carte carte: cartes)
-                    if (carte.getNom() == nom)
-                        return carte;
-        return null; //Si la carte n'est pas là (en rupture de stock ou simplement pas présente depuis le début car on joue avec les deux set en même temps)
     }
 
     public Bassin getBassinSpecifique(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
@@ -162,11 +140,4 @@ public class Plateau {
         }
     }
 
-    public int getPosFaceSpecifiqueDansBassin(Bassin bassinDansLequelChercher, Face.typeFace typeFace, Ressource.type typeRessource, int quantite){
-        for (int i = 0; i < bassinDansLequelChercher.getFaces().size(); i++)
-            for (Ressource ressource: bassinDansLequelChercher.getFace(i).getRessources())
-                if (ressource.getType() == typeRessource && ressource.getQuantite() == quantite)
-                    return i;
-        return -1; //indique une erreur
-    }
 }

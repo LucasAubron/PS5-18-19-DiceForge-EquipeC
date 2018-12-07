@@ -1,6 +1,7 @@
 package diceForge.ElementPlateau;
 
 import diceForge.Faces.Face;
+import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
@@ -9,27 +10,30 @@ import java.util.List;
 public class Bassin {
 
     //Attributs ----------------------------------------------------------------------------------------------------------------------
+    public enum typeBassin{Cout2FaceOr, Cout2FaceLune, Cout3FaceOr, Cout3FaceSoleil, Cout4, Cout5, Cout6, Cout8FaceSoleil, Cout8FacePdg, Cout12, Bouclier};
     private int cout;
     private List<Face> faces;
+    private typeBassin type;
 
     //Constructeurs -------------------------------------------------------------------------------------------------------------------
     /**
      * Constructeur dans le cas ou il y a des faces différentes dans le même bassin
      * et qu'il est plus simple de transmettre une liste
      */
-    public Bassin(int cout, List<Face> faces) {
+    public Bassin(int cout, List<Face> faces, typeBassin type) {
         if (cout < 0 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;
         if (faces.size() < 2 || faces.size() > 4)
             throw new DiceForgeException("Bassin","Nombre de faces dans un bassin invalide. Min 2, max 4, actuel : "+faces.size());
         this.faces = faces;
+        this.type = type;
     }
 
     /**
      * Constructeur qui sert lorsque le bassin ne comporte que la même faces
      */
-    public Bassin(int cout, Face facesUnique, int nbrFace){
+    public Bassin(int cout, Face facesUnique, int nbrFace, typeBassin type){
         if (cout < 0 || cout > 12)
             throw new DiceForgeException("Bassin","Le cout du bassin n'est pas bon. Min 0, max 12, actuel : "+cout);
         this.cout = cout;
@@ -38,6 +42,7 @@ public class Bassin {
         faces = new ArrayList<>();
         for (int i = 0; i != nbrFace; ++i)
             faces.add(facesUnique);
+        this.type = type;
     }
 
     // Méthodes --------------------------------------------------------------------------------------------------------------------
@@ -47,7 +52,8 @@ public class Bassin {
 
    /**
      * A utiliser pour savoir les faces présentes, PAS pour en prendre une
-     * @return la liste des faces. Aucune, certaines ou toutes peuvent être nulles
+     * @return la liste des faces.
+    * Aucune, certaines ou toutes peuvent être nulles
      */
     public List<Face> getFaces() {
         return faces;
@@ -57,21 +63,25 @@ public class Bassin {
         return faces.get(num);
     }
 
-    public Face getUneFace(){ return faces.get(0); }
+    /**
+     * Pour les bassins qui contiennent des faces différentes
+     * Utile pour les bots lorsqu'ils cherchent une face bien spécifique
+     * @return la position de la face recherchée dans le bassin
+     */
+    public int getPosFaceSpecifiqueDansBassin(Face faceATrouver){
+        for (int i=0; i<faces.size(); i++)
+            if (faces.get(i).getTypeFace() == faceATrouver.getTypeFace())
+                if (faces.get(i).getRessources() == faceATrouver.getRessources())
+                    return i;
+        return -1; //Si on n'a pas trouvé la face :(
+    }
+
     /**
      * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
      * Il ne faut pas utiliser la méthode getFace() pour cela !
      */
     public Face retirerFace(int numFace){
         return faces.remove(numFace);
-    }
-
-    public boolean equals(Bassin bassin){
-        if (faces.isEmpty() && bassin.getFaces().isEmpty() && cout == bassin.getCout())
-            return true;
-        if (cout == bassin.getCout() && faces.size() == bassin.getFaces().size() && faces.get(0).toString().equals(bassin.getFaces().get(0).toString()))
-            return true;
-        return false;
     }
 
     @Override
