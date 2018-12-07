@@ -16,7 +16,7 @@ public class FaceVoileCeleste extends Face {
         this.temple = temple;
     }
 
-    void multiplierX3Actif(){
+    public void multiplierX3Actif(){
         multiplierX3 = 3;
     }
 

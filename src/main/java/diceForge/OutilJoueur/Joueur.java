@@ -5,7 +5,9 @@ import diceForge.Cartes.Marteau;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
 import diceForge.Faces.Face;
+import diceForge.Faces.FaceBouclier;
 import diceForge.Faces.FaceMiroirAbyssal;
+import diceForge.Faces.FaceVoileCeleste;
 import diceForge.Structure.Afficheur;
 import diceForge.Structure.DiceForgeException;
 import java.util.ArrayList;
@@ -114,8 +116,6 @@ public abstract class Joueur {
 
     public int getMaxSoleil(){return maxSoleil;} //idem (juste pour l'affichage)
 
-    public int getDernierLanceDes(){return dernierLanceDes;}
-
     public void ajouterSoleil(int quantite) {
         soleil = (soleil + quantite > maxSoleil) ? maxSoleil : soleil + quantite;
         if (soleil < 0) soleil = 0;
@@ -144,6 +144,8 @@ public abstract class Joueur {
 
     //----------- Reste des getter et setter --------------
 
+    public int getDernierLanceDes(){return dernierLanceDes;} //Pour le jeton cerbère, pour savoir quel(s) dé(s)
+                                                             //On été lancé(s) en dernier
     public int getIdentifiant() {return identifiant;}
 
     public De[] getDes() {return des;}
@@ -305,6 +307,7 @@ public abstract class Joueur {
      * Lors d'un lancer des deux dés, il existe des combinaisons de faces spéciales qui induisent des exceptions
      * qui méritent d'être traitée individuellement, de plus(et surtout !) certaines faces ont un résultat qui
      * dépendent du résultat du second dé (coucou X3, coucou bouclier)
+     * Méthode longue car on veut s'assurer que chaque cas est traité correctement.
      */
     void gainAvecFacesDependantes(){
         //on check en premier les faces miroirs, les plus simples à traiter car elles peuvent
@@ -313,13 +316,105 @@ public abstract class Joueur {
             if (de.getFaceActive().getTypeFace() == Face.typeFace.MIROIR) {
                 FaceMiroirAbyssal pourAvoirAccesALaMethode = new FaceMiroirAbyssal(this, plateau.getJoueurs()); // c'est laid mais pas trouvé mieux :-|
                 de.setFaceActive(pourAvoirAccesALaMethode.copierFaceSelonChoixDuJoueur(this));//on change la face active par la face choisir par le joueur
-                gagnerRessourceDesDeuxDes();   // On rappelle la méthode sauf que cette fois on a changé la face active
-                break;                          // du dé par la face choisie et copiée, ça c'est joli par contre
+                gagnerRessourceDesDeuxDes();   // On rappelle la méthode sauf que cette fois on a changé la face active grâce à la face miroir
+                break;                          // du dé par la face choisie et copiée
             }
-        // Et maintenant tous les cas compliqué un par un (: !! youpi.
-        for (int i = 0; i<des.length; i++){
 
+        // Et maintenant tous les cas compliqué un par un (: !! youpi.
+        int compteVoile = 0; int compteX3 = 0; int compteBouclier = 0; int compteFaceSimple = 0; int compteFaceAChoix = 0; int compteFaceAddition  = 0;
+        Ressource ressourceBouclier1 = null;
+        Ressource ressourceBouclier2 = null;
+        Ressource[] ressourceFaceSansEffet = new Ressource[]{};
+        for (De de: des){
+            if (de.getFaceActive().estFaceAChoix()) {
+                ressourceFaceSansEffet = de.getFaceActive().getRessources();
+                compteFaceAChoix++;
+            }
+            if (de.getFaceActive().getTypeFace() == Face.typeFace.SIMPLE ) {
+                ressourceFaceSansEffet = de.getFaceActive().getRessources();
+                compteFaceSimple++;
+            }
+            if (de.getFaceActive().getTypeFace() == Face.typeFace.ADDITION){
+                ressourceFaceSansEffet = de.getFaceActive().getRessources();
+                compteFaceAddition++;
+            }
+            if (de.getFaceActive().getTypeFace() == Face.typeFace.VOILECELESTE)
+                compteVoile++;
+            if (de.getFaceActive().getTypeFace() == Face.typeFace.X3)
+                compteX3++;
+            if (de.getFaceActive().getTypeFace() == Face.typeFace.BOUCLIER) {
+                compteBouclier++;
+                if (ressourceBouclier1 == null)
+                    ressourceBouclier1 = de.getFaceActive().getRessource();
+                else
+                    ressourceBouclier2 = de.getFaceActive().getRessource();
+            }
         }
+        if (compteX3 == 2){
+            //rien, pas de chance !
+        }
+        else if (compteX3 == 1 && compteBouclier == 1){
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+        }
+        else if (compteX3 == 1 && compteFaceSimple == 1){
+            gagnerRessourceFace(new Face(ressourceFaceSansEffet[0]), false);
+            gagnerRessourceFace(new Face(ressourceFaceSansEffet[0]), false);
+            gagnerRessourceFace(new Face(ressourceFaceSansEffet[0]), false);
+        }
+        else if (compteX3 == 1 && compteFaceAddition == 1){
+            gagnerRessourceFace(new Face(Face.typeFace.ADDITION,ressourceFaceSansEffet), false);
+            gagnerRessourceFace(new Face(Face.typeFace.ADDITION,ressourceFaceSansEffet), false);
+            gagnerRessourceFace(new Face(Face.typeFace.ADDITION,ressourceFaceSansEffet), false);
+        }
+        else if (compteX3 == 1 && compteFaceAChoix == 1){
+            gagnerRessourceFace(new Face(choisirRessourceFaceAchoix(ressourceFaceSansEffet)), false);
+            gagnerRessourceFace(new Face(choisirRessourceFaceAchoix(ressourceFaceSansEffet)), false);
+            gagnerRessourceFace(new Face(choisirRessourceFaceAchoix(ressourceFaceSansEffet)), false);
+        }
+        else if (compteX3 == 1 && compteVoile == 1){
+            FaceVoileCeleste faceTemp = new FaceVoileCeleste(plateau.getTemple());
+            faceTemp.multiplierX3Actif();
+            gagnerRessourceFace(faceTemp, false);
+        }
+        else if (compteBouclier == 2) {
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier2), false);
+        }
+        else if (compteBouclier == 1 && compteFaceSimple == 1) {
+            gagnerRessourceFace(new Face(ressourceFaceSansEffet[0]), false);
+            if (ressourceFaceSansEffet[0].getType() == ressourceBouclier1.getType())
+                gagnerRessourceFace(new Face(new Ressource(5, Ressource.type.PDG)), false);
+            else
+                gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+        }
+        else if (compteBouclier == 1 && compteFaceAddition == 1) {
+            boolean bouclierUtilise = false;
+            gagnerRessourceFace(new Face(Face.typeFace.ADDITION, ressourceFaceSansEffet), false);
+            for (Ressource ressource: ressourceFaceSansEffet)
+                if (ressource.getType() == ressourceBouclier1.getType()){
+                    gagnerRessourceFace(new Face(new Ressource(5, Ressource.type.PDG)),false);
+                    bouclierUtilise = true;
+                    break;
+                }
+            if (!bouclierUtilise)
+                gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+        }
+        else if (compteBouclier == 1 && compteFaceAChoix == 1) {
+            Ressource ressourceChoisie = choisirRessourceFaceAchoix(ressourceFaceSansEffet);
+            gagnerRessourceFace(new Face(ressourceChoisie), false);
+            if (ressourceChoisie.getType() == ressourceBouclier1.getType())
+                gagnerRessourceFace(new Face(new Ressource(5, Ressource.type.PDG)), false);
+            else
+                gagnerRessourceFace(new Face(ressourceBouclier1), false);
+        }
+        else if (compteBouclier == 1 && compteVoile == 1) {
+            gagnerRessourceFace(new FaceBouclier(ressourceBouclier1), false);
+            gagnerRessourceFace(new FaceVoileCeleste(plateau.getTemple()), false);
+        }
+        else
+            throw  new DiceForgeException("Joueur", "gain d'une combinaison de faces non gérée lors d'une faveur des dieux");
     }
 
 
