@@ -39,20 +39,21 @@ public class EasyBot extends Joueur {
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassinsAbordables){
 
         Bassin bassinAChoisir = null; // On va le choisir par la suite
-        List<Bassin> ordrePrioBassin = new ArrayList<>();
+        List<Bassin.typeBassin> ordrePrioBassin = new ArrayList<>();
 
         int numFaceAChoisirDansBassin = 0;
         int numDeSurLequelForger = getIdDuDeLePlusFaible();
         int numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(numDeSurLequelForger));
         //A partir d'ici on choisit le bassin qui nous interesse
         if (numManche <= 2) { //si on est dans les deux premières manches
-            ordrePrioBassin.add(getPlateau().getBassinSpecifique(2, Ressource.type.OR)); // on priorise
-            ordrePrioBassin.add(getPlateau().getBassinSpecifique(3, Ressource.type.OR)); // l'achat d'or
-            for (Bassin bassinPrio : ordrePrioBassin)
-                for (Bassin bassin : bassinsAbordables)
-                    if (bassin == bassinPrio && bassinAChoisir == null)
-                        bassinAChoisir = bassin;
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceOr); // on priorise
+            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceOr); // l'achat d'or
         }
+        for (Bassin.typeBassin bassinPrio: ordrePrioBassin)
+            for (Bassin bassin: bassinsAbordables)
+                if (bassin.estLeBassin(bassinPrio) && bassinAChoisir == null)
+                        bassinAChoisir = bassin;
+
         if (bassinAChoisir == null) // Sinon on achète la face la plus chère disponible !
             bassinAChoisir = getBassinLePlusCher(bassinsAbordables);
         return new ChoixJoueurForge(bassinAChoisir, numFaceAChoisirDansBassin, numDeSurLequelForger, numFaceARemplacerSurLeDe);

@@ -108,36 +108,4 @@ public class Plateau {
     public Temple getTemple() {
         return temple;
     }
-
-    public Bassin getBassinSpecifique(int cout, Ressource.type typeRessource){ // a faire si vous estimez que c'est le bon endroit et utile
-        switch (cout){
-            case 2: {
-                if (typeRessource == Ressource.type.OR)
-                    return getTemple().getSanctuaire()[0];
-                if (typeRessource == Ressource.type.LUNE)
-                    return getTemple().getSanctuaire()[0];
-            }
-            case 3:
-                if (typeRessource == Ressource.type.OR)
-                    return getTemple().getSanctuaire()[2];
-                if (typeRessource == Ressource.type.SOLEIL)
-                    return getTemple().getSanctuaire()[3];
-            case 4:
-                return getTemple().getSanctuaire()[4];
-            case 5:
-                return getTemple().getSanctuaire()[5];
-            case 6:
-                return getTemple().getSanctuaire()[6];
-            case 8:
-                if (typeRessource == Ressource.type.SOLEIL)
-                    return getTemple().getSanctuaire()[7];
-                if (typeRessource == Ressource.type.PDG)
-                    return getTemple().getSanctuaire()[8];
-            case 12:
-                return getTemple().getSanctuaire()[9];
-            default:
-                throw new DiceForgeException("Plateau", "Un bassin n'a pas été trouvé, cout:" + cout);
-        }
-    }
-
 }

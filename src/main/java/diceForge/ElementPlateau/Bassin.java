@@ -84,6 +84,12 @@ public class Bassin {
         return faces.remove(numFace);
     }
 
+    public boolean estLeBassin(typeBassin type){
+        if (type == this.type)
+            return true;
+        return false;
+    }
+
     @Override
     public String toString(){
         return "" + faces;
