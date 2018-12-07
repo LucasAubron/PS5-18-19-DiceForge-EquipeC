@@ -31,7 +31,10 @@ public class CarteSanglier extends Carte {
         for (Joueur joueur: joueurs)                     // à lui même la face sanglier
             if (joueur.getIdentifiant() != acheteur.getIdentifiant())
                 joueursEnnemis.add(joueur);
-        joueurs.get(acheteur.choisirIdJoueurPorteurSanglier(joueursEnnemis)-1).forgerFaceSpeciale(new FaceSanglier(acheteur));
+        int idEnnemiChoisi = acheteur.choisirIdJoueurPorteurSanglier(joueursEnnemis);
+        for (Joueur joueur: joueursEnnemis)
+            if (idEnnemiChoisi == joueur.getIdentifiant())
+                joueur.forgerFaceSpeciale(new FaceSanglier(acheteur));
     }
 
     @Override

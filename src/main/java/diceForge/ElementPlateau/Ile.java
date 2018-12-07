@@ -50,53 +50,38 @@ public class Ile {
         }
     }
 
-    /**
-     * Sert dans le cas ou le joueur part sur une autre ile
-     */
-    public Joueur retirerJoueur(){
-        Joueur joueurExpulse = this.joueur;
-        this.joueur=null;
-        return joueurExpulse;
-    }
-
-    /**
-     * Méthode permettant à un joueur de prendre une carte
-     * Elle gére l'arrivé de joueur, il ne faut donc pas utiliser ajouterJoueur
-     * Elle gére aussi la prise de carte par le joueur
-     * @return le joueur expulsé s'il existe sinon null
-     */
-    public Joueur prendreCarte(Joueur joueur, Carte carte){
-        Joueur x = null;
+    public Joueur prendreCarte(Joueur acheteur, Carte carte){
+        Joueur joueurChasse = null;
         for (List<Carte> paquet:cartes){//On cherche dans chaque paquet
             if (!paquet.isEmpty() && paquet.get(0).equals(carte)){//Si la première carte du paquet (la plus en dessous de la pile) est la carte recherché
-//                afficheur.NidoBotAfficheur("Avant ajout\t\t\tile qui contient carte " + carte.getNom() + " héberge joueur " + this.joueur);
-                if (this.joueur == null || this.joueur.getIdentifiant() != joueur.getIdentifiant())//on ajoute le joueur
-                    x = ajouterJoueur(joueur);
-//                afficheur.NidoBotAfficheur("Avant ajout\t\t\tile qui contient carte " + carte.getNom() + " héberge joueur " + this.joueur);
-                joueur.acheterExploit(paquet.remove(paquet.size()-1));//Le joueur l'achete
-                return x;
+                if (this.joueur == null)//Si l'ile est occupée
+                    ajouterJoueur(acheteur);
+                else
+                   joueurChasse = remplacerJoueur(acheteur); //sinon il y a chasse
+                acheteur.acheterExploit(paquet.remove(paquet.size()-1));//Le joueur l'achete
+                return joueurChasse;
             }
         }
         throw new DiceForgeException("Ile","La carte n'est pas dans le paquet.");
     }
 
-    /**
-     * Lorsqu'un joueur arrive sur l'ile
-     * Cette fonction ne peux pas être utilisé en dehors de la classe,
-     * elle ne l'est que dans prendreCarte() pour l'instant
-     * On ne la teste pas, on teste prendreCarte() à la place.
-     * @return le joueur expulsé ou null s'il n'y en a pas
-     */
-    private Joueur ajouterJoueur(Joueur joueur){
-        Joueur x = null;
-        if(this.joueur!=null){//S'il y a déjà un joueur présent, il y a une chasse
-            //afficheur.chasse(joueur, this.joueur);
-            this.joueur.estChasse();
-            joueur.chasse();
-            x = retirerJoueur();
-        }
-        this.joueur=joueur;
-        return x;
+    public Joueur retirerJoueur(){
+        Joueur joueurExpulse = this.joueur;
+        this.joueur = null;
+        return joueurExpulse;
+    }
+
+    private void ajouterJoueur(Joueur nouveauOccupant){
+        this.joueur = nouveauOccupant;
+    }
+
+    private Joueur remplacerJoueur(Joueur chasseur){
+        Joueur joueurChasse;
+        this.joueur.estChasse();
+        chasseur.chasse();
+        joueurChasse = retirerJoueur();
+        ajouterJoueur(chasseur);
+        return joueurChasse;
     }
 
     public Joueur getJoueur() {return this.joueur;}

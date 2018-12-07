@@ -157,10 +157,10 @@ public class Coordinateur {
      */
     private void phaseLanceDe(Joueur joueur){
         afficheur.presentationLancerDes(); //toutes les méthodes d'afficheur appelées servent uniquement à gérer l'affichage des informations, peuvent facilement être ignorées lors de la lecture du code
-        for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés, on stocke les résultats dans un attribut du joueur (chaque joueur a un tableau de Face qui représente ses dernier résultat)
+        for (Joueur x:plateau.getJoueurs()){//En premier, tout le monde lance les dés, on stocke les résultats dans un attribut faceActive de chaque dé
             x.lancerLesDes();
         }
-        for (Joueur x:plateau.getJoueurs()) {//et gagne les ressources correspondantes
+        for (Joueur x:plateau.getJoueurs()) {//Les joueurs gagnent les faces actives de leur deux dés
             x.gagnerRessourceDesDeuxDes();
         }
         if (plateau.getJoueurs().size() == 2) {
@@ -193,17 +193,17 @@ public class Coordinateur {
                 renfortsUtilisables.add(renfort);
             }
         }
-        //On demande au joueur son plan de jeu pour les renforts
-        List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables);
-        //On active les renforts selon les choix du joueur
+        //On demande au joueur son plan de jeu pour les renforts, la vrai décision ici est de choisir s'il veut activer
+        List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables); //ses renforts anciens ou alors économiser son or
+        //On active les renforts selon les choix du joueur                //Les autres renorts n'ont pas d'interêt a ne pas être utilisés
         joueur.appelerRenforts(choixDuJoueur);
     }
 
     private void phaseJetonTriton(Joueur joueur) {
         for (int i = 0; i < joueur.getJetons().size() && joueur.getJetons().get(i) == TRITON; ++i) {//On parcours tout les tritons
             Joueur.choixJetonTriton choix = joueur.utiliserJetonTriton();//On stocke le choix
-            if (choix != Joueur.choixJetonTriton.Rien)//Si il veut
-                joueur.appliquerJetonTriton(choix);//on l'applique
+            if (choix != Joueur.choixJetonTriton.Rien)//Si il veut utiliser son jeton
+                joueur.appliquerJetonTriton(choix);//on l'utilise
         }
     }
 
@@ -294,21 +294,20 @@ public class Coordinateur {
     }
     /**
      * Action exploit, on envoit la liste des cartes achetables par le joueur, celui ci choisit et l'achat est effectué dans la foulée.
-     * Gère également la chasse.
+     * Gère également le déplacement des joueurs et la chasse.
      */
     private void exploit(Joueur joueur) {
         List cartesAbordables = cartesAbordables(joueur); //on a déjà vérifié en amont que le joueur peut acheter au moins une carte donc la liste n'est jamais vide
         Carte carteChoisie = joueur.choisirCarte(cartesAbordables); //On demande au joueur la carte qu'il veut acheter
         retirerJoueurDeSonEmplacement(joueur);//le joueur dont c'est le tour quitte son emplacement actuel
         Joueur joueurChasse = null;
-        for (Ile ile : plateau.getIles()) {
+        for (Ile ile : plateau.getIles()) { // On retouve l'ile qui possède la carte choisie
             for (List<Carte> paquet : ile.getCartes())
-                if (!paquet.isEmpty() && paquet.get(0).equals(carteChoisie)) {
+                if (!paquet.isEmpty() && paquet.get(0).getNom() == carteChoisie.getNom()) {//Chaque paquet contiennent les mêmes cartes donc on vérifie le premier élément
                     joueurChasse = ile.prendreCarte(joueur, carteChoisie);//Ici on l'ajoute à l'ile ou il va, on lui fait prendre sa carte et on chasse le joueur présent sur l'ile si il y en avait un
                     //Le joueur paye son dû en même temps que l'acquisition de sa carte
                 }
         }
-//        afficheur.NidoBotAfficheur("joueurChasse == " + joueurChasse);
         if (joueurChasse != null) {//S'il il y a bien un joueur qui a été chassé, on le renvoi au portails originels
             plateau.getPortail().ajouterJoueur(joueurChasse);
         }
@@ -318,18 +317,18 @@ public class Coordinateur {
         List<Carte> cartesAbordables = new ArrayList<>();//Notre liste qui va contenir les cartes abordables par le joueur
         for (Ile ile : plateau.getIles()) {//On parcours les iles
             for (List<Carte> paquet : ile.getCartes()) {//Et les paquets
-                for (Carte carte : paquet) {//Et les cartes
+                if (!paquet.isEmpty()) {
                     int prixSoleil = 0, prixLune = 0;
-                    for (Ressource prix : carte.getCout()) {//Convertisseur object -> int des ressources
+                    for (Ressource prix : paquet.get(0).getCout()) {//paquet.get(0) est une carte
                         if (prix.getType() == Ressource.type.SOLEIL)
                             prixSoleil += prix.getQuantite();
                         else if (prix.getType() == Ressource.type.LUNE)
                             prixLune += prix.getQuantite();
                         else//Cela ne devrait jamais arriver
-                            throw new DiceForgeException("Coordinateur", "Une carte doit couter soit des lunes soit des soleils !");
+                            throw new DiceForgeException("Coordinateur", "Une carte doit coute autre chose que des lunes et/ou des soleils !");
                     }
                     if (prixSoleil <= joueur.getSoleil() && prixLune <= joueur.getLune())//Si le joueur peut l'acheter on l'ajoute
-                        cartesAbordables.add(carte);
+                        cartesAbordables.add(paquet.get(0));
                 }
             }
         }
@@ -342,7 +341,7 @@ public class Coordinateur {
                 plateau.getPortail().retirerJoueur(joueur.getIdentifiant());
                 break;
             }
-        for (Ile ile:plateau.getIles())
+        for (Ile ile:plateau.getIles())//on vérifie s'il est sur une ile et on le retire si c'est le cas
             if (ile.getJoueur() != null && ile.getJoueur().getIdentifiant() == joueur.getIdentifiant()) {
                 ile.retirerJoueur();
                 break;

@@ -28,7 +28,7 @@ public class EasyBot extends Joueur {
     @Override
     public Action choisirAction(){
         numManche++;
-        if (numManche < 6 && getOr() > 5)//Si on est au début du jeu et que l'on a assez d'or, on forge
+        if (numManche < 3 && getOr() >= 4 || numManche < 6 && getOr() >= 8) //Si on est au début du jeu et que l'on a assez d'or, on forge
             return Action.FORGER;
         else if (getSoleil() > 0 || getLune() > 0)//Sinon, si on peu, on prend des cartes
             return Action.EXPLOIT;

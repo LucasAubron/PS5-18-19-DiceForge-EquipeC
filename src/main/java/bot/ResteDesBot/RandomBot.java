@@ -8,14 +8,18 @@ import diceForge.OutilJoueur.ChoixJoueurForge;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.Afficheur;
+import diceForge.Structure.DiceForgeException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RandomBot extends Joueur {
+
     private Random random = new Random();
-    public RandomBot(int identifiant, Afficheur afficheur, Plateau plateau){ super(identifiant, afficheur, plateau);
+
+    public RandomBot(int identifiant, Afficheur afficheur, Plateau plateau){
+        super(identifiant, afficheur, plateau);
     }
 
     @Override
@@ -28,7 +32,7 @@ public class RandomBot extends Joueur {
             case 2:
                 return Action.PASSER;
         }
-        return null;
+        throw  new DiceForgeException("RandomBot", "choisirAction");
     }
 
 
