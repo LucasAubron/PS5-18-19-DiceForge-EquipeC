@@ -46,8 +46,10 @@ public class EasyBot extends Joueur {
         int numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(numDeSurLequelForger));
         //A partir d'ici on choisit le bassin qui nous interesse
         if (numManche <= 2) { //si on est dans les deux premières manches
-            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceOr); // on priorise
-            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceOr); // l'achat d'or
+            // on priorise l'achat d'or
+            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceOr);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceOr);
+            // on add dans le sens inverse de priorité
         }
         for (Bassin.typeBassin bassinPrio: ordrePrioBassin)
             for (Bassin bassin: bassinsAbordables)

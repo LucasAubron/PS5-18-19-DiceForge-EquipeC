@@ -1,12 +1,11 @@
 package bot.NidoBot;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-import diceForge.*;
 import diceForge.Cartes.Carte;
 import diceForge.ElementPlateau.Bassin;
 import diceForge.ElementPlateau.Plateau;
 import diceForge.Faces.Face;
 import diceForge.OutilJoueur.ChoixJoueurForge;
+import diceForge.OutilJoueur.De;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.OutilJoueur.Ressource;
 import diceForge.Structure.Afficheur;
@@ -82,169 +81,111 @@ public class NidoBotV2 extends Joueur {
         else return Action.PASSER;
     }
 
+
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins) {
-        Bassin bassin = getPlateau().getTemple().getSanctuaire()[0];
-        int[] posFace = new int[2];
-        int posFaceInt = -1;
-        int j = -1;
-        if (bassins.isEmpty()) {
-            afficheur.NidoBotAfficheur("bassins empty in choisirFaceAForgerEtARemplacer");
-            return new ChoixJoueurForge(null, 0, 0, 0);
+        Bassin bassinAChoisir = null;
+        List<Bassin.typeBassin> ordrePrioBassin = new ArrayList<>();
+        int numFaceAChoisirDansBassin = 0, numDeSurLequelForger = -1, numFaceARemplacerSurLeDe = -1;
+
+        if (this.manche == 1) { //si on est dans les deux premières manches
+            // on priorise l'achat d'or
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceLune);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceOr);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceOr);
+            // on add dans le sens inverse de priorité
         }
-        /**
-         * manche 1 7or alors faire
-         * face lune sur dé ou il y a lune et face or achetées répartir sur les 2 dés cout 3+2+2
-         * gere exception pas 7 or a chaque fois pour commencer
-         * forger lune et soleil  pendant les 2 premiers tours 1face 3, or , 4 or, 1 lune
-         * 1re manche 3Or + 4or + 1Lune
-         */
-        //afficheur.NidoBotAfficheur("attribut manche de NidoBot ==> " + manche);
-        if (this.manche == 1) {
-            BassinType[] listBassins = {
-                    new BassinType(3, Ressource.type.OR),
-                    new BassinType(2, Ressource.type.OR),
-                    new BassinType(2, Ressource.type.LUNE)};
-            int i = 0;
-            while (i < listBassins.length && (bassin = getPlateau().getBassinSpecifique(
-                    bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
-                i++;
-            //afficheur.NidoBotAfficheur("Nidobot: i == " + i);
-            //afficheur.NidoBotAfficheur("bassin == " + bassin.toString());
-            if (i == 3)
-                bassin = getPlateau().getTemple().getSanctuaire()[0];
-
-            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.LUNE) {
-                for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.LUNE)))
-                        break;
-                posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.OR) {
-                if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1)
-                        && getPosFaceOrDuDe(this, 1, 3) == -1
-                        && getPosFaceOrDuDe(this, 1, 4) == -1) {
-                    posFaceInt = getPosFaceOrDuDe(this, 1, 1);
-                    j = 1;
-                } else if ((getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)
-                        && getPosFaceOrDuDe(this, 0, 3) == -1
-                        && getPosFaceOrDuDe(this, 0, 4) == -1) {
-                    posFaceInt = getPosFaceOrDuDe(this, 0, 1);
-                    j = 0;
-                } else if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1)) {
-                    j = new Random().nextInt(2) == 0 ? 1 : 0;
-                    posFaceInt = getPosFaceOrDuDe(this, j, 1);
-                } else {
-                    //les 2 dés ne contiennent pas de face 3/4Or, donc on remplace une face 1Or sur le 1er
-                    posFaceInt = getPosFaceOrDuDe(this, 0, 1);
-                    j = 0;
-                    if (posFaceInt == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, 1, 1);
-                        j = 1;
-                    }
-                    if (posFaceInt == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, 0, 3);
-                        j = 0;
-                    }
-                    if (posFaceInt == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, 1, 3);
-                        j = 1;
-                    }
-                    if (posFaceInt == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, 0, 4);
-                        j = 0;
-                    }
-                    if (posFaceInt == -1) {
-                        posFaceInt = getPosFaceOrDuDe(this, 1, 4);
-                        j = 1;
-                    }
-                }
-                afficheur.NidoBotAfficheur("posFaceInt == " + posFaceInt);
-            }
-            if (posFaceInt != -1) {
-//                System.out.println("yo first manche return!.");
-//                System.out.println("posfaceInt == " + posFaceInt + " j == " + j);
-                return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
-            }
-            /* on a 13 or sur le dé maintenant
-             * 13/12 un peu plus d'un or par lancé
-             * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
-             * manche 2 forger 2soleil sur le dé ou y a deja un soleil
-             */
-        } else if (this.manche <= 3) {
-//            System.out.println("enteres in manche 2 or 3");
-            BassinType[] listBassins = {
-                    new BassinType(8, Ressource.type.SOLEIL),
-                    new BassinType(3, Ressource.type.SOLEIL),
-                    new BassinType(6, Ressource.type.LUNE),
-                    new BassinType(2, Ressource.type.LUNE),
-                    new BassinType(3, Ressource.type.OR),
-                    new BassinType(2, Ressource.type.OR)};
-            int i = 0;
-            while (i < listBassins.length && (
-                    bassin = getPlateau().getBassinSpecifique(bassins, listBassins[i].getNum(), listBassins[i].getNom())) == null)
-                i++;
-
-            if (i == 6)
-                bassin = getPlateau().getTemple().getSanctuaire()[0];
-
-//            System.out.println("bassin is size == " + bassin.getFaces().size());
-            if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.SOLEIL) {
-                for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.SOLEIL)))
-                        break;
-                posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.LUNE) {
-                for (j = 0; j < getDes().length; j++)
-                    if (haveFaceType(getDe(j), new Ressource(1, Ressource.type.LUNE)))
-                        break;
-                posFaceInt = getPosFaceOrDuDe(this, j, 1);
-            } else if (bassin != null && !bassin.getFaces().isEmpty() && bassin.getFace(0).getRessource().getType() == Ressource.type.OR) {
-                if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
-                    j = new Random().nextInt(2) == 1 ? 1 : 0;
-                else if ((getPosFaceOrDuDe(this, 0, 3) != -1 || getPosFaceOrDuDe(this, 0, 4) != -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
-                    j = 1;
-                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) != -1 || getPosFaceOrDuDe(this, 1, 4) != -1))
-                    j = 0;
-                else if ((getPosFaceOrDuDe(this, 0, 3) == -1 && getPosFaceOrDuDe(this, 0, 4) == -1) &&
-                        (getPosFaceOrDuDe(this, 1, 3) == -1 && getPosFaceOrDuDe(this, 1, 4) == -1))
-                    j = new Random().nextInt(2) == 1 ? 1 : 0;
-
-                posFaceInt = getPosFaceOrDuDe(this, j, 1);
-//                System.out.println("yo BP 2: nummanche == " + this.manche + " j == " + j + " posfaceInt == " + posFaceInt);
-                if (posFaceInt == -1) {
-                    posFaceInt = getPosFaceOrDuDe(this, j, 3);
-                }
-                if (posFaceInt == -1) {
-                    posFaceInt = getPosFaceOrDuDe(this, j, 4);
-                }
-            }
-
-            if (posFaceInt != -1) {
-//                System.out.println("yo return nummanche == " + this.manche + " j == " + j);
-                return new ChoixJoueurForge(bassin, 0, j, posFaceInt);
-            }
-            /*
-             * manche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 => MANCHE 3 ressemble bcp a manche 2.
-             * 2 lune sur le dé ou il y a lune+ 1 soleil sur dé ou il y a un soleil
-             *
-             * 1 dé ou : 1 lune, 1lune, 2lune, 2pdg, 1 or, 3/4or
-             * 2 dé: 2soleil, 1sol, 1sol, 1 or, 1or, 3/4Or
-             *
-             * acheter marteau eventuellement
-             */
+        //        } else if (this.manche <= 3) {
+////            System.out.println("enteres in manche 2 or 3");
+//            BassinType[] listBassins = {
+//                    new BassinType(8, Ressource.type.SOLEIL),
+//                    new BassinType(3, Ressource.type.SOLEIL),
+//                    new BassinType(6, Ressource.type.LUNE),
+//                    new BassinType(2, Ressource.type.LUNE),
+//                    new BassinType(3, Ressource.type.OR),
+//                    new BassinType(2, Ressource.type.OR)};
+//            }
+        else if (this.manche <= 3) {
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceOr);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceOr);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout2FaceLune);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout6); //Lune
+            ordrePrioBassin.add(Bassin.typeBassin.Cout3FaceSoleil);
+            ordrePrioBassin.add(Bassin.typeBassin.Cout8FaceSoleil);
         }
+        if (bassins.get(0).estLeBassin(Bassin.typeBassin.Bouclier)) {
+            bassinAChoisir = bassins.get(0);
+            for (int i = 0; i < bassinAChoisir.getFaces().size(); i++) {
+                if (bassinAChoisir.getFace(i).getRessource().estDuType(Ressource.type.SOLEIL)) {
+                    numFaceAChoisirDansBassin = i;
+                    break;
+                }
+                if (bassinAChoisir.getFace(i).getRessource().estDuType(Ressource.type.LUNE)) {
+                    numFaceAChoisirDansBassin = i;
+                    break;
+                }
+                if (bassinAChoisir.getFace(i).getRessource().estDuType(Ressource.type.PDG)) {
+                    numFaceAChoisirDansBassin = i;
+                    break;
+                }
+                if (bassinAChoisir.getFace(i).getRessource().estDuType(Ressource.type.OR)) {
+                    numFaceAChoisirDansBassin = i;
+                    break;
+                }
+            }
+        }
+        for (Bassin.typeBassin bassinPrio : ordrePrioBassin)
+            for (Bassin bassin : bassins)
+                if (bassin.estLeBassin(bassinPrio) && bassinAChoisir == null)
+                    bassinAChoisir = bassin;
 
+        if (bassinAChoisir == null) // Sinon on achète la face la plus chère disponible !
+            bassinAChoisir = getBassinLePlusCher(bassins);
 
-        afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
-//        System.out.println("end of function");
-        return new ChoixJoueurForge(null, 0, 0, 0);
+        if (bassinAChoisir.estLeBassin(Bassin.typeBassin.Cout8FaceSoleil)
+                || bassinAChoisir.estLeBassin(Bassin.typeBassin.Cout3FaceSoleil)) {
+            numDeSurLequelForger = 1;
+            numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(1));
+        } else if (bassinAChoisir.estLeBassin(Bassin.typeBassin.Cout6)
+                || bassinAChoisir.estLeBassin(Bassin.typeBassin.Cout2FaceLune)) {
+            numDeSurLequelForger = 0;
+            numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(0));
+        }
+        if (numDeSurLequelForger == -1)
+            numDeSurLequelForger = new Random().nextInt(2);
+        if (numFaceARemplacerSurLeDe == -1)
+            numFaceARemplacerSurLeDe = new Random().nextInt(6);
+
+        return new ChoixJoueurForge(
+                bassinAChoisir, numFaceAChoisirDansBassin,
+                numDeSurLequelForger, numFaceARemplacerSurLeDe);
     }
 
+    /**
+     * manche 1 7or alors faire
+     * face lune sur dé ou il y a lune et face or achetées répartir sur les 2 dés cout 3+2+2
+     * gere exception pas 7 or a chaque fois pour commencer
+     * forger lune et soleil  pendant les 2 premiers tours 1face 3, or , 4 or, 1 lune
+     * 1re manche 3Or + 4or + 1Lune
+     */
+//
+    /* on a 13 or sur le dé maintenant
+     * 13/12 un peu plus d'un or par lancé
+     * 1.08*2 == 2.16 * nb joueurs (4) == moins de 9 or 8.64 en moy  //2 joueur comme 4 joueur
+     * manche 2 forger 2soleil sur le dé ou y a deja un soleil
+     */
 
+    /*
+     * manche 3: 8 or en moyenne gagné par tour 9 or pour faire 6 + 3 => MANCHE 3 ressemble bcp a manche 2.
+     * 2 lune sur le dé ou il y a lune+ 1 soleil sur dé ou il y a un soleil
+     *
+     * 1 dé ou : 1 lune, 1lune, 2lune, 2pdg, 1 or, 3/4or
+     * 2 dé: 2soleil, 1sol, 1sol, 1 or, 1or, 3/4Or
+     *
+     * acheter marteau eventuellement
+     */
+//        }
+//    }
     @Override
     public Carte choisirCarte(List<Carte> cartes) {
         Carte carteAChoisir = cartes.get(0);
@@ -258,12 +199,12 @@ public class NidoBotV2 extends Joueur {
                 return carte;
             if (carte.getNom() == Ancien && nombreCartePossedee(Ancien) < 1 && manche <= 5)
                 return carte;
+            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0 && manche <= 6)
+                return carte;
             if (carte.getNom() == CasqueDinvisibilite && !possedeCarte(CasqueDinvisibilite) && manche <= 4)
                 return carte;
 //            if (carte.getNom() == BateauCeleste && nombreCartePossedee(BateauCeleste) == 0 && manche <= 4)
 //                return carte;
-            if (carte.getNom() == Bouclier && nombreCartePossedee(Bouclier) == 0 && manche <= 5)
-                return carte;
             if (manche >= 5 && (carte.getNom() == Hydre || carte.getNom() == Typhon))
                 return carte;
             if (manche >= 5 && (carte.getNom() == Meduse))
@@ -335,7 +276,7 @@ public class NidoBotV2 extends Joueur {
         Random random = new Random();
         if (haveFaceType(getDe(0), new Ressource(1, Ressource.type.SOLEIL)))
             return 0;
-        if (haveFaceType(getDe(1),  new Ressource(1, Ressource.type.SOLEIL)))
+        if (haveFaceType(getDe(1), new Ressource(1, Ressource.type.SOLEIL)))
             return 1;
         if (haveFaceType(getDe(0), new Ressource(1, Ressource.type.LUNE)))
             return 0;
@@ -383,7 +324,7 @@ public class NidoBotV2 extends Joueur {
             if (numDeLune == -1)
                 numDeLune = new Random().nextInt(2) == 0 ? 1 : 0;
 
-            afficheur.NidoBotAfficheur("numDeLune == " + numDeLune);
+//            afficheur.NidoBotAfficheur("numDeLune == " + numDeLune);
             posFaceQteMin = getPosFaceOrDuDe(this, numDeLune, 1);
             if (posFaceQteMin == -1) {
                 posFaceQteMin = getPosFaceQteMin(numDeLune, getDes(), new Ressource(1, Ressource.type.LUNE));
@@ -392,6 +333,17 @@ public class NidoBotV2 extends Joueur {
             resultat[0] = numDeLune;
             resultat[1] = posFaceQteMin;
             aForge = true;
+        } else if (face.getTypeFace() == Face.typeFace.BOUCLIER) {
+            switch (face.getRessource().getType()) {
+                case SOLEIL:
+                    resultat[0] = 0;
+                    break;
+                case LUNE:
+                    resultat[0] = 1;
+                    break;
+                default:
+                    resultat[0] = new Random().nextInt(2);
+            }
         } else {
             resultat = getPosFace1Or();
             //si on a trouvé une face 1 or sur un des dés)
@@ -432,19 +384,24 @@ public class NidoBotV2 extends Joueur {
     public Face choisirFaceACopier(List<Face> faces) {
         int posMaxSoleil = -1, posMaxLune = -1, posMaxOr = -1;
         int maxSoleil = 0, maxLune = 0, maxOr = 0;
+        Ressource ressource;
         for (int i = 0; i != faces.size(); ++i) {
-            for (Ressource ressource : faces.get(i).getRessources()) {
-                if (ressource.getType() == Ressource.type.SOLEIL && ressource.getQuantite() > maxSoleil) {
-                    posMaxSoleil = i;
-                    maxSoleil = ressource.getQuantite();
-                } else if (ressource.getType() == Ressource.type.LUNE && ressource.getQuantite() > maxLune) {
-                    posMaxLune = i;
-                    maxLune = ressource.getQuantite();
-                } else if (ressource.getType() == Ressource.type.OR && ressource.getQuantite() > maxOr) {
-                    posMaxOr = i;
-                    maxOr = ressource.getQuantite();
-                }
-
+            ressource = faces.get(i).getRessource();
+            if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                    && ressource.getType() == Ressource.type.SOLEIL
+                    && ressource.getQuantite() > maxSoleil) {
+                posMaxSoleil = i;
+                maxSoleil = ressource.getQuantite();
+            } else if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                    && ressource.getType() == Ressource.type.LUNE
+                    && ressource.getQuantite() > maxLune) {
+                posMaxLune = i;
+                maxLune = ressource.getQuantite();
+            } else if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
+                    && ressource.getType() == Ressource.type.OR
+                    && ressource.getQuantite() > maxOr) {
+                posMaxOr = i;
+                maxOr = ressource.getQuantite();
             }
         }
         if (posMaxSoleil != -1) return faces.get(posMaxSoleil);
@@ -507,6 +464,40 @@ public class NidoBotV2 extends Joueur {
             }
         }
         return new int[]{-1, -1}; //Si on ne trouve pas de face 1 or
+    }
+
+    private int getPosDeLaFaceLaPlusFaible(De de) {
+        Random random = new Random();
+        int choixPos = -1;
+        for (int i = 0; i < de.getFaces().length; i++) {
+            if (de.getFace(i).getTypeFace() == Face.typeFace.SIMPLE) {
+                if (de.getFace(i).getRessource().estDuType(Ressource.type.OR)
+                        && de.getFace(i).getRessource().getQuantite() == 1)
+                    choixPos = i;
+                if (de.getFace(i).getRessource().estDuType(Ressource.type.LUNE)
+                        && de.getFace(i).getRessource().getQuantite() == 1 && choixPos == -1)
+                    choixPos = i;
+                if (de.getFace(i).getRessource().estDuType(Ressource.type.SOLEIL)
+                        && de.getFace(i).getRessource().getQuantite() == 1 && choixPos == -1)
+                    choixPos = i;
+            }
+        }
+        if (choixPos == -1)
+            choixPos = random.nextInt(6);
+        return choixPos;
+    }
+
+
+    private Bassin getBassinLePlusCher(List<Bassin> bassins) {
+        int maxCout = 0;
+        Bassin bassinLePlusCher = null;
+        for (Bassin bassin : bassins) {
+            if (bassin.getCout() > maxCout) {
+                maxCout = bassin.getCout();
+                bassinLePlusCher = bassin;
+            }
+        }
+        return bassinLePlusCher;
     }
 
     @Override

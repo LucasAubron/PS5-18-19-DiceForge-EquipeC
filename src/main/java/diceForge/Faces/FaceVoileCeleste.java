@@ -28,7 +28,7 @@ public class FaceVoileCeleste extends Face {
                 bassinsAbordables.add(bassin);
         if (!bassinsAbordables.isEmpty()) {
             ChoixJoueurForge choixDuJoueur = joueur.choisirFaceAForgerEtARemplacer(bassinsAbordables);
-            if (choixDuJoueur.getBassin() != null) {
+            if (choixDuJoueur != null) {
                 Bassin bassinChoisi = choixDuJoueur.getBassin();
                 int numFaceBassinChoisi = choixDuJoueur.getNumFaceDansBassin();
                 int idDeChoisi = choixDuJoueur.getNumDe();
