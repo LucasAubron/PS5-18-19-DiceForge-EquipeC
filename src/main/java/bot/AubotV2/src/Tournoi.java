@@ -1,6 +1,7 @@
 package bot.AubotV2.src;
 
-import diceForge.Joueur;
+
+import diceForge.OutilJoueur.Joueur;
 
 public class Tournoi {
     private int nombreDeJoueurParPartie;

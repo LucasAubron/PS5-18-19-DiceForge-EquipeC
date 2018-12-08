@@ -53,7 +53,6 @@ public class EasyBot extends Joueur {
             for (Bassin bassin: bassinsAbordables)
                 if (bassin.estLeBassin(bassinPrio) && bassinAChoisir == null)
                         bassinAChoisir = bassin;
-
         if (bassinAChoisir == null) // Sinon on achète la face la plus chère disponible !
             bassinAChoisir = getBassinLePlusCher(bassinsAbordables);
         return new ChoixJoueurForge(bassinAChoisir, numFaceAChoisirDansBassin, numDeSurLequelForger, numFaceARemplacerSurLeDe);
@@ -91,11 +90,13 @@ public class EasyBot extends Joueur {
         for (Ressource ressource: ressources)
             if (ressource.estDuType(Ressource.type.SOLEIL) || ressource.estDuType(Ressource.type.LUNE))
                 return ressource;
-        return ressources[0]; //par défaut si on ne trouve rien
+        return ressources[0]; //par défaut si on ne pas ce que l'on veut
     }
 
     @Override
-    public int choisirOrQueLeMarteauNePrendPas(int nbrOr){return 0;}//On met tout dans le marteau quand on en a un
+    public int choisirOrQueLeMarteauNePrendPas(int nbrOr){
+        return 0; ///On met tout dans le marteau quand on en a un
+    }
 
     @Override
     public List<Renfort> choisirRenforts(List renfortsUtilisables){
@@ -149,7 +150,7 @@ public class EasyBot extends Joueur {
             case 3:
                 return choixJetonTriton.Lune;
         }
-        throw new DiceForgeException("Bot","Impossible, utiliserJetonTriton ne renvoit rien !!");
+        throw new DiceForgeException("Bot","Problème avec le jeton triton");
     }
 
     @Override
@@ -162,6 +163,9 @@ public class EasyBot extends Joueur {
     public boolean choisirPdgPlutotQueRessource(Ressource ressource){
         return true;
     }
+
+
+    //Méthodes propore à easyBot, fin des méthodes Override -----------------------------------------------
 
     private Bassin getBassinLePlusCher(List<Bassin> bassins) {
         int maxCout = 0;
@@ -195,20 +199,19 @@ public class EasyBot extends Joueur {
         for (int i = 0; i<getDes().length; i++)
             for (Face face:getDe(0).getFaces())
                 if (face.getTypeFace() == Face.typeFace.SIMPLE)
-                    if (face.getRessource().getQuantite() == 1)
-                        if (face.getRessource().estDuType(Ressource.type.OR))
-                            if (i==0)
-                                compteurFaceUnOrDeZero++;
-                            else
-                                compteurFaceUnOrDeZero--;
+                    if (face.getRessource().getQuantite() == 1 && face.getRessource().estDuType(Ressource.type.OR)) {
+                        if (i == 0)
+                            compteurFaceUnOrDeZero++;
+                        else
+                            compteurFaceUnOrDeZero--;
+                    }
         return (compteurFaceUnOrDeZero >= 0) ? 0 : 1;
     }
 
     private int getPosDeLaFaceLaPlusFaible(De de){
         for (int i=0; i < de.getFaces().length; i++)
             if (de.getFace(i).getTypeFace() == Face.typeFace.SIMPLE)
-                if (de.getFace(i).getRessource().estDuType(Ressource.type.OR))
-                    if (de.getFace(i).getRessource().getQuantite() == 1)
+                if (de.getFace(i).getRessource().estDuType(Ressource.type.OR) && de.getFace(i).getRessource().getQuantite() == 1)
                         return i;
         return random.nextInt(6);
     }

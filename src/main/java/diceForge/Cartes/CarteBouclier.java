@@ -18,10 +18,10 @@ public class CarteBouclier extends Carte {
 
     @Override
     public void effetDirect(Joueur acheteur){
-        ChoixJoueurForge choix = acheteur.choisirFaceAForgerEtARemplacer(
+        ChoixJoueurForge choix = acheteur.choisirFaceAForgerEtARemplacer(//ici la méthode ne sert qu'à choisir la face bouclier que l'on veut
                 new ArrayList(Arrays.asList(plateau.getTemple().getJardin()[0])));
-        acheteur.forgerFaceSpeciale(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFaceDansBassin()));
-    }
+        acheteur.forgerFaceSpeciale(plateau.getTemple().getJardin()[0].retirerFace(choix.getNumFaceDansBassin())); // ce n'est qu'ici qu'on choisit
+    }                                                                                                              // ou on veut la forger
 
     @Override
     public Carte clone(){

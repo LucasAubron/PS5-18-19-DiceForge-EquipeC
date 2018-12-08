@@ -110,7 +110,7 @@ public class NidoBot extends Joueur {
                                 return new ChoixJoueurForge(bassin, 0, indexDe, posFace);
                         }
             }
-        afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
+        //afficheur.NidoBotAfficheur("end of function choisirFaceAForgerEtARemplacer");
         return null;
     }
 

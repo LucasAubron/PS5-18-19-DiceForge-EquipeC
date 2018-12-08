@@ -1,13 +1,8 @@
 package bot.AubotV2.src;
 
-import diceForge.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static diceForge.Joueur.Jeton.CERBERE;
-import static diceForge.Joueur.Jeton.TRITON;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.Structure.Coordinateur;
 
 public class MatchTournoi{
     private int nombreDePartieParMatch;

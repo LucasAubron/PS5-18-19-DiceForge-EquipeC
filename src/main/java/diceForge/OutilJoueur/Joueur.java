@@ -51,7 +51,7 @@ public abstract class Joueur {
     public enum Action {FORGER, EXPLOIT, PASSER}
     public enum Renfort{ANCIEN, BICHE, HIBOU}
     public enum Jeton {TRITON, CERBERE}
-    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBot, AubronBotV2, RomanetBot, NidoBot, NidoBotV2, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10}
+    public enum Bot{RandomBot, EasyBot, TestBot, PlanteBot, AubronBotV2, RomanetBot, NidoBot, NidoBotV2, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10}
     public enum choixJetonTriton{Rien, Or, Soleil, Lune}
 
     private int dernierLanceDes;//vaut 0 si le joueur a lancé le dé 0 en dernier, 1 si c'est le cas du dé 1, 2 s'il s'agit des deux dés en même temps, sert au jetonCerbère
@@ -613,24 +613,56 @@ public abstract class Joueur {
 
     // Méthodes abstract synonymes de choix à faire par les joueurs, à redéfinir dans chacun des bots -------------------------------------------------
 
-    /*LISTE DES METHODES ABSTRACT: (pour créer un bot, copier coller et enlever les tirets  en selectionnant un tiret et en utilisant alt+maj+ctrl+j)
+    /*LISTE DES METHODES ABSTRACT: (pour créer un bot, copier coller)
 
-    -public Action choisirAction(){}
-    -public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){}
-    -public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){}
-    -public Carte choisirCarte(List<Carte> cartes){}
-    -public boolean choisirActionSupplementaire(){}
-    -public Ressource choisirRessourceFaceAchoix(Ressource[] ressources){}
-    -public int choisirOrQueLeMarteauNePrendPas(int nbrOr){}
-    -public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
-    -public Face choisirFaceACopier(List<Face> faces){}
-    -public Ressource choisirRessourceAPerdre(Ressource[] ressources){}
-    -public int choisirDeFaveurMineure(){}
-    -public int choisirDeCyclope(){}
-    -public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
-    -public choixJetonTriton utiliserJetonTriton(){}
-    -public boolean utiliserJetonCerbere(){}
-    -public boolean choisirPdgPlutotQueRessource(Ressource ressource){}
+
+    @Override
+    public Action choisirAction(){}
+
+    @Override
+    public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){}
+
+    @Override
+    public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){}
+
+    @Override
+    public Carte choisirCarte(List<Carte> cartes){}
+
+    @Override
+    public boolean choisirActionSupplementaire(){}
+
+    @Override
+    public Ressource choisirRessourceFaceAchoix(Ressource[] ressources){}
+
+    @Override
+    public int choisirOrQueLeMarteauNePrendPas(int nbrOr){}
+
+    @Override
+    public List<Renfort> choisirRenforts(List<Renfort> renfortsUtilisables){}
+
+    @Override
+    public Face choisirFaceACopier(List<Face> faces){}
+
+    @Override
+    public Ressource choisirRessourceAPerdre(Ressource[] ressources){}
+
+    @Override
+    public int choisirDeFaveurMineure(){}
+
+    @Override
+    public int choisirDeCyclope(){}
+
+    @Override
+    public int choisirIdJoueurPorteurSanglier(List<Joueur> joueurs){}
+
+    @Override
+    public choixJetonTriton utiliserJetonTriton(){}
+
+    @Override
+    public boolean utiliserJetonCerbere(){}
+
+    @Override
+    public boolean choisirPdgPlutotQueRessource(Ressource ressource){}
 
     16 méthodes.
     */
