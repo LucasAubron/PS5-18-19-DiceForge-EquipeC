@@ -218,7 +218,6 @@ public class NidoBot extends Joueur {
         int maxSoleil = 0, maxLune = 0, maxOr = 0;
         Ressource ressource;
         for (int i = 0; i != faces.size(); ++i) {
-//            for (Ressource ressource : faces.get(i).getRessources()) {
             ressource = faces.get(i).getRessource();
             if (faces.get(i).getTypeFace() == Face.typeFace.SIMPLE
                     && ressource.getType() == Ressource.type.SOLEIL
@@ -236,8 +235,6 @@ public class NidoBot extends Joueur {
                 posMaxOr = i;
                 maxOr = ressource.getQuantite();
             }
-
-//            }
         }
         if (posMaxSoleil != -1) return faces.get(posMaxSoleil);
         if (posMaxLune != -1) return faces.get(posMaxLune);
