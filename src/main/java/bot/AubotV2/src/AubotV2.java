@@ -40,8 +40,8 @@ public class AubotV2 extends Joueur {
     private int nombreDeTourForgeOptimal;//Nombre de tour max dédié a la forge
     private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche <= 6)
     private int [][][] ordrePrioForgeManche = new int[3][5][2];//Les trois premiers tours de forge sont preset car ils sont importants, sinon on forgera toujours la face la plus chère
-    private Carte.Noms[] ordrePrioCarte = new Carte.Noms[][18];//Quelles cartes a acheter en priorité (pour les cartes coutant 4 et moins)
-    private int[] nombreCarteMax = new int[18];//Nombre de carte de même type max que le joueur doir acheter (pour les cartes coutant 4 et moins)
+    private Carte.Noms[] ordrePrioCarte = new Carte.Noms[][24];//Quelles cartes a acheter en priorité
+    private int[] nombreCarteMax = new int[18];//Nombre de carte de même type max que le joueur doir acheter
     //--------------------------------------------
     public AubotV2(int identifiant, Afficheur afficheur, Plateau plateau, String file) {
         super(identifiant, afficheur, plateau);
@@ -58,7 +58,7 @@ public class AubotV2 extends Joueur {
             printInfo();
         }
         manche++;
-        if (rejouer){ // S'il s'agit d'une deuxième action, on achète une carte
+        if (rejouer){ // S'il s'agit d'une deuxième action, on achète forcément une carte
             rejouer = false;
             return Action.EXPLOIT;
         }
@@ -75,7 +75,7 @@ public class AubotV2 extends Joueur {
 
     @Override
     public Carte choisirCarte(List<Carte> cartes){
-        if (manche >= derniereManche -1) // A la fin la seule caractéristique d'une cart qui importe vraiment est les points qu'elle rapporte
+        if (manche >= derniereManche -1) // A la fin de la partie la seule caractéristique d'une carte qui importe vraiment est les points qu'elle rapporte
             return carteQuiApporteLePlusDePoint(cartes);
         for (Carte.Noms nom: ordrePrioCarte) // Sinon on regarde la liste de priorité des cartes
             for (Carte carte: cartes)

@@ -45,7 +45,7 @@ public class PortailsOriginels {
 
 //            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
 //                this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
-            
+
         else if(typeJoueurs[identifiant-1] == Joueur.Bot.A1)
             this.joueurs.add(new AubotV2(identifiant, afficheur, plateau, "src/main/java/bot/AubotV2/Bot1/"));
         else if(typeJoueurs[identifiant-1] == Joueur.Bot.A2)
