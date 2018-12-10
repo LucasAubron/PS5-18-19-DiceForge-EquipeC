@@ -18,8 +18,69 @@ import java.util.*;
 
 
 /**
- * Commentaire à faire
+ * Meilleur bot du set de bot, il a la particularité d'avoir des paramètres qui peuvent varier.
+ * Pour compléter ces paramètres il lit dans un fichier source qui doit ressembler à ceci:
+ *
+ * 3468888                          //première ligne: un entier [1,6], six entier [2,9]
+ * 555666                           // six entier [1,6]
+ * 444555                           //six entier [1,6]
+ * 0123456789                       //dix entier [0,9] différents un à un
+ * 0123456789                       //dix entier [0,9] différents un à un
+ * 0123456789                       //dix entier [0,9] différents un à un
+ * abcdefghijklmnopqrstuvwx         // Les 24 premières lettres de l'alphabet dans un certain ordre
+ * 123401203112312412031201         // 24 entier [0,4]
+ *
+ * PREMIERE LIGNE
+ * le premier entier de la première ligne est le nombre de tour maximum que doit allouer le joueur
+ * a la forge et UNIQUEMENT si la manche <= 6, les 6 entiers qui suivent sont l'or minimum que
+ * doit avoir le joueur pour décider de forger durant chaque manche (de 1 a 6)
+ *
+ * DEUXIEME 2 ET 3
+ * la deuxieme ligne donne le nombre minimum de soleil que l'on doit avoir pour les manches
+ * 4 à dernière manche-1 (8 ou 9 selon le nombre de joueur)
+ * la troisème est la même chose mais pour les lunes, le joueur doit respecter l'exigence
+ * des lunes OU (pas et) des soleils.
+ * Si l'on ne définit pas toutes les manches ainsi c'est parce que les trois premières manches
+ * on décide de rejouer si on a >=3 soleils ou >= 1 lune car les petites cartes sont fortes en début de partie.
+ * La dernière manche n'est pas défini non plus car on va forcément rejouer, c'est la dernière manche on ne doit
+ * pas essayer d'économiser des ressources !
+ *
+ * LIGNE 4 A 6
+ *Y figure les bassins dans lesquels piocher en priorité pour les 3 premiers tours de forge (et pas de jeu!), il y
+ * a exactement 10 bassins donc 10 entiers différents pour les identifier. Passé le 3ème tour de forge (et si manche<=6)
+ * on achetera toujours dans le bassin qui coute le plus cher (et qui est dans nos moyens).
+ * La ligne 4 correspond au premier tour de forge, la ligne 5 au deuxième et la ligne 6 au troisème.
+ * Pour savoir quel entier correpspond a quel bassin, se référer à la méthode initValeur.
+ *
+ * LIGNE 7
+ * Ordre des cartes à acheter en priorité quand on décide de faire un exploit.
+ * De la plus prioritaire à la moins. Chaque lettre de l'alphabet correspond à une carte.
+ * On peut retrouver leur ordre de A a Z dans le constructeur. (a = marteau, b = coffre, etc...)
+ *
+ * LIGNE 8
+ * La ligne précédente tuerait la réussite du bot sans celle-ci, a chaque carte, dans l'ordre
+ * du constructeur, est associé un entier [0,4] indiquanr le nombre maximum d'exemplaire que le
+ * bot doit se procurer avant de passer à la carte suivante. Ainsi on ne se retrouve pas avec 4 marteaux
+ * dont 3 incomplets.
+ *
+ * Ce bot a également la capacité d'évoluer grâce a un algorithme génétique.
+ * Il effectue des tournois entre plusieurs fichier sources, il garde les meilleurs,
+ * en créer de nouveaux à partir gagnants (qui parfois peuvent muter) et
+ * recommence. BestBot est le fichier source qui est lu quand AubotV2
+ * est utilisé dans le main du projet. Il faut le remplacer manuellement
+ * après une simulation de plusieurs générations (copier coller
+ * le fichier du meilleur bot du dernier tournoi effectué).
+ *
+ * Petit à petit, de génération en génération le bot s'améliore.
+ * Il faut utiliser le main de AubotV2 pour lancer les tournois,
+ * certains paramètres sont changeables (chance de mutation,
+ * nombre de population, etc...)
+ *
+ * Ce bot possède une version pour chaque type de partie (2, 3 ou 4 joueurs)
+ * car certaines cartes ou face ont un impact très différents dépendant du
+ * nombre de joueurs.
  */
+
 
 public class AubotV2 extends Joueur {
     private boolean montrerInfo = false;
@@ -46,7 +107,7 @@ public class AubotV2 extends Joueur {
     //--------------------------------------------
     private int nombreDeTourForgeOptimal;//Nombre de tour max dédié a la forge
     private int orPourForgerManche[] = new int[6];//or minimum pour que le joueur forge de la manche 1 a 6 (à condition que manche <= 6)
-    private Bassin.typeBassin [][] ordrePrioBassinManche = new Bassin.typeBassin[3][5];//Les trois premiers tours de forge sont preset car ils sont importants, sinon on forgera toujours la face la plus chère
+    private Bassin.typeBassin [][] ordrePrioBassinManche = new Bassin.typeBassin[3][10];//Les trois premiers tours de forge sont preset car ils sont importants, sinon on forgera toujours la face la plus chère
     private Carte.Noms[] ordrePrioCarte = new Carte.Noms[24];//Quelles cartes a acheter en priorité
     private int[] nombreCarteMax = new int[24];//Nombre de carte de même type max que le joueur doir acheter
     private int[] nombreDeSoleilPourRejouer = new int[6]; //parle de lui même
@@ -85,7 +146,7 @@ public class AubotV2 extends Joueur {
     @Override
     public Joueur.Action choisirAction() {
         if (manche == 0 && !aDejaEteInit) {//on fait ici ce qu'on n'a pas pu faire dans le constructeur (du fait que le plateau n'est pas encore complètement initialisé à ce moment là)
-            aDejaEteInit = true;
+            aDejaEteInit = true; // Pour éviter les bug quand on rejoue manche 1 ...
             nombreDeJoueurs = getPlateau().getJoueurs().size();
             derniereManche = (nombreDeJoueurs == 3) ? 10 : 9;
             initBuffers();
@@ -133,8 +194,8 @@ public class AubotV2 extends Joueur {
         int numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(numDeSurLequelForger));
 
         //A partir d'ici on choisit le bassin qui nous interesse
-        if (manche <= 3)
-            ordrePrioBassin = ordrePrioBassinManche[manche-1];
+        if (compteurDeManchePasseeAForger <= 2)
+            ordrePrioBassin = ordrePrioBassinManche[compteurDeManchePasseeAForger];
         else
             ordrePrioBassin = new Bassin.typeBassin[]{}; //vide
 
@@ -196,8 +257,8 @@ public class AubotV2 extends Joueur {
             manche--;
             return true;
         }
-        if (manche <= 3) {                                         // au début de la partie
-            if (getSoleil() >= 3 || getLune() >= 1) {                // on est friand de petites cartes
+        if (manche <= 3) {                                          // au début de la partie
+            if (getSoleil() >= 3 || getLune() >= 1) {               // on est friand de petites cartes
                 Arejoue = true;                                     // il faut donc peu de ressource
                 manche--;                                           // pour décider de Arejoue
                 return true;
@@ -682,7 +743,7 @@ public class AubotV2 extends Joueur {
             br.close();
             fr.close();
         } catch (IOException exception) {
-            System.out.println("Erreur lors de la fermeture du fichier: " + exception);
+           throw  new  DiceForgeException("AuborV2", "Erreur lors de la fermeture du fichier: " + exception);
         }
     }
 

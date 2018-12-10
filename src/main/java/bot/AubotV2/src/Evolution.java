@@ -3,7 +3,20 @@ package bot.AubotV2.src;
 
 
 import java.io.*;
-import java.util.Random;
+import java.util.*;
+
+/**
+ * Ma première expérience avec les buffer en java, c'est pour cela que ce n'est pas très compréhensible, voire pas du tout
+ * Pour résumer: les 5 meilleurs bot du tournoi précedent (ceux qui ont le meileur winrate ...)
+ * survivent, les 5 pires sont éliminés et remplacés.
+ * Pour recréer 5 nouveaux joueurs, on va faire croiser les joueurs survivants.
+ * Pour cela, on réécrit ligne à ligne les nouveaux joueurs, pour chaque ligne, on recopie une ligne
+ * d'un joueur survivant pris au hasard.
+ * S'ajoute à cela la mutation, certaines fois une ligne ne sera pas recopiée d'un joueur
+ * mais sera réécrite de façon aléatoire. Il existe les mutation totales comme expliqué
+ * précédemment, et les mutations minimes ou la on ne changera qu'un ou deux caractère
+ * d'une ligne prise d'un joueur survivant.
+ */
 
 public class Evolution {
     private Random random = new Random();
@@ -20,9 +33,9 @@ public class Evolution {
     private int[] betaId = new int[5];
     private String[] alphaFile = new String[5];
     private String[] betaFile = new String[5];
-    private String[] path2J = new String[]{"src/main/java/bot/AubotV2/1V1/Bot1", "src/main/java/bot/AubotV2/1V1/Bot2", "src/main/java/bot/AubotV2/1V1/Bot3", "src/main/java/bot/AubotV2/1V1/Bot4", "src/main/java/bot/AubotV2/1V1/Bot5", "src/main/java/bot/AubotV2/1V1/Bot6", "src/main/java/bot/AubotV2/1V1/Bot7", "src/main/java/bot/AubotV2/1V1/Bot8", "src/main/java/bot/AubotV2/1V1/Bot9", "src/main/java/bot/AubotV2/1V1/Bot10"};
-    private String[] path3J = new String[]{"src/main/java/bot/AubotV2/1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1/Bot2", "src/main/java/bot/AubotV2/1V1V1/Bot3", "src/main/java/bot/AubotV2/1V1V1/Bot4", "src/main/java/bot/AubotV2/1V1V1/Bot5", "src/main/java/bot/AubotV2/1V1V1/Bot6", "src/main/java/bot/AubotV2/1V1V1/Bot7", "src/main/java/bot/AubotV2/1V1V1/Bot8", "src/main/java/bot/AubotV2/1V1V1/Bot9", "src/main/java/bot/AubotV2/1V1/Bot10"};
-    private String[] path4J = new String[]{"src/main/java/bot/AubotV2/1V1V1V1/Bot1", "src/main/java/bot/AubotV2/1V1V1V1/Bot2", "src/main/java/bot/AubotV2/1V1V1V1/Bot3", "src/main/java/bot/AubotV2/1V1V1V1/Bot4", "src/main/java/bot/AubotV2/1V1V1V1/Bot5", "src/main/java/bot/AubotV2/1V1V1V1/Bot6", "src/main/java/bot/AubotV2/1V1V1V1/Bot7", "src/main/java/bot/AubotV2/1V1V1V1/Bot8", "src/main/java/bot/AubotV2/1V1V1V1/Bot9", "src/main/java/bot/AubotV2/1V1/Bot10"};
+    private String[] path2J = new String[]{"src/main/java/bot/AubotV2/Bot1/1V1", "src/main/java/bot/AubotV2/Bot2/1V1", "src/main/java/bot/AubotV2/Bot3/1V1", "src/main/java/bot/AubotV2/Bot4/1V1", "src/main/java/bot/AubotV2/Bot5/1V1", "src/main/java/bot/AubotV2/Bot6/1V1", "src/main/java/bot/AubotV2/Bot7/1V1", "src/main/java/bot/AubotV2/Bot8/1V1", "src/main/java/bot/AubotV2/Bot9/1V1", "src/main/java/bot/AubotV2/Bot10/1V1"};
+    private String[] path3J = new String[]{"src/main/java/bot/AubotV2/Bot1/1V1V1", "src/main/java/bot/AubotV2/Bot2/1V1V1", "src/main/java/bot/AubotV2/Bot3/1V1V1", "src/main/java/bot/AubotV2/Bot4/1V1V1", "src/main/java/bot/AubotV2/Bot5/1V1V1", "src/main/java/bot/AubotV2/Bot6/1V1V1", "src/main/java/bot/AubotV2/Bot7/1V1V1", "src/main/java/bot/AubotV2/Bot8/1V1V1", "src/main/java/bot/AubotV2/Bot9/1V1V1", "src/main/java/bot/AubotV2/Bot10/1V1V1"};
+    private String[] path4J = new String[]{"src/main/java/bot/AubotV2/Bot1/1V1V1V1", "src/main/java/bot/AubotV2/Bot2/1V1V1V1", "src/main/java/bot/AubotV2/Bot3/1V1V1V1", "src/main/java/bot/AubotV2/Bot4/1V1V1V1", "src/main/java/bot/AubotV2/Bot5/1V1V1V1", "src/main/java/bot/AubotV2/Bot6/1V1V1V1", "src/main/java/bot/AubotV2/Bot7/1V1V1V1", "src/main/java/bot/AubotV2/Bot8/1V1V1V1", "src/main/java/bot/AubotV2/Bot9/1V1V1V1", "src/main/java/bot/AubotV2/Bot10/1V1V1V1"};
 
     Evolution(int n, int m, int p, int mu, int mul) {
         this.nombreDeJoueurs = n;
@@ -122,7 +135,7 @@ public class Evolution {
         int compteLigne = 1;
         for (int i = 0; i < 5; i++) {
             compteLigne = 1;
-            for (int j = 0; j < 20; j++) {
+            for (int j = 0; j < 8; j++) {
                 int r = random.nextInt(5);
                 try {
                     ligne = br[i][r].readLine();
@@ -133,7 +146,7 @@ public class Evolution {
                 if (mutation != 0)
                     stringFichierNouveauJoueurs[i] += ligne + "\n";
                 else {
-                    stringFichierNouveauJoueurs[i] += (random.nextInt(uneChanceSurDeMuterLigne) == 0) ? mutationLigne(ligne, compteLigne) + "\n" : mutationChar(ligne, compteLigne) + "\n"; //deux types de mutation, une grossière qui créé de gros changements, et une moins impactante
+                    stringFichierNouveauJoueurs[i] += (random.nextInt(uneChanceSurDeMuterLigne) == 0) ? mutationLigne(ligne, compteLigne) + "\n" : mutationMinime(ligne, compteLigne) + "\n"; //deux types de mutation, une grossière qui créé de gros changements, et une moins impactante
                 }
                 for (int k = 0; k < 5; k++)
                     if (k != r)
@@ -168,10 +181,11 @@ public class Evolution {
         }
     }
 
-    private String mutationChar(String ligne, int compteLigne) {
+    private String mutationMinime(String ligne, int compteLigne) {
         int longueur = ligne.length();
         char[] tabLigne = ligne.toCharArray();
-        int randomPos = random.nextInt(longueur);
+        int randomPos = random.nextInt(longueur); //Pour choisir le seul élément qui va être modifié quand il n'y a qu'un seul élement à modifier ...
+        int randomPos2 = random.nextInt(longueur);//pour les permutations (a utiliser avec randomPos)
         if (compteLigne == 1)
                 if (randomPos == 0) {
                     int r = random.nextInt(6) + 1;
@@ -183,57 +197,21 @@ public class Evolution {
                     tabLigne[randomPos] = a;
                 }
         else if (compteLigne == 2 || compteLigne == 3){
-                int r = random.nextInt(3) + 1;
+                int r = random.nextInt(6) + 1;
                 char a = (char) (r + 48);
                 tabLigne[randomPos] = a;
         }
-        else if (compteLigne >= 4 && compteLigne <= 9){
-                int[] coutBassins = new int[]{2, 3, 4, 5, 6, 8};
-                if (randomPos % 3 == 1) {
-                    randomPos--;
-                } else if (randomPos % 3 == 2) {
-                    randomPos -= 2;
-                }
-                int r1 = coutBassins[random.nextInt(5)];
-                int r2 = random.nextInt(2);
-                int n;
-                switch (r1) {
-                    case 2:
-                        n = (random.nextInt() == 0) ? 0 : 2;
-                        break;
-                    case 3:
-                        n = (random.nextInt(2) == 0) ? 0 : 1;
-                        break;
-                    case 4:
-                        n = random.nextInt(3);
-                        break;
-                    case 5:
-                        n = 0;
-                        break;
-                    case 6:
-                        n = 2;
-                        break;
-                    case 8:
-                        n = 1;
-                        break;
-                    default:
-                        n = 1000; //probleme
-                }
-                char a = (char) (r1 + 48);
-                char b = (char) (r2 + 48);
-                char c = (char) (n + 48);
-                tabLigne[randomPos] = a;
-                tabLigne[randomPos + 1] = b;
-                tabLigne[randomPos + 2] = c;
+        else if (compteLigne >= 4 && compteLigne <= 6){
+            char save = tabLigne[randomPos2];
+            tabLigne[randomPos2] = tabLigne[randomPos];
+            tabLigne[randomPos] = save;
         }
-        else if (compteLigne >= 10 && compteLigne <=19){
-            String alphabet = "abcdefghijklmnopqrstuvwx";
-            char[] alphabetChar = alphabet.toCharArray();
-            int r = random.nextInt(24);
-            char a = alphabetChar[r];
-            tabLigne[randomPos] = a;
+        else if (compteLigne == 7){
+            char save = tabLigne[randomPos2];
+            tabLigne[randomPos2] = tabLigne[randomPos];
+            tabLigne[randomPos] = save;
         }
-        else if (compteLigne == 20){
+        else if (compteLigne == 8){
             int r = random.nextInt(nombreDeJoueurs+1);
             char a = (char) (r + 48);
             tabLigne[randomPos] = a;
@@ -247,53 +225,39 @@ public class Evolution {
 
     private String mutationLigne(String ligne, int compteLigne) {
         if (compteLigne == 1) {
-            return "" + (random.nextInt(6) + 1) + (random.nextInt(6) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2) + (random.nextInt(8) + 2);
-        }
-        if (compteLigne == 2 || compteLigne == 3) {
-            return "" + "1" + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + (random.nextInt(3) + 1) + "0";
-        }
-        if (compteLigne >= 4 && compteLigne <= 9) {
             String res = "";
-            int[] coutBassins = new int[]{2, 3, 4, 5, 6, 8};
-            int[] unTableauParmiSept = new int[3];
-            for (int i = 0; i < 7; i++) {
-                unTableauParmiSept[0] = coutBassins[random.nextInt(6)];
-                unTableauParmiSept[1] = random.nextInt(2);
-                int r = random.nextInt(2);
-                switch (unTableauParmiSept[0]) {
-                    case 2:
-                        unTableauParmiSept[2] = (r == 0) ? 0 : 2;
-                        break;
-                    case 3:
-                        unTableauParmiSept[2] = (r == 0) ? 0 : 1;
-                        break;
-                    case 4:
-                        unTableauParmiSept[2] = random.nextInt(3);
-                        break;
-                    case 5:
-                        unTableauParmiSept[2] = 0;
-                        break;
-                    case 6:
-                        unTableauParmiSept[2] = 2;
-                        break;
-                    case 8:
-                        unTableauParmiSept[2] = 1;
-                        break;
-                }
-                res += "" + unTableauParmiSept[0] + unTableauParmiSept[1] + unTableauParmiSept[2];
-            }
+            res += random.nextInt(6) + 1;
+            for (int i = 0; i<6; i++)
+                res+= random.nextInt(8) + 2;
             return res;
         }
-        if (compteLigne >= 10 && compteLigne <= 19) {
-            String[] alphabet = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x"};
+        if (compteLigne == 2 || compteLigne == 3) {
             String res = "";
-            for (int i = 0; i<18; i++)
-                res += (alphabet[random.nextInt(24)]);
+            for (int i = 0; i<6; i++)
+                res += random.nextInt(6) + 1;
+            return res;
+        }
+        if (compteLigne >= 4 && compteLigne <= 6) {
+            String res = "";
+            List<Integer> resListe = new ArrayList<>(Arrays.asList(0,1,2,3,4,5,6,7,8,9));
+            Collections.shuffle(resListe);
+            for (int n: resListe)
+                res += n;
+            return res;
+        }
+        if (compteLigne >= 7 && compteLigne <= 19) {
+            //String resTab = "abcdefghijklmnopqrstuvwx";
+            //resTab.toCharArray();
+            String res = "";
+            List resListe = new ArrayList(Arrays.asList('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x'));
+            Collections.shuffle(resListe);
+            for (Object a: resListe)
+                res+=a;
             return res;
         }
         if (compteLigne == 20) {
             String res = "";
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 24; i++)
                 res += random.nextInt(nombreDeJoueurs+1);
             return res;
         }

@@ -8,9 +8,7 @@ public class Tournoi {
     private int nombreDeMatchParConfrontation;
     private int[] victoireCumulesParJoueurs = new int[10];
     private int[] pointCumulesParJoueurs = new int[10];
-    private Joueur.Bot[] Enum2J = new Joueur.Bot[]{Joueur.Bot.A1,Joueur.Bot.A2,Joueur.Bot.A3,Joueur.Bot.A4,Joueur.Bot.A5,Joueur.Bot.A6,Joueur.Bot.A7,Joueur.Bot.A8,Joueur.Bot.A9,Joueur.Bot.A10};
-    private Joueur.Bot[] Enum3J = new Joueur.Bot[]{};
-    private Joueur.Bot[] Enum4J = new Joueur.Bot[]{};
+    private Joueur.Bot[] EnumJ = new Joueur.Bot[]{Joueur.Bot.A1,Joueur.Bot.A2,Joueur.Bot.A3,Joueur.Bot.A4,Joueur.Bot.A5,Joueur.Bot.A6,Joueur.Bot.A7,Joueur.Bot.A8,Joueur.Bot.A9,Joueur.Bot.A10};
 
     Tournoi(int n, int m){
         this.nombreDeJoueurParPartie = n;
@@ -19,12 +17,12 @@ public class Tournoi {
     }
 
     void initTournoi(){
-        MatchTournoi match = null;
+        MatchTournoi match ;
         switch (nombreDeJoueurParPartie){
             case 2:
                 for (int j1 = 0; j1<10; j1++)
                     for (int j2 = j1 +1; j2 <10; j2++){
-                        match = new MatchTournoi(new Joueur.Bot[]{Enum2J[j1], Enum2J[j2]}, nombreDeMatchParConfrontation);
+                        match = new MatchTournoi(new Joueur.Bot[]{EnumJ[j1], EnumJ[j2]}, nombreDeMatchParConfrontation);
                         victoireCumulesParJoueurs[j1] += match.getResultatMatch()[0];
                         victoireCumulesParJoueurs[j2] += match.getResultatMatch()[1];
                         pointCumulesParJoueurs[j1] += match.getPointMatch()[0];
