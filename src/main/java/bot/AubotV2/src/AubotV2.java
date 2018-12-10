@@ -279,14 +279,14 @@ public class AubotV2 extends Joueur {
         Ressource ressourceAChoisir = null;
         Ressource.type typePrio;
         // A partir d'ici on défini quelle type ressource est prioritaire en fonction de la situation
-        if (compteurDeManchePasseeAForger < nombreDeTourForgeOptimal)
-            typePrio = Ressource.type.OR;
-        else if (manche >= derniereManche - 2)
+        if (manche >= derniereManche - 2)
             typePrio = Ressource.type.PDG;
         else if(luneManquant >= 3 && soleilManquant <= 2)
             typePrio = Ressource.type.LUNE;
-        else
+        else if (soleilManquant >= 1)
             typePrio = Ressource.type.SOLEIL;
+        else
+            typePrio = Ressource.type.OR;
         // Et ensuite on choisit simplement la ressource du type voulu et qui a la plus grosse quantité
         for (Ressource ressource: ressources)
             if (ressource.estDuType(typePrio) && ressource.getQuantite() > quantiteMax){
@@ -317,7 +317,7 @@ public class AubotV2 extends Joueur {
         if (manche <= 3) {//on préfère garder l'or en début de partie
             int nombreAncien = nombreCartePossedee(Carte.Noms.Ancien);
             for (int i=0; i<nombreAncien; i++)
-                renfortsUtilisables.remove(Carte.Noms.Ancien);
+                renfortsUtilisables.remove(Renfort.ANCIEN);
         }
         return renfortsUtilisables;
     }

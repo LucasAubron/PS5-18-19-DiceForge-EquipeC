@@ -245,7 +245,7 @@ public class Evolution {
                 res += n;
             return res;
         }
-        if (compteLigne >= 7 && compteLigne <= 19) {
+        if (compteLigne == 7) {
             //String resTab = "abcdefghijklmnopqrstuvwx";
             //resTab.toCharArray();
             String res = "";
@@ -255,7 +255,7 @@ public class Evolution {
                 res+=a;
             return res;
         }
-        if (compteLigne == 20) {
+        if (compteLigne == 8) {
             String res = "";
             for (int i = 0; i < 24; i++)
                 res += random.nextInt(nombreDeJoueurs+1);
