@@ -30,8 +30,8 @@ public class Coordinateur {
     private int[] nbrEgalite;
 
     public Coordinateur(boolean modeVerbeux, Joueur.Bot[] typeJoueurs){//typeJoueurs = [Joueur.BOT.EasyBot, Joueur.BOT.RandomBot]
-        //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots, et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
-        this.nbrJoueur = typeJoueurs.length;
+        //Le constructeur est séparé en deux cas: le cas ou l'on veut une seule partie et où l'on la description des actions des bots,
+        this.nbrJoueur = typeJoueurs.length; // et le cas ou l'on veut simuler un grand nombre de partie et voir le résultat avec des statistiques
         this.nbrManche = nbrJoueur == 3 ? 10 : 9; //le jeu se joue en 9 manches si il y a 3 joueurs, sinon 10
         if (modeVerbeux) {
             lanceUnePartieAvecDetail(typeJoueurs, nbrManche);
@@ -78,7 +78,6 @@ public class Coordinateur {
         //On va lancer 1000 parties, mais on veut s'assurer que chaque joueur joue en premier de manière strictement équiprobable !
         //Ne pas oublier de dire le jour de la soutenance que la position des joueurs est aléatoire, car les positions donnent des avantages non négligeables (en 1V1 le J1 est très avantagé)
         //Le but ici est que sur le total des parties, chaque joueur ait joué sur une position de autant de fois que les autres, car dans certaines configurations jouer en 1er peut s'avérer être un avantage non négligeable
-        List<Integer> joueurGagnant;
         Joueur.Bot stockJoueur;
         int stockPdg;
         int stockVictoire;
@@ -193,9 +192,9 @@ public class Coordinateur {
                 renfortsUtilisables.add(renfort);
             }
         }
-        //On demande au joueur son plan de jeu pour les renforts, la vrai décision ici est de choisir s'il veut activer
-        List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables); //ses renforts anciens ou alors économiser son or
-        //On active les renforts selon les choix du joueur                //Les autres renorts n'ont pas d'interêt a ne pas être utilisés
+        //On demande au joueur son plan de jeu pour les renforts, la vrai décision ici est de choisir s'il veut activer ses
+        List choixDuJoueur = joueur.choisirRenforts(renfortsUtilisables); //renforts anciens ou alors économiser son or
+        //On active les renforts selon les choix du joueur                //Les autres renforts n'ont pas d'interêt a ne pas être utilisés
         joueur.appelerRenforts(choixDuJoueur);
     }
 
@@ -250,7 +249,7 @@ public class Coordinateur {
 
     /**
      * Méthode qui demande à un joueur de choisir la face a crafter (dans un des bassins) et la face a éliminer (sur ses dés)
-     * et qui effectue l'action chosie par le joueur.
+     * et qui effectue l'action choisie par le joueur.
      * @return Une List représentant les bassins que le joueur à déjà utilisés, ou null si le joueur ne peut plus ou ne veut plus forger
      */
     private List<Bassin> forger(Joueur joueur, List<Bassin> bassinsUtilises) {
@@ -275,7 +274,7 @@ public class Coordinateur {
 
     /**
      * Méthode qui calcule les bassins auxquels le joueur peut encore accéder en fonction de
-     * ceux qu'il a utilisé précédemment et de son or, renvoit les bassins sous forme de liste.
+     * ceux qu'il a utilisé précédemment et de son or et des bassins vides, renvoit les bassins sous forme de liste.
      * @param joueur
      * @param bassinsUtilises
      * @return
@@ -292,6 +291,7 @@ public class Coordinateur {
         }
         return bassinAbordable;
     }
+
     /**
      * Action exploit, on envoit la liste des cartes achetables par le joueur, celui ci choisit et l'achat est effectué dans la foulée.
      * Gère également le déplacement des joueurs et la chasse.
@@ -379,7 +379,7 @@ public class Coordinateur {
         return infoJoueurGagnant;
     }
 
-    Afficheur getAffichage(){return afficheur;}
+    public Afficheur getAffichage(){return afficheur;}
 
     Plateau getPlateau(){return plateau;}
 

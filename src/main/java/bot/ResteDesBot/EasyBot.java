@@ -167,7 +167,7 @@ public class EasyBot extends Joueur {
     }
 
 
-    //Méthodes propore à easyBot, fin des méthodes Override -----------------------------------------------
+    //Méthodes propre à easyBot, fin des méthodes Override -----------------------------------------------
 
     private Bassin getBassinLePlusCher(List<Bassin> bassins) {
         int maxCout = 0;
@@ -199,7 +199,7 @@ public class EasyBot extends Joueur {
     private int getIdDuDeLePlusFaible(){//Le dé le plus faible est celui qui possède le plus
         int compteurFaceUnOrDeZero= 0; // de face un or
         for (int i = 0; i<getDes().length; i++)
-            for (Face face:getDe(0).getFaces())
+            for (Face face:getDe(i).getFaces())
                 if (face.getTypeFace() == Face.typeFace.SIMPLE)
                     if (face.getRessource().getQuantite() == 1 && face.getRessource().estDuType(Ressource.type.OR)) {
                         if (i == 0)

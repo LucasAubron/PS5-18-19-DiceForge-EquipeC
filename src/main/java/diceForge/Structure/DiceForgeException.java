@@ -7,7 +7,7 @@ public class DiceForgeException extends RuntimeException {
         this.localisation = localisation;
     }
 
-    String getLocalisation() {
+    public String getLocalisation() {
         return localisation;
     }
 }

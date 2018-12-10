@@ -348,7 +348,6 @@ public class NidoBotV2 extends Joueur {
             resultat = getPosFace1Or();
             //si on a trouvé une face 1 or sur un des dés)
             if (resultat[0] != -1) {
-//                forgerDe(posFace[0], face, posFace[1]);
                 aForge = true;
             }
 
@@ -371,11 +370,9 @@ public class NidoBotV2 extends Joueur {
             if (posFaceQteMin != -1) {
                 resultat[0] = 0;
                 resultat[1] = posFaceQteMin;
-//                forgerDe(0, face, posFaceQteMin);
             } else {
                 resultat[0] = 0;
                 resultat[1] = new Random().nextInt(6);
-//                forgerDe(0, face, new Random().nextInt(6));
             }
         return resultat;
     }
