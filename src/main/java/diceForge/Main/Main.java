@@ -13,6 +13,7 @@ public class Main {
             System.out.println(coordinateur1.getAffichage());        // qui comprend toute la partie temporelle du jeu, en échange constant avec les joueurs,
             Coordinateur coordinateur2 = new Coordinateur(modeVerbeux, new Joueur.Bot[]{Joueur.Bot.AubronBotV2, Joueur.Bot.AubronBotV2});
             System.out.println(coordinateur2.getAffichage());
+            
         }                                                           // il leur envoie les choix disponibles à chaque fois qu'une prise de décision est nécessaire
         catch (DiceForgeException e){
             System.out.println("Une erreur est apparue dans "+e.getLocalisation()+".java, message d'erreur : ");
