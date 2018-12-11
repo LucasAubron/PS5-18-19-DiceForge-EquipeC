@@ -17,7 +17,7 @@ import static diceForge.OutilJoueur.Joueur.Jeton.CERBERE;
  */
 public class Carte {
     private Ressource[] cout; //un tableau de ressource car l'hydre et le typhon
-    private int nbrPointGloire;// coutent des soleils ET des lunes
+    private int nbrPointGloire;// coutent des soleils et des lunes
     private Noms nom;
 
     public enum Noms {Coffre, HerbesFolles, Ancien, Marteau, Ours, Sanglier, Biche, Satyres,
