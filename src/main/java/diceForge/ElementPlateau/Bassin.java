@@ -64,19 +64,6 @@ public class Bassin {
     }
 
     /**
-     * Pour les bassins qui contiennent des faces différentes
-     * Utile pour les bots lorsqu'ils cherchent une face bien spécifique
-     * @return la position de la face recherchée dans le bassin
-     */
-    public int getPosFaceSpecifiqueDansBassin(Face faceATrouver){
-        for (int i=0; i<faces.size(); i++)
-            if (faces.get(i).getTypeFace() == faceATrouver.getTypeFace())
-                if (faces.get(i).getRessources() == faceATrouver.getRessources())
-                    return i;
-        return -1; //Si on n'a pas trouvé la face :(
-    }
-
-    /**
      * Cette méthode doit être utilisé pour retirer une face du bassin pour ensuite la graver sur un dé.
      * Il ne faut pas utiliser la méthode getFace() pour cela !
      */
@@ -85,9 +72,7 @@ public class Bassin {
     }
 
     public boolean estLeBassin(typeBassin type){
-        if (type == this.type)
-            return true;
-        return false;
+        return type == this.type;
     }
 
     @Override
