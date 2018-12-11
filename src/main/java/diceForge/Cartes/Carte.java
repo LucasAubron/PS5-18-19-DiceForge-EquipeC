@@ -66,7 +66,7 @@ public class Carte {
                 acheteur.ajouterJeton(Joueur.Jeton.TRITON);
                 break;
             case Cerbere:
-                acheteur.ajouterJeton(CERBERE);
+                acheteur.ajouterJeton(Joueur.Jeton.CERBERE);
                 break;
             case CasqueDinvisibilite:
                 acheteur.forgerFaceSpeciale(new FaceX3());
