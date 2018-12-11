@@ -11,6 +11,7 @@ import diceForge.OutilJoueur.Ressource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -248,9 +249,9 @@ public class Afficheur {
             info += "\n";
     }
 
-    public void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
+    public void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie, Coordinateur coordinateur){
         for (int i = 0; i != nbrVictoire.length; ++i){
-            info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire, soit "+nbrVictoire[i]+" victoires; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité, soit "+nbrEgalite[i]+" égalités; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire";
+            info += coordinateur.getPlateau().getJoueurs().get(i) + ": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire, soit "+nbrVictoire[i]+" victoires; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité, soit "+nbrEgalite[i]+" égalités; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire";
             if (i != nbrVictoire.length-1)
                 info += "\n";
         }
