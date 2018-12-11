@@ -1,24 +1,26 @@
 package diceForge;
 
+import bot.ResteDesBot.RandomBot;
+import diceForge.Cartes.*;
+import diceForge.ElementPlateau.Ile;
+import diceForge.OutilJoueur.Joueur;
+import diceForge.OutilJoueur.Ressource;
+import diceForge.Structure.Afficheur;
+import diceForge.Structure.Coordinateur;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class IleTest {
-    /*
-    private Ile i0 = new Ile(new Carte(new Ressource[]{new Soleil(2)}, 3, Carte.Noms.Coffre),
-            new Carte(new Ressource[]{new Soleil(3)}, 4, Carte.Noms.Coffre), 4);
-    private Joueur j0 = new RandomBot(0, new Afficheur(new Coordinateur(false);
-    private Joueur j1 = new RandomBot(1, new Afficheur(new Coordinateur(false);
+    Ile ile0 = new Ile(new Marteau(), new Marteau(), 2, new Afficheur(false));
+    private Joueur j0 = new RandomBot(1, new Afficheur(false), null);
+    private Joueur j1 = new RandomBot(2, new Afficheur(false), null);
 
     @Test
     public void prendreCarte() {
-        j0.ajouterSoleil(2);
-        assertEquals(i0.prendreCarte(j0, new Carte(new Ressource[]{new Soleil(2)}, 3, Carte.Noms.Coffre)), null);
-        assertEquals(i0.getCartes().get(0).size(), 3);
-        j1.ajouterSoleil(3);
-        assertEquals(i0.prendreCarte(j1, new Carte(new Ressource[]{new Soleil(3)}, 4, Carte.Noms.Coffre)), j0);
-        assertEquals(i0.getCartes().get(1).size(), 3);
+        assertNull(ile0.prendreCarte(j0, ile0.getCartes().get(0).get(0)));
+        assertEquals(ile0.getCartes().get(0).size(), 1);
+        assertEquals(ile0.prendreCarte(j1, ile0.getCartes().get(0).get(0)), j0);
+        assertEquals(ile0.getCartes().get(0).size(), 0);
     }
-    */
 }
