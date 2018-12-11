@@ -5,6 +5,7 @@ import bot.NidoBot.NidoBot;
 import bot.NidoBot.NidoBotV2;
 import bot.ResteDesBot.EasyBot;
 import bot.ResteDesBot.RandomBot;
+import bot.ResteDesBot.ZizaBot;
 import diceForge.OutilJoueur.Joueur;
 import diceForge.Structure.Afficheur;
 import diceForge.Structure.DiceForgeException;
@@ -39,6 +40,8 @@ public class PortailsOriginels {
 
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
                 this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
+            else if (typeJoueurs[identifiant-1] == Joueur.Bot.ZizaBot)
+                this.joueurs.add(new ZizaBot(identifiant, afficheur, plateau));
 
 
 //            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
