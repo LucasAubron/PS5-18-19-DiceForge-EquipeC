@@ -40,8 +40,6 @@ public class PortailsOriginels {
             else if (typeJoueurs[identifiant-1] == Joueur.Bot.NidoBotV2)
                 this.joueurs.add(new NidoBotV2(identifiant, afficheur, plateau));
 
-//            else if (typeJoueurs[identifiant-1] == Joueur.Bot.PlanteBot)
-//                this.joueurs.add(new MLGBot(identifiant, afficheur, plateau));
 
 //            else if (typeJoueurs[identifiant-1] == Joueur.Bot.RomanetBot)
 //                this.joueurs.add(new LataBotch(identifiant, afficheur, plateau));
