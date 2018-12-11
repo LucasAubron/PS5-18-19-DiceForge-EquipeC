@@ -250,7 +250,7 @@ public class Afficheur {
 
     public void statsPlusieursPartie(int[] nbrVictoire, int[] nbrEgalite, int[] ptsGloireCumules, int nbrPartie){
         for (int i = 0; i != nbrVictoire.length; ++i){
-            info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire";
+            info += "Joueur "+(i+1)+": "+(nbrVictoire[i]*100/(float)nbrPartie)+"% de victoire, soit "+nbrVictoire[i]+" victoires; "+(nbrEgalite[i]*100/(float)nbrPartie)+"% d'égalité, soit "+nbrEgalite[i]+" égalités; avec en moyenne "+ptsGloireCumules[i]/nbrPartie+" points de gloire";
             if (i != nbrVictoire.length-1)
                 info += "\n";
         }
