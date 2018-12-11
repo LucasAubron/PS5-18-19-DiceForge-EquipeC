@@ -18,7 +18,7 @@ import java.util.Random;
 public class EasyBot extends Joueur {
 
     private Random random;
-    public int numManche = 0; //public pour les test
+    public int numManche = 0; // public pour les test
 
     public EasyBot(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);

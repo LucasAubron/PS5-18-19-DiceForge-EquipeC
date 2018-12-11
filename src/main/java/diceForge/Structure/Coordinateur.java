@@ -113,7 +113,7 @@ public class Coordinateur {
                     ptsGloireCumules[n] += plateau.getJoueurs().get(n).getPointDeGloire();
             }
         }
-        afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, (nbrParties/nbrJoueur) * nbrJoueur); // le calcul étrange du dernier paramètre s'explique:
+        afficheur.statsPlusieursPartie(nbrVictoire, nbrEgalite, ptsGloireCumules, (nbrParties/nbrJoueur) * nbrJoueur, this); // le calcul étrange du dernier paramètre s'explique:
                                                                                                                                 // 1000 n'étant pas divisible par 3, lorsqu'on joue a
                                                                                                                                 // 3 joueurs on ne fait en réalité que 999 parties
     }
