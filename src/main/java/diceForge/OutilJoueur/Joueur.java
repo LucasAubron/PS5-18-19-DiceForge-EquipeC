@@ -243,7 +243,7 @@ public abstract class Joueur {
                 switch (ressource.getType()) {
                     case OR: {
                         if (jetOrOuPdg && choisirPdgPlutotQueRessource(ressource)) //Dans le cas du cyclope
-                            ajouterPointDeGloire(ressource.getQuantite());  //1 or peut valoir 1pdg,
+                            ajouterPointDeGloire(ressource.getQuantite());      //1 or peut valoir 1pdg,
                         else {                                                //selon la décision du joueur
                             if (minautore)
                                 ajouterOr(-ressource.getQuantite());
