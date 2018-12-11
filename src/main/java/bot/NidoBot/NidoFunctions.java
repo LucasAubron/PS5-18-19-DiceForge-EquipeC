@@ -116,15 +116,4 @@ public class NidoFunctions {
         return cartesAbordables;
     }
 
-//    public static int getPosFaceOrDuDe(Joueur joueur, int numDe, int qte){
-//        for (int i = 0; i != 6; i++) {
-//            if (joueur.getDe(numDe).getFace(i).getRessource().length == 1) {
-//
-//                if (joueur.getDe(numDe).getFace(i).getRessource()[0][0] instanceof Or &&
-//                        joueur.getDe(numDe).getFace(i).getRessource()[0][0].getQuantite() == qte)
-//                    return i;
-//            }
-//        }
-//        return -1;
-//    }
 }

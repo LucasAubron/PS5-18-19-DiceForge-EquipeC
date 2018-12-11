@@ -18,7 +18,7 @@ import java.util.Random;
 public class EasyBot extends Joueur {
 
     private Random random;
-    private int numManche = 0;
+    public int numManche = 0; //public pour les test
 
     public EasyBot(int identifiant, Afficheur afficheur, Plateau plateau) {
         super(identifiant, afficheur, plateau);
@@ -140,19 +140,7 @@ public class EasyBot extends Joueur {
 
     @Override
     public choixJetonTriton utiliserJetonTriton(){
-        Random random = new Random();
-        int choix = random.nextInt(choixJetonTriton.values().length);
-        switch (choix){
-            case 0:
-                return choixJetonTriton.Rien;
-            case 1:
-                return choixJetonTriton.Or;
-            case 2:
-                return choixJetonTriton.Soleil;
-            case 3:
-                return choixJetonTriton.Lune;
-        }
-        throw new DiceForgeException("Bot","Problème avec le jeton triton");
+        return choixJetonTriton.Soleil;
     }
 
     @Override
