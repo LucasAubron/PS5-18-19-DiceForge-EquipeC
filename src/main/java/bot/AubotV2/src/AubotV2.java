@@ -368,8 +368,10 @@ public class AubotV2 extends Joueur {
     }
 
     @Override
-    public int[] choisirOuForgerFaceSpeciale(Face face){
-        return new int[]{0,0};
+    public int[] choisirOuForgerFaceSpeciale(Face faceSpeciale){
+        int numDeSurLequelForger = getIdDuDeLePlusFaible();
+        int numFaceARemplacerSurLeDe = getPosDeLaFaceLaPlusFaible(getDe(numDeSurLequelForger));
+        return new int[]{numDeSurLequelForger, numFaceARemplacerSurLeDe};
     }
 
     @Override

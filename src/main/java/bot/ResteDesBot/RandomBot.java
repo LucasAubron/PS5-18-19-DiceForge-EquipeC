@@ -38,7 +38,10 @@ public class RandomBot extends Joueur {
 
     @Override
     public ChoixJoueurForge choisirFaceAForgerEtARemplacer(List<Bassin> bassins){
-        return new ChoixJoueurForge(bassins.get(random.nextInt(bassins.size())), 0, random.nextInt(2), random.nextInt(6));
+        if (random.nextInt(bassins.size()+1) == bassins.size() && !(bassins.get(0).getFace(0).getTypeFace() == Face.typeFace.BOUCLIER))
+            return null;
+        else
+            return new ChoixJoueurForge(bassins.get(random.nextInt(bassins.size())), 0, random.nextInt(2), random.nextInt(6));
     }
 
     @Override
