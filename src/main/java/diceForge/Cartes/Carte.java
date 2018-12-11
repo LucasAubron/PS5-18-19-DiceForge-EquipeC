@@ -120,12 +120,6 @@ public class Carte {
 
     public Noms getNom() { return nom; }
 
-    boolean equals(Carte carte){
-        if (carte == null)
-            return false;
-        return (nom == carte.getNom());
-    }
-
     @Override
     public String toString(){
         return nom.toString();
