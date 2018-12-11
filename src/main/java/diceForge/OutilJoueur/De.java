@@ -24,7 +24,7 @@ public class De {
 
     // Constructeur ------------------------------------------------------------------------------------------------
 
-    De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){//les 6 faces en tableau, l'afficheur, le joueur
+    public De(Face[] faces, Afficheur afficheur, Joueur joueur, int id){//les 6 faces en tableau, l'afficheur, le joueur
         this.proprietaire = joueur;                              //propriétaire du dé, et le numéro du dé (==son id)
         this.afficheur = afficheur;
         this.id = id;
