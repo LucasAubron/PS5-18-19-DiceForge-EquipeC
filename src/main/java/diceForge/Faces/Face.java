@@ -50,22 +50,19 @@ public class Face {
     public Ressource getRessource() { return ressource; }//face simple
 
     public boolean faitGagnerUneRessource(){
-        if (type != typeFace.VOILECELESTE && type != typeFace.X3)
-            return true;
-        return false;
+        return type != typeFace.VOILECELESTE && type != typeFace.X3;
     }
 
     public boolean estFaceAChoix(){ //on le fait pour ce type de face et pas les autres car on les rencontre souvent dans le code
-        if (type == typeFace.CHOIX || type == typeFace.SANGLIER || type == typeFace.MIROIR)
-            return true;
-        return false;
+        return type == typeFace.CHOIX || type == typeFace.SANGLIER || type == typeFace.MIROIR;
     }
 
     public boolean estUneFaceAyantBesoinDuDeuxiemeDe(){
-        if (type == typeFace.BOUCLIER || type == typeFace.X3 || type == typeFace.MIROIR) // Le miroir en soi n'a pas besoin
-            return true;                                                                 // du résultat du deuxième dé, mais
-        return false;                                                                    // si le joueur choisit de copier une
-    }                                                                                    // face X3 ou bouclier, alors ça devient le cas
+        // Le miroir en soi n'a pas besoin
+        // du résultat du deuxième dé, mais
+        // face X3 ou bouclier, alors ça devient le cas
+        return type == typeFace.BOUCLIER || type == typeFace.X3 || type == typeFace.MIROIR;
+    }
 
     /**
      * A override pour les faces a effet
@@ -74,18 +71,18 @@ public class Face {
 
     @Override
     public String toString() {
-        String affichage = "";
+        StringBuilder affichage = new StringBuilder();
         String separateur = "";
         if (type == typeFace.ADDITION)
             separateur += " + ";
         if (type == typeFace.CHOIX)
             separateur += " ou ";
         for (Ressource ressource: ressources)
-            affichage += ressource + separateur;
+            affichage.append(ressource).append(separateur);
         if (type == typeFace.ADDITION)
-            affichage = affichage.substring(0, affichage.length()-2);//On supprime "+ "
+            affichage = new StringBuilder(affichage.substring(0, affichage.length() - 2));//On supprime "+ "
         if (type == typeFace.CHOIX)
-            affichage = affichage.substring(0, affichage.length()-3);//On supprime "ou "
+            affichage = new StringBuilder(affichage.substring(0, affichage.length() - 3));//On supprime "ou "
         return affichage + " ";
     }
 }
